@@ -413,3 +413,15 @@ h1 { font-size: 2.2em; font-weight: 800; letter-spacing: -0.02em; }
 .diff-btn.sel { border-color: var(--coral-2); }
 .foot-child { position: relative; z-index: 1; }
 .bleed > .wrap, .bleed .wrap { width: 100%; }
+
+/* ---------- Suscripción ---------- */
+.plan-choice { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 14px 0; }
+.plan-opt { display: flex; gap: 12px; align-items: flex-start; padding: 16px; font-weight: 400; }
+label.plan-opt { cursor: pointer; }
+label.plan-opt:has(input:checked) { border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand) inset; }
+.plan-opt input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--brand); flex: none; }
+.plan-body { display: flex; flex-direction: column; gap: 4px; }
+.plan-name { font-family: var(--font-title); font-size: 1.1em; }
+.plan-price { font-family: var(--font-title); font-size: 1.5em; font-weight: 800; color: var(--brand); font-variant-numeric: tabular-nums; }
+.sub-terms { font-size: .92em; padding-left: 1.2em; }
+.sub-terms li { margin: 4px 0; }
