@@ -1,6 +1,6 @@
 // Prueba de punta a punta: recorre familia, modo niño, control de sesión, profesional, administración, vencimiento y baja.
 const { chromium } = require('playwright');
-const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.BASE_URL || BASE;
+const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.BASE_URL || 'http://localhost:8765/';
 (async () => {
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: 1200, height: 900 } });
@@ -17,7 +17,7 @@ const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.
   await p.screenshot({ path: S + '/02-familia.png', fullPage: true });
   log('trial bar:', await p.textContent('.trial'));
   await p.click('[data-start] >> nth=0');
-  await p.click('[data-av="colita"]'); await p.click('#ch-next');
+  await p.click('[data-av="zorro"]'); await p.click('#ch-next');
   await p.click('[data-mood="alegria"]');
   await p.screenshot({ path: S + '/03-mood.png', fullPage: true });
   await p.click('#ch-next');
@@ -61,17 +61,26 @@ const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.
   log('signals:', await p.$$eval('.sug h3', e => e.map(x => x.textContent)));
   await p.click('input[value=considerada]'); await p.click('#review-form button');
   await p.waitForSelector('text=Guardamos tu revisión');
+  if (!(await p.$('.home-bar [data-act=home]'))) throw new Error('falta Volver al inicio');
   await p.click('[data-tab=pauta]');
   await p.screenshot({ path: S + '/09-pauta.png', fullPage: true });
   await p.click('[data-tab=registros]');
   // probar cada actividad en consulta (abandono rápido)
-  for (const id of ['memoria','secuencias','distinto','contar','clasificar']) {
+  for (const id of ['memoria','secuencias','distinto','contar','clasificar','isla']) {
     await p.click('[data-tab=pauta]').catch(()=>{});
     await p.click(`[data-consult="${id}"] >> nth=0`);
-    await p.click('[data-av="rulos"]'); await p.click('#ch-next');
+    await p.click('[data-av="panda"]'); await p.click('#ch-next');
     await p.click('[data-mood="nose"]'); await p.click('#ch-next');
     await p.waitForSelector('#act-root');
-    if (id !== 'memoria') { // responder probando todas las opciones
+    if (!(await p.$('#ch-home'))) throw new Error('falta Volver al inicio en modo niño');
+    if (id === 'isla') { // el juego corre aislado; simulamos el aviso de fin de ronda desde su marco
+      const fh = await p.waitForSelector('.isla-frame iframe'); const fr = await fh.contentFrame();
+      await fr.waitForSelector('.isle'); // entra directo con el animalito elegido
+      await fr.evaluate(() => parent.postMessage({ type: 'isla-ronda', area: 'num', first: 4, total: 6, level: 2 }, '*'));
+      await p.waitForSelector('text=Rondas terminadas: 1');
+      await p.screenshot({ path: S + '/10-isla-juego.png' });
+      await p.click('#isla-done');
+    } else if (id !== 'memoria') { // responder probando todas las opciones
       for (let k = 0; k < 6; k++) {
         if (await p.$('.feedback')) break;
         const btns = await p.$$('.act-opt:not([disabled])');

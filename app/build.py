@@ -4,6 +4,8 @@ import pathlib
 root = pathlib.Path(__file__).parent
 src = root / "src"
 css = (src / "styles.css").read_text()
+import json
+isla = (root / "tools" / "isla-de-juegos.html").read_text()
 js = "\n".join((src / f).read_text() for f in ["content.js", "store.js", "followup.js", "illustrations.js", "avatars.js", "activities.js", "app.js"])
 head = """<title>Aprender Siendo Beta</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -14,7 +16,7 @@ head = """<title>Aprender Siendo Beta</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Manrope:wght@600;700;800&display=swap">
 <style>
 """ + css + "\n</style>"
-body = '<div id="app" aria-live="off"></div>\n<script>\n"use strict";\n' + js + "\n</script>"
+body = '<div id="app" aria-live="off"></div>\n<script>\n"use strict";\nconst ISLA_HTML = ' + json.dumps(isla).replace("<", "\\u003c") + ';\n' + js + "\n</script>"
 dist = root / "dist"; dist.mkdir(exist_ok=True)
 (dist / "artifact.html").write_text(head + "\n" + body + "\n")
 (dist / "index.html").write_text('<!doctype html>\n<html lang="es-AR">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'

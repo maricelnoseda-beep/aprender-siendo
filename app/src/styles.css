@@ -413,3 +413,15 @@ h1 { font-size: 2.2em; font-weight: 800; letter-spacing: -0.02em; }
 .diff-btn.sel { border-color: var(--coral-2); }
 .foot-child { position: relative; z-index: 1; }
 .bleed > .wrap, .bleed .wrap { width: 100%; }
+
+/* ---------- v0.3: Volver al inicio, Isla de Juegos, animalitos ---------- */
+.home-bar{padding-top:12px}
+.back-home{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 16px;border-radius:999px;border:2px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-weight:700;cursor:pointer}
+.back-home:hover,.back-home:focus-visible{border-color:var(--brand);color:var(--brand)}
+.foot-child #ch-home{display:inline-flex;align-items:center;gap:6px}
+.isla-frame{width:100%;max-width:760px;margin:0 auto;border-radius:24px;overflow:hidden;border:3px solid #C5D9DC;background:#EAF3F3;box-shadow:0 8px 24px rgba(20,48,58,.12)}
+.isla-frame iframe{display:block;width:100%;height:min(78vh,760px);border:0}
+.isla-count{text-align:center;font-weight:700;margin:12px 0 0}
+.avatar-btn .av,.mood-btn .av{transition:transform .15s}
+.avatar-btn:hover .av,.mood-btn:hover .av{transform:scale(1.06) rotate(-2deg)}
+@media (prefers-reduced-motion:reduce){.avatar-btn:hover .av,.mood-btn:hover .av{transform:none}}

@@ -38,14 +38,14 @@ const MOODS = [
   { id: "nose", label: "No sé", face: "unsure" }
 ];
 
-/* REVISAR: personajes para elegir avatar (figuras infantiles diversas, ilustración original). */
+/* REVISAR: personajes para elegir avatar (animalitos que expresan emociones, ilustración original). */
 const AVATARS = [
-  { id: "rulos", label: "Rulos", hair: "rulos", hairColor: "#2B3331", skin: "#7A4A2E", top: "#E8B44C", bg: "#DCE9E2" },
-  { id: "colita", label: "Colita", hair: "colita", hairColor: "#7A4A2E", skin: "#F3C7A6", top: "#E07B5F", bg: "#E9DFD0" },
-  { id: "flequillo", label: "Flequillo", hair: "flequillo", hairColor: "#2B3331", skin: "#E8B48F", top: "#4F7BB0", bg: "#F2D9CF" },
-  { id: "rodetes", label: "Rodetes", hair: "rodetes", hairColor: "#C8663F", skin: "#F3C7A6", top: "#77A9A0", bg: "#F4E3B8" },
-  { id: "largo", label: "Pelo largo", hair: "largo", hairColor: "#3B2A20", skin: "#D99A6C", top: "#B9A6D9", bg: "#DCE9E2" },
-  { id: "corto", label: "Pelo corto", hair: "corto", hairColor: "#E8B44C", skin: "#A86B45", top: "#315F59", bg: "#D6E2EE" }
+  { id: "pulpo", label: "Pulpo", species: "pulpo", fur: "#B98AD9", light: "#E7D4F3", bg: "#EEE4F6" },
+  { id: "zorro", label: "Zorro", species: "zorro", fur: "#E07B4F", light: "#FFF4EC", dark: "#3B2A20", bg: "#F6DDCF" },
+  { id: "panda", label: "Panda", species: "panda", fur: "#FFFFFF", light: "#FFFFFF", dark: "#2F3A3C", bg: "#DCE9E2" },
+  { id: "rana", label: "Rana", species: "rana", fur: "#7DBF6A", light: "#D6EDB8", bg: "#E3F1D8" },
+  { id: "buho", label: "Búho", species: "buho", fur: "#9C7451", light: "#F1E0C8", dark: "#6B4C33", bg: "#F1E6D3" },
+  { id: "tortuga", label: "Tortuga", species: "tortuga", fur: "#8CC7A1", light: "#3E8E6B", dark: "#2E6E52", bg: "#D9EEF0" }
 ];
 
 /* REVISAR: textos que ve el niño durante el recorrido. */
@@ -79,6 +79,18 @@ const CHILD_TEXT = {
    Las mecánicas son de demostración. Edades, diagnósticos sugeridos, consignas
    y criterios de dificultad deben venir en una FEC de PSP-SR. */
 const ACTIVITIES = [
+  /* REVISAR (PSP-SR): "Isla de Juegos" fue aportado por la responsable del proyecto. Consignas,
+     niveles, regla adaptativa y fundamentos son del juego original y no tienen FEC todavía. */
+  {
+    id: "isla",
+    name: "Isla de Juegos",
+    area: "Números, atención, memoria, funciones ejecutivas y palabras",
+    ageMin: 4, ageMax: 9,
+    suggestedFor: ["en-evaluacion", "tdah", "dea"],
+    instruction: "Elegí una isla y jugá. Cuando termines, tocá «Terminé de jugar».",
+    forFamily: "El juego ajusta solo la dificultad. Acompañá leyendo con calma y dejá que elija y responda por su cuenta.",
+    levels: ["El juego ajusta la dificultad solo"]
+  },
   {
     id: "memoria",
     name: "Memoria de pares",
