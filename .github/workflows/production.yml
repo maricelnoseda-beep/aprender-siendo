@@ -1,0 +1,30 @@
+# Pase a producción: SOLO manual, SOLO con las dos aprobaciones registradas sobre la
+# misma versión y la misma huella (DEV-IA §8). El entorno "production" debe tener
+# revisores obligatorios configurados en GitHub. Hoy no hay versiones aprobadas.
+name: Producción
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versión a publicar (debe existir approvals/<versión>.md)"
+        required: true
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ inputs.version }}" }
+      - run: python3 app/build.py
+      - name: Bloqueo técnico — verificar aprobaciones y huella
+        run: python3 scripts/check_approvals.py "${{ inputs.version }}" app/dist/index.html
+  deploy:
+    needs: gate
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - name: Producción todavía no configurada
+        run: |
+          echo "La app de producción necesita el servidor (ADR-001) y responsable técnico designado."
+          exit 1

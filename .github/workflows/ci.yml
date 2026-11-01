@@ -1,0 +1,33 @@
+# Integración continua: arma la app, verifica sintaxis y corre la prueba de punta a punta.
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  build-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - name: Armar
+        run: python3 app/build.py
+      - name: Verificar sintaxis
+        run: |
+          sed -n '/<script>/,/<\/script>/p' app/dist/index.html | sed '1d;$d' > /tmp/app.js
+          node --check /tmp/app.js
+      - name: Instalar navegador de prueba
+        run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
+      - name: Prueba de punta a punta
+        run: |
+          (cd app/dist && python3 -m http.server 8765 &) && sleep 1
+          node tests/e2e.js
+      - name: Huella del artefacto
+        run: sha256sum app/dist/index.html | tee app/dist/SHA256
+      - uses: actions/upload-artifact@v4
+        with: { name: aprender-siendo-dist, path: app/dist/ }

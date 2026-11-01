@@ -1,0 +1,6 @@
+app/dist/
+node_modules/
+*.png
+.env
+.env.*
+.DS_Store
