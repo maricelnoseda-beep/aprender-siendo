@@ -1,6 +1,6 @@
 // Prueba de punta a punta: recorre familia, modo niño, control de sesión, profesional, administración, vencimiento y baja.
 const { chromium } = require('playwright');
-const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.BASE_URL || BASE;
+const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.BASE_URL || 'http://localhost:8765/';
 (async () => {
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: 1200, height: 900 } });
