@@ -15,12 +15,13 @@ Cuentas de demostración en la portada. Contraseña: `beta2026`.
 | Ruta | Qué hay |
 | --- | --- |
 | `app/src/content.js` | **Contenido clínico y textos para personas (BORRADOR, REVISAR por PSP-SR y la supervisora)** |
+| `app/src/content_simulador.js`, `simulador.js` | **Simulador de casos y generador de apoyos (BORRADOR SIM-001, sin revisión clínica)**. Ver `docs/propuestas/SIM-001_simulador_y_apoyos.md` |
 | `app/src/store.js` | Capa de datos simulada y permisos por rol (futura API) |
 | `app/src/followup.js` | Indicadores de seguimiento, calculados en código |
 | `app/src/activities.js` | Mecánicas de las 5 actividades |
 | `app/src/illustrations.js`, `avatars.js` | Ilustraciones y logo originales en SVG |
 | `app/src/app.js`, `styles.css` | Pantallas y estilo |
-| `tests/e2e.js` | Prueba de punta a punta de los tres perfiles |
+| `tests/e2e.js`, `tests/e2e_simulador.js` | Pruebas de punta a punta de los tres perfiles y del simulador |
 | `docs/adr/` | Decisiones: alojamiento (001), proveedor de IA (002), beta en un archivo (003) |
 | `approvals/`, `scripts/check_approvals.py` | Registros de aprobación y bloqueo técnico del pase a producción |
 | `.github/workflows/` | CI, despliegue al entorno de prueba y pase a producción con doble aprobación |
