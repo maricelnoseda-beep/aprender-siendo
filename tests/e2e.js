@@ -1,6 +1,6 @@
 // Prueba de punta a punta: recorre familia, modo niño, control de sesión, profesional, administración, vencimiento y baja.
 const { chromium } = require('playwright');
-const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.BASE_URL || BASE;
+const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.BASE_URL || 'http://localhost:8765/';
 (async () => {
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: 1200, height: 900 } });
@@ -106,6 +106,30 @@ const S = process.env.SHOTS || require('os').tmpdir(); const BASE = process.env.
   await p.click('.demo-acc[data-email^=familia] >> nth=0'); await p.click('#login button[type=submit]');
   await p.waitForSelector('text=Tu prueba gratuita terminó');
   log('expired ok');
+  // suscripción (pago simulado): sin consentimiento no avanza; rechazo; aprobación
+  await p.click('main [data-go=subscribe]');
+  await p.check('input[name=plan][value=anual]');
+  await p.click('#sub button.btn-primary');
+  if (await p.$('.checkout-sim')) throw new Error('avanzó sin consentimiento');
+  await p.check('#sub-ok'); await p.click('#sub button.btn-primary');
+  await p.waitForSelector('.checkout-sim');
+  if (await p.$('input[autocomplete^=cc], input[name*=card i]')) throw new Error('la simulación no debe pedir tarjeta');
+  await p.screenshot({ path: S + '/13a-checkout.png', fullPage: true });
+  await p.click('[data-pay=no]'); await p.waitForSelector('text=El pago no se aprobó');
+  await p.check('input[name=plan][value=mensual]'); await p.check('#sub-ok'); await p.click('#sub button.btn-primary');
+  await p.click('[data-pay=ok]'); await p.waitForSelector('text=Tu suscripción está activa');
+  await p.waitForSelector('text=Actividades indicadas');
+  log('subscribe ok');
+  await p.click('[data-go=account] >> nth=0'); await p.waitForSelector('text=Próxima renovación');
+  await p.screenshot({ path: S + '/13b-account-sub.png', fullPage: true });
+  await p.click('#sub-cancel'); await p.click('#do-cancel'); await p.waitForSelector('text=No se te va a cobrar más');
+  await p.waitForSelector('text=Acceso hasta');
+  await p.click('[data-go=home] >> nth=0'); await p.waitForSelector('text=Actividades indicadas'); // lo pagado se respeta
+  log('cancel ok');
+  await p.click('[data-doc=arrepentimiento] >> nth=0'); await p.click('#withdraw');
+  await p.waitForSelector('text=Registramos tu arrepentimiento');
+  await p.click('[data-go=home] >> nth=0'); await p.waitForSelector('text=Tu suscripción no está vigente');
+  log('withdraw ok');
   await p.click('[data-act=leave] >> nth=0'); await p.click('[data-step="2"]');
   await p.fill('#lv-pass', 'beta2026'); await p.click('#lv button.btn-danger');
   await p.waitForSelector('text=Tu cuenta fue dada de baja');

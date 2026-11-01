@@ -21,7 +21,11 @@ Cuentas de demostración en la portada. Contraseña: `beta2026`.
 | `app/src/illustrations.js`, `avatars.js` | Ilustraciones y logo originales en SVG |
 | `app/src/app.js`, `styles.css` | Pantallas y estilo |
 | `tests/e2e.js` | Prueba de punta a punta de los tres perfiles |
-| `docs/adr/` | Decisiones: alojamiento (001), proveedor de IA (002), beta en un archivo (003) |
+| `docs/adr/` | Decisiones: alojamiento (001), proveedor de IA (002), beta en un archivo (003), cobro con Mercado Pago (004) |
+| `docs/cobros-mercado-pago.md` | Qué hace la responsable en Mercado Pago |
+| `server/supabase/functions/_shared/billing-rules.mjs` | **Reglas de cobro** (planes, precios, acceso, firma de avisos). Fuente única: la usan el servidor y la beta |
+| `server/supabase/` | Funciones del servidor para cobrar con Mercado Pago y esquema `billing` (aún sin desplegar) |
+| `tests/billing.test.mjs` | Pruebas de las reglas y del servicio de cobro (`node --test tests/billing.test.mjs`) |
 | `approvals/`, `scripts/check_approvals.py` | Registros de aprobación y bloqueo técnico del pase a producción |
 | `.github/workflows/` | CI, despliegue al entorno de prueba y pase a producción con doble aprobación |
 
@@ -30,7 +34,8 @@ Cuentas de demostración en la portada. Contraseña: `beta2026`.
 2. Designar responsable técnico.
 3. Crear las cuentas de Cloudflare y Supabase (ADR-001) y cargar los secretos en GitHub.
 4. Reemplazar `store.js` por Supabase con permisos RLS, segundo factor real y correo transaccional.
-5. Revisión jurídica de los textos legales y de la transferencia internacional; inscripción ante la AAIP.
-6. Batería de evaluación y doble aprobación registrada sobre la misma versión.
+5. Cobro: cuenta de Mercado Pago, precio en pesos, inscripción en ARCA y claves en Supabase (`docs/cobros-mercado-pago.md`).
+6. Revisión jurídica de los textos legales y de la transferencia internacional; inscripción ante la AAIP.
+7. Batería de evaluación y doble aprobación registrada sobre la misma versión.
 
 Necesidad de origen: NEC-002 (carpeta compartida del proyecto).

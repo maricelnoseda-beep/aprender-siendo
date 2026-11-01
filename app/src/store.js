@@ -65,7 +65,8 @@ const Store = (() => {
     db = {
       schema: 1,
       createdAt: t,
-      config: { trialDays: 15, warnDays: 3, sessionIdleMin: 30, clockOffsetDays: 0 },
+      config: { trialDays: 15, warnDays: 3, sessionIdleMin: 30, clockOffsetDays: 0, arsPerUsd: 1000, graceDays: Billing.GRACE_DAYS_DEFAULT },
+      payments: [],
       users: [], patients: [], plans: [], activitySessions: [], reviews: [],
       reports: [], dataRequests: [], activeSessions: {}, audit: [],
       activityState: Object.fromEntries(ACTIVITIES.map((a) => [a.id, { enabled: true }])),
@@ -159,6 +160,26 @@ const Store = (() => {
     return { end, daysLeft: Math.max(0, daysLeft), expired: msLeft <= 0, warn: msLeft > 0 && daysLeft <= db.config.warnDays };
   }
 
+  /* ---------- acceso y suscripción (código, nunca modelo) ----------
+     Reglas: Billing (billing-rules.mjs, compartido con el servidor).
+     En la beta el pago es SIMULADO: no hay Mercado Pago ni datos de tarjeta.
+     Mientras la suscripción esté activa, cada vencimiento se renueva solo,
+     como haría Mercado Pago, para poder probar con el reloj adelantado. */
+  function accessInfo(user) {
+    if (!user || user.role === "admin") return { access: true, reason: "admin" };
+    const s = user.subscription;
+    let renewed = false;
+    while (s && s.status === "activa" && s.paidThrough && s.paidThrough <= now()) {
+      const at = s.paidThrough;
+      s.paidThrough = Billing.extendPaidThrough(s.paidThrough, at, s.planId);
+      db.payments.push({ id: uid("pay"), userId: user.id, planId: s.planId, amountArs: s.amountArs, at, simulated: true });
+      audit(user.id, "renovación simulada", s.planId + " · $" + s.amountArs); renewed = true;
+    }
+    if (renewed) save();
+    const t = trialInfo(user);
+    return Billing.accessStatus({ now: now(), trialEnd: t ? t.end : null, subscription: s, graceDays: db.config.graceDays });
+  }
+
   /* ---------- sesiones: una sola activa por cuenta ---------- */
   function sessionAlive(s) { return s && now() - s.lastSeen < db.config.sessionIdleMin * 60000; }
 
@@ -178,11 +199,11 @@ const Store = (() => {
   }
 
   return {
-    async init() { load(); if (!db || db.schema !== 1) await seed(); return db; },
+    async init() { load(); if (!db || db.schema !== 1) await seed(); db.payments ||= []; db.config.arsPerUsd ??= 1000; db.config.graceDays ??= Billing.GRACE_DAYS_DEFAULT; return db; },
     async reset() { try { localStorage.removeItem(DB_KEY); } catch (e) {} db = null; clearMyToken(); await seed(); },
     reload() { load(); },
     get db() { return db; },
-    now, uid, hash, audit, save, trialInfo, inviteCode, deviceId,
+    now, uid, hash, audit, save, trialInfo, accessInfo, inviteCode, deviceId,
 
     /* Sesión actual de esta pestaña, validada contra el registro central. */
     currentUser() {
@@ -329,11 +350,56 @@ const Store = (() => {
       user.status = "baja"; user.deletedAt = t;
       user.email = "baja+" + user.id + "@anonimizado"; user.alias = "Cuenta dada de baja";
       user.passHash = ""; delete user.matricula;
+      if (user.subscription && ["pendiente", "activa", "pausada"].includes(user.subscription.status)) {
+        user.subscription.status = "cancelada"; user.subscription.cancelledAt = t; // la baja de la cuenta cancela el cobro
+      }
       delete db.activeSessions[user.id];
       if (user.role === "familia") db.patients.forEach((p) => { p.familyUserIds = p.familyUserIds.filter((x) => x !== user.id); });
       if (user.role === "profesional") db.patients.filter((p) => p.professionalId === user.id).forEach((p) => { p.status = "archivado"; p.familyUserIds = []; });
       audit(user.id, "baja de cuenta", user.role);
       clearMyToken(); save();
+    },
+
+    /* ---------- suscripción (simulación del circuito de Mercado Pago) ---------- */
+    priceArs(planId) { return Billing.priceArs(planId, db.config.arsPerUsd); },
+    startSubscription(user, planId, consent) {
+      if (consent !== true) return { error: "Para suscribirte tenés que confirmar el cobro." };
+      if (!Billing.PLANS[planId]) return { error: "Elegí un plan." };
+      if (user.subscription && ["activa", "pausada"].includes(user.subscription.status)) return { error: "Ya tenés una suscripción en curso." };
+      let amountArs;
+      try { amountArs = this.priceArs(planId); } catch (e) { return { error: "Todavía no está configurado el precio en pesos. Probá más tarde." }; }
+      user.subscription = { planId, amountArs, status: "pendiente", consentAt: now(), consentVersion: BILLING_TEXT.version,
+        rulesVersion: Billing.RULES_VERSION, startedAt: null, paidThrough: null };
+      audit(user.id, "suscripción iniciada", planId + " · $" + amountArs); save();
+      return { ok: true };
+    },
+    /* En la versión real esto lo hace el aviso firmado de Mercado Pago, en el servidor. */
+    simulateCheckout(user, approved) {
+      const s = user.subscription;
+      if (!s || s.status !== "pendiente") return;
+      if (!approved) { audit(user.id, "pago simulado rechazado", s.planId); save(); return; }
+      const t = now();
+      s.status = "activa"; s.startedAt = t; s.paidThrough = Billing.extendPaidThrough(null, t, s.planId);
+      db.payments.push({ id: uid("pay"), userId: user.id, planId: s.planId, amountArs: s.amountArs, at: t, simulated: true });
+      audit(user.id, "pago simulado aprobado", s.planId + " · $" + s.amountArs); save();
+    },
+    cancelSubscription(user) {
+      const s = user.subscription;
+      if (!s || !["pendiente", "activa", "pausada"].includes(s.status)) return;
+      s.status = "cancelada"; s.cancelledAt = now();
+      audit(user.id, "suscripción cancelada", "acceso hasta " + (s.paidThrough ? new Date(s.paidThrough).toISOString().slice(0, 10) : "—")); save();
+    },
+    canWithdraw(user) { return Billing.canWithdraw(user.subscription, now()); },
+    withdraw(user) {
+      if (!this.canWithdraw(user)) return { error: "Pasaron más de 10 días desde la suscripción." };
+      const s = user.subscription; s.status = "arrepentimiento"; s.cancelledAt = now(); s.refundStatus = "pendiente";
+      audit(user.id, "arrepentimiento", "reembolso pendiente · $" + s.amountArs); save();
+      return { ok: true };
+    },
+    markRefunded(adminUser, userId) {
+      if (adminUser.role !== "admin") throw new Error("Sin permiso");
+      const u = db.users.find((x) => x.id === userId);
+      if (u?.subscription?.refundStatus === "pendiente") { u.subscription.refundStatus = "reembolsado"; audit(adminUser.id, "reembolso registrado", u.email); save(); }
     },
 
     /* ---------- administración ---------- */

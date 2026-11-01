@@ -69,13 +69,14 @@ function shell(user, inner, { child = false } = {}) {
     <label><input type="checkbox" id="pref-contrast"> Más contraste</label>
     <label><input type="checkbox" id="pref-voice"> Leer en voz alta las consignas</label>
   </div></header>
-  ${trial ? trialBar(trial) : ""}`}
+  ${trial && !user.subscription?.paidThrough ? trialBar(trial) : ""}`}
   ${State.notice ? `<div class="wrap"><div class="notice notice-${State.notice.kind}" role="status">${State.notice.text}</div></div>` : ""}
   <main id="main" class="${child ? "child-main" : State.view === "landing" && !user ? "bleed" : "wrap main"}">${child ? childBackdrop() : ""}${inner}</main>
   <footer class="foot ${child ? "foot-child" : ""}">${child ? "" : `<div class="wrap foot-brand">${brandMark(48)}<div><strong class="brand-name">Aprender Siendo</strong><p>Cada persona, un modo único de aprender.</p></div></div>`}<div class="wrap foot-in">
     <button class="foot-link strong" data-act="report">Reportar un inconveniente</button>
     ${canLeave && !child ? `<button class="foot-link strong" data-act="leave">Dar de baja mi cuenta</button>` : ""}
     ${child ? "" : `
+    <button class="foot-link" data-act="legal" data-doc="arrepentimiento">Botón de arrepentimiento</button>
     <button class="foot-link" data-act="legal" data-doc="terminos">Términos de uso</button>
     <button class="foot-link" data-act="legal" data-doc="privacidad">Privacidad</button>
     <button class="foot-link" data-act="legal" data-doc="ia">Uso de inteligencia artificial</button>
@@ -98,7 +99,7 @@ function trialBar(t) {
   const cls = t.warn ? "trial warn" : "trial";
   return `<div class="${cls}"><div class="wrap">
     ${t.warn ? `<strong>Tu prueba gratuita vence pronto.</strong> ` : ""}Prueba gratuita: te quedan <strong>${t.daysLeft} ${t.daysLeft === 1 ? "día" : "días"}</strong> (hasta el ${fmtDate(t.end)}).
-    ${t.warn ? ` <button class="linklike" data-act="legal" data-doc="post">Ver qué pasa después</button>` : ""}
+    ${t.warn ? ` <button class="linklike" data-go="subscribe">Ver planes</button> · <button class="linklike" data-act="legal" data-doc="post">Qué pasa después</button>` : ""}
   </div></div>`;
 }
 
@@ -139,7 +140,8 @@ function render() {
   const trial = user && Store.trialInfo(user);
   let html;
   if (State.view === "child") return renderChild(user);
-  const blocked = user && trial && trial.expired && !["account", "leave", "legal"].includes(State.view);
+  const access = user && Store.accessInfo(user);
+  const blocked = user && !access.access && !["account", "leave", "legal", "subscribe", "checkout"].includes(State.view);
   if (blocked) html = viewExpired(user, trial);
   else html = (Views[State.view] || Views.landing)(user);
   app().innerHTML = shell(user, html);
@@ -419,13 +421,112 @@ Binders["request-pro"] = () => {
 
 /* ---------- Prueba vencida ---------- */
 function viewExpired(user, t) {
+  const s = user.subscription;
+  const lapsed = s && s.paidThrough;
   return `<section class="narrow card">
-    <h1>Tu prueba gratuita terminó</h1>
-    <p>La prueba de ${Store.db.config.trialDays} días terminó el ${fmtDate(t.end)}. Mientras dure la beta, las actividades quedan en pausa para esta cuenta.</p>
-    <p><strong>Condiciones después de la prueba:</strong> ${esc(LEGAL.postTrialConditions)}</p>
-    <div class="row wrap-row"><button class="btn btn-soft" data-go="account">Ver mi cuenta y mis datos</button>
-    <button class="btn btn-soft" data-act="legal" data-doc="post">Qué pasa con mis datos</button></div>
+    <h1>${lapsed ? "Tu suscripción no está vigente" : "Tu prueba gratuita terminó"}</h1>
+    ${lapsed ? `<p>El período pago terminó el ${fmtDate(s.paidThrough)}. Las actividades quedan en pausa hasta que vuelvas a suscribirte.</p>`
+      : `<p>La prueba de ${Store.db.config.trialDays} días terminó el ${t ? fmtDate(t.end) : "—"}. Las actividades quedan en pausa hasta que te suscribas.</p>`}
+    ${planCards()}
+    <div class="row wrap-row"><button class="btn btn-primary" data-go="subscribe">Suscribirme</button>
+    <button class="btn btn-soft" data-go="account">Ver mi cuenta y mis datos</button>
+    <button class="btn btn-soft" data-act="legal" data-doc="post">Qué pasa con mis datos</button>
+    <button class="btn btn-ghost" data-act="leave">Dar de baja mi cuenta</button></div>
   </section>`;
+}
+
+/* ==========================================================================
+   SUSCRIPCIÓN — montos y reglas en Billing (código); textos en content.js
+   ========================================================================== */
+const fmtArs = (n) => "$ " + Number(n).toLocaleString("es-AR");
+const fmtUsd = (cents) => "US$ " + (cents / 100).toLocaleString("es-AR");
+const subStatusLabel = { pendiente: "Pago sin confirmar", activa: "Activa", pausada: "Pausada", cancelada: "Cancelada", arrepentimiento: "Cancelada por arrepentimiento" };
+function priceLine(planId) {
+  try { return fmtArs(Store.priceArs(planId)); } catch (e) { return "precio en pesos a confirmar"; }
+}
+function planCards(selectable = false) {
+  return `<div class="plan-choice" ${selectable ? 'role="radiogroup" aria-label="Plan"' : ""}>${Object.values(Billing.PLANS).map((p) => {
+    const per = p.months === 1 ? "por mes" : "por año";
+    const inner = `<strong class="plan-name">${esc(p.label)}</strong>
+      <span class="plan-price">${priceLine(p.id)} <span class="hint">${per}</span></span>
+      <span class="hint">${fmtUsd(p.usdCents)} ${per}${p.months === 12 ? ` · ${Billing.ANNUAL_DISCOUNT_PCT} % de descuento` : ""}</span>`;
+    return selectable
+      ? `<label class="card plan-opt"><input type="radio" name="plan" value="${p.id}" ${p.id === "mensual" ? "checked" : ""}> <span class="plan-body">${inner}</span></label>`
+      : `<div class="card plan-opt"><span class="plan-body">${inner}</span></div>`;
+  }).join("")}</div>`;
+}
+
+Views.subscribe = (user) => {
+  if (user.role === "admin") return `<p>La administración no se suscribe.</p>`;
+  const s = user.subscription;
+  if (s && ["activa", "pausada"].includes(s.status)) return `<section class="narrow card"><h1>Ya tenés una suscripción</h1><p>Plan ${esc(Billing.PLANS[s.planId].label.toLowerCase())}, ${esc(subStatusLabel[s.status].toLowerCase())}.</p><button class="btn btn-primary" data-go="account">Ver mi cuenta</button></section>`;
+  return `<section class="narrow card">
+    <p class="eyebrow">Suscripción</p><h1>Elegí tu plan</h1>
+    <form id="sub" class="form">
+      ${planCards(true)}
+      <ul class="sub-terms"><li>${esc(BILLING_TEXT.renewal)}</li><li>${esc(BILLING_TEXT.exchange)}</li><li>${esc(BILLING_TEXT.withdrawal)}</li><li>${esc(BILLING_TEXT.noCard)}</li></ul>
+      <p class="hint">El primer cobro se hace hoy, al confirmar el pago.</p>
+      <label class="check"><input type="checkbox" id="sub-ok" required> <span>${esc(BILLING_TEXT.consent)} <button type="button" class="linklike" data-act="legal" data-doc="terminos">Ver condiciones</button></span></label>
+      <p class="err" id="sub-err" role="alert"></p>
+      <div class="row wrap-row"><button class="btn btn-primary">Ir a pagar con Mercado Pago</button><button type="button" class="btn btn-ghost" data-go="account">Ahora no</button></div>
+    </form></section>`;
+};
+Binders.subscribe = (user) => {
+  const f = $("#sub"); if (!f) return;
+  f.addEventListener("submit", (e) => { e.preventDefault();
+    const plan = ($("input[name=plan]:checked") || {}).value;
+    const r = Store.startSubscription(user, plan, $("#sub-ok").checked);
+    if (r.error) { $("#sub-err").textContent = r.error; return; }
+    go("checkout"); });
+};
+
+/* Simulación de la página de Mercado Pago. En la versión real el navegador va a
+   mercadopago.com.ar y vuelve; acá NO se piden datos de tarjeta. */
+Views.checkout = (user) => {
+  const s = user.subscription;
+  if (!s || s.status !== "pendiente") return `<section class="narrow card"><h1>No hay un pago pendiente</h1><button class="btn btn-primary" data-go="account">Ver mi cuenta</button></section>`;
+  return `<section class="narrow card checkout-sim">
+    <div class="notice notice-warn" role="note"><strong>Simulación.</strong> ${esc(BILLING_TEXT.demo)}</div>
+    <p class="eyebrow">Mercado Pago (simulado)</p><h1>Confirmá tu pago</h1>
+    <dl class="dl"><dt>Plan</dt><dd>${esc(Billing.PLANS[s.planId].label)}</dd><dt>Monto</dt><dd>${fmtArs(s.amountArs)} ${s.planId === "anual" ? "por año" : "por mes"}</dd></dl>
+    <div class="row wrap-row"><button class="btn btn-primary" data-pay="ok">Simular pago aprobado</button><button class="btn btn-soft" data-pay="no">Simular pago rechazado</button></div>
+  </section>`;
+};
+Binders.checkout = (user) => {
+  $$("[data-pay]").forEach((b) => b.addEventListener("click", () => {
+    const ok = b.dataset.pay === "ok";
+    Store.simulateCheckout(user, ok);
+    if (ok) { notice("¡Listo! Tu suscripción está activa.", "ok"); go("home"); }
+    else { notice("El pago no se aprobó. No se cobró nada. Podés intentar de nuevo con otro medio de pago.", "warn"); go("subscribe"); }
+  }));
+};
+
+function subscriptionCard(user) {
+  if (user.role === "admin") return "";
+  const s = user.subscription;
+  const acc = Store.accessInfo(user);
+  if (!s || ["cancelada", "arrepentimiento"].includes(s.status) && !(s.paidThrough && acc.reason === "suscripcion")) {
+    return `<section class="card"><h2>Suscripción</h2>
+      ${s ? `<p>${esc(subStatusLabel[s.status])}${s.refundStatus ? ` · reembolso ${esc(s.refundStatus)}` : ""}.</p>` : `<p>No tenés una suscripción. ${esc(LEGAL.postTrialConditions)}</p>`}
+      <button class="btn btn-primary" data-go="subscribe">Suscribirme</button></section>`;
+  }
+  return `<section class="card"><h2>Suscripción</h2>
+    <dl class="dl"><dt>Plan</dt><dd>${esc(Billing.PLANS[s.planId].label)} · ${fmtArs(s.amountArs)} ${s.planId === "anual" ? "por año" : "por mes"}</dd>
+    <dt>Estado</dt><dd>${esc(subStatusLabel[s.status])}</dd>
+    ${s.paidThrough ? `<dt>${s.status === "activa" ? "Próxima renovación" : "Acceso hasta"}</dt><dd>${fmtDate(s.paidThrough)}</dd>` : ""}</dl>
+    <div class="row wrap-row">
+      ${s.status === "pendiente" ? `<button class="btn btn-primary" data-go="checkout">Completar el pago</button>` : ""}
+      ${["pendiente", "activa", "pausada"].includes(s.status) ? `<button class="btn btn-danger" id="sub-cancel">Cancelar suscripción</button>` : `<button class="btn btn-primary" data-go="subscribe">Volver a suscribirme</button>`}
+      ${Store.canWithdraw(user) ? `<button class="btn btn-ghost" data-act="legal" data-doc="arrepentimiento">Botón de arrepentimiento</button>` : ""}
+    </div>
+    <p class="hint">${esc(BILLING_TEXT.renewal)}</p></section>`;
+}
+function bindSubscriptionCard(user) {
+  const b = $("#sub-cancel"); if (!b) return;
+  b.addEventListener("click", () => modal(`<h2 id="modal-title">¿Cancelar la suscripción?</h2>
+    <p>No se te va a cobrar más.${user.subscription.paidThrough ? ` Seguís usando la app hasta el ${fmtDate(user.subscription.paidThrough)}.` : ""}</p>
+    <div class="row"><button class="btn btn-danger" id="do-cancel">Sí, cancelar</button><button class="btn btn-ghost" data-close>Volver</button></div>`,
+    (root) => $("#do-cancel", root).addEventListener("click", () => { Store.cancelSubscription(user); notice("Cancelaste la suscripción. No se te va a cobrar más.", "ok"); go("account"); })));
 }
 
 /* ---------- Inicio según rol ---------- */
@@ -766,6 +867,7 @@ Views.account = (user) => {
       ${user.matricula ? `<dt>Matrícula</dt><dd>${esc(user.matricula.numero)} · ${esc(user.matricula.provincia)} · ${user.matricula.verificada ? "verificada el " + fmtDate(user.matricula.verifiedAt) : "sin verificar"}</dd>` : ""}
       <dt>Activación</dt><dd>${user.activatedAt ? fmtDate(user.activatedAt) : "—"}</dd>
       <dt>Prueba gratuita</dt><dd>${t ? (t.expired ? "Terminó el " + fmtDate(t.end) : `Quedan ${t.daysLeft} días (hasta el ${fmtDate(t.end)})`) : "—"}</dd></dl></section>
+    ${subscriptionCard(user)}
     <section class="card"><h2>Autorizaciones</h2>
       <p>Términos y privacidad aceptados el ${fmtDate(user.consents.terms.at)} (versión ${esc(user.consents.terms.v)}).</p>
       <label class="check"><input type="checkbox" id="impr" ${user.consents.improvement.granted ? "checked" : ""}> <span>Autorizo usar datos sin identificación, agregados, para mejorar los programas (opcional).</span></label>
@@ -781,6 +883,7 @@ Views.account = (user) => {
     <button class="btn btn-danger" data-act="leave">Dar de baja mi cuenta</button></section>`;
 };
 Binders.account = (user) => {
+  bindSubscriptionCard(user);
   $("#impr").addEventListener("change", (e) => { Store.setImprovementConsent(user, e.target.checked); notice(e.target.checked ? "Guardamos tu autorización." : "Retiraste tu autorización.", "ok"); render(); });
   $("#dr").addEventListener("submit", (e) => { e.preventDefault();
     const n = Store.addDataRequest(user, $("#dr-kind").value, $("#dr-det").value);
@@ -797,7 +900,7 @@ Views.leave = (user) => {
   if (step === 2) return `<section class="narrow card">
     <p class="eyebrow">Paso 2 de 3</p><h1>Qué pasa con tu cuenta y tus datos</h1>
     <h2>El servicio</h2><ul><li>Se cierra tu sesión y no vas a poder volver a ingresar.</li>
-      <li>Durante la beta no hay suscripción ni cobros, así que no hay nada que cancelar.</li>
+      <li>${user.subscription && ["pendiente", "activa", "pausada"].includes(user.subscription.status) ? "Se cancela tu suscripción y no se te cobra más." : "No tenés una suscripción activa, así que no hay cobros para cancelar."}</li>
       ${isPro ? "<li>Tus pacientes quedan archivados y las familias vinculadas dejan de ver sus pautas.</li>" : "<li>Se quita tu vínculo con los pacientes. La profesional conserva sus registros profesionales.</li>"}</ul>
     <h2>Tus datos</h2><ul><li>Tu correo y tu nombre para mostrar se borran en el momento.</li>
       <li>Los registros de actividad ${isPro ? "de tus pacientes" : "que hiciste acompañando"} se conservan según la política de conservación: ${esc(LEGAL.retention)}</li>
@@ -848,6 +951,7 @@ const AdminTabs = {
       <div class="card stat"><span class="stat-lab">Cuentas activas</span><span class="stat-num">${active.length}</span><span class="hint">${active.filter((u) => u.role === "profesional").length} profesionales · ${active.filter((u) => u.role === "familia").length} familias</span></div>
       <div class="card stat"><span class="stat-lab">Pruebas por vencer (≤ ${db.config.warnDays} días)</span><span class="stat-num">${trials.filter((x) => x.warn).length}</span><span class="hint">${trials.filter((x) => x.expired).length} vencidas</span></div>
       <div class="card stat"><span class="stat-lab">Sesiones de actividad (7 días)</span><span class="stat-num">${s7.length}</span><span class="hint">Completadas en 28 días: ${completion}%</span></div>
+      <div class="card stat"><span class="stat-lab">Suscripciones activas</span><span class="stat-num">${users.filter((u) => u.subscription?.status === "activa").length}</span><span class="hint">${users.filter((u) => u.subscription?.refundStatus === "pendiente").length} reembolsos pendientes</span></div>
       <div class="card stat"><span class="stat-lab">Reportes abiertos</span><span class="stat-num">${openReports}</span><span class="hint">${db.users.filter((u) => u.status === "pendiente").length} solicitudes profesionales pendientes</span></div>
     </div>
     <div class="grid-2"><section class="card"><h2>Sesiones por semana (todas las cuentas)</h2>${bars(weeks, ["Hace 4 sem.", "Hace 3", "Hace 2", "Última"])}</section>
@@ -868,13 +972,16 @@ const AdminTabs = {
         <div><label for="cp-prov">Provincia</label><input id="cp-prov" required></div></div>
         <label class="check"><input type="checkbox" required> Verifiqué la matrícula en el registro oficial o con la constancia del colegio.</label>
         <p class="err" id="cp-err" role="alert"></p><button class="btn btn-primary">Crear y activar</button></form></section>
-    <div class="table-wrap"><table class="tbl"><thead><tr><th>Cuenta</th><th>Perfil</th><th>Estado</th><th>Matrícula</th><th>Prueba</th><th>Mejora</th><th>Acciones</th></tr></thead>
+    <div class="table-wrap"><table class="tbl"><thead><tr><th>Cuenta</th><th>Perfil</th><th>Estado</th><th>Matrícula</th><th>Prueba</th><th>Suscripción</th><th>Mejora</th><th>Acciones</th></tr></thead>
     <tbody>${db.users.map((u) => { const t = Store.trialInfo(u); return `<tr>
       <td>${esc(u.alias)}<br><span class="small mono">${esc(u.email)}</span></td><td>${roleLabel[u.role]}</td>
       <td><span class="pill ${u.status === "activa" ? "pill-ok" : u.status === "pendiente" ? "pill-warn" : "pill-muted"}">${u.status}</span></td>
       <td>${u.matricula ? `${esc(u.matricula.numero)} · ${esc(u.matricula.provincia)} · ${u.matricula.verificada ? "verificada" : "sin verificar"}` : "—"}</td>
-      <td>${t ? (t.expired ? "vencida" : t.daysLeft + " días") : "—"}</td><td>${u.consents?.improvement?.granted ? "sí" : "no"}</td>
+      <td>${t ? (t.expired ? "vencida" : t.daysLeft + " días") : "—"}</td>
+      <td>${u.subscription ? `${esc(Billing.PLANS[u.subscription.planId].label)} · ${esc(subStatusLabel[u.subscription.status])}${u.subscription.paidThrough ? "<br><span class=small>hasta " + fmtDate(u.subscription.paidThrough) + "</span>" : ""}` : "—"}</td>
+      <td>${u.consents?.improvement?.granted ? "sí" : "no"}</td>
       <td class="actions">${u.status === "pendiente" ? `<button class="btn btn-soft" data-verify="${u.id}">Verifiqué la matrícula: activar</button>` : ""}
+        ${u.subscription?.refundStatus === "pendiente" ? `<button class="btn btn-soft" data-refund="${u.id}">Registré el reembolso en Mercado Pago</button>` : ""}
         ${t && u.status === "activa" ? `<button class="btn btn-ghost" data-shift="${u.id}" title="Solo para probar la beta">Simular +5 días</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>`;
   },
   contenidos() {
@@ -918,6 +1025,12 @@ const AdminTabs = {
         <div><label for="cfg-warn">Avisar cuando falten (días)</label><input id="cfg-warn" type="number" min="1" max="14" value="${c.warnDays}"></div>
         <div><label for="cfg-idle">Cerrar sesión tras inactividad (min)</label><input id="cfg-idle" type="number" min="5" max="240" value="${c.sessionIdleMin}"></div></div>
         <button class="btn btn-primary">Guardar</button></form></section>
+    <section class="card"><h2>Precio en pesos</h2>
+      <p>Los planes están fijados en dólares (mensual ${fmtUsd(Billing.PLANS.mensual.usdCents)}, anual ${fmtUsd(Billing.PLANS.anual.usdCents)}). Mercado Pago cobra en pesos con la cotización oficial del dólar del Banco Nación (billete, vendedor). En la versión real la actualiza una tarea diaria y, si falla o el salto es mayor al ${Billing.RATE_MAX_JUMP_PCT} %, avisa y conserva el valor anterior. Hoy: mensual ${priceLine("mensual")}, anual ${priceLine("anual")}. <strong>En la beta el valor es de ejemplo y se carga a mano.</strong> Un cambio afecta solo a suscripciones nuevas.</p>
+      <form id="cfg-pay" class="form"><div class="grid-form">
+        <div><label for="cfg-rate">Dólar oficial BNA, vendedor (pesos)</label><input id="cfg-rate" type="number" min="1" step="0.01" value="${c.arsPerUsd ?? ""}"></div>
+        <div><label for="cfg-grace">Días de gracia si falla un cobro</label><input id="cfg-grace" type="number" min="0" max="15" value="${c.graceDays}"></div></div>
+        <button class="btn btn-primary">Guardar precio</button></form></section>
     <section class="card"><h2>Herramientas de prueba</h2>
       <p>Adelantar el reloj de la demostración permite probar avisos y vencimientos sin esperar. Hoy está adelantado <strong>${c.clockOffsetDays} días</strong>.</p>
       <div class="row wrap-row"><button class="btn btn-soft" data-clock="1">Adelantar 1 día</button><button class="btn btn-soft" data-clock="5">Adelantar 5 días</button><button class="btn btn-ghost" data-clock="0">Volver a hoy</button></div>
@@ -933,6 +1046,12 @@ function bindAdmin(user) {
     if (r.error) { $("#cp-err").textContent = r.error; return; }
     notice("Cuenta profesional creada y activada. Su prueba empieza hoy.", "ok"); go("home", { tab: "usuarios" }); });
   $$("[data-verify]").forEach((b) => b.addEventListener("click", () => { Store.verifyProfessional(user, b.dataset.verify); notice("Matrícula verificada. La cuenta está activa.", "ok"); go("home", { tab: "usuarios" }); }));
+  $$("[data-refund]").forEach((b) => b.addEventListener("click", () => { Store.markRefunded(user, b.dataset.refund); go("home", { tab: "usuarios" }); }));
+  const cp2 = $("#cfg-pay");
+  if (cp2) cp2.addEventListener("submit", (e) => { e.preventDefault();
+    const rate = +$("#cfg-rate").value, grace = +$("#cfg-grace").value;
+    if (!(rate > 0) || !(grace >= 0 && grace <= 15)) { notice("Revisá los valores: el tipo de cambio debe ser mayor que cero y la gracia entre 0 y 15 días.", "warn"); return go("home", { tab: "config" }); }
+    Store.setConfig(user, { arsPerUsd: rate, graceDays: grace }); notice("Precio guardado.", "ok"); go("home", { tab: "config" }); });
   $$("[data-shift]").forEach((b) => b.addEventListener("click", () => { Store.shiftActivation(user, b.dataset.shift, 5); go("home", { tab: "usuarios" }); }));
   $$("[data-toggle]").forEach((b) => b.addEventListener("click", () => { const id = b.dataset.toggle; Store.setActivity(user, id, !Store.db.activityState[id].enabled); go("home", { tab: "contenidos" }); }));
   $$("[data-rstatus]").forEach((s) => s.addEventListener("change", () => Store.setReportStatus(user, s.dataset.rstatus, s.value)));
@@ -968,6 +1087,7 @@ const LegalDocs = {
     <h3>2. Versión beta</h3><p>El servicio está en etapa beta, con acceso por invitación. Puede tener errores o cambios.</p>
     <h3>3. Cuentas</h3><p>Hay cuentas de familia o responsable, de profesional (con matrícula verificada) y de administración. Cada cuenta puede tener una sola sesión activa a la vez.</p>
     <h3>4. Prueba gratuita</h3><p>Cada cuenta tiene ${Store.db.config.trialDays} días de prueba gratuita desde su activación. La app muestra el tiempo restante y avisa antes del vencimiento. Condiciones posteriores: ${esc(LEGAL.postTrialConditions)}</p>
+    <h3>4 bis. Suscripción y pagos</h3><p>${esc(BILLING_TEXT.renewal)} ${esc(BILLING_TEXT.exchange)} ${esc(BILLING_TEXT.noCard)}</p><p>${esc(BILLING_TEXT.withdrawal)}</p>
     <h3>5. Uso responsable</h3><p>Las actividades se hacen siguiendo la indicación de la profesional. Las sugerencias automáticas son orientativas y las revisa la profesional; el desempeño en la app no equivale a mejoría o retroceso clínico.</p>
     <h3>6. Baja</h3><p>Podés dar de baja tu cuenta en cualquier momento desde «Dar de baja mi cuenta».</p>
     <h3>7. Contacto</h3><p>${esc(LEGAL.contact)}</p>` },
@@ -991,6 +1111,13 @@ const LegalDocs = {
     <li>Las sugerencias que ve la profesional están marcadas como «Sugerencia automática» y requieren su revisión. Nunca se muestran a familias ni a niños.</li>
     <li>Cuando se incorpore un modelo de lenguaje para redactar resúmenes, recibirá solo indicadores con el código del paciente, sin datos personales, y lo vamos a informar acá antes de activarlo.</li>
     <li>El desempeño en la app no equivale a una mejoría ni a un retroceso clínico. La interpretación es de la profesional.</li></ul>` },
+  arrepentimiento: { title: "Botón de arrepentimiento", body: () => {
+    const u = Store.currentUser(); const user = u && u.id ? u : null;
+    const can = user && Store.canWithdraw(user);
+    return `${draftBanner}<p>${esc(BILLING_TEXT.withdrawal)}</p>
+    ${can ? `<p>Te suscribiste el ${fmtDate(user.subscription.startedAt)}. Si te arrepentís, la suscripción se cancela ahora, dejás de tener acceso y registramos el reembolso de ${fmtArs(user.subscription.amountArs)}.</p>
+      <button class="btn btn-danger" id="withdraw">Me arrepiento: cancelar y pedir el reembolso</button>`
+      : user ? `<p>No tenés una suscripción dentro del plazo de 10 días.</p>` : `<p>Para usarlo, ingresá con tu cuenta. También podés escribirnos a ${esc(LEGAL.contact)}.</p>`}`; } },
   post: { title: "Qué pasa cuando termina la prueba", body: () => `${draftBanner}
     <p>Condiciones después de la prueba: ${esc(LEGAL.postTrialConditions)}</p><p>Conservación de los datos: ${esc(LEGAL.retention)}</p>
     <p>Podés dar de baja tu cuenta en cualquier momento.</p>` }
@@ -999,7 +1126,12 @@ Views.legal = () => {
   const d = LegalDocs[State.params.doc] || LegalDocs.beta;
   return `<button class="linklike back" id="legal-back">← Volver</button><article class="narrow card legal"><h1>${esc(d.title)}</h1>${d.body()}</article>`;
 };
-Binders.legal = () => { $("#legal-back").addEventListener("click", () => go(State.params.back && State.params.back !== "legal" ? State.params.back : "home")); };
+Binders.legal = (user) => {
+  $("#legal-back").addEventListener("click", () => go(State.params.back && State.params.back !== "legal" ? State.params.back : "home"));
+  const w = $("#withdraw");
+  if (w && user) w.addEventListener("click", () => { const r = Store.withdraw(user);
+    notice(r.error ? r.error : "Registramos tu arrepentimiento: cancelamos la suscripción y el reembolso queda en trámite.", r.error ? "warn" : "ok"); go("account"); });
+};
 
 /* ==========================================================================
    Arranque y control de sesión entre pestañas
