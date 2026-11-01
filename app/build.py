@@ -4,7 +4,7 @@ import pathlib
 root = pathlib.Path(__file__).parent
 src = root / "src"
 css = (src / "styles.css").read_text()
-js = "\n".join((src / f).read_text() for f in ["content.js", "store.js", "followup.js", "illustrations.js", "avatars.js", "activities.js", "app.js"])
+js = "\n".join((src / f).read_text() for f in ["content.js", "store.js", "followup.js", "illustrations.js", "avatars.js", "activities.js", "content_simulador.js", "app.js", "simulador.js"])
 head = """<title>Aprender Siendo Beta</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Aprender Siendo: versión beta de demostración con datos ficticios.">

@@ -16,7 +16,9 @@ const roleLabel = { admin: "Administración", profesional: "Profesional", famili
 const State = { view: "landing", params: {}, pending: null, notice: null, child: null };
 const app = () => $("#app");
 
-function go(view, params = {}) { State.view = view; State.params = params; render(); window.scrollTo(0, 0); }
+function go(view, params = {}) {
+  if (view !== "sim" && typeof Sim !== "undefined") { Sim.apoyos = null; Sim.risk = false; } /* el texto libre del generador no se conserva */
+  State.view = view; State.params = params; render(); window.scrollTo(0, 0); }
 function notice(text, kind = "info") { State.notice = { text, kind }; }
 
 /* ---------- Lectura de voz (opcional, si el navegador la ofrece) ---------- */
@@ -87,7 +89,7 @@ function shell(user, inner, { child = false } = {}) {
 function navFor(user) {
   const items = {
     familia: [["home", "Inicio"], ["account", "Mi cuenta"]],
-    profesional: [["home", "Pacientes"], ["catalog", "Actividades"], ["account", "Mi cuenta"]],
+    profesional: [["home", "Pacientes"], ["catalog", "Actividades"], ["sim", "Simulador (borrador)"], ["account", "Mi cuenta"]],
     admin: [["home", "Panel"]]
   }[user.role];
   return items.map(([v, l]) => `<button class="btn btn-ghost ${State.view === v ? "is-on" : ""}" data-go="${v}">${l}</button>`).join("");
@@ -883,7 +885,11 @@ const AdminTabs = {
     <div class="table-wrap"><table class="tbl"><thead><tr><th>Actividad</th><th>Área</th><th>Edades</th><th>Estado</th><th></th></tr></thead><tbody>
     ${ACTIVITIES.map((a) => `<tr><td>${esc(a.name)}</td><td>${esc(a.area)}</td><td>${a.ageMin}–${a.ageMax}</td><td>${db.activityState[a.id].enabled ? '<span class="pill pill-ok">Disponible</span>' : '<span class="pill pill-muted">Retirada</span>'}</td>
       <td><button class="btn ${db.activityState[a.id].enabled ? "btn-danger" : "btn-soft"}" data-toggle="${a.id}">${db.activityState[a.id].enabled ? "Retirar" : "Habilitar"}</button></td></tr>`).join("")}</tbody></table></div>
-    <p class="hint">Versión de contenido: ${esc(CONTENT_VERSION)}</p>`;
+    <p class="hint">Versión de contenido: ${esc(CONTENT_VERSION)}</p>
+    <h2>Herramientas en borrador</h2>
+    <div class="table-wrap"><table class="tbl"><thead><tr><th>Herramienta</th><th>Para</th><th>Versión</th><th>Estado</th><th></th></tr></thead><tbody>
+      <tr><td>Simulador de casos y generador de apoyos</td><td>Profesionales</td><td class="small">${esc(SIM_CONTENT_VERSION)}</td><td>${db.config.draftToolsEnabled !== false ? '<span class="pill pill-warn">Borrador visible</span>' : '<span class="pill pill-muted">Retirada</span>'}</td>
+      <td><button class="btn ${db.config.draftToolsEnabled !== false ? "btn-danger" : "btn-soft"}" data-simtoggle>${db.config.draftToolsEnabled !== false ? "Retirar" : "Habilitar"}</button></td></tr></tbody></table></div>`;
   },
   reportes() {
     const db = Store.db;
@@ -935,6 +941,7 @@ function bindAdmin(user) {
   $$("[data-verify]").forEach((b) => b.addEventListener("click", () => { Store.verifyProfessional(user, b.dataset.verify); notice("Matrícula verificada. La cuenta está activa.", "ok"); go("home", { tab: "usuarios" }); }));
   $$("[data-shift]").forEach((b) => b.addEventListener("click", () => { Store.shiftActivation(user, b.dataset.shift, 5); go("home", { tab: "usuarios" }); }));
   $$("[data-toggle]").forEach((b) => b.addEventListener("click", () => { const id = b.dataset.toggle; Store.setActivity(user, id, !Store.db.activityState[id].enabled); go("home", { tab: "contenidos" }); }));
+  $$("[data-simtoggle]").forEach((b) => b.addEventListener("click", () => { Store.setConfig(user, { draftToolsEnabled: Store.db.config.draftToolsEnabled === false }); go("home", { tab: "contenidos" }); }));
   $$("[data-rstatus]").forEach((s) => s.addEventListener("change", () => Store.setReportStatus(user, s.dataset.rstatus, s.value)));
   $$("[data-kill]").forEach((b) => b.addEventListener("click", () => {
     if (b.dataset.kill === user.id) { notice("Esa es tu propia sesión. Usá «Salir».", "warn"); return go("home", { tab: "sesiones" }); }

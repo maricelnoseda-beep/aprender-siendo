@@ -27,6 +27,7 @@ jobs:
         run: |
           (cd app/dist && python3 -m http.server 8765 &) && sleep 1
           node tests/e2e.js
+          node tests/e2e_simulador.js
       - name: Huella del artefacto
         run: sha256sum app/dist/index.html | tee app/dist/SHA256
       - uses: actions/upload-artifact@v4
