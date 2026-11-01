@@ -1,4 +1,4 @@
-/* avatars.js — Personajes infantiles (busto) con expresión según el ánimo elegido. */
+/* avatars.js — Animalitos con expresión según el ánimo elegido. */
 const Avatar = {
   face(kind) {
     const ink = "#24302D", e = (x, y) => `<circle cx="${x}" cy="${y}" r="4.2" fill="${ink}"/>`;
@@ -14,34 +14,58 @@ const Avatar = {
       default: return e(39, 56) + e(61, 56) + `<path d="M42 70 H58" ${st}/>`;
     }
   },
-  hair(style, c) {
-    const cap = `<path d="M24 52 Q22 18 50 16 Q80 16 77 52 Q70 32 50 30 Q32 31 24 52Z" fill="${c}"/>`;
-    return {
-      rulos: [24, 36, 50, 64, 76].map((x, i) => `<circle cx="${x}" cy="${i % 2 ? 20 : 28}" r="13" fill="${c}"/>`).join(""),
-      colita: cap + `<ellipse cx="82" cy="44" rx="9" ry="17" fill="${c}" transform="rotate(-25 82 44)"/>`,
-      flequillo: `<path d="M23 54 Q20 16 50 15 Q81 16 77 54 L72 40 Q60 34 48 40 Q36 34 28 42Z" fill="${c}"/>`,
-      rodetes: cap + `<circle cx="26" cy="22" r="10" fill="${c}"/><circle cx="74" cy="22" r="10" fill="${c}"/>`,
-      largo: cap,
-      corto: cap
-    }[style] || cap;
+  /* Animalitos (ilustración original, mismos amigos que "Isla de Juegos"). Cada especie
+     tiene detalles propios; la cara cambia según el ánimo elegido. */
+  animal(a) {
+    const f = a.fur, l = a.light, d = a.dark || f;
+    const P = {
+      pulpo: {
+        body: `<path d="M12 104 C14 86 22 80 26 74 C30 84 34 76 38 72 C42 82 46 74 50 72 C54 82 58 74 62 72 C66 84 70 76 74 74 C78 80 86 86 88 104Z" fill="${f}"/><circle cx="30" cy="88" r="2.4" fill="${l}"/><circle cx="50" cy="90" r="2.4" fill="${l}"/><circle cx="70" cy="88" r="2.4" fill="${l}"/>`,
+        back: "", front: `<circle cx="36" cy="28" r="3" fill="${l}"/><circle cx="62" cy="25" r="4" fill="${l}"/><circle cx="68" cy="34" r="2.2" fill="${l}"/>`, nose: "", head: f
+      },
+      zorro: {
+        back: `<path d="M22 36 L24 4 L46 22Z" fill="${f}"/><path d="M78 36 L76 4 L54 22Z" fill="${f}"/><path d="M24 14 L24 4 L32 9Z" fill="${d}"/><path d="M76 14 L76 4 L68 9Z" fill="${d}"/><path d="M28 28 L28 14 L39 23Z" fill="${l}"/><path d="M72 28 L72 14 L61 23Z" fill="${l}"/>`,
+        front: `<path d="M23 48 Q36 50 50 64 Q64 50 77 48 Q74 70 50 73 Q26 70 23 48Z" fill="${l}"/>`,
+        nose: `<ellipse cx="50" cy="50" rx="2.8" ry="2" fill="${d}"/>`, head: f
+      },
+      panda: {
+        back: `<circle cx="27" cy="23" r="10" fill="${d}"/><circle cx="73" cy="23" r="10" fill="${d}"/>`,
+        front: `<ellipse cx="38" cy="47" rx="8" ry="10" fill="${d}" opacity=".28" transform="rotate(20 38 47)"/><ellipse cx="62" cy="47" rx="8" ry="10" fill="${d}" opacity=".28" transform="rotate(-20 62 47)"/>`,
+        nose: `<ellipse cx="50" cy="50" rx="2.8" ry="2" fill="${d}"/>`, head: f, stroke: "#C9D6D3", bodyColor: d
+      },
+      rana: {
+        back: `<circle cx="34" cy="24" r="11" fill="${f}"/><circle cx="66" cy="24" r="11" fill="${f}"/><circle cx="34" cy="24" r="6" fill="${l}"/><circle cx="66" cy="24" r="6" fill="${l}"/>`,
+        front: "", nose: `<circle cx="46" cy="50" r="1.1" fill="#2E5A2A"/><circle cx="54" cy="50" r="1.1" fill="#2E5A2A"/>`, head: f
+      },
+      buho: {
+        back: `<path d="M26 30 L22 8 L42 22Z" fill="${d}"/><path d="M74 30 L78 8 L58 22Z" fill="${d}"/>`,
+        front: `<circle cx="39" cy="46" r="11" fill="${l}"/><circle cx="61" cy="46" r="11" fill="${l}"/>`,
+        nose: `<path d="M47 46.5 L53 46.5 L50 51.5Z" fill="#E8A14C"/>`, head: f, bodyExtra: `<path d="M38 82 q4 4 8 0 M54 82 q4 4 8 0 M46 92 q4 4 8 0" stroke="${l}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+      },
+      tortuga: {
+        body: `<path d="M8 104 Q10 70 50 68 Q90 70 92 104Z" fill="${l}"/><path d="M30 104 L36 84 L50 78 L64 84 L70 104 M36 84 L22 80 M64 84 L78 80" stroke="${d}" stroke-width="2.6" fill="none" stroke-linejoin="round"/>`,
+        back: "", front: "", nose: `<circle cx="46" cy="50" r="1.1" fill="${d}"/><circle cx="54" cy="50" r="1.1" fill="${d}"/>`, head: f
+      }
+    };
+    return P[a.species] || P.pulpo;
   },
-  /* El cuerpo se dibuja en 100x100; la cara (pensada para centro 50,60) se reubica sobre la cabeza. */
   svg(avatarId, moodId, size = 96) {
     const a = AVATARS.find((x) => x.id === avatarId) || AVATARS[0];
     const m = MOODS.find((x) => x.id === moodId);
-    const back = a.hair === "largo" ? `<path d="M21 46 Q14 80 20 100 H80 Q86 80 79 46Z" fill="${a.hairColor}"/>` : "";
-    return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" aria-hidden="true" class="av">
+    const p = this.animal(a);
+    const uid = `avc-${a.id}-${size}-${Math.random().toString(36).slice(2, 6)}`;
+    const body = p.body || `<path d="M14 104 Q16 70 50 68 Q84 70 86 104Z" fill="${p.bodyColor || a.fur}"/><ellipse cx="50" cy="96" rx="18" ry="16" fill="${a.light}" opacity=".9"/>${p.bodyExtra || ""}`;
+    return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" aria-hidden="true" class="av av-${a.species}">
       <circle cx="50" cy="50" r="48" fill="${a.bg}"/>
-      <clipPath id="avc-${a.id}-${size}"><circle cx="50" cy="50" r="48"/></clipPath>
-      <g clip-path="url(#avc-${a.id}-${size})">
-        ${back}
-        <path d="M10 104 Q12 74 50 72 Q88 74 90 104Z" fill="${a.top}"/>
-        <path d="M40 74 Q50 84 60 74" stroke="${a.skin}" stroke-width="8" fill="none" stroke-linecap="round"/>
-        <rect x="43" y="58" width="14" height="16" rx="6" fill="${a.skin}"/>
-        <circle cx="50" cy="44" r="25" fill="${a.skin}"/>
-        ${this.hair(a.hair, a.hairColor)}
+      <clipPath id="${uid}"><circle cx="50" cy="50" r="48"/></clipPath>
+      <g clip-path="url(#${uid})">
+        ${body}
+        ${p.back}
+        <circle cx="50" cy="46" r="27" fill="${p.head}" ${p.stroke ? `stroke="${p.stroke}" stroke-width="1.5"` : ""}/>
+        ${p.front}
         <g transform="translate(50 49) scale(0.7) translate(-50 -60)">${this.face(m ? m.face : "neutral")}</g>
-        <circle cx="33" cy="52" r="4" fill="#E07B5F" opacity=".3"/><circle cx="67" cy="52" r="4" fill="#E07B5F" opacity=".3"/>
+        ${p.nose}
+        <circle cx="32" cy="55" r="4" fill="#E07B5F" opacity=".35"/><circle cx="68" cy="55" r="4" fill="#E07B5F" opacity=".35"/>
       </g></svg>`;
   }
 };

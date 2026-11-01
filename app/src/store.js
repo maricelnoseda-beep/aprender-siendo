@@ -45,6 +45,8 @@ const Store = (() => {
     try {
       const raw = localStorage.getItem(DB_KEY);
       db = raw ? JSON.parse(raw) : null;
+      /* Actividades agregadas en versiones nuevas: quedan disponibles en bases ya guardadas. */
+      if (db && db.activityState) ACTIVITIES.forEach((a) => { if (!db.activityState[a.id]) db.activityState[a.id] = { enabled: true }; });
     } catch (e) { db = memoryFallback; }
     return db;
   }

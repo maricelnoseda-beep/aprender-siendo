@@ -76,6 +76,29 @@ function roundEngine(root, { rounds, render, onDone, say }) {
 }
 
 const Engines = {
+  /* Isla de Juegos: corre aislada (iframe sin acceso a la app ni a sus datos). Solo recibe
+     de vuelta el resultado de cada ronda que el juego avisa por postMessage. */
+  isla(root, { level, onDone, avatarId }) {
+    const m = { items: 0, completed: 0, firstTry: 0, attempts: 0, hints: 0, abandoned: false, rounds: [] };
+    root.innerHTML = `<div class="isla-frame"><iframe title="Isla de Juegos" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></div>
+      <p class="isla-count" aria-live="polite">Todavía no terminaste ninguna ronda.</p>
+      <div class="child-actions"><button class="btn btn-primary big" id="isla-done">Terminé de jugar</button></div>`;
+    const fr = root.querySelector("iframe");
+    /* El amigo del juego es el mismo animalito que eligió en Aprender Siendo. */
+    const friend = { pulpo: "🐙", zorro: "🦊", panda: "🐼", rana: "🐸", buho: "🦉", tortuga: "🐢" }[avatarId];
+    fr.srcdoc = friend ? ISLA_HTML.replace("avatar:null,", `avatar:${JSON.stringify(friend)},`) : ISLA_HTML;
+    const onMsg = (e) => {
+      if (e.source !== fr.contentWindow || !e.data || e.data.type !== "isla-ronda") return;
+      const d = e.data, total = Math.max(0, Math.min(20, d.total | 0)), first = Math.max(0, Math.min(total, d.first | 0));
+      m.items += total; m.completed += total; m.firstTry += first; m.attempts += 1;
+      m.rounds.push({ area: String(d.area).slice(0, 8), first, total, level: d.level | 0 });
+      root.querySelector(".isla-count").textContent = `Rondas terminadas: ${m.attempts}. ¡Muy bien!`;
+    };
+    window.addEventListener("message", onMsg);
+    const finish = (abandoned) => { window.removeEventListener("message", onMsg); m.abandoned = abandoned || m.attempts === 0; if (!m.items) m.items = 1; onDone(m); };
+    root.querySelector("#isla-done").addEventListener("click", () => finish(false));
+    return { abandon() { finish(true); } };
+  },
   secuencias(root, { level, onDone, say }) {
     const shapes = ["circulo", "cuadrado", "triangulo", "estrella", "rombo"];
     const cols = Object.keys(Shapes.colors);

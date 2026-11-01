@@ -2,7 +2,7 @@
    app.js — Interfaz de la beta de demostración de Aprender Siendo
    ========================================================================== */
 
-const APP_VERSION = "0.2.0-beta-demo (2026-11-01)";
+const APP_VERSION = "0.3.0-beta-demo (2026-11-01)";
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -70,9 +70,11 @@ function shell(user, inner, { child = false } = {}) {
     <label><input type="checkbox" id="pref-voice"> Leer en voz alta las consignas</label>
   </div></header>
   ${trial ? trialBar(trial) : ""}`}
+  ${!child && State.view !== (user ? "home" : "landing") || (!child && user && State.params && State.params.tab && State.params.tab !== "resumen") ? `<div class="wrap home-bar"><button class="back-home" data-act="home">${homeIcon()} Volver al inicio</button></div>` : ""}
   ${State.notice ? `<div class="wrap"><div class="notice notice-${State.notice.kind}" role="status">${State.notice.text}</div></div>` : ""}
   <main id="main" class="${child ? "child-main" : State.view === "landing" && !user ? "bleed" : "wrap main"}">${child ? childBackdrop() : ""}${inner}</main>
   <footer class="foot ${child ? "foot-child" : ""}">${child ? "" : `<div class="wrap foot-brand">${brandMark(48)}<div><strong class="brand-name">Aprender Siendo</strong><p>Cada persona, un modo único de aprender.</p></div></div>`}<div class="wrap foot-in">
+    ${child ? `<button class="foot-link strong" id="ch-home">${homeIcon()} Volver al inicio</button>` : ""}
     <button class="foot-link strong" data-act="report">Reportar un inconveniente</button>
     ${canLeave && !child ? `<button class="foot-link strong" data-act="leave">Dar de baja mi cuenta</button>` : ""}
     ${child ? "" : `
@@ -82,6 +84,20 @@ function shell(user, inner, { child = false } = {}) {
     <span class="foot-meta">Aprender Siendo · aprendersiendo.ar · ${APP_VERSION}. Las herramientas no reemplazan la evaluación profesional.</span>`}
   </div></footer>
   <div id="modal-root"></div>`;
+}
+
+function homeIcon() {
+  return `<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9h4.5v-5h3v5H18v-9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>`;
+}
+
+/* Sujeción "mantener apretado" para que la salida la haga una persona adulta. */
+function holdButton(b, onDone, ms = 1500) {
+  let timer = null;
+  const startHold = (e) => { e.preventDefault(); b.classList.add("holding"); timer = setTimeout(onDone, ms); };
+  const stopHold = () => { b.classList.remove("holding"); clearTimeout(timer); };
+  b.addEventListener("pointerdown", startHold); ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => b.addEventListener(ev, stopHold));
+  b.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && !e.repeat) startHold(e); });
+  b.addEventListener("keyup", stopHold);
 }
 
 function navFor(user) {
@@ -103,10 +119,11 @@ function trialBar(t) {
 }
 
 /* ---------- Íconos ilustrados de actividad y fondo del modo niño ---------- */
-const ACT_COLORS = { memoria: ["#F2B8A2", "#E07B5F"], secuencias: ["#C9D8EE", "#4F7BB0"], distinto: ["#F4E3B8", "#C99528"], contar: ["#DCE9E2", "#55867D"], clasificar: ["#E4DBF2", "#8A72B8"] };
+const ACT_COLORS = { memoria: ["#F2B8A2", "#E07B5F"], secuencias: ["#C9D8EE", "#4F7BB0"], distinto: ["#F4E3B8", "#C99528"], contar: ["#DCE9E2", "#55867D"], clasificar: ["#E4DBF2", "#8A72B8"], isla: ["#D9EEF0", "#1B7F86"] };
 function actIcon(id, size = 64) {
   const [bg, fg] = ACT_COLORS[id] || ["#DCE9E2", "#315F59"];
   const art = {
+    isla: `<path d="M10 66 Q50 54 90 66 L90 90 H10Z" fill="#9FD3D8"/><ellipse cx="50" cy="64" rx="28" ry="9" fill="#F2D59A"/><path d="M50 62 Q48 40 54 26" stroke="#8A5A3B" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M54 26 Q40 20 30 30 M54 26 Q66 16 76 24 M54 26 Q58 36 68 40 M54 26 Q46 34 38 42" stroke="${fg}" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="76" cy="16" r="6" fill="#F2B33D"/>`,
     memoria: `<rect x="18" y="26" width="26" height="36" rx="6" fill="${fg}" transform="rotate(-10 31 44)"/><rect x="40" y="24" width="26" height="36" rx="6" fill="#fff" stroke="${fg}" stroke-width="3" transform="rotate(8 53 42)"/><circle cx="53" cy="42" r="7" fill="${fg}"/>`,
     secuencias: `<circle cx="22" cy="42" r="9" fill="${fg}"/><rect x="36" y="33" width="18" height="18" rx="4" fill="#E8B44C"/><rect x="60" y="33" width="18" height="18" rx="5" fill="none" stroke="${fg}" stroke-width="3" stroke-dasharray="4 3"/>`,
     distinto: [0, 1, 2].flatMap((r) => [0, 1, 2].map((c) => (r === 1 && c === 2 ? `<path d="M${62} ${26 + r * 18} l8 14 h-16z" fill="#E07B5F"/>` : `<circle cx="${28 + c * 17}" cy="${33 + r * 18}" r="6.5" fill="${fg}"/>`))).join(""),
@@ -513,7 +530,7 @@ function renderChild(user) {
   else if (c.step === "feedback") {
     const m = c.rec.metrics;
     inner = `<div class="feedback">
-      <div class="cheer">${Scenes.childCheer(190)}${Avatar.svg(c.avatarId, "alegria", 110)}</div>
+      <div class="cheer">${Avatar.svg(c.avatarId, "alegria", 150)}</div>
       <h1 class="child-title">${esc(c.feedbackText)}</h1>
       <div class="effort" aria-label="Reconocimiento al esfuerzo">${Array.from({ length: Math.max(1, Math.min(5, m.attempts)) }, () => `<span class="leaf" aria-hidden="true"></span>`).join("")}</div>
       <p>${m.abandoned ? "Hiciste una parte. ¡Cada intento cuenta!" : `Intentaste ${m.attempts} ${m.attempts === 1 ? "vez" : "veces"} y llegaste hasta el final.`}</p>
@@ -559,7 +576,7 @@ function bindChild(user) {
     Voice.say(a.instruction);
     $("#ch-voice").addEventListener("click", () => { const was = Voice.on; Voice.on = true; Voice.say(a.instruction); Voice.on = was; });
     const engine = Engines[c.activityId]($("#act-root"), {
-      level: c.level, say: (t) => Voice.say(t),
+      level: c.level, avatarId: c.avatarId, say: (t) => Voice.say(t),
       onDone: (m) => { if (c.step !== "activity") return; c.rec.metrics = { level: c.level, ...m }; c.rec.endAt = Store.now();
         c.feedbackText = pick(CHILD_TEXT.feedback); advance("feedback"); }
     });
@@ -579,14 +596,19 @@ function bindChild(user) {
   }
   if (c.step === "done") {
     Voice.say(CHILD_TEXT.thanks);
-    const b = $("#ch-exit"); let timer = null;
-    const startHold = (e) => { e.preventDefault(); b.classList.add("holding"); timer = setTimeout(() => {
-      const back = c.backTo, params = c.backParams; State.child = null; notice("Actividad registrada. ¡Gracias por acompañar!", "ok"); go(back || "home", params); }, 1500); };
-    const stopHold = () => { b.classList.remove("holding"); clearTimeout(timer); };
-    b.addEventListener("pointerdown", startHold); ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => b.addEventListener(ev, stopHold));
-    b.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && !e.repeat) startHold(e); });
-    b.addEventListener("keyup", stopHold);
+    holdButton($("#ch-exit"), () => {
+      const back = c.backTo, params = c.backParams; State.child = null; notice("Actividad registrada. ¡Gracias por acompañar!", "ok"); go(back || "home", params); });
   }
+  /* "Volver al inicio" desde el modo niño: pide a una persona adulta que confirme. */
+  const hb = $("#ch-home");
+  if (hb) hb.addEventListener("click", () => {
+    const saved = c.step === "done";
+    modal(`<h2 id="modal-title">¿Volver al inicio?</h2>
+      <p>${saved ? "La actividad ya quedó registrada." : "La actividad en curso no se va a guardar."} Esta salida la hace una persona adulta.</p>
+      <div class="row"><button class="btn btn-primary hold" id="ch-home-ok"><span>Mantener apretado para salir</span><i></i></button><button class="btn btn-ghost" data-close>Seguir con la actividad</button></div>`, () => {
+      holdButton($("#ch-home-ok"), () => { State.child = null; if (saved) notice("Actividad registrada. ¡Gracias por acompañar!", "ok"); go("home"); });
+    });
+  });
 }
 
 /* ==========================================================================
