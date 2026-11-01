@@ -75,9 +75,22 @@ export function repo() {
   };
   return {
     async getConfig() {
-      const { data, error } = await db.from("config").select("ars_per_usd, grace_days").eq("id", 1).single();
+      const { data, error } = await db.from("config").select("ars_per_usd, rate_updated_at, grace_days").eq("id", 1).single();
       if (error) throw error;
-      return { arsPerUsd: Number(data.ars_per_usd), graceDays: Number(data.grace_days) };
+      return { arsPerUsd: data.ars_per_usd == null ? null : Number(data.ars_per_usd), rateUpdatedAt: ms(data.rate_updated_at), graceDays: Number(data.grace_days) };
+    },
+    async recordRate(r: { at: number; compra: number; venta: number; source: string; applied: boolean; why: string | null }) {
+      const { error } = await db.from("exchange_rates").insert({
+        read_at: new Date(r.at).toISOString(), compra: r.compra, venta: r.venta, source: r.source, applied: r.applied, reason: r.why,
+      });
+      if (error) throw error;
+    },
+    async setRate(r: { arsPerUsd: number; rateUpdatedAt: number; source: string }) {
+      const { error } = await db.from("config").update({
+        ars_per_usd: r.arsPerUsd, rate_updated_at: new Date(r.rateUpdatedAt).toISOString(), rate_source: r.source,
+        updated_at: new Date().toISOString(), updated_by: "tarea cotizacion-bna",
+      }).eq("id", 1);
+      if (error) throw error;
     },
     getSubscriptionByUser: (userId: string) =>
       one(db.from("subscriptions").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(1).maybeSingle()),
@@ -102,7 +115,7 @@ export function repo() {
       if (error) throw error;
       return true;
     },
-    async flag(subscriptionId: string, detail: string) {
+    async flag(subscriptionId: string | null, detail: string) {
       await db.from("alerts").insert({ subscription_id: subscriptionId, detail });
     },
   };

@@ -3,7 +3,7 @@
 Guía paso a paso. **Ninguna clave se le pasa a DEV-IA ni se escribe en mensajes ni en el repositorio:** se cargan directo en el gestor de secretos de Supabase.
 
 ## Antes de empezar (decisiones y trámites)
-1. **Precio en pesos.** Mercado Pago cobra en pesos. Hay que decidir el tipo de cambio que se usa para convertir US$ 20 y US$ 216, y cada cuánto se revisa.
+1. **Precio en pesos.** Decidido: cotización oficial del dólar del Banco Nación (vendedor), actualizada sola cada día hábil. Falta decidir qué pasa con quienes ya están suscriptos cuando cambia la cotización (hoy conservan su monto).
 2. **Facturación.** Para cobrar hace falta estar inscripta en ARCA (ex AFIP) y emitir factura por cada cobro. Conviene consultarlo con un contador.
 3. **Textos.** Los textos del cobro (`app/src/content.js`, bloque `BILLING_TEXT`) necesitan revisión jurídica.
 
@@ -27,6 +27,7 @@ Supabase → proyecto `aprender-siendo-prueba` → **Edge Functions** → **Secr
 - `MP_ACCESS_TOKEN` → el *Access Token* **de prueba**.
 - `MP_WEBHOOK_SECRET` → la clave secreta de los avisos.
 - `APP_URL` → `https://beta.aprendersiendo.ar`
+- `CRON_SECRET` → una contraseña larga al azar (la usa la tarea diaria de la cotización; también se guarda en Vault, ver la migración).
 
 Las credenciales **de producción** las carga solo el responsable técnico en el proyecto `aprender-siendo-produccion`, después de las dos aprobaciones.
 

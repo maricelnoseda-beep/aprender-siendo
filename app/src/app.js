@@ -1026,9 +1026,9 @@ const AdminTabs = {
         <div><label for="cfg-idle">Cerrar sesión tras inactividad (min)</label><input id="cfg-idle" type="number" min="5" max="240" value="${c.sessionIdleMin}"></div></div>
         <button class="btn btn-primary">Guardar</button></form></section>
     <section class="card"><h2>Precio en pesos</h2>
-      <p>Los planes están fijados en dólares (mensual ${fmtUsd(Billing.PLANS.mensual.usdCents)}, anual ${fmtUsd(Billing.PLANS.anual.usdCents)}). Mercado Pago cobra en pesos con este tipo de cambio. Hoy: mensual ${priceLine("mensual")}, anual ${priceLine("anual")}. <strong>En la beta el valor es de ejemplo.</strong> Un cambio afecta solo a suscripciones nuevas.</p>
+      <p>Los planes están fijados en dólares (mensual ${fmtUsd(Billing.PLANS.mensual.usdCents)}, anual ${fmtUsd(Billing.PLANS.anual.usdCents)}). Mercado Pago cobra en pesos con la cotización oficial del dólar del Banco Nación (billete, vendedor). En la versión real la actualiza una tarea diaria y, si falla o el salto es mayor al ${Billing.RATE_MAX_JUMP_PCT} %, avisa y conserva el valor anterior. Hoy: mensual ${priceLine("mensual")}, anual ${priceLine("anual")}. <strong>En la beta el valor es de ejemplo y se carga a mano.</strong> Un cambio afecta solo a suscripciones nuevas.</p>
       <form id="cfg-pay" class="form"><div class="grid-form">
-        <div><label for="cfg-rate">Pesos por dólar</label><input id="cfg-rate" type="number" min="1" step="0.01" value="${c.arsPerUsd ?? ""}"></div>
+        <div><label for="cfg-rate">Dólar oficial BNA, vendedor (pesos)</label><input id="cfg-rate" type="number" min="1" step="0.01" value="${c.arsPerUsd ?? ""}"></div>
         <div><label for="cfg-grace">Días de gracia si falla un cobro</label><input id="cfg-grace" type="number" min="0" max="15" value="${c.graceDays}"></div></div>
         <button class="btn btn-primary">Guardar precio</button></form></section>
     <section class="card"><h2>Herramientas de prueba</h2>

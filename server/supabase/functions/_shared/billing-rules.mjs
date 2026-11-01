@@ -12,8 +12,9 @@
    confirmación escrita.
    ========================================================================== */
 
-const RULES_VERSION = "1.0.0";
+const RULES_VERSION = "1.1.0";
 const DAY_MS = 86400000;
+const GRACE_DAYS_DEFAULT = 3; // decisión de la responsable (2026-11-01)
 
 // Montos en centavos de dólar para evitar errores de redondeo.
 const MONTHLY_USD_CENTS = 2000;
@@ -28,7 +29,7 @@ const PLANS = Object.freeze({
 });
 
 // Mercado Pago en Argentina cobra en pesos: el precio en dólares se convierte
-// con el tipo de cambio que fija la responsable (no se toma de internet).
+// con la cotización oficial del BNA (ver más abajo).
 const CURRENCY = "ARS";
 
 function getPlan(planId) {
@@ -40,6 +41,54 @@ function assertRate(arsPerUsd) {
   if (typeof arsPerUsd !== "number" || !Number.isFinite(arsPerUsd) || arsPerUsd <= 0) {
     throw new Error("Tipo de cambio no configurado o inválido");
   }
+}
+
+/* ---------- Cotización: dólar oficial del Banco de la Nación Argentina ----------
+   Decisión de la responsable (2026-11-01): el precio en pesos se calcula con la
+   cotización oficial publicada por el BNA. Se usa el valor VENDEDOR del dólar
+   billete (lo que paga quien compra dólares). Una tarea diaria la lee de
+   bna.com.ar y la guarda; si la lectura falla o es sospechosa, no se aplica. */
+const RATE_SOURCE = "BNA dólar billete vendedor";
+const RATE_MAX_AGE_DAYS = 5;   // cubre fines de semana largos y feriados
+const RATE_MAX_JUMP_PCT = 15;  // un salto mayor entre días se revisa a mano
+
+/** "1.440,50" o "1440,0000" → número. */
+function parseArNumber(text) {
+  const t = String(text).trim().replace(/\./g, "").replace(",", ".");
+  if (!/^\d+(\.\d+)?$/.test(t)) return NaN;
+  return Number(t);
+}
+
+/**
+ * Extrae compra y venta del dólar billete de la página de Personas del BNA.
+ * Busca la fila "Dolar U.S.A" dentro de la solapa de billetes y toma las dos
+ * celdas siguientes. Si la página cambia de forma, falla (no adivina).
+ */
+function parseBnaBilletes(html) {
+  const src = String(html);
+  const start = src.search(/id=["']billetes["']/i);
+  if (start < 0) throw new Error("BNA: no se encontró la tabla de billetes");
+  const after = src.slice(start);
+  const row = after.match(/D[oó]lar\s+U\.?S\.?A\.?\s*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>/i);
+  if (!row) throw new Error("BNA: no se encontró la fila del dólar");
+  const compra = parseArNumber(row[1]), venta = parseArNumber(row[2]);
+  if (!(compra > 0) || !(venta > 0) || compra > venta) throw new Error("BNA: valores inválidos");
+  return { compra, venta };
+}
+
+/** Controla una cotización nueva antes de aplicarla. */
+function checkNewRate(prevArsPerUsd, nextArsPerUsd) {
+  if (!(typeof nextArsPerUsd === "number" && Number.isFinite(nextArsPerUsd) && nextArsPerUsd > 0)) return { ok: false, why: "valor inválido" };
+  if (prevArsPerUsd > 0) {
+    const jump = (Math.abs(nextArsPerUsd - prevArsPerUsd) / prevArsPerUsd) * 100;
+    if (jump > RATE_MAX_JUMP_PCT) return { ok: false, why: `salto de ${jump.toFixed(1)} %` };
+  }
+  return { ok: true };
+}
+
+/** Una cotización vieja no se usa para cobrar (falla cerrado). */
+function rateIsFresh(rateUpdatedAt, now) {
+  return typeof rateUpdatedAt === "number" && now - rateUpdatedAt >= 0 && now - rateUpdatedAt <= RATE_MAX_AGE_DAYS * DAY_MS;
 }
 
 /** Precio en pesos enteros (redondeo al peso). */
@@ -177,7 +226,8 @@ async function verifyWebhookSignature({ secret, header, requestId, dataId, now, 
 }
 
 export const Billing = Object.freeze({
-  RULES_VERSION, DAY_MS, PLANS, ANNUAL_DISCOUNT_PCT, CURRENCY, WITHDRAWAL_DAYS,
+  RULES_VERSION, DAY_MS, GRACE_DAYS_DEFAULT, PLANS, ANNUAL_DISCOUNT_PCT, CURRENCY, WITHDRAWAL_DAYS,
+  RATE_SOURCE, RATE_MAX_AGE_DAYS, RATE_MAX_JUMP_PCT, parseArNumber, parseBnaBilletes, checkNewRate, rateIsFresh,
   getPlan, priceArs, addMonths, extendPaidThrough, mapPreapprovalStatus, accessStatus, canWithdraw,
   externalReference, validatePreapproval, preapprovalBody,
   parseSignatureHeader, signatureManifest, verifyWebhookSignature, safeEqual

@@ -33,7 +33,9 @@ export async function startSubscription({ user, planId, consent, consentVersion,
     throw new BillingError("exists", "Ya tenés una suscripción en curso", 409);
   }
   const cfg = await repo.getConfig();
-  const amountArs = Billing.priceArs(planId, cfg.arsPerUsd); // falla cerrado si no hay tipo de cambio
+  // Sin cotización del BNA reciente no se cobra (falla cerrado).
+  if (!Billing.rateIsFresh(cfg.rateUpdatedAt, now)) throw new BillingError("rate", "La cotización del dólar no está actualizada. Probá más tarde.", 503);
+  const amountArs = Billing.priceArs(planId, cfg.arsPerUsd);
   // Un intento anterior que quedó sin pagar se cancela antes de crear otro,
   // para que nunca haya dos suscripciones que puedan cobrar.
   if (current && current.status === "pendiente") {
@@ -136,4 +138,21 @@ export async function handleWebhook({ headers, query, body, now }, { repo, mp, s
   }
 
   return { status: 200, body: { ignored: type } };
+}
+
+/**
+ * Tarea diaria: lee la cotización oficial del BNA y la aplica si pasa los
+ * controles. Afecta solo a suscripciones nuevas. Si algo falla, deja una
+ * alerta y conserva el valor anterior.
+ */
+export async function updateRateFromBna({ now }, { fetchBnaHtml, repo }) {
+  const cfg = await repo.getConfig();
+  let parsed;
+  try { parsed = Billing.parseBnaBilletes(await fetchBnaHtml()); }
+  catch (e) { await repo.flag(null, "cotización BNA: " + e.message); return { applied: false, why: e.message }; }
+  const check = Billing.checkNewRate(cfg.arsPerUsd, parsed.venta);
+  await repo.recordRate({ at: now, compra: parsed.compra, venta: parsed.venta, source: Billing.RATE_SOURCE, applied: check.ok, why: check.why || null });
+  if (!check.ok) { await repo.flag(null, "cotización BNA no aplicada: " + check.why); return { applied: false, why: check.why }; }
+  await repo.setRate({ arsPerUsd: parsed.venta, rateUpdatedAt: now, source: Billing.RATE_SOURCE });
+  return { applied: true, arsPerUsd: parsed.venta };
 }

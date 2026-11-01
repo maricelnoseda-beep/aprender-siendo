@@ -8,8 +8,13 @@ create schema if not exists billing;
 -- Parámetros comerciales que fija la responsable del proyecto.
 create table billing.config (
   id smallint primary key default 1 check (id = 1),
-  ars_per_usd numeric(12,2) check (ars_per_usd > 0), -- null = sin configurar: no se puede suscribir (falla cerrado)
-  grace_days smallint not null default 0 check (grace_days between 0 and 15),
+  -- Cotización oficial BNA, dólar billete vendedor (decisión de la responsable,
+  -- 2026-11-01). La actualiza la tarea diaria cotizacion-bna. Sin valor o con
+  -- un valor de más de 5 días, nadie puede suscribirse (falla cerrado).
+  ars_per_usd numeric(12,2) check (ars_per_usd > 0),
+  rate_updated_at timestamptz,
+  rate_source text,
+  grace_days smallint not null default 3 check (grace_days between 0 and 15),
   updated_at timestamptz not null default now(),
   updated_by text
 );
@@ -56,6 +61,17 @@ create table billing.webhook_events (
   received_at timestamptz not null default now()
 );
 
+-- Historial de lecturas de la cotización (aplicadas o descartadas).
+create table billing.exchange_rates (
+  id bigserial primary key,
+  read_at timestamptz not null,
+  compra numeric(12,2) not null,
+  venta numeric(12,2) not null,
+  source text not null,
+  applied boolean not null,
+  reason text
+);
+
 create table billing.alerts (
   id bigserial primary key,
   subscription_id uuid references billing.subscriptions(id),
@@ -72,6 +88,7 @@ alter table billing.subscriptions enable row level security;
 alter table billing.payments enable row level security;
 alter table billing.webhook_events enable row level security;
 alter table billing.alerts enable row level security;
+alter table billing.exchange_rates enable row level security;
 
 create policy "ver mi prueba" on billing.trials for select using (auth.uid() = user_id);
 create policy "ver mi suscripcion" on billing.subscriptions for select using (auth.uid() = user_id);
@@ -96,3 +113,15 @@ returns boolean language sql stable security definer set search_path = billing, 
 $$;
 revoke all on function billing.tengo_acceso() from public;
 grant execute on function billing.tengo_acceso() to authenticated;
+
+-- Tarea diaria de la cotización (lunes a viernes, 16:30 hora argentina = 19:30 UTC).
+-- Requiere las extensiones pg_cron y pg_net, y dos secretos en Supabase Vault
+-- (`project_url` y `cron_secret`) que carga el responsable técnico. Se deja
+-- comentado para activarlo al crear cada proyecto:
+--
+-- select cron.schedule('cotizacion-bna', '30 19 * * 1-5', $$
+--   select net.http_post(
+--     url := (select decrypted_secret from vault.decrypted_secrets where name = 'project_url') || '/functions/v1/cotizacion-bna',
+--     headers := jsonb_build_object('x-cron-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'cron_secret'))
+--   );
+-- $$);

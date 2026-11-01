@@ -193,7 +193,7 @@ const FOLLOWUP_SUGGESTIONS = {
 const LEGAL = {
   version: "borrador-0.1",
   updated: "2026-11-01",
-  postTrialConditions: "Al terminar la prueba podés suscribirte: plan mensual de US$ 20 o plan anual de US$ 216 (10 % de descuento sobre el mensual). Se paga en pesos, por Mercado Pago, con el monto en pesos informado antes de confirmar. No se cobra nada sin tu confirmación expresa y podés cancelar cuando quieras desde «Mi cuenta». Si no te suscribís, las actividades quedan en pausa y podés consultar tus datos o dar de baja la cuenta.",
+  postTrialConditions: "Al terminar la prueba podés suscribirte: plan mensual de US$ 20 o plan anual de US$ 216 (10 % de descuento sobre el mensual). Se paga en pesos, por Mercado Pago, según la cotización oficial del dólar del Banco Nación, con el monto en pesos informado antes de confirmar. No se cobra nada sin tu confirmación expresa y podés cancelar cuando quieras desde «Mi cuenta». Si no te suscribís, las actividades quedan en pausa y podés consultar tus datos o dar de baja la cuenta.",
   retention: "A definir con asesoramiento jurídico (plazo de conservación tras la baja y tras el fin de la prueba).",
   contact: "[correo de contacto a definir]@aprendersiendo.ar"
 };
@@ -207,7 +207,7 @@ const BILLING_TEXT = {
   consent: "Confirmo que quiero suscribirme al plan elegido y autorizo a Aprender Siendo a cobrar el monto indicado en pesos, por Mercado Pago, en cada renovación, hasta que cancele. Leí las condiciones.",
   renewal: "La suscripción se renueva sola al final de cada período. Podés cancelarla cuando quieras desde «Mi cuenta», en un solo paso; seguís usando la app hasta el final del período que ya pagaste.",
   noCard: "Aprender Siendo no ve ni guarda los datos de tu tarjeta: el pago se hace en la página de Mercado Pago.",
-  exchange: "El precio está fijado en dólares y se cobra en pesos. Antes de cada cambio del monto en pesos te avisamos por correo.",
+  exchange: "El precio está fijado en dólares y se cobra en pesos, según la cotización oficial del dólar (vendedor) del Banco de la Nación Argentina del día en que te suscribís. Antes de cualquier cambio del monto en pesos te avisamos por correo.",
   withdrawal: "Tenés 10 días corridos desde que te suscribiste para arrepentirte: cancelamos la suscripción y te devolvemos lo cobrado (Ley 24.240, art. 34).",
   demo: "Demostración: en esta beta no se cobra nada. En la versión real, este botón te lleva a Mercado Pago."
 };

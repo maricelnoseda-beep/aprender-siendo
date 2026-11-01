@@ -14,3 +14,7 @@ verify_jwt = true
 
 [functions.suscripcion-estado]
 verify_jwt = true
+
+# Tarea diaria de cotización: la autentica el secreto CRON_SECRET.
+[functions.cotizacion-bna]
+verify_jwt = false

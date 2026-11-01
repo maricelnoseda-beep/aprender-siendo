@@ -65,7 +65,7 @@ const Store = (() => {
     db = {
       schema: 1,
       createdAt: t,
-      config: { trialDays: 15, warnDays: 3, sessionIdleMin: 30, clockOffsetDays: 0, arsPerUsd: 1000, graceDays: 0 },
+      config: { trialDays: 15, warnDays: 3, sessionIdleMin: 30, clockOffsetDays: 0, arsPerUsd: 1000, graceDays: Billing.GRACE_DAYS_DEFAULT },
       payments: [],
       users: [], patients: [], plans: [], activitySessions: [], reviews: [],
       reports: [], dataRequests: [], activeSessions: {}, audit: [],
@@ -199,7 +199,7 @@ const Store = (() => {
   }
 
   return {
-    async init() { load(); if (!db || db.schema !== 1) await seed(); db.payments ||= []; db.config.arsPerUsd ??= 1000; db.config.graceDays ??= 0; return db; },
+    async init() { load(); if (!db || db.schema !== 1) await seed(); db.payments ||= []; db.config.arsPerUsd ??= 1000; db.config.graceDays ??= Billing.GRACE_DAYS_DEFAULT; return db; },
     async reset() { try { localStorage.removeItem(DB_KEY); } catch (e) {} db = null; clearMyToken(); await seed(); },
     reload() { load(); },
     get db() { return db; },

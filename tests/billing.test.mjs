@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { webcrypto } from "node:crypto";
 import { Billing } from "../server/supabase/functions/_shared/billing-rules.mjs";
-import { startSubscription, cancelSubscription, withdraw, handleWebhook, getAccess, BillingError } from "../server/supabase/functions/_shared/billing-service.mjs";
+import { startSubscription, cancelSubscription, withdraw, handleWebhook, getAccess, updateRateFromBna, BillingError } from "../server/supabase/functions/_shared/billing-service.mjs";
 
 const DAY = Billing.DAY_MS;
 const T0 = Date.UTC(2026, 10, 1, 12);
@@ -89,11 +89,14 @@ test("firma: válida, alterada, vieja o sin secreto", async () => {
 });
 
 /* ---------- servicio con dobles de Mercado Pago y de la base ---------- */
-function fakes({ arsPerUsd = 1000, graceDays = 0 } = {}) {
-  const subs = [], payments = new Set(), events = new Set(), alerts = [], calls = [];
+function fakes({ arsPerUsd = 1000, graceDays = 0, rateUpdatedAt = T0 } = {}) {
+  const subs = [], payments = new Set(), events = new Set(), alerts = [], calls = [], rates = [];
+  const cfg = { arsPerUsd, graceDays, rateUpdatedAt };
   const mpState = { preapprovals: {}, authorized: {} };
   const repo = {
-    async getConfig() { return { arsPerUsd, graceDays }; },
+    async getConfig() { return { ...cfg }; },
+    async recordRate(r) { rates.push(r); },
+    async setRate(r) { cfg.arsPerUsd = r.arsPerUsd; cfg.rateUpdatedAt = r.rateUpdatedAt; },
     async getSubscriptionByUser(u) { return subs.filter((s) => s.userId === u).at(-1) || null; },
     async getSubscriptionByPreapproval(id) { return subs.find((s) => s.mpPreapprovalId === id) || null; },
     async insertSubscription(s) { const r = { ...s, id: "sub" + subs.length }; subs.push(r); return r; },
@@ -115,7 +118,7 @@ function fakes({ arsPerUsd = 1000, graceDays = 0 } = {}) {
     if (kind === "authorized_payments") return mpState.authorized[id];
     throw new Error("ruta no simulada " + path);
   };
-  return { repo, mp, subs, alerts, calls, mpState, deps: { repo, mp, appUrl: "https://beta.aprendersiendo.ar", secret: "s3cr3t" } };
+  return { repo, mp, subs, alerts, calls, mpState, rates, cfg, deps: { repo, mp, appUrl: "https://beta.aprendersiendo.ar", secret: "s3cr3t" } };
 }
 const user = { id: "u1", email: "familia@ejemplo.test" };
 
@@ -139,9 +142,51 @@ test("alta: exige consentimiento, el monto lo fija el servidor, sin duplicados",
 });
 
 test("alta sin tipo de cambio configurado: no crea nada", async () => {
-  const f = fakes({ arsPerUsd: null });
-  await assert.rejects(startSubscription({ user, planId: "mensual", consent: true, consentVersion: "v1", now: T0 }, f.deps));
-  assert.equal(f.calls.length, 0);
+  const f = fakes({ arsPerUsd: null, rateUpdatedAt: null });
+  await assert.rejects(startSubscription({ user, planId: "mensual", consent: true, consentVersion: "v1", now: T0 }, f.deps), (e) => e.code === "rate");
+  const g = fakes({ rateUpdatedAt: T0 - 6 * DAY }); // cotización vieja
+  await assert.rejects(startSubscription({ user, planId: "mensual", consent: true, consentVersion: "v1", now: T0 }, g.deps), (e) => e.code === "rate");
+  assert.equal(f.calls.length + g.calls.length, 0);
+});
+
+/* ---------- cotización oficial del BNA ---------- */
+const bnaHtml = (compra, venta) => `<div id="billetes"><table class="table cotizacion"><thead><tr><th>Moneda</th><th>Compra</th><th>Venta</th></tr></thead>
+  <tbody><tr><td class="tit">Dolar U.S.A</td><td>${compra}</td><td>${venta}</td></tr><tr><td class="tit">Euro</td><td>1.500,00</td><td>1.600,00</td></tr></tbody></table></div>
+  <div id="divisas"><table><tr><td class="tit">Dolar U.S.A</td><td>9,00</td><td>9,50</td></tr></table></div>`;
+
+test("BNA: lee el dólar billete (compra y venta) y rechaza formatos raros", () => {
+  assert.equal(Billing.parseArNumber("1.440,50"), 1440.5);
+  assert.equal(Billing.parseArNumber("1440,0000"), 1440);
+  assert.ok(Number.isNaN(Billing.parseArNumber("abc")));
+  assert.deepEqual(Billing.parseBnaBilletes(bnaHtml("1.410,00", "1.460,00")), { compra: 1410, venta: 1460 });
+  assert.throws(() => Billing.parseBnaBilletes("<html>mantenimiento</html>"));
+  assert.throws(() => Billing.parseBnaBilletes(bnaHtml("1.500,00", "1.400,00")), /inválidos/);
+});
+
+test("BNA: controles de salto y antigüedad", () => {
+  assert.equal(Billing.checkNewRate(1000, 1100).ok, true);
+  assert.equal(Billing.checkNewRate(1000, 1200).ok, false);
+  assert.equal(Billing.checkNewRate(null, 1200).ok, true, "primera carga");
+  assert.equal(Billing.checkNewRate(1000, 0).ok, false);
+  assert.equal(Billing.rateIsFresh(T0, T0 + 5 * DAY), true);
+  assert.equal(Billing.rateIsFresh(T0, T0 + 5 * DAY + 1), false);
+  assert.equal(Billing.rateIsFresh(null, T0), false);
+  assert.equal(Billing.GRACE_DAYS_DEFAULT, 3);
+});
+
+test("tarea diaria: aplica la venta del BNA, o conserva el valor anterior y alerta", async () => {
+  const f = fakes({ arsPerUsd: 1400, rateUpdatedAt: T0 - DAY });
+  let html = bnaHtml("1.410,00", "1.460,00");
+  const deps = { repo: f.repo, fetchBnaHtml: async () => html };
+  assert.deepEqual(await updateRateFromBna({ now: T0 }, deps), { applied: true, arsPerUsd: 1460 });
+  assert.equal(f.cfg.rateUpdatedAt, T0);
+  html = bnaHtml("2.900,00", "3.000,00"); // salto > 15 %: probable error de lectura
+  assert.equal((await updateRateFromBna({ now: T0 + DAY }, deps)).applied, false);
+  assert.equal(f.cfg.arsPerUsd, 1460);
+  html = "<html>error</html>";
+  assert.equal((await updateRateFromBna({ now: T0 + 2 * DAY }, deps)).applied, false);
+  assert.equal(f.alerts.length, 2);
+  assert.equal(f.rates.length, 2);
 });
 
 test("aviso: firma inválida → 401 y no cambia nada", async () => {
