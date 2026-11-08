@@ -29,14 +29,22 @@ const Shapes = {
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
-/* Motor común de rondas con opciones: maneja intentos, pistas y métricas. */
-function roundEngine(root, { rounds, render, onDone, say }) {
-  const m = { items: rounds, completed: 0, firstTry: 0, attempts: 0, hints: 0, abandoned: false };
-  let i = 0;
+/* Motor común de rondas con opciones: maneja intentos, pistas, métricas y el ajuste
+   adaptativo por ítem (REQ-CLI-M10). El nivel se pide a ctx.getLevel() antes de cada
+   ítem, y cada resultado se informa a ctx.onItem(), que aplica Rules.adapt.
+   Devoluciones del banco (M18-2): acierto nombra el proceso; error neutro con pista. */
+function roundEngine(root, { rounds, render, onDone, say, ctx }) {
+  const m = { items: 0, completed: 0, firstTry: 0, attempts: 0, hints: 0, abandoned: false, floorExit: false, msTotal: 0 };
+  let i = 0, forceEasy = false, moreHelp = false;
+  const okText = () => pick(ctx.okText.length ? ctx.okText : ["Lo resolviste paso a paso."]);
+  const errText = () => pick(ctx.errText.length ? ctx.errText : ["Casi. Mirá otra vez."]);
+  function finish() { m.avgMs = m.items ? Math.round(m.msTotal / m.items) : null; onDone(m); }
   function next() {
-    if (i >= rounds) return onDone(m);
-    let tries = 0;
-    const r = render(i);
+    if (i >= rounds) return finish();
+    let tries = 0, hinted = false;
+    const level = forceEasy ? Math.max(1, ctx.getLevel() - 1) : ctx.getLevel();
+    const r = render(i, level);
+    const t0 = Date.now();
     root.innerHTML = `
       <div class="act-progress" aria-label="Paso ${i + 1} de ${rounds}">${Array.from({ length: rounds }, (_, k) => `<span class="${k < i ? "done" : k === i ? "now" : ""}"></span>`).join("")}</div>
       <div class="act-prompt">${r.prompt}</div>
@@ -47,39 +55,55 @@ function roundEngine(root, { rounds, render, onDone, say }) {
       <div class="act-hint-row"></div>`;
     const msg = root.querySelector(".act-msg");
     const hintRow = root.querySelector(".act-hint-row");
+    const giveHint = () => {
+      m.hints++; hinted = true;
+      // La pista descarta una opción incorrecta; nunca marca la correcta.
+      const wrong = [...root.querySelectorAll(".act-opt:not([disabled])")].filter((x) => +x.dataset.k !== r.correct);
+      if (wrong.length) { wrong[0].disabled = true; wrong[0].classList.add("faded"); }
+      msg.textContent = (r.hint ? "Te doy una pista: " + r.hint : "Una opción ya no está. Mirá las que quedan.");
+      say(msg.textContent); hintRow.innerHTML = "";
+    };
+    if (moreHelp) { moreHelp = false; setTimeout(giveHint, 50); }   // M10-5: la consigna llega con más ayuda
     root.querySelectorAll(".act-opt").forEach((b) => b.addEventListener("click", () => {
       const k = +b.dataset.k; m.attempts++;
       if (k === r.correct) {
-        if (tries === 0) m.firstTry++;
-        m.completed++; b.classList.add("ok"); msg.textContent = CHILD_TEXT.good; say(CHILD_TEXT.good);
+        const first = tries === 0;
+        if (first) m.firstTry++;
+        m.completed++; m.items++; m.msTotal += Date.now() - t0;
+        b.classList.add("ok"); const t = okText(); msg.textContent = t; say(t);
         root.querySelectorAll(".act-opt").forEach((x) => (x.disabled = true));
-        i++; setTimeout(next, 900);
+        after({ ok: first, hinted });
       } else {
-        tries++; b.classList.add("try"); b.disabled = true; msg.textContent = CHILD_TEXT.tryAgain; say(CHILD_TEXT.tryAgain);
-        if (tries >= ADAPTIVE_DEMO.hintAfterAttempts && !hintRow.children.length) {
-          hintRow.innerHTML = `<button class="btn btn-soft">Quiero una pista</button>`;
-          hintRow.firstChild.addEventListener("click", () => {
-            m.hints++;
-            // La pista descarta una opción incorrecta; nunca marca la correcta.
-            const wrong = [...root.querySelectorAll(".act-opt:not([disabled])")].filter((x) => +x.dataset.k !== r.correct);
-            if (wrong.length) { wrong[0].disabled = true; wrong[0].classList.add("faded"); }
-            msg.textContent = CHILD_TEXT.hint + " " + (r.hint || "una opción ya no está. Mirá las que quedan.");
-            say(msg.textContent); hintRow.innerHTML = "";
-          });
+        tries++; b.classList.add("try"); b.disabled = true; const t = errText(); msg.textContent = t; say(t);
+        if (tries === 1) {
+          // El primer error ya cuenta para la regla adaptativa: el ítem no fue resuelto al primer intento.
+          if (!hintRow.children.length) {
+            hintRow.innerHTML = `<button class="btn btn-soft">Quiero una pista</button>`;
+            hintRow.firstChild.addEventListener("click", giveHint);
+          }
         }
       }
     }));
     say(r.speak || "");
+    function after(item) {
+      forceEasy = false;
+      const res = ctx.onItem(item);
+      if (res.action === "bajar" && res.nextEasy) { forceEasy = true; moreHelp = true; }
+      else if (res.action === "bajar") moreHelp = true;
+      if (res.action === "piso" || res.action === "fuera") { m.floorExit = true; i = rounds; setTimeout(finish, 900); return; }
+      i++; setTimeout(next, 900);
+    }
+    /* Un ítem resuelto tras errores cuenta como no acertado al primer intento (ok:false). */
   }
   next();
-  return { abandon() { m.abandoned = true; onDone(m); } };
+  return { abandon() { m.abandoned = true; finish(); } };
 }
 
 const Engines = {
   /* Isla de Juegos: corre aislada (iframe sin acceso a la app ni a sus datos). Solo recibe
      de vuelta el resultado de cada ronda que el juego avisa por postMessage. */
-  isla(root, { level, onDone, avatarId }) {
-    const m = { items: 0, completed: 0, firstTry: 0, attempts: 0, hints: 0, abandoned: false, rounds: [] };
+  isla(root, { onDone, avatarId, ctx }) {
+    const m = { items: 0, completed: 0, firstTry: 0, attempts: 0, hints: 0, abandoned: false, floorExit: false, rounds: [] };
     root.innerHTML = `<div class="isla-frame"><iframe title="Isla de Juegos" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></div>
       <p class="isla-count" aria-live="polite">Todavía no terminaste ninguna ronda.</p>
       <div class="child-actions"><button class="btn btn-primary big" id="isla-done">Terminé de jugar</button></div>`;
@@ -92,19 +116,19 @@ const Engines = {
       const d = e.data, total = Math.max(0, Math.min(20, d.total | 0)), first = Math.max(0, Math.min(total, d.first | 0));
       m.items += total; m.completed += total; m.firstTry += first; m.attempts += 1;
       m.rounds.push({ area: String(d.area).slice(0, 8), first, total, level: d.level | 0 });
-      root.querySelector(".isla-count").textContent = `Rondas terminadas: ${m.attempts}. ¡Muy bien!`;
+      root.querySelector(".isla-count").textContent = `Rondas terminadas: ${m.attempts}.`;
     };
     window.addEventListener("message", onMsg);
     const finish = (abandoned) => { window.removeEventListener("message", onMsg); m.abandoned = abandoned || m.attempts === 0; if (!m.items) m.items = 1; onDone(m); };
     root.querySelector("#isla-done").addEventListener("click", () => finish(false));
     return { abandon() { finish(true); } };
   },
-  secuencias(root, { level, onDone, say }) {
+  secuencias(root, { onDone, say, ctx }) {
     const shapes = ["circulo", "cuadrado", "triangulo", "estrella", "rombo"];
     const cols = Object.keys(Shapes.colors);
     return roundEngine(root, {
-      rounds: ADAPTIVE_DEMO.roundsPerSession, onDone, say,
-      render() {
+      rounds: ctx.rounds, onDone, say, ctx,
+      render(i, level) {
         const pool = shuffle(shapes).slice(0, 3).map((s, k) => ({ s, c: cols[k] }));
         const unit = level === 1 ? [pool[0], pool[1]] : level === 2 ? [pool[0], pool[1], pool[2]] : [pool[0], pool[0], pool[1], pool[1]];
         const len = level === 3 ? 7 : 5;
@@ -121,11 +145,11 @@ const Engines = {
     });
   },
 
-  distinto(root, { level, onDone, say }) {
-    const n = [3, 4, 5][level - 1];
+  distinto(root, { onDone, say, ctx }) {
     return roundEngine(root, {
-      rounds: ADAPTIVE_DEMO.roundsPerSession, onDone, say, optClass: "grid-" + n,
-      render() {
+      rounds: ctx.rounds, onDone, say, ctx,
+      render(i, level) {
+        const n = [3, 4, 5][level - 1];
         let base, odd;
         if (level === 1) { const [a, b] = shuffle(["circulo", "cuadrado", "estrella", "corazon"]); base = { s: a, r: 0 }; odd = { s: b, r: 0 }; }
         else if (level === 2) { const pair = pick([["circulo", "anillo"], ["cuadrado", "rombo"]]); base = { s: pair[0], r: 0 }; odd = { s: pair[1], r: 0 }; }
@@ -136,17 +160,17 @@ const Engines = {
         return {
           prompt: "Encontrá la figura distinta", speak: "Hay una figura distinta. ¡Encontrala!",
           options: opts.map((o, k) => ({ html: Shapes.svg(o.s, col, n > 4 ? 40 : 52, o.r), aria: "figura " + (k + 1) })),
-          correct: at, hint: "mirá fila por fila, despacio."
+          correct: at, hint: "mirá fila por fila, despacio.", optClass: "grid-" + n
         };
       }
     });
   },
 
-  contar(root, { level, onDone, say }) {
-    const [lo, hi] = [[1, 5], [3, 10], [6, 20]][level - 1];
+  contar(root, { onDone, say, ctx }) {
     return roundEngine(root, {
-      rounds: ADAPTIVE_DEMO.roundsPerSession, onDone, say,
-      render() {
+      rounds: ctx.rounds, onDone, say, ctx,
+      render(i, level) {
+        const [lo, hi] = [[1, 5], [3, 10], [6, 20]][level - 1];
         const n = lo + Math.floor(Math.random() * (hi - lo + 1));
         const cells = shuffle(Array.from({ length: 25 }, (_, k) => k)).slice(0, n);
         const set = new Set([n]);
@@ -162,11 +186,11 @@ const Engines = {
     });
   },
 
-  clasificar(root, { level, onDone, say }) {
-    const rounds = ADAPTIVE_DEMO.roundsPerSession;
+  clasificar(root, { onDone, say, ctx }) {
+    const rounds = ctx.rounds;
     return roundEngine(root, {
-      rounds, onDone, say, optClass: "boxes",
-      render(i) {
+      rounds, onDone, say, ctx,
+      render(i, level) {
         const rule = level === 1 ? "color" : level === 2 ? "forma" : (i < 3 ? "color" : "forma");
         const shapesPair = ["circulo", "triangulo"], colorsPair = ["verde", "coral"];
         const item = { s: pick(shapesPair), c: pick(colorsPair) };
@@ -175,23 +199,24 @@ const Engines = {
           : shapesPair.map((s) => ({ html: Shapes.svg(s, "currentColor", 40) + `<span>${Shapes.names[s]}</span>`, aria: "caja " + Shapes.names[s], v: s }));
         const changed = level === 3 && i === 3;
         return {
-          prompt: `${changed ? "<strong class='rule-change'>¡Cambió la regla!</strong> " : ""}Regla: ordená por <strong>${rule}</strong>`,
-          speak: (changed ? "¡Cambió la regla! " : "") + "Ordená por " + rule + ". ¿En qué caja va?",
+          prompt: `${changed ? "<strong class='rule-change'>Cambió la regla.</strong> " : ""}Regla: ordená por <strong>${rule}</strong>`,
+          speak: (changed ? "Cambió la regla. " : "") + "Ordená por " + rule + ". ¿En qué caja va?",
           stage: `<div class="sort-item">${Shapes.svg(item.s, Shapes.colors[item.c], 88)}</div>`,
-          options: boxes, correct: boxes.findIndex((b) => b.v === (rule === "color" ? item.c : item.s)),
+          options: boxes, optClass: "boxes", correct: boxes.findIndex((b) => b.v === (rule === "color" ? item.c : item.s)),
           hint: "leé otra vez la regla de arriba."
         };
       }
     });
   },
 
-  memoria(root, { level, onDone, say }) {
+  memoria(root, { onDone, say, ctx }) {
+    const level = ctx.getLevel();
     const pairs = [3, 4, 6][level - 1];
     const pool = shuffle(["circulo", "cuadrado", "triangulo", "estrella", "rombo", "corazon"]).slice(0, pairs);
     const cols = Object.values(Shapes.colors);
     const cards = shuffle(pool.flatMap((s, k) => [{ s, c: cols[k % cols.length] }, { s, c: cols[k % cols.length] }]));
-    const m = { items: pairs, completed: 0, firstTry: 0, attempts: 0, hints: 0, abandoned: false };
-    let open = [], found = new Set(), busy = false;
+    const m = { items: pairs, completed: 0, firstTry: 0, attempts: 0, hints: 0, abandoned: false, floorExit: false, msTotal: 0 };
+    let open = [], found = new Set(), busy = false, missSince = 0, hintedSince = false, t0 = Date.now();
     root.innerHTML = `
       <div class="act-prompt">Encontrá los pares iguales</div>
       <div class="mem-grid cols-${pairs > 4 ? 4 : 3}">${cards.map((c, k) =>
@@ -200,8 +225,9 @@ const Engines = {
       <div class="act-hint-row"><button class="btn btn-soft" id="mem-hint">Quiero una pista</button></div>`;
     say("Dá vuelta dos tarjetas. Buscá las que son iguales.");
     const msg = root.querySelector(".act-msg");
+    const done = () => { m.avgMs = Math.round(m.msTotal / Math.max(1, m.completed)); onDone(m); };
     root.querySelector("#mem-hint").addEventListener("click", () => {
-      if (busy) return; m.hints++; busy = true;
+      if (busy) return; m.hints++; hintedSince = true; busy = true;
       root.querySelectorAll(".mem-card:not(.found)").forEach((b) => b.classList.add("peek"));
       setTimeout(() => { root.querySelectorAll(".mem-card.peek").forEach((b) => b.classList.remove("peek")); busy = false; }, 1200);
     });
@@ -214,16 +240,15 @@ const Engines = {
         m.attempts++;
         const [a, c] = open;
         if (cards[a].s === cards[c].s) {
-          found.add(a); found.add(c); m.completed++;
+          found.add(a); found.add(c); m.completed++; m.msTotal += Date.now() - t0; t0 = Date.now();
+          const ok = missSince <= 1; if (ok) m.firstTry++;
+          ctx.onItem({ ok, hinted: hintedSince });            // el nivel cambia para la próxima sesión (el tablero es fijo)
+          missSince = 0; hintedSince = false;
           root.querySelectorAll(`[data-k="${a}"],[data-k="${c}"]`).forEach((x) => x.classList.add("found"));
-          msg.textContent = CHILD_TEXT.good; say(CHILD_TEXT.good); open = [];
-          if (found.size === cards.length) {
-            // Métrica de demostración: pares hallados con pocos intentos de más.
-            m.firstTry = Math.max(0, Math.min(pairs, Math.round(pairs - (m.attempts - pairs) / 2)));
-            setTimeout(() => onDone(m), 900);
-          }
+          const t = pick(ctx.okText); msg.textContent = t; say(t); open = [];
+          if (found.size === cards.length) setTimeout(done, 900);
         } else {
-          busy = true; msg.textContent = CHILD_TEXT.tryAgain;
+          missSince++; busy = true; msg.textContent = pick(ctx.errText);
           setTimeout(() => {
             open.forEach((x) => { const el = root.querySelector(`[data-k="${x}"]`); el.classList.remove("open"); el.setAttribute("aria-label", "tarjeta " + (x + 1) + ", boca abajo"); });
             open = []; busy = false;
@@ -231,6 +256,6 @@ const Engines = {
         }
       }
     }));
-    return { abandon() { m.abandoned = true; onDone(m); } };
+    return { abandon() { m.abandoned = true; done(); } };
   }
 };

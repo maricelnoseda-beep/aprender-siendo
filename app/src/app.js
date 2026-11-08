@@ -2,14 +2,14 @@
    app.js — Interfaz de la beta de demostración de Aprender Siendo
    ========================================================================== */
 
-const APP_VERSION = "0.3.0-beta-demo (2026-11-01)";
+const APP_VERSION = "0.4.0-beta2 (2026-11-08)";
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const fmtDate = (t) => new Date(t).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
 const fmtDateTime = (t) => new Date(t).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 const dxLabel = (id) => (DIAGNOSIS_CATEGORIES.find((d) => d.id === id) || { label: id }).label;
-const moodLabel = (id) => (MOODS.find((m) => m.id === id) || { label: "—" }).label;
+const moodLabel = (id) => (MOODS.find((m) => m.id === id) || { label: "—" }).label || "—";
 const actById = (id) => ACTIVITIES.find((a) => a.id === id);
 const roleLabel = { admin: "Administración", profesional: "Profesional", familia: "Familia o responsable" };
 
@@ -39,6 +39,7 @@ const Prefs = {
   apply() {
     const p = this.get(), r = document.documentElement;
     r.dataset.size = p.size || "1"; r.dataset.spacing = p.spacing ? "wide" : ""; r.dataset.contrast = p.contrast ? "high" : "";
+    r.dataset.line = p.line || ""; r.dataset.letter = p.letter ? "wide" : ""; r.dataset.font = p.font || ""; r.dataset.calm = p.calm ? "on" : "";
   }
 };
 
@@ -58,15 +59,20 @@ function shell(user, inner, { child = false } = {}) {
     <button class="brand" data-act="home" aria-label="Aprender Siendo, ir al inicio">${brandMark(42)}<span class="brand-words"><span class="brand-name">Aprender Siendo</span><span class="brand-sub">Psicopedagogía · Educación · Innovación</span></span><span class="beta-tag">Beta</span></button>
     <nav class="top-nav" aria-label="Principal">
       ${user ? navFor(user) : ""}
-      <button class="btn btn-ghost" data-act="prefs" aria-expanded="false">Modo lectura</button>
+      <button class="btn btn-ghost" data-act="prefs" aria-expanded="false">Cómo leer</button>
       ${user ? `<span class="who">${esc(user.alias)} · ${roleLabel[user.role]}</span><button class="btn btn-ghost" data-act="logout">Salir</button>` : ""}
     </nav>
   </div>
   <div class="wrap prefs" id="prefs" hidden>
+    <strong class="prefs-title">Elegí cómo te resulta más cómodo leer</strong>
     <span>Tamaño de letra</span>
     <button class="btn btn-soft" data-size="1">A</button><button class="btn btn-soft" data-size="2">A+</button><button class="btn btn-soft" data-size="3">A++</button>
-    <label><input type="checkbox" id="pref-spacing"> Más espaciado</label>
+    <label>Letra <select id="pref-font"><option value="">Atkinson Hyperlegible Next</option><option value="manrope">Manrope</option><option value="sistema">La del sistema</option></select></label>
+    <label>Interlineado <select id="pref-line"><option value="">Normal</option><option value="wide">Amplio</option><option value="wider">Muy amplio</option></select></label>
+    <label><input type="checkbox" id="pref-letter"> Más espacio entre letras</label>
+    <label><input type="checkbox" id="pref-spacing"> Más espacio entre palabras</label>
     <label><input type="checkbox" id="pref-contrast"> Más contraste</label>
+    <label><input type="checkbox" id="pref-calm"> Modo calma (menos movimiento y color)</label>
     <label><input type="checkbox" id="pref-voice"> Leer en voz alta las consignas</label>
   </div></header>
   ${trial ? trialBar(trial) : ""}`}
@@ -103,10 +109,11 @@ function holdButton(b, onDone, ms = 1500) {
 function navFor(user) {
   const items = {
     familia: [["home", "Inicio"], ["account", "Mi cuenta"]],
-    profesional: [["home", "Pacientes"], ["catalog", "Actividades"], ["account", "Mi cuenta"]],
+    profesional: [["home", "Pacientes"], ["catalog", "Aventuras"], ["account", "Mi cuenta"]],
     admin: [["home", "Panel"]]
   }[user.role];
-  return items.map(([v, l]) => `<button class="btn btn-ghost ${State.view === v ? "is-on" : ""}" data-go="${v}">${l}</button>`).join("");
+  return items.map(([v, l]) => `<button class="btn btn-ghost ${State.view === v ? "is-on" : ""}" data-go="${v}">${l}</button>`).join("")
+    + (user.role === "admin" ? "" : `<button class="btn btn-soft btn-suggest" data-act="suggest">Sugerencias</button>`);
 }
 
 function trialBar(t) {
@@ -180,6 +187,12 @@ function bindCommon(user) {
   const sp = $("#pref-spacing"), co = $("#pref-contrast"), vo = $("#pref-voice");
   if (sp) { sp.checked = !!pr.spacing; sp.addEventListener("change", () => Prefs.set({ spacing: sp.checked })); }
   if (co) { co.checked = !!pr.contrast; co.addEventListener("change", () => Prefs.set({ contrast: co.checked })); }
+  const pf = $("#pref-font"), pl = $("#pref-line"), plt = $("#pref-letter"), pc = $("#pref-calm");
+  if (pf) { pf.value = pr.font || ""; pf.addEventListener("change", () => Prefs.set({ font: pf.value })); }
+  if (pl) { pl.value = pr.line || ""; pl.addEventListener("change", () => Prefs.set({ line: pl.value })); }
+  if (plt) { plt.checked = !!pr.letter; plt.addEventListener("change", () => Prefs.set({ letter: plt.checked })); }
+  if (pc) { pc.checked = !!pr.calm; pc.addEventListener("change", () => Prefs.set({ calm: pc.checked })); }
+  $$("[data-act='suggest']").forEach((b) => b.addEventListener("click", () => openSuggestion(user)));
   if (vo) { vo.checked = !!pr.voice; Voice.on = !!pr.voice; vo.addEventListener("change", () => { Prefs.set({ voice: vo.checked }); Voice.on = vo.checked; }); }
 }
 
@@ -234,6 +247,47 @@ function shrinkImage(file) {
   });
 }
 
+/* ---------- Sugerencias (familia y profesional) ----------
+   Se guardan en la beta para que las evalúe el equipo profesional y técnico, y se
+   abre el correo ya completo para enviarlas a LEGAL.suggestionsTo. El envío desde
+   el servidor queda para cuando haya backend (decisión del responsable técnico). */
+const SUG_KINDS = [["mejora", "Una mejora"], ["nueva", "Una aventura o función nueva"], ["texto", "Un texto que no se entiende"], ["accesibilidad", "Accesibilidad"], ["otra", "Otra"]];
+const SUG_AREAS = [["aventuras", "Aventuras del chico o la chica"], ["familia", "Espacio familia"], ["profesional", "Espacio profesional"], ["seguimiento", "Seguimiento e informes"], ["general", "General"]];
+function mailtoSuggestion(sg) {
+  const body = `Sugerencia ${sg.number}\nPerfil: ${roleLabel[sg.role]}\nTipo: ${(SUG_KINDS.find((k) => k[0] === sg.kind) || [, sg.kind])[1]}\nÁrea: ${(SUG_AREAS.find((k) => k[0] === sg.area) || [, sg.area])[1]}\n\n${sg.text}\n\n(Enviada desde la beta de Aprender Siendo, ${APP_VERSION})`;
+  return `mailto:${LEGAL.suggestionsTo}?subject=${encodeURIComponent("Sugerencia " + sg.number + " · beta Aprender Siendo")}&body=${encodeURIComponent(body)}`;
+}
+function openSuggestion(user) {
+  if (!user) return;
+  modal(`
+    <h2 id="modal-title">Sugerencias</h2>
+    <p>Contanos qué mejorarías. Cada sugerencia la evalúan el equipo profesional y el equipo técnico. <strong>No incluyas nombres, datos de contacto ni información clínica de ningún chico o chica.</strong></p>
+    <form id="sug-form" class="form">
+      <div class="two"><div><label for="sug-kind">¿Qué querés sugerir?</label><select id="sug-kind">${SUG_KINDS.map(([v, l]) => `<option value="${v}">${l}</option>`).join("")}</select></div>
+      <div><label for="sug-area">¿Sobre qué parte?</label><select id="sug-area">${SUG_AREAS.map(([v, l]) => `<option value="${v}">${l}</option>`).join("")}</select></div></div>
+      <label for="sug-text">Tu sugerencia</label>
+      <textarea id="sug-text" rows="5" required minlength="10" maxlength="2000"></textarea>
+      <p class="err" id="sug-err" role="alert"></p>
+      <div class="row"><button class="btn btn-primary" type="submit">Enviar sugerencia</button><button class="btn btn-ghost" type="button" data-close>Cancelar</button></div>
+    </form>`, (root, close) => {
+    $("#sug-form", root).addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = $("#sug-text", root).value.trim();
+      const pii = Rules.piiCheck(text);
+      if (!pii.ok) { $("#sug-err", root).textContent = "Parece que el texto incluye " + pii.found.join(", ") + ". Sacalo antes de enviar."; return; }
+      const sg = Store.addSuggestion(user, { kind: $("#sug-kind", root).value, area: $("#sug-area", root).value, text });
+      const href = mailtoSuggestion(sg);
+      $(".modal", root).innerHTML = `<h2 id="modal-title">¡Gracias por tu sugerencia!</h2>
+        <p>Quedó registrada con el número <strong class="mono">${sg.number}</strong> para que la evalúe el equipo.</p>
+        <p>Para que llegue también por correo a <span class="mono">${esc(LEGAL.suggestionsTo)}</span>, tocá «Enviar por correo»: se abre tu programa de correo con el texto listo.</p>
+        <div class="row wrap-row"><a class="btn btn-primary" id="sug-mail" href="${href}">Enviar por correo</a><button class="btn btn-soft" id="sug-copy">Copiar el texto</button><button class="btn btn-ghost" data-close>Listo</button></div>
+        <p class="hint" id="sug-copied" role="status"></p>`;
+      $("[data-close]", root).addEventListener("click", close);
+      $("#sug-copy", root).addEventListener("click", async () => { try { await navigator.clipboard.writeText(sg.number + "\n\n" + sg.text); $("#sug-copied", root).textContent = "Texto copiado."; } catch (er) { $("#sug-copied", root).textContent = "No se pudo copiar. Seleccioná el texto a mano."; } });
+    });
+  });
+}
+
 /* ==========================================================================
    Vistas
    ========================================================================== */
@@ -257,8 +311,8 @@ Views.landing = () => `
     <p class="eyebrow center">Tres maneras de participar</p>
     <h2 class="section-title">Un mismo recorrido, cada quien en su rol</h2>
     <div class="role-grid">
-      ${[["familia", "Familias y responsables", "Acompañan en casa las actividades que indica la profesional, sin resolver por el niño.", Scenes.family(150), "familia@demo.aprendersiendo.ar", "role-coral"],
-         ["profesional", "Profesionales", "Indican actividades, siguen la participación y revisan las sugerencias automáticas.", Scenes.professional(150), "profesional@demo.aprendersiendo.ar", "role-verde"],
+      ${[["familia", "Familias y responsables", "Acompañan en casa las aventuras que indica la profesional, o crean un perfil libre para jugar sin profesional.", Scenes.family(150), "familia@demo.aprendersiendo.ar", "role-coral"],
+         ["profesional", "Profesionales", "Indican aventuras, arman el plan de intervención y siguen la participación con alertas calculadas por reglas fijas.", Scenes.professional(150), "profesional@demo.aprendersiendo.ar", "role-verde"],
          ["admin", "Administración", "Gestiona cuentas, contenidos, reportes de la beta e indicadores generales.", Scenes.admin(150), "admin@demo.aprendersiendo.ar", "role-azul"]].map(([k, t, d, art, e, cls]) => `
         <article class="role-card ${cls}"><div class="role-art">${art}</div><h3>${t}</h3><p>${d}</p>
           <button class="btn btn-soft demo-acc" data-email="${e}">Probar con la cuenta de demostración</button></article>`).join("")}
@@ -266,13 +320,13 @@ Views.landing = () => `
   </section>
 
   <section class="journey-band"><div class="wrap">
-    <p class="eyebrow center">La experiencia del niño</p>
-    <h2 class="section-title">Cuatro pasos, siempre en el mismo orden</h2>
+    <p class="eyebrow center">La aventura del chico o la chica</p>
+    <h2 class="section-title">Descubrir, jugar, hacer y contar</h2>
     <ol class="journey">
-      <li><span class="j-art">${Avatar.svg("rodetes", "alegria", 92)}</span><strong>Elige su personaje</strong><span>y cuenta cómo se siente al empezar.</span></li>
-      <li><span class="j-art">${actIcon("secuencias", 92)}</span><strong>Hace la actividad</strong><span>con consignas claras y pistas que no resuelven por él.</span></li>
-      <li><span class="j-art">${Avatar.svg("rulos", "alegria", 92)}</span><strong>Recibe un reconocimiento</strong><span>a su esfuerzo, no solo al resultado.</span></li>
-      <li><span class="j-art">${Avatar.svg("largo", "calma", 92)}</span><strong>Cuenta cómo le fue</strong><span>con unas pocas preguntas sencillas.</span></li>
+      <li><span class="j-art">${Avatar.svg("rodetes", "alegria", 92)}</span><strong>Descubrir</strong><span>Mira cómo se hace, después de contar cómo viene (o saltearlo).</span></li>
+      <li><span class="j-art">${actIcon("secuencias", 92)}</span><strong>Jugar</strong><span>La dificultad se ajusta sola con reglas fijas para que sea un desafío justo.</span></li>
+      <li><span class="j-art">${Avatar.svg("rulos", "alegria", 92)}</span><strong>Hacer</strong><span>Un desafío cortito para casa o el aula, fuera de la pantalla.</span></li>
+      <li><span class="j-art">${Avatar.svg("largo", "calma", 92)}</span><strong>Contar</strong><span>Qué le ayudó y cómo le resultó. Su compañero crece con cada aventura.</span></li>
     </ol>
   </div></section>
 
@@ -293,7 +347,8 @@ Views.landing = () => `
       <h2>Cuentas de demostración</h2>
       <p>Para probar los tres perfiles con pacientes ficticios. La contraseña de todas es <code>beta2026</code>.</p>
       <ul class="demo-list">
-        <li><button class="linklike demo-acc" data-email="familia@demo.aprendersiendo.ar">familia@demo.aprendersiendo.ar</button></li>
+        <li><button class="linklike demo-acc" data-email="familia@demo.aprendersiendo.ar">familia@demo.aprendersiendo.ar</button> <span class="hint">(chicos de 4 a 14 años)</span></li>
+        <li><button class="linklike demo-acc" data-email="familia2@demo.aprendersiendo.ar">familia2@demo.aprendersiendo.ar</button> <span class="hint">(adolescente de 17)</span></li>
         <li><button class="linklike demo-acc" data-email="profesional@demo.aprendersiendo.ar">profesional@demo.aprendersiendo.ar</button></li>
         <li><button class="linklike demo-acc" data-email="admin@demo.aprendersiendo.ar">admin@demo.aprendersiendo.ar</button></li>
       </ul>
@@ -450,184 +505,156 @@ Views.home = (user) => user.role === "familia" ? familyHome(user) : user.role ==
 Binders.home = (user) => (user.role === "familia" ? bindFamily : user.role === "profesional" ? bindPro : bindAdmin)(user);
 
 /* ==========================================================================
-   FAMILIA
+   FAMILIA (M08: la familia ve práctica, no interpretación)
    ========================================================================== */
-function weekCount(sessions, activityId) {
-  const t = Store.now();
-  return sessions.filter((s) => s.activityId === activityId && t - s.startAt <= 7 * DAY).length;
+function linkBadge(p) {
+  if (p.mode === "libre") return `<span class="pill">Modo libre</span>`;
+  const l = Store.link(p);
+  return l.status === "activa" ? `<span class="pill pill-ok">Con profesional</span>` : l.status === "pendiente" ? `<span class="pill pill-warn">Vinculación pendiente</span>`
+    : l.status === "revocada" ? `<span class="pill pill-muted">Vinculación revocada</span>` : `<span class="pill pill-muted">Vinculación suspendida</span>`;
+}
+function familyConsentBox(p) {
+  if (p.mode !== "vinculado") return "";
+  const age = Store.age(p), l = Store.link(p), out = [];
+  const pro = Store.db.users.find((u) => u.id === p.professionalId);
+  if (age < 16 && l.missing.some((m) => m.includes("representante"))) out.push(`<form class="consent-form" data-consent="${p.id}">
+      <h4>${esc(age >= 13 ? CONSENT_FORMS.teen1315.title : CONSENT_FORMS.child.title)}</h4>
+      <p class="legal-ph">${esc(CONSENT_FORMS.child.body)} <em>Texto jurídico pendiente.</em></p>
+      <label class="check"><input type="checkbox" required> Como representante, doy mi consentimiento para que ${esc(pro?.alias || "la profesional")} vea la práctica en Aprender Siendo.</label>
+      ${age < 13 ? `<label class="check"><input type="checkbox" name="mood"> Opcional: autorizo que el ánimo que elija al empezar se guarde y lo vea solo la profesional.</label>` : ""}
+      <button class="btn btn-primary">Dar mi consentimiento</button>${age >= 13 ? `<p class="hint">Además, el adolescente tiene que dar su asentimiento desde su espacio.</p>` : `<p class="hint">Al entrar, le vamos a preguntar al niño si está de acuerdo, con palabras simples.</p>`}</form>`);
+  if (age >= 13 && age < 16 && l.missing.some((m) => m.includes("asentimiento"))) out.push(`<p class="hint">Falta el asentimiento del adolescente: se le pide cuando entra a su espacio.</p>`);
+  if (age >= 16 && age < 18) {
+    const sent = p.consents.find((x) => x.type === "aviso-enviado");
+    const recd = p.consents.some((x) => x.type === "aviso-recibido");
+    if (sent) out.push(`<div class="notice notice-info"><strong>Aviso:</strong> el adolescente dio su consentimiento para trabajar con una profesional en Aprender Siendo. Se respeta su confidencialidad, con las excepciones que fija la ley. ${esc(sent.detail.split(". ").slice(-1)[0])}
+      ${recd ? "" : `<button class="btn btn-soft" data-notice="${p.id}">Recibí el aviso</button>`}</div>`);
+    else if (l.missing.length) out.push(`<p class="hint">A los 16 y 17 años consiente el propio adolescente; te vamos a avisar cuando lo haga.</p>`);
+    if (sent && !p.oppositionPending && l.status === "activa") out.push(`<button class="btn btn-ghost" data-oppose="${p.id}">Me opongo a esta vinculación</button>`);
+    if (p.oppositionPending) out.push(`<p class="hint">Registramos tu oposición. La profesional la evalúa considerando el interés superior del adolescente.</p>`);
+  }
+  if (age < 16 && l.status === "activa") out.push(`<button class="btn btn-ghost" data-revoke="${p.id}">Revocar mi consentimiento</button>`);
+  return out.length ? `<div class="consent-box">${out.join("")}</div>` : "";
 }
 function familyHome(user) {
   const pats = Store.patientsFor(user);
   return `
   <section class="greet greet-coral"><div class="greet-text"><p class="eyebrow">Espacio familia</p><h1>Hola, ${esc(user.alias)}</h1>
-  <p>Acá están las actividades que indicó la profesional. Tu rol es acompañar: dejá que el niño piense e intente; no hace falta resolver por él.</p></div>
+  <p>Tu rol es acompañar: dejá que piense e intente; no hace falta resolver por él o por ella.</p></div>
   <div class="greet-art">${Scenes.family(190)}</div></section>
-  ${pats.length ? pats.map((p) => {
-    const plans = Store.plansFor(p.id).filter((pl) => Store.db.activityState[pl.activityId]?.enabled);
-    const ses = Store.sessionsFor(user, p.id);
-    return `<section class="card">
-      <div class="card-head"><div>${Avatar.svg(p.avatarId, "calma", 64)}</div><div><h2>Paciente ${esc(p.code)}</h2><p class="muted">${p.ageYears} años</p></div></div>
-      <h3>Actividades indicadas</h3>
-      ${plans.length ? `<ul class="plan-list">${plans.map((pl) => { const a = actById(pl.activityId); const done = weekCount(ses, pl.activityId); return `
-        <li class="plan-item">
-          <span class="plan-icon">${actIcon(a.id, 72)}</span>
-          <div class="plan-main"><strong>${esc(a.name)}</strong><span class="muted">${esc(a.area)} · Nivel ${pl.level}</span>
-          <span class="week">Esta semana: ${done} de ${pl.perWeek} ${pl.perWeek === 1 ? "vez" : "veces"}</span>
-          ${pl.note ? `<p class="pro-note"><strong>Indicación:</strong> ${esc(pl.note)}</p>` : ""}
-          <p class="hint">${esc(a.forFamily)}</p></div>
-          <button class="btn btn-primary btn-lg" data-start="${p.id}" data-activity="${a.id}" data-level="${pl.level}">Empezar</button>
-        </li>`; }).join("")}</ul>` : `<div class="empty">${Scenes.empty(120)}<p>Todavía no hay actividades indicadas. La profesional las va a cargar desde su cuenta.</p></div>`}
-      <details><summary>Últimas actividades realizadas</summary>
-        ${ses.length ? `<ul class="hist">${ses.slice(0, 8).map((s) => `<li>${fmtDateTime(s.startAt)} · ${esc(actById(s.activityId)?.name)} · ${s.metrics.abandoned ? "sin terminar" : "terminada"}</li>`).join("")}</ul>` : "<p>Todavía no hay registros.</p>"}
-      </details>
-    </section>`; }).join("") : ""}
+  <div class="notice notice-info">${esc(FAMILY_TEXT.consult)}</div>
+  ${pats.map((p) => familyProfileCard(user, p)).join("")}
+  <section class="card"><h2>Agregar un perfil en modo libre</h2>
+    <p>Sin profesional: práctica y apoyo, sin informes ni interpretación.</p>
+    <form id="free" class="form inline"><label for="fr-alias" class="sr">Apodo</label><input id="fr-alias" required maxlength="30" placeholder="Apodo (no el nombre real)">
+      <label for="fr-age" class="sr">Edad</label><input id="fr-age" type="number" min="3" max="18" required placeholder="Edad"><button class="btn btn-soft">Crear perfil</button></form>
+  </section>
   <section class="card">
-    <h2>${pats.length ? "Vincular otro paciente" : "Vinculá a tu hijo o hija"}</h2>
-    <p>Pedile a la profesional el código de vinculación. Solo así vas a ver las actividades que indicó.</p>
+    <h2>Vincular con una profesional</h2>
+    <p>Pedile a la profesional el código de vinculación.</p>
     <form id="link" class="form inline"><label for="link-code" class="sr">Código</label><input id="link-code" placeholder="XXXX-XXXX" maxlength="9" required><button class="btn btn-soft">Vincular</button></form>
     <p class="err" id="link-err" role="alert"></p>
   </section>`;
 }
+function familyProfileCard(user, p) {
+  const age = Store.age(p);
+  if (age >= 18 && p.selfOwner && !p.familyAuthorized) return `<section class="card"><h2>${esc(p.alias || p.code)}</h2><p>Esta persona cumplió 18 años y tomó la titularidad de su cuenta. Ya no ves su actividad.</p></section>`;
+  const route = Rules.route(age);
+  const l = Store.link(p);
+  const ses = Store.db.activitySessions.filter((s) => s.patientId === p.id).sort((a, b) => b.startAt - a.startAt);
+  const r = Followup.analyze(ses, [], Store.now());
+  const fit = (a) => age >= a.ageMin && age <= a.ageMax && Store.db.activityState[a.id]?.enabled;
+  const plans = Store.plansFor(p.id).filter((pl) => Store.db.activityState[pl.activityId]?.enabled);
+  const list = p.mode === "libre" ? ACTIVITIES.filter(fit) : plans.map((pl) => actById(pl.activityId));
+  const can = (w) => Rules.familyCanSee(p, age, w);
+  const canPlay = p.mode === "libre" || l.status === "activa" || l.status === "pendiente";
+  return `<section class="card" data-profile="${p.id}">
+    <div class="card-head"><div>${Avatar.svg(p.avatarId || "zorro", "calma", 64)}</div><div><h2>${esc(p.alias || p.code)}</h2>
+      <p class="muted">${age} años · ruta ${route} ${linkBadge(p)}</p></div></div>
+    ${familyConsentBox(p)}
+    <h3>Aventuras</h3>
+    ${list.length ? `<ul class="plan-list">${list.map((a) => { const pl = plans.find((x) => x.activityId === a.id); return `
+      <li class="plan-item"><span class="plan-icon">${actIcon(a.id, 64)}</span>
+        <div class="plan-main"><strong>${esc(a.name)}</strong><span class="muted">${esc(a.skill)}${can("nivel") && p.adaptive[a.id] ? " · Nivel " + p.adaptive[a.id].level : ""}</span>
+        ${pl && pl.perWeek ? `<span class="week">Sugerido: ${pl.perWeek} ${pl.perWeek === 1 ? "vez" : "veces"} por semana</span>` : ""}
+        ${pl && pl.note ? `<p class="pro-note"><strong>Indicación:</strong> ${esc(pl.note)}</p>` : ""}
+        ${age < 13 ? `<p class="hint">${esc(a.forFamily)}</p>` : ""}
+        <details class="ficha-fam"><summary>Para qué sirve</summary><p>${esc(TRANSFER[a.ficha.variant].fam(a))}</p><p class="prueba-tag">${PRUEBA}</p></details></div>
+        <button class="btn btn-primary btn-lg" data-start="${p.id}" data-activity="${a.id}" ${canPlay ? "" : "disabled"}>Empezar</button>
+      </li>`; }).join("")}</ul>` : `<div class="empty">${Scenes.empty(110)}<p>${p.mode === "libre" ? "No hay aventuras para esta edad todavía." : "La profesional todavía no indicó aventuras."}</p></div>`}
+    <h3>Cómo viene la práctica (últimos 28 días)</h3>
+    <div class="grid-3 small-stats">
+      <div class="stat"><span class="stat-lab">Tiempo</span><span class="stat-num">${r.minutes} min</span></div>
+      <div class="stat"><span class="stat-lab">Aventuras</span><span class="stat-num">${r.total}</span></div>
+      ${can("desafios") ? `<div class="stat"><span class="stat-lab">Desafíos en casa</span><span class="stat-num">${p.desafiosHechos || 0}</span></div>` : ""}
+    </div>
+    ${age < 13 ? `<p class="hint">${esc(FAMILY_TEXT.adjust)}</p>` : `<p class="hint">Por su edad, solo ves el tiempo y las aventuras. Lo demás es privado.</p>`}
+    ${can("objetivos") && p.objectives.length ? `<div class="shared"><h4>Lo que compartió la profesional</h4><ul>${p.objectives.map((o) => `<li>Objetivo: ${esc(o.text)}</li>`).join("")}</ul></div>` : ""}
+    ${age < 13 ? `<div class="row"><button class="btn btn-soft" data-desafio="${p.id}">Hicimos un desafío en casa</button></div>` : ""}
+    <div class="row wrap-row"><button class="btn btn-ghost" data-export="${p.id}">Descargar los datos</button>
+      ${p.mode === "libre" ? `<details><summary>Elegir aventuras</summary>${ACTIVITIES.filter(fit).map((a) => `<label class="check"><input type="checkbox" data-freeplan="${p.id}" value="${a.id}" ${plans.some((x) => x.activityId === a.id) || !plans.length ? "checked" : ""}> ${esc(a.name)}</label>`).join("")}</details>` : ""}</div>
+  </section>`;
+}
 function bindFamily(user) {
-  $$("[data-start]").forEach((b) => b.addEventListener("click", () => startChild(user, b.dataset.start, b.dataset.activity, +b.dataset.level, "hogar")));
+  $$("[data-start]").forEach((b) => b.addEventListener("click", () => startChild(user, b.dataset.start, b.dataset.activity, "hogar")));
   $("#link").addEventListener("submit", (e) => {
     e.preventDefault();
     const r = Store.linkFamily(user, $("#link-code").value);
     if (r.error) { $("#link-err").textContent = r.error; return; }
-    notice(`Vinculaste al paciente ${esc(r.patient.code)}.`, "ok"); go("home");
+    notice(`Vinculaste el perfil ${esc(r.patient.code)}. Falta registrar el consentimiento.`, "ok"); go("home");
   });
-}
-
-/* ==========================================================================
-   MODO NIÑO: avatar y ánimo → actividad → devolución → evaluación final
-   ========================================================================== */
-function startChild(user, patientId, activityId, level, context) {
-  if (!Store.db.activityState[activityId]?.enabled) { notice("Esta actividad no está disponible en este momento.", "warn"); return render(); }
-  const p = Store.db.patients.find((x) => x.id === patientId);
-  State.child = { patientId, activityId, level, context, step: "avatar", avatarId: p.avatarId, rec: {} , backTo: State.view, backParams: State.params };
-  State.view = "child"; render();
-}
-
-function renderChild(user) {
-  const c = State.child;
-  if (!user || !c) return go("home");
-  const a = actById(c.activityId);
-  let inner = "";
-  if (c.step === "avatar") inner = `
-    <h1 class="child-title">${CHILD_TEXT.pickAvatar}</h1>
-    <div class="avatar-grid" role="group" aria-label="Personajes">${AVATARS.map((av) =>
-      `<button class="avatar-btn ${c.avatarId === av.id ? "sel" : ""}" data-av="${av.id}" aria-pressed="${c.avatarId === av.id}">${Avatar.svg(av.id, "alegria", 92)}<span>${esc(av.label)}</span></button>`).join("")}</div>
-    <div class="child-actions"><button class="btn btn-primary big" id="ch-next" ${c.avatarId ? "" : "disabled"}>Seguir</button></div>`;
-  else if (c.step === "mood") inner = `
-    <h1 class="child-title">${CHILD_TEXT.pickMood}</h1>
-    ${moodPicker("ms", c.rec.moodStart)}
-    <div class="child-actions"><button class="btn btn-primary big" id="ch-next" ${c.rec.moodStart ? "" : "disabled"}>${CHILD_TEXT.start}</button></div>`;
-  else if (c.step === "activity") inner = `
-    <div class="child-act-head">${Avatar.svg(c.avatarId, c.rec.moodStart, 64)}<div><h1 class="child-title sm">${esc(a.name)}</h1><p>${esc(a.instruction)}</p></div>
-      <button class="btn btn-ghost" id="ch-voice" aria-label="Escuchar la consigna">🔊 Escuchar</button></div>
-    <div id="act-root" class="act-root"></div>
-    <div class="child-actions"><button class="btn btn-ghost" id="ch-stop">Quiero terminar acá</button></div>`;
-  else if (c.step === "feedback") {
-    const m = c.rec.metrics;
-    inner = `<div class="feedback">
-      <div class="cheer">${Avatar.svg(c.avatarId, "alegria", 150)}</div>
-      <h1 class="child-title">${esc(c.feedbackText)}</h1>
-      <div class="effort" aria-label="Reconocimiento al esfuerzo">${Array.from({ length: Math.max(1, Math.min(5, m.attempts)) }, () => `<span class="leaf" aria-hidden="true"></span>`).join("")}</div>
-      <p>${m.abandoned ? "Hiciste una parte. ¡Cada intento cuenta!" : `Intentaste ${m.attempts} ${m.attempts === 1 ? "vez" : "veces"} y llegaste hasta el final.`}</p>
-      <div class="child-actions"><button class="btn btn-primary big" id="ch-next">Seguir</button></div></div>`;
-  } else if (c.step === "q1") inner = `<h1 class="child-title">${CHILD_TEXT.qDuring}</h1>${moodPicker("md", c.rec.moodDuring)}<div class="child-actions"><button class="btn btn-primary big" id="ch-next" ${c.rec.moodDuring ? "" : "disabled"}>Seguir</button></div>`;
-  else if (c.step === "q2") inner = `<h1 class="child-title">${CHILD_TEXT.qAfter}</h1>${moodPicker("ma", c.rec.moodAfter)}<div class="child-actions"><button class="btn btn-primary big" id="ch-next" ${c.rec.moodAfter ? "" : "disabled"}>Seguir</button></div>`;
-  else if (c.step === "q3") inner = `<h1 class="child-title">${CHILD_TEXT.qDifficulty}</h1>
-    <div class="diff-row" role="group">${CHILD_TEXT.difficulty.map((d) => `<button class="diff-btn ${c.rec.difficulty === d.id ? "sel" : ""}" data-diff="${d.id}" aria-pressed="${c.rec.difficulty === d.id}">${esc(d.label)}</button>`).join("")}</div>
-    <div class="child-actions"><button class="btn btn-primary big" id="ch-next" ${c.rec.difficulty ? "" : "disabled"}>Terminar</button></div>`;
-  else if (c.step === "done") inner = `<div class="feedback">${Avatar.svg(c.avatarId, c.rec.moodAfter, 120)}<h1 class="child-title">${CHILD_TEXT.thanks}</h1>
-    <p>${CHILD_TEXT.adultGate}</p><button class="btn btn-primary big hold" id="ch-exit"><span>Mantener apretado</span><i></i></button></div>`;
-
-  app().innerHTML = shell(user, `<div class="child-wrap">${inner}</div>`, { child: true });
-  bindCommon(user);
-  bindChild(user);
-}
-
-function moodPicker(name, selected) {
-  return `<div class="mood-grid" role="group" aria-label="Estados de ánimo">${MOODS.map((m) =>
-    `<button class="mood-btn ${selected === m.id ? "sel" : ""}" data-mood="${m.id}" aria-pressed="${selected === m.id}">${Avatar.svg(State.child.avatarId, m.id, 84)}<span>${esc(m.label)}</span></button>`).join("")}</div>`;
-}
-
-function bindChild(user) {
-  const c = State.child;
-  const next = $("#ch-next");
-  const advance = (step) => { c.step = step; renderChild(user); };
-  if (c.step === "avatar") {
-    Voice.say(CHILD_TEXT.pickAvatar);
-    $$("[data-av]").forEach((b) => b.addEventListener("click", () => { c.avatarId = b.dataset.av; renderChild(user); }));
-    next.addEventListener("click", () => advance("mood"));
-  }
-  if (["mood", "q1", "q2"].includes(c.step)) {
-    const key = { mood: "moodStart", q1: "moodDuring", q2: "moodAfter" }[c.step];
-    Voice.say({ mood: CHILD_TEXT.pickMood, q1: CHILD_TEXT.qDuring, q2: CHILD_TEXT.qAfter }[c.step]);
-    $$("[data-mood]").forEach((b) => b.addEventListener("click", () => { c.rec[key] = b.dataset.mood; Voice.say(moodLabel(b.dataset.mood)); renderChild(user); }));
-    next.addEventListener("click", () => {
-      if (c.step === "mood") { c.rec.startAt = Store.now(); advance("activity"); }
-      else advance(c.step === "q1" ? "q2" : "q3");
-    });
-  }
-  if (c.step === "activity") {
-    const a = actById(c.activityId);
-    Voice.say(a.instruction);
-    $("#ch-voice").addEventListener("click", () => { const was = Voice.on; Voice.on = true; Voice.say(a.instruction); Voice.on = was; });
-    const engine = Engines[c.activityId]($("#act-root"), {
-      level: c.level, avatarId: c.avatarId, say: (t) => Voice.say(t),
-      onDone: (m) => { if (c.step !== "activity") return; c.rec.metrics = { level: c.level, ...m }; c.rec.endAt = Store.now();
-        c.feedbackText = pick(CHILD_TEXT.feedback); advance("feedback"); }
-    });
-    $("#ch-stop").addEventListener("click", () => engine.abandon());
-  }
-  if (c.step === "feedback") { Voice.say(c.feedbackText); next.addEventListener("click", () => advance("q1")); }
-  if (c.step === "q3") {
-    Voice.say(CHILD_TEXT.qDifficulty);
-    $$("[data-diff]").forEach((b) => b.addEventListener("click", () => { c.rec.difficulty = b.dataset.diff; renderChild(user); }));
-    next.addEventListener("click", () => {
-      Store.reload();
-      const u = Store.currentUser();
-      if (!u || !u.id) return render();
-      Store.recordSession(u, { patientId: c.patientId, activityId: c.activityId, context: c.context, avatarId: c.avatarId, ...c.rec });
-      advance("done");
-    });
-  }
-  if (c.step === "done") {
-    Voice.say(CHILD_TEXT.thanks);
-    holdButton($("#ch-exit"), () => {
-      const back = c.backTo, params = c.backParams; State.child = null; notice("Actividad registrada. ¡Gracias por acompañar!", "ok"); go(back || "home", params); });
-  }
-  /* "Volver al inicio" desde el modo niño: pide a una persona adulta que confirme. */
-  const hb = $("#ch-home");
-  if (hb) hb.addEventListener("click", () => {
-    const saved = c.step === "done";
-    modal(`<h2 id="modal-title">¿Volver al inicio?</h2>
-      <p>${saved ? "La actividad ya quedó registrada." : "La actividad en curso no se va a guardar."} Esta salida la hace una persona adulta.</p>
-      <div class="row"><button class="btn btn-primary hold" id="ch-home-ok"><span>Mantener apretado para salir</span><i></i></button><button class="btn btn-ghost" data-close>Seguir con la actividad</button></div>`, () => {
-      holdButton($("#ch-home-ok"), () => { State.child = null; if (saved) notice("Actividad registrada. ¡Gracias por acompañar!", "ok"); go("home"); });
-    });
-  });
+  $("#free").addEventListener("submit", (e) => { e.preventDefault(); const p = Store.createFreeProfile(user, { alias: $("#fr-alias").value, ageYears: $("#fr-age").value }); notice(`Creaste el perfil ${esc(p.alias)} en modo libre.`, "ok"); go("home"); });
+  $$("[data-consent]").forEach((f) => f.addEventListener("submit", async (e) => {
+    e.preventDefault(); const id = f.dataset.consent;
+    const r = await Store.consent(user, id, "consentimiento-representante", "formulario " + CONSENT_FORMS.version);
+    if (r.error) return notice(r.error, "warn"), render();
+    if (f.querySelector("[name=mood]")) Store.setMoodConsent(user, id, f.querySelector("[name=mood]").checked);
+    notice("Registramos tu consentimiento.", "ok"); render();
+  }));
+  $$("[data-notice]").forEach((b) => b.addEventListener("click", async () => { await Store.noticeReceived(user, b.dataset.notice); notice("Registramos que recibiste el aviso.", "ok"); render(); }));
+  $$("[data-oppose]").forEach((b) => b.addEventListener("click", async () => { await Store.consent(user, b.dataset.oppose, "oposicion-representante", ""); notice("Registramos tu oposición y le avisamos a la profesional.", "ok"); render(); }));
+  $$("[data-revoke]").forEach((b) => b.addEventListener("click", () => modal(`<h2 id="modal-title">¿Revocar el consentimiento?</h2><p>La vinculación con la profesional termina. Se conservan los registros que la ley exige.</p>
+    <div class="row"><button class="btn btn-danger" id="rv-ok">Revocar</button><button class="btn btn-ghost" data-close>Cancelar</button></div>`, (root, close) => {
+    $("#rv-ok", root).addEventListener("click", async () => { await Store.consent(user, b.dataset.revoke, "revocacion", "por el representante"); close(); notice("Revocaste el consentimiento. La vinculación terminó.", "ok"); render(); });
+  })));
+  $$("[data-desafio]").forEach((b) => b.addEventListener("click", () => { Store.bumpDesafio(b.dataset.desafio); notice("¡Listo! Sumamos un detalle a su mundo.", "ok"); render(); }));
+  $$("[data-freeplan]").forEach((cb) => cb.addEventListener("change", () => {
+    const pid = cb.dataset.freeplan;
+    $$(`[data-freeplan="${pid}"]`).forEach((x) => Store.setFreePlan(user, pid, x.value, x.checked)); render();
+  }));
+  $$("[data-export]").forEach((b) => b.addEventListener("click", () => {
+    const p = Store.db.patients.find((x) => x.id === b.dataset.export), age = Store.age(p);
+    const ses = Store.db.activitySessions.filter((s) => s.patientId === p.id);
+    const data = { aviso: FAMILY_TEXT.export, exportado: new Date(Store.now()).toISOString(), perfil: { codigo: p.code, apodo: p.alias, edad: age, modo: p.mode },
+      sesiones: ses.map((s) => age >= 13 ? { fecha: new Date(s.startAt).toISOString(), aventura: actById(s.activityId)?.name, minutos: Math.round(((s.endAt || s.startAt) - s.startAt) / 60000) }
+        : { fecha: new Date(s.startAt).toISOString(), aventura: actById(s.activityId)?.name, completo: !s.metrics.abandoned, desafio: !!s.desafioHecho }),
+      consentimientos: p.consents.map(({ type, at, hash }) => ({ tipo: type, fecha: new Date(at).toISOString(), huella: hash })) };
+    download("datos-" + p.code + ".json", JSON.stringify(data, null, 2));
+  }));
 }
 
 /* ==========================================================================
    PROFESIONAL
    ========================================================================== */
+function proAlerts(user, p) {
+  if (!Store.proHasData(user, p)) return [];
+  const ses = Store.sessionsFor(user, p.id);
+  return Rules.alerts({ sessions: ses, plans: Store.plansFor(p.id), objectives: p.objectives, moodsNewestFirst: ses.map((s) => s.moodStart), linked: true, now: Store.now() });
+}
 function proHome(user) {
   const pats = Store.patientsFor(user);
-  const now = Store.now();
   return `
   <section class="greet greet-verde"><div class="greet-text"><p class="eyebrow">Espacio profesional</p><h1>Hola, ${esc(user.alias)}</h1>
     <p>Tenés ${pats.length} ${pats.length === 1 ? "paciente" : "pacientes"}. Cada paciente se identifica con un código; no se guardan nombres.</p>
     <button class="btn btn-primary" id="new-pat">Nuevo paciente</button></div><div class="greet-art">${Scenes.professional(190)}</div></section>
   <div id="new-pat-box"></div>
   <div class="table-wrap"><table class="tbl">
-    <thead><tr><th>Código</th><th>Edad</th><th>Categoría</th><th>Sesiones (28 días)</th><th>Señales para revisar</th><th></th></tr></thead>
+    <thead><tr><th>Código</th><th>Edad</th><th>Ruta</th><th>Vinculación</th><th>Alertas</th><th></th></tr></thead>
     <tbody>${pats.map((p) => {
-      const r = Followup.analyze(Store.sessionsFor(user, p.id), Store.plansFor(p.id), now);
-      return `<tr><td class="mono"><span class="cell-av">${Avatar.svg(p.avatarId, "calma", 34)}</span>${esc(p.code)}${p.synthetic ? ' <span class="pill pill-muted">ficticio</span>' : ""}</td><td>${p.ageYears}</td><td>${esc(dxLabel(p.diagnosis))}</td>
-        <td class="num">${r.total}</td><td>${r.signals.length ? r.signals.map((s) => `<span class="pill pill-warn">${esc(FOLLOWUP_SUGGESTIONS[s.key].title)}</span>`).join(" ") : '<span class="pill pill-ok">Sin señales</span>'}</td>
+      const al = proAlerts(user, p), l = Store.link(p);
+      return `<tr><td class="mono"><span class="cell-av">${Avatar.svg(p.avatarId || "zorro", "calma", 34)}</span>${esc(p.code)}${p.synthetic ? ' <span class="pill pill-muted">ficticio</span>' : ""}</td><td>${Store.age(p)}</td><td>${Store.route(p)}</td>
+        <td>${l.status === "activa" ? '<span class="pill pill-ok">Activa</span>' : `<span class="pill pill-warn">${esc(l.status)}</span>`}${p.oppositionPending ? ' <span class="pill pill-warn">Oposición del representante</span>' : ""}</td>
+        <td>${al.length ? al.map((s) => `<span class="pill pill-warn">${esc(s.title)}</span>`).join(" ") : '<span class="pill pill-ok">Sin alertas</span>'}</td>
         <td><button class="btn btn-soft" data-pat="${p.id}">Abrir</button></td></tr>`; }).join("") || `<tr><td colspan="6">Todavía no cargaste pacientes.</td></tr>`}</tbody>
   </table></div>`;
 }
@@ -636,58 +663,71 @@ function bindPro(user) {
   $("#new-pat").addEventListener("click", () => {
     $("#new-pat-box").innerHTML = `<form id="np" class="card form">
       <h2>Nuevo paciente</h2>
-      <p class="hint">Solo pedimos lo mínimo: edad y categoría. El sistema asigna un código; no cargues nombres, documento ni escuela.</p>
+      <p class="hint">Solo lo mínimo: edad y categoría. El sistema asigna un código; no cargues nombres, documento ni escuela.</p>
       <div class="two"><div><label for="np-age">Edad (años)</label><input id="np-age" type="number" min="3" max="18" required></div>
-      <div><label for="np-dx">Categoría diagnóstica</label><select id="np-dx" required>${DIAGNOSIS_CATEGORIES.map((d) => `<option value="${d.id}">${esc(d.label)}</option>`).join("")}</select></div></div>
-      <p class="hint">Lista provisoria, pendiente de revisión clínica.</p>
-      <label class="check"><input type="checkbox" id="np-cons" required> Cuento con el consentimiento del adulto responsable para registrar la actividad del paciente en la app.</label>
+      <div><label for="np-dx">Categoría (solo la ves vos)</label><select id="np-dx" required>${DIAGNOSIS_CATEGORIES.map((d) => `<option value="${d.id}">${esc(d.label)}</option>`).join("")}</select></div></div>
+      <label for="np-alias">Apodo para la experiencia (lo elige el adulto titular; no el nombre real)</label><input id="np-alias" maxlength="30">
+      <p class="hint">Los consentimientos se registran en la app: la familia (y, según la edad, el niño o el adolescente) los da desde su espacio.</p>
       <div class="row"><button class="btn btn-primary">Crear</button><button type="button" class="btn btn-ghost" id="np-cancel">Cancelar</button></div></form>`;
     $("#np-age").focus();
     $("#np-cancel").addEventListener("click", () => ($("#new-pat-box").innerHTML = ""));
     $("#np").addEventListener("submit", (e) => { e.preventDefault();
-      const p = Store.createPatient(user, { ageYears: $("#np-age").value, diagnosis: $("#np-dx").value });
+      const p = Store.createPatient(user, { ageYears: $("#np-age").value, diagnosis: $("#np-dx").value, alias: $("#np-alias").value });
       notice(`Creaste el paciente ${p.code}. Compartí el código de vinculación con la familia.`, "ok"); go("patient", { id: p.id }); });
   });
 }
 
 /* ---------- Ficha del paciente ---------- */
+const PRO_TABS = [["seguimiento", "Seguimiento"], ["informe", "Informe"], ["plan", "Plan de intervención"], ["evaluacion", "Evaluación inicial y final"], ["pauta", "Pauta de aventuras"], ["familia", "Qué ve la familia"], ["consentimientos", "Consentimientos"], ["registros", "Registros"]];
 Views.patient = (user) => {
   const p = Store.db.patients.find((x) => x.id === State.params.id);
   if (!Store.canSeePatient(user, p) || user.role !== "profesional") return `<p>No tenés acceso a este paciente.</p>`;
-  const tab = State.params.tab || "seguimiento";
+  const l = Store.link(p), has = Store.proHasData(user, p);
+  const tab = has ? (State.params.tab || "seguimiento") : "consentimientos";
   const ses = Store.sessionsFor(user, p.id);
   const plans = Store.plansFor(p.id);
+  const views = { seguimiento: () => followupView(user, p, ses, plans), informe: () => reportView(user, p, ses, plans), plan: () => interventionView(user, p),
+    evaluacion: () => measuresView(user, p), pauta: () => planView(user, p, plans), familia: () => shareView(p), consentimientos: () => consentView(user, p), registros: () => recordsView(ses) };
   return `
   <button class="linklike back" data-go="home">← Pacientes</button>
-  <div class="page-head"><div class="card-head">${Avatar.svg(p.avatarId, "calma", 72)}<div><h1 class="mono">${esc(p.code)}</h1>
-    <p class="muted">${p.ageYears} años · ${esc(dxLabel(p.diagnosis))} · ${p.familyUserIds.length ? "Familia vinculada" : "Sin familia vinculada"}</p></div></div>
+  <div class="page-head"><div class="card-head">${Avatar.svg(p.avatarId || "zorro", "calma", 72)}<div><h1 class="mono">${esc(p.code)}</h1>
+    <p class="muted">${Store.age(p)} años · ruta ${Store.route(p)} · ${esc(dxLabel(p.diagnosis))} · ${p.familyUserIds.length ? "Familia vinculada" : "Sin familia vinculada"}</p></div></div>
     <div class="invite"><span class="muted small">Código para vincular a la familia</span><span class="mono big">${esc(p.inviteCode)}</span><span class="hint">De un solo uso</span></div></div>
-  <div class="tabs" role="tablist">${[["seguimiento", "Seguimiento"], ["pauta", "Pauta de actividades"], ["registros", "Registros"]].map(([k, l]) =>
-    `<button role="tab" aria-selected="${tab === k}" class="tab ${tab === k ? "on" : ""}" data-tab="${k}">${l}</button>`).join("")}</div>
-  ${tab === "seguimiento" ? followupView(user, p, ses, plans) : tab === "pauta" ? planView(user, p, plans) : recordsView(ses)}`;
+  ${l.status !== "activa" ? `<div class="notice notice-warn"><strong>Vinculación ${esc(l.status)}.</strong> ${l.missing.map(esc).join(" · ") || ""} Hasta que esté activa no ves registros de este paciente.</div>` : ""}
+  ${p.oppositionPending ? `<div class="notice notice-warn"><strong>El representante se opuso a la vinculación.</strong> Evaluá el interés superior del adolescente y registrá tu decisión en «Consentimientos».</div>` : ""}
+  <div class="tabs" role="tablist">${PRO_TABS.filter(([k]) => has || k === "consentimientos").map(([k, lbl]) =>
+    `<button role="tab" aria-selected="${tab === k}" class="tab ${tab === k ? "on" : ""}" data-tab="${k}">${lbl}</button>`).join("")}</div>
+  ${views[tab]()}`;
 };
 Binders.patient = (user) => {
   const p = Store.db.patients.find((x) => x.id === State.params.id);
   if (!p) return;
-  $$("[data-tab]").forEach((b) => b.addEventListener("click", () => go("patient", { id: p.id, tab: b.dataset.tab })));
-  $$("[data-consult]").forEach((b) => b.addEventListener("click", () => {
-    const pl = Store.plansFor(p.id).find((x) => x.activityId === b.dataset.consult);
-    startChild(user, p.id, b.dataset.consult, pl ? pl.level : 1, "consulta");
-  }));
+  const reload = (tab) => go("patient", { id: p.id, tab });
+  $$("[data-tab]").forEach((b) => b.addEventListener("click", () => reload(b.dataset.tab)));
+  $$("[data-consult]").forEach((b) => b.addEventListener("click", () => startChild(user, p.id, b.dataset.consult, "consulta")));
   $$(".plan-form").forEach((f) => f.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const id = f.dataset.act;
+    e.preventDefault(); const id = f.dataset.act;
     Store.setPlan(user, p.id, id, { perWeek: $(`#pw-${id}`).value, level: $(`#lv-${id}`).value, note: $(`#nt-${id}`).value, active: $(`#on-${id}`).checked });
-    notice("Pauta guardada. La familia ya la ve en su inicio.", "ok"); go("patient", { id: p.id, tab: "pauta" });
+    notice("Pauta guardada.", "ok"); reload("pauta");
   }));
-  const rv = $("#review-form");
-  if (rv) rv.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const decision = (new FormData(rv)).get("decision");
-    if (!decision) { $("#rv-err").textContent = "Elegí una opción."; return; }
-    Store.saveReview(user, p.id, { decision, note: $("#rv-note").value.trim().slice(0, 1000), signals: JSON.parse(rv.dataset.signals) });
-    notice("Guardamos tu revisión. Las sugerencias no se comparten con la familia.", "ok"); go("patient", { id: p.id });
-  });
+  $$("[data-fix]").forEach((f) => f.addEventListener("submit", (e) => { e.preventDefault(); const act = f.dataset.fix;
+    Store.setSkillOverride(user, p.id, act, { fixed: f.querySelector("select").value, locked: f.querySelector("[type=checkbox]").checked }); notice("Ajuste guardado.", "ok"); reload("seguimiento"); }));
+  $$("[data-obs]").forEach((b) => b.addEventListener("click", () => { Store.audit(user.id, "observación fuera de la app", p.code + " · " + b.dataset.obs); Store.save(); notice("Registramos tu observación.", "ok"); reload("seguimiento"); }));
+  $$("[data-share]").forEach((cb) => cb.addEventListener("change", () => { Store.setShare(user, p.id, cb.dataset.share, cb.checked); notice("Guardado.", "ok"); reload("familia"); }));
+  const om = $("#obj-measure"); if (om) om.addEventListener("submit", (e) => { e.preventDefault(); Store.addObjectiveMeasure(user, p.id, $("#om-obj").value, $("#om-val").value); notice("Medida registrada.", "ok"); reload("plan"); });
+  const ip = $("#ip-form"); if (ip) bindInterventionForm(user, p, ip, reload);
+  const mf = $("#me-form"); if (mf) mf.addEventListener("submit", (e) => { e.preventDefault();
+    Store.saveMeasure(user, p.id, { measure: $("#me-m").value, kind: $("#me-k").value, form: $("#me-k").value === "inicial" ? "A" : "B", score: +$("#me-s").value }); notice("Medida guardada.", "ok"); reload("evaluacion"); });
+  const mx = $("#me-export"); if (mx) mx.addEventListener("click", () => download("progreso-" + p.code + ".txt", mx.dataset.text, "text/plain"));
+  const rp = $("#rep-approve"); if (rp) rp.addEventListener("click", () => {
+    const text = $("#rep-text").value; const f = Rules.filterSummary(text);
+    if (!f.ok) { $("#rep-err").textContent = "El filtro bloqueó el resumen: contiene categorías diagnósticas o medicación."; return; }
+    if (!$("#rep-sign").checked) { $("#rep-err").textContent = "Para aprobar tenés que firmar con tu nombre y matrícula."; return; }
+    Store.approveReport(user, p.id, text); notice("Informe aprobado y firmado.", "ok"); reload("informe"); });
+  $$("[data-rexport]").forEach((b) => b.addEventListener("click", () => { const r = Store.db.reportApprovals.find((x) => x.id === b.dataset.rexport); download("informe-" + p.code + ".txt", r.text + "\n\nFirmado: " + r.signedBy + " · " + new Date(r.at).toLocaleString("es-AR"), "text/plain"); }));
+  $$("[data-decide]").forEach((b) => b.addEventListener("click", async () => { await Store.consent(user, p.id, "decision-profesional", b.dataset.decide); notice("Decisión registrada.", "ok"); reload("consentimientos"); }));
+  const vc = $("#verify-chain"); if (vc) vc.addEventListener("click", async () => { const ok = await Store.verifyChain(p); $("#chain-res").textContent = ok ? "La cadena de huellas está íntegra." : "La cadena está alterada."; });
+  const dc = $("#dl-consents"); if (dc) dc.addEventListener("click", () => download("comprobante-consentimientos-" + p.code + ".json", JSON.stringify({ paciente: p.code, formularios: CONSENT_FORMS.version, registros: p.consents }, null, 2)));
 };
 
 function bars(values, labels, max) {
@@ -698,83 +738,169 @@ function bars(values, labels, max) {
 
 function followupView(user, p, ses, plans) {
   const r = Followup.analyze(ses, plans, Store.now());
-  const sug = Followup.suggestions(r);
-  const reviews = Store.reviewsFor(user, p.id);
-  const moodRows = MOODS.filter((m) => r.moodStart[m.id] || r.moodEnd[m.id]);
+  const al = proAlerts(user, p);
+  const moodRows = Object.entries(r.moods);
   return `
-  <div class="notice notice-info"><strong>Para leer estos datos:</strong> el desempeño dentro de la app no equivale a una mejoría ni a un retroceso clínico. La interpretación terapéutica es tuya.</div>
+  <div class="notice notice-info"><strong>Para leer estos datos:</strong> el desempeño dentro de la app no equivale a una mejoría ni a un retroceso clínico. La interpretación es tuya.</div>
+  <section class="card"><h2>Alertas</h2>${al.length ? `<div class="sug-list">${al.map((a) => `<article class="sug"><h3>${esc(a.title)}</h3><p>${esc(a.detail)}</p>
+    ${FOLLOWUP_SUGGESTIONS[a.key] ? `<div class="two"><div><h4>Preguntas para explorar</h4><ul>${FOLLOWUP_SUGGESTIONS[a.key].questions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div><div><h4>Posibles ajustes</h4><ul>${FOLLOWUP_SUGGESTIONS[a.key].alternatives.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div></div><p class="prueba-tag">${PRUEBA}</p>` : ""}</article>`).join("")}</div>` : "<p>Sin alertas con los umbrales actuales.</p>"}
+    <p class="hint">Alertas calculadas con reglas fijas (umbrales a calibrar con la supervisora). Ninguna es una alerta del protocolo de riesgo.</p></section>
   <div class="grid-3">
-    <div class="card stat"><span class="stat-lab">Adhesión a la pauta (7 días)</span><span class="stat-num">${r.adherencePct === null ? "—" : r.adherencePct + "%"}</span><span class="hint">${r.adherencePct === null ? "Sin pauta para comparar" : "Sesiones hechas sobre las indicadas"}</span></div>
-    <div class="card stat"><span class="stat-lab">Sesiones en 28 días</span><span class="stat-num">${r.total}</span><span class="hint">Quincena anterior ${r.prev} · última ${r.last}</span></div>
-    <div class="card stat"><span class="stat-lab">Señales para revisar</span><span class="stat-num">${r.signals.length}</span><span class="hint">Con umbrales de demostración</span></div>
+    <div class="card stat"><span class="stat-lab">Adherencia (14 días)</span><span class="stat-num">${r.adherencePct === null ? "—" : r.adherencePct + "%"}</span></div>
+    <div class="card stat"><span class="stat-lab">Sesiones en 28 días</span><span class="stat-num">${r.total}</span><span class="hint">${r.minutes} minutos</span></div>
+    <div class="card stat"><span class="stat-lab">Desafíos en casa</span><span class="stat-num">${p.desafiosHechos || 0}</span><span class="hint">Mide adherencia, no transferencia</span></div>
   </div>
   <div class="grid-2">
     <section class="card"><h2>Participación por semana</h2>${bars(r.weeks, ["Hace 4 sem.", "Hace 3", "Hace 2", "Última"])}</section>
-    <section class="card"><h2>Ánimo declarado</h2>
-      ${moodRows.length ? `<div class="table-wrap"><table class="tbl compact"><thead><tr><th>Ánimo</th><th>Al empezar</th><th>Al terminar</th></tr></thead>
-      <tbody>${moodRows.map((m) => `<tr><td>${esc(m.label)}</td><td class="num">${r.moodStart[m.id] || 0}</td><td class="num">${r.moodEnd[m.id] || 0}</td></tr>`).join("")}</tbody></table></div>` : "<p>Sin registros.</p>"}
-      <p class="hint">Conteo de lo que eligió el niño. La app no calcula puntajes emocionales.</p></section>
+    <section class="card"><h2>Autorreporte de ánimo</h2>
+      ${!p.moodConsent ? "<p>Sin consentimiento del representante: no se guarda.</p>" : moodRows.length ? `<table class="tbl compact"><tbody>${moodRows.map(([m, n]) => `<tr><td>${esc(moodLabel(m))}</td><td class="num">${n}</td></tr>`).join("")}</tbody></table>` : "<p>Sin registros.</p>"}
+      <p class="hint"><strong>Autorreporte. No es una evaluación emocional.</strong></p></section>
   </div>
-  <section class="card"><h2>Desempeño por actividad</h2>
-    <div class="table-wrap"><table class="tbl"><thead><tr><th>Actividad</th><th>Sesiones</th><th>Aciertos al 1.er intento (últimas 3)</th><th>(3 anteriores)</th><th>Nivel actual</th><th>Última vez</th><th></th></tr></thead>
-    <tbody>${r.perActivity.map((a) => `<tr><td>${esc(Followup.actName(a.id))}</td><td class="num">${a.count}</td><td class="num">${a.recentPct ?? "—"}%</td><td class="num">${a.prevPct ?? "—"}${a.prevPct === null ? "" : "%"}</td><td class="num">${a.level}</td><td>${fmtDate(a.lastAt)}</td>
-      <td><button class="btn btn-soft" data-consult="${a.id}">Usar en consulta</button></td></tr>`).join("") || `<tr><td colspan="7">Todavía no hay sesiones.</td></tr>`}</tbody></table></div>
-  </section>
-  <section class="card ai-card">
-    <div class="ai-head"><span class="pill pill-ai">Sugerencia automática</span><h2>Análisis asistido · requiere tu revisión</h2></div>
-    <p class="hint">Indicadores calculados con reglas fijas a partir de los registros. En esta beta no interviene un modelo de lenguaje: el resumen con IA se conectará cuando se defina el proveedor, y recibirá solo indicadores con el código del paciente, nunca datos personales. Preguntas y recursos: borrador pendiente de revisión clínica.</p>
-    ${sug.length ? `<div class="sug-list">${sug.map((s) => `<article class="sug">
-      <h3>${esc(s.title)}</h3><p>${esc(s.detail)}</p>
-      <div class="two"><div><h4>Preguntas para explorar</h4><ul>${s.questions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div>
-      <div><h4>Recursos alternativos posibles</h4><ul>${s.alternatives.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div></div></article>`).join("")}</div>
-      <form id="review-form" class="form review" data-signals='${esc(JSON.stringify(r.signals.map((s) => s.key)))}'>
-        <fieldset><legend>Tu revisión</legend>
-          <label class="check"><input type="radio" name="decision" value="considerada"> Lo revisé y lo voy a considerar</label>
-          <label class="check"><input type="radio" name="decision" value="no-corresponde"> Lo revisé y no corresponde</label>
-        </fieldset>
-        <label for="rv-note">Nota para vos (opcional, sin datos identificatorios)</label><textarea id="rv-note" rows="2" maxlength="1000"></textarea>
-        <p class="err" id="rv-err" role="alert"></p>
-        <button class="btn btn-primary">Guardar revisión</button></form>` : `<p>No aparecen señales con los umbrales actuales.</p>`}
-    ${reviews.length ? `<details><summary>Revisiones anteriores (${reviews.length})</summary><ul class="hist">${reviews.map((v) => `<li>${fmtDateTime(v.at)} · ${v.decision === "considerada" ? "La voy a considerar" : "No corresponde"}${v.note ? " · " + esc(v.note) : ""}</li>`).join("")}</ul></details>` : ""}
+  <section class="card"><h2>Desempeño y nivel adaptativo por aventura</h2>
+    <div class="table-wrap"><table class="tbl"><thead><tr><th>Aventura</th><th>Sesiones</th><th>Aciertos al 1.er intento (últimas 3)</th><th>Tiempo medio por ítem</th><th>Nivel</th><th>Fijar nivel o bloquear ajuste</th><th></th></tr></thead>
+    <tbody>${r.perActivity.map((x) => { const a = actById(x.id), st = p.adaptive[x.id] || {}; return `<tr><td>${esc(a?.name)}</td><td class="num">${x.count}</td><td class="num">${x.recentPct ?? "—"}%</td><td class="num">${x.avgMs ? (x.avgMs / 1000).toFixed(1) + " s" : "—"}</td><td class="num">${st.level || x.level}</td>
+      <td><form class="inline-form" data-fix="${x.id}"><select aria-label="Nivel fijo"><option value="">Automático</option>${(a?.levels || []).map((lv, i) => `<option value="${i + 1}" ${st.fixed === i + 1 ? "selected" : ""}>${i + 1}. ${esc(lv)}</option>`).join("")}</select>
+        <label class="check small"><input type="checkbox" ${st.locked ? "checked" : ""}> Bloquear</label><button class="btn btn-soft">Guardar</button></form></td>
+      <td><button class="btn btn-soft" data-consult="${x.id}">Usar en consulta</button></td></tr>`; }).join("") || `<tr><td colspan="7">Todavía no hay sesiones.</td></tr>`}</tbody></table></div>
+    <p class="hint">El tiempo se registra pero no cambia el nivel (salvo ítems de fluidez). El niño no ve niveles.</p></section>
+  <section class="card"><h2>¿Observó el uso de la estrategia fuera de la app?</h2><div class="row"><button class="btn btn-soft" data-obs="sí">Sí</button><button class="btn btn-soft" data-obs="no">No</button><button class="btn btn-soft" data-obs="no sé">No sé</button></div>
+    <p class="hint">Dato de observación del profesional, no una medida de efecto.</p></section>`;
+}
+
+/* M09: informe en palabras fijas, calculado en código. En la beta no interviene un modelo de lenguaje. */
+function summaryText(p, ses, plans) {
+  const r = Followup.analyze(ses, plans, Store.now());
+  const parts = [`Paciente ${p.code}, ${Store.age(p)} años.`, `En los últimos 28 días hizo ${r.total} sesiones (${r.minutes} minutos).`];
+  if (r.adherencePct !== null) parts.push(`Adherencia a la pauta en 14 días: ${r.adherencePct} %.`);
+  r.perActivity.forEach((x) => parts.push(`${Followup.actName(x.id)}: ${x.count} sesiones; aciertos al primer intento en las últimas 3: ${x.recentPct ?? "—"} %; nivel actual ${(p.adaptive[x.id] || {}).level || x.level}.`));
+  parts.push(`Desafíos para casa registrados: ${p.desafiosHechos || 0}.`);
+  return parts.join(" ");
+}
+function reportView(user, p, ses, plans) {
+  const t = summaryText(p, ses, plans), f = Rules.filterSummary(t);
+  const approved = Store.db.reportApprovals.filter((x) => x.patientId === p.id);
+  return `<section class="card ai-card"><div class="ai-head"><span class="pill pill-ai">Resumen automático</span><h2>Borrador del informe · requiere tu revisión</h2></div>
+    <p class="hint">Plantilla fija calculada con reglas, sin modelo de lenguaje en esta beta. Cuando se conecte un modelo, el texto llevará el rótulo «Resumen generado por IA. Revisar antes de usar.» y recibirá solo datos seudonimizados.</p>
+    ${f.ok ? "" : `<div class="notice notice-warn">El filtro de salida bloqueó el borrador automático.</div>`}
+    <label for="rep-text">Texto del informe (editalo antes de aprobar)</label><textarea id="rep-text" rows="6">${esc(f.ok ? t : "")}</textarea>
+    <label class="check"><input type="checkbox" id="rep-sign"> Reviso y firmo: ${esc(user.alias)} · Mat. ${esc(user.matricula?.numero)} (${esc(user.matricula?.provincia)})</label>
+    <p class="err" id="rep-err" role="alert"></p>
+    <button class="btn btn-primary" id="rep-approve">Aprobar y firmar</button>
+    <p class="hint">No se exporta ni se comparte con la familia hasta que lo aprobás.</p></section>
+    ${approved.length ? `<section class="card"><h2>Informes aprobados</h2><ul class="hist">${approved.map((r) => `<li>${fmtDateTime(r.at)} · ${esc(r.signedBy)} <button class="btn btn-soft" data-rexport="${r.id}">Exportar</button></li>`).join("")}</ul></section>` : ""}`;
+}
+
+/* M13: plan con los 8 campos de PSP-SR 5; sin objetivos completos y firma, queda en borrador. */
+function interventionView(user, p) {
+  const prev = Store.plansIntervention(user, p.id);
+  return `<form id="ip-form" class="card form"><h2>Plan de intervención</h2><p class="hint">Lo que propone el sistema es un borrador. Las estrategias salen de la Biblioteca; las de nivel X no se pueden elegir.</p>
+    <label for="ip-ctx">1. Contexto (sin identificadores)</label><textarea id="ip-ctx" rows="2"></textarea>
+    <label for="ip-prof">2. Perfil de fortalezas y necesidades</label><textarea id="ip-prof" rows="2"></textarea>
+    <fieldset><legend>3. Objetivo con línea de base, meta y plazo</legend><div class="grid-form">
+      <div><label for="ob-t">Objetivo</label><input id="ob-t"></div><div><label for="ob-b">Línea de base</label><input id="ob-b" type="number"></div>
+      <div><label for="ob-g">Meta</label><input id="ob-g" type="number"></div><div><label for="ob-w">Plazo (semanas)</label><input id="ob-w" type="number" min="1"></div></div></fieldset>
+    <fieldset><legend>4. Estrategias (Biblioteca de evidencia · ${PRUEBA})</legend>${BIBLIOTECA.map((b) => `<label class="check ${b.nivel === "X" ? "disabled" : ""}"><input type="checkbox" name="estr" value="${b.id}" ${b.nivel === "X" ? "disabled" : ""}> ${esc(b.name)} · <strong>Nivel ${b.nivel}</strong>${b.nivel === "X" ? " (práctica excluida)" : ""}</label>`).join("")}</fieldset>
+    <label for="ip-dose">5. Dosis y responsables</label><input id="ip-dose">
+    <fieldset><legend>6. Aventuras del portal asignadas</legend>${ACTIVITIES.map((a) => `<label class="check"><input type="checkbox" name="tool" value="${a.id}"> ${esc(a.name)}</label>`).join("")}</fieldset>
+    <label for="ip-ind">7. Indicadores y fecha de revisión</label><input id="ip-ind">
+    <label for="ip-alta">8. Criterios de alta o de cambio de nivel de apoyo</label><input id="ip-alta">
+    <label class="check"><input type="checkbox" id="ip-sign"> Firmo el plan: ${esc(user.alias)} · Mat. ${esc(user.matricula?.numero)}</label>
+    <div class="row"><button class="btn btn-primary" name="act" value="1">Guardar como activo</button><button class="btn btn-soft" name="act" value="0">Guardar borrador</button></div>
+    <p class="err" id="ip-err" role="alert"></p></form>
+  ${p.objectives.length ? `<section class="card"><h2>Objetivos activos y medidas de monitoreo</h2><ul>${p.objectives.map((o) => `<li>${esc(o.text)} · base ${o.baseline} → meta ${o.goal} en ${o.weeks} semanas · medidas: ${o.measures.map((m) => m.value).join(", ") || "—"}</li>`).join("")}</ul>
+    <form id="obj-measure" class="form inline"><select id="om-obj" aria-label="Objetivo">${p.objectives.map((o) => `<option value="${o.id}">${esc(o.text)}</option>`).join("")}</select><input id="om-val" type="number" required aria-label="Valor" placeholder="Valor"><button class="btn btn-soft">Registrar medida</button></form></section>` : ""}
+  ${prev.length ? `<section class="card"><h2>Planes guardados</h2><ul class="hist">${prev.map((x) => `<li>${fmtDateTime(x.at)} · ${x.status === "activo" ? "Activo, firmado por " + esc(x.signedBy) : "Borrador"}</li>`).join("")}</ul></section>` : ""}`;
+}
+function bindInterventionForm(user, p, f, reload) {
+  let want = true;
+  f.querySelectorAll("button[name=act]").forEach((b) => b.addEventListener("click", () => { want = b.value === "1"; }));
+  f.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const obj = { text: $("#ob-t").value.trim(), baseline: $("#ob-b").value, goal: $("#ob-g").value, weeks: $("#ob-w").value };
+    const plan = { context: $("#ip-ctx").value, profile: $("#ip-prof").value, objectives: obj.text ? [obj] : [], strategies: $$("[name=estr]:checked", f).map((x) => x.value),
+      dose: $("#ip-dose").value, tools: $$("[name=tool]:checked", f).map((x) => x.value), indicators: $("#ip-ind").value, discharge: $("#ip-alta").value, signed: $("#ip-sign").checked, wantActive: want };
+    const r = Store.saveInterventionPlan(user, p.id, plan);
+    if (want && r.status !== "activo") { notice("Se guardó como borrador: para activarlo hacen falta objetivo con línea de base, meta y plazo, y tu firma.", "warn"); }
+    else notice(r.status === "activo" ? "Plan activo y firmado." : "Borrador guardado.", "ok");
+    reload("plan");
+  });
+}
+
+/* M17: medidas propias, puntaje bruto y cambio; sin baremos ni categorías. */
+function measuresView(user, p) {
+  const ms = Store.measuresFor(user, p.id);
+  const byM = MEDIDAS.map((m) => { const pre = ms.find((x) => x.measure === m.id && x.kind === "inicial"), post = ms.find((x) => x.measure === m.id && x.kind === "final"); return { m, pre, post }; }).filter((x) => x.pre || x.post);
+  const legend = "Medida de progreso en las habilidades practicadas. No es un test estandarizado ni una evaluación diagnóstica, y no tiene baremos.";
+  const text = byM.map((x) => `${x.m.name}: inicial ${x.pre ? x.pre.score : "—"} / final ${x.post ? x.post.score : "—"} (sobre ${x.m.max})${x.pre && x.post ? `; cambio ${x.post.score - x.pre.score >= 0 ? "+" : ""}${x.post.score - x.pre.score}` : ""}`).join("\n")
+    + `\n\n${legend}\nFirmado: ${user.alias} · Mat. ${user.matricula?.numero}`;
+  return `<div class="notice notice-info"><strong>${legend}</strong></div>
+  <form id="me-form" class="card form inline"><select id="me-m" aria-label="Medida">${MEDIDAS.map((m) => `<option value="${m.id}">${esc(m.name)} (sobre ${m.max})</option>`).join("")}</select>
+    <select id="me-k" aria-label="Toma"><option value="inicial">Inicial (forma A)</option><option value="final">Final (forma B)</option></select>
+    <input id="me-s" type="number" min="0" required aria-label="Puntaje bruto" placeholder="Puntaje bruto"><button class="btn btn-primary">Guardar</button></form>
+  <p class="prueba-tag">Banco de medidas: ${PRUEBA}</p>
+  <section class="card"><h2>Resultados</h2>${byM.length ? `<table class="tbl"><thead><tr><th>Medida</th><th>Inicial</th><th>Final</th><th>Cambio</th></tr></thead><tbody>${byM.map((x) => `<tr><td>${esc(x.m.name)}</td><td class="num">${x.pre ? x.pre.score : "—"}</td><td class="num">${x.post ? x.post.score : "—"}</td><td class="num">${x.pre && x.post ? (x.post.score - x.pre.score >= 0 ? "+" : "") + (x.post.score - x.pre.score) : "—"}</td></tr>`).join("")}</tbody></table>
+    <button class="btn btn-soft" id="me-export" data-text="${esc(text)}">Exportar con mi firma</button>` : "<p>Sin medidas.</p>"}</section>`;
+}
+
+function shareView(p) {
+  const age = Store.age(p);
+  if (age >= 13) return `<section class="card"><h2>Qué ve la familia</h2><p>Por la edad del paciente, la familia ve solo el tiempo y las aventuras. No ve el check-in, las respuestas de «Contar» ni los errores.</p></section>`;
+  return `<section class="card"><h2>Qué ve la familia</h2><p>Siempre ve: qué se practicó, cuántas aventuras, cuánto tiempo y los desafíos hechos. Nunca ve porcentajes, alertas, interpretación ni el autorreporte de ánimo. Además, vos decidís si comparte:</p>
+    <label class="check"><input type="checkbox" data-share="objetivos" ${p.share?.objetivos ? "checked" : ""}> Los objetivos del plan, en lectura fácil</label>
+    <label class="check"><input type="checkbox" data-share="nivel" ${p.share?.nivel ? "checked" : ""}> El nivel de cada aventura</label></section>`;
+}
+
+const CONSENT_LABEL = { "consentimiento-representante": "Consentimiento del representante", "asentimiento-nino": "Asentimiento del niño", "asentimiento-adolescente": "Asentimiento del adolescente",
+  "consentimiento-adolescente": "Consentimiento del adolescente", "aviso-enviado": "Aviso al representante enviado", "aviso-recibido": "Aviso recibido por el representante", "oposicion-representante": "Oposición del representante",
+  "decision-profesional": "Decisión del profesional", revocacion: "Revocación", titularidad: "Toma de titularidad (18 años)", "no-consiente": "El adolescente no consintió" };
+function consentView(user, p) {
+  return `<section class="card"><h2>Registro de consentimientos</h2>
+    <p class="hint">Registro encadenado por huella digital: cada entrada incluye la huella de la anterior. Formularios: ${esc(CONSENT_FORMS.version)} (texto jurídico pendiente).</p>
+    <div class="table-wrap"><table class="tbl compact"><thead><tr><th>Fecha</th><th>Registro</th><th>Detalle</th><th>Huella</th></tr></thead><tbody>
+    ${p.consents.map((c) => `<tr><td>${fmtDateTime(c.at)}</td><td>${esc(CONSENT_LABEL[c.type] || c.type)}</td><td class="wrap-cell small">${esc(c.detail)}</td><td class="mono small">${esc(c.hash.slice(0, 12))}…</td></tr>`).join("") || `<tr><td colspan="4">Sin registros todavía.</td></tr>`}</tbody></table></div>
+    <div class="row"><button class="btn btn-soft" id="verify-chain">Verificar la cadena</button><button class="btn btn-soft" id="dl-consents">Descargar comprobante</button><span id="chain-res" role="status"></span></div>
+    ${p.oppositionPending ? `<h3>Decisión ante la oposición del representante</h3><p>Evaluá el interés superior del adolescente. Si el conflicto es grave, se suspende y se orienta a mediación, al servicio local de protección de derechos o a un abogado del niño.</p>
+      <div class="row"><button class="btn btn-soft" data-decide="continuar">Continuar la vinculación</button><button class="btn btn-danger" data-decide="suspender">Suspender y orientar</button></div>` : ""}
   </section>`;
 }
 
 function planView(user, p, plans) {
   const enabled = ACTIVITIES.filter((a) => Store.db.activityState[a.id]?.enabled);
-  const fit = (a) => p.ageYears >= a.ageMin && p.ageYears <= a.ageMax;
-  return `<p>Elegí qué actividades hace el paciente en casa y con qué frecuencia. La familia ve solo lo que actives acá.</p>
-  <p class="hint">Rangos de edad y sugerencias por categoría: valores de demostración, pendientes de la ficha clínica.</p>
+  const age = Store.age(p), fit = (a) => age >= a.ageMin && age <= a.ageMax;
+  return `<p>Elegí qué aventuras hace el paciente en casa y con qué frecuencia. La familia ve solo lo que actives acá.</p>
   <div class="plan-grid">${enabled.map((a) => {
     const pl = plans.find((x) => x.activityId === a.id) || Store.db.plans.find((x) => x.patientId === p.id && x.activityId === a.id);
-    const suggested = a.suggestedFor.includes(p.diagnosis);
+    const fv = Rules.validateFicha(FICHAS[a.id], X_PRACTICES);
     return `<form class="card plan-form" data-act="${a.id}">
       <div class="plan-card-head">${actIcon(a.id, 52)}<h3>${esc(a.name)}</h3>${pl?.active ? '<span class="pill pill-ok">Indicada</span>' : ""}</div>
-      <p class="muted">${esc(a.area)} · ${a.ageMin} a ${a.ageMax} años</p>
-      <div class="chips">${fit(a) ? '<span class="pill">Adecuada a la edad</span>' : '<span class="pill pill-warn">Fuera del rango de edad</span>'}${suggested ? '<span class="pill">Sugerida para la categoría</span>' : ""}</div>
-      <p>${esc(a.instruction)}</p>
+      <p class="muted">${esc(a.skill)} · ${a.ageMin} a ${a.ageMax} años</p>
+      <div class="chips">${fit(a) ? '<span class="pill">Adecuada a la edad</span>' : '<span class="pill pill-warn">Fuera del rango de edad</span>'}${fv.ok ? "" : '<span class="pill pill-warn">Ficha incompleta: no publicable</span>'}</div>
+      <details><summary>Ficha de la aventura</summary><p>${esc(TRANSFER[a.ficha.variant].pro(a))}</p>${fv.rotuloC ? `<p><strong>${fv.rotuloC}</strong></p>` : ""}<ul class="small">${fv.errors.map((e) => `<li>${esc(e)}</li>`).join("")}</ul><p class="prueba-tag">${PRUEBA}</p></details>
       <div class="two"><div><label for="pw-${a.id}">Veces por semana</label><input id="pw-${a.id}" type="number" min="1" max="7" value="${pl?.perWeek || 2}"></div>
-      <div><label for="lv-${a.id}">Nivel</label><select id="lv-${a.id}">${a.levels.map((l, i) => `<option value="${i + 1}" ${(pl?.level || 1) === i + 1 ? "selected" : ""}>${i + 1}. ${esc(l)}</option>`).join("")}</select></div></div>
+      <div><label for="lv-${a.id}">Nivel inicial</label><select id="lv-${a.id}">${a.levels.map((l, i) => `<option value="${i + 1}" ${(pl?.level || 1) === i + 1 ? "selected" : ""}>${i + 1}. ${esc(l)}</option>`).join("")}</select></div></div>
       <label for="nt-${a.id}">Indicación para la familia (opcional)</label><textarea id="nt-${a.id}" rows="2" maxlength="280" placeholder="Sin datos identificatorios">${esc(pl?.note || "")}</textarea>
-      <label class="check"><input type="checkbox" id="on-${a.id}" ${pl?.active ? "checked" : ""}> Indicar esta actividad</label>
+      <label class="check"><input type="checkbox" id="on-${a.id}" ${pl?.active ? "checked" : ""}> Indicar esta aventura</label>
       <div class="row"><button class="btn btn-primary">Guardar</button><button type="button" class="btn btn-soft" data-consult="${a.id}">Usar en consulta</button></div>
     </form>`; }).join("")}</div>`;
 }
 
 function recordsView(ses) {
-  return `<div class="table-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Actividad</th><th>Dónde</th><th>Nivel</th><th>Completó</th><th>1.er intento</th><th>Intentos</th><th>Pistas</th><th>Ánimo inicio</th><th>Durante</th><th>Final</th><th>Le resultó</th></tr></thead>
-  <tbody>${ses.map((s) => `<tr><td>${fmtDateTime(s.startAt)}</td><td>${esc(actById(s.activityId)?.name)}</td><td>${s.context}</td><td class="num">${s.metrics.level}</td>
-    <td class="num">${s.metrics.completed}/${s.metrics.items}${s.metrics.abandoned ? " (dejó)" : ""}</td><td class="num">${s.metrics.firstTry}</td><td class="num">${s.metrics.attempts}</td><td class="num">${s.metrics.hints}</td>
-    <td>${esc(moodLabel(s.moodStart))}</td><td>${esc(moodLabel(s.moodDuring))}</td><td>${esc(moodLabel(s.moodAfter))}</td><td>${esc((CHILD_TEXT.difficulty.find((d) => d.id === s.difficulty) || {}).label || "—")}</td></tr>`).join("") || `<tr><td colspan="12">Sin registros.</td></tr>`}</tbody></table></div>`;
+  return `<div class="table-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Aventura</th><th>Dónde</th><th>Nivel inicio → fin</th><th>Completó</th><th>1.er intento</th><th>Pistas</th><th>Salida en el piso</th><th>Ánimo (autorreporte)</th><th>Le ayudó</th><th>Le resultó</th><th>Desafío</th></tr></thead>
+  <tbody>${ses.map((s) => `<tr><td>${fmtDateTime(s.startAt)}</td><td>${esc(actById(s.activityId)?.name)}</td><td>${s.context}</td><td class="num">${s.metrics.level} → ${s.metrics.endLevel ?? s.metrics.level}</td>
+    <td class="num">${s.metrics.completed}/${s.metrics.items}${s.metrics.abandoned ? " (dejó)" : ""}</td><td class="num">${s.metrics.firstTry}</td><td class="num">${s.metrics.hints}</td><td>${s.metrics.floorExit ? "sí" : "—"}</td>
+    <td>${esc(s.moodStart ? moodLabel(s.moodStart) : "—")}</td><td>${esc(s.helped || "—")}</td><td>${esc((CHILD_TEXT.how.find((d) => d.id === s.how) || {}).label || "—")}</td><td>${s.desafioHecho ? "sí" : "—"}</td></tr>`).join("") || `<tr><td colspan="12">Sin registros.</td></tr>`}</tbody></table></div>`;
 }
 
 /* ---------- Catálogo ---------- */
 Views.catalog = () => `
-  <h1>Catálogo de actividades</h1>
-  <div class="notice notice-warn"><strong>Contenido de demostración.</strong> Las mecánicas funcionan, pero las consignas, edades y criterios deben revisarse y aprobarse antes de usarse con pacientes reales. Versión de contenido: ${esc(CONTENT_VERSION)}.</div>
-  <div class="plan-grid">${ACTIVITIES.map((a) => `<article class="card act-card">
-    <div class="act-card-head">${actIcon(a.id, 64)}<h2>${esc(a.name)}</h2></div><p class="muted">${esc(a.area)} · ${a.ageMin} a ${a.ageMax} años · ${Store.db.activityState[a.id].enabled ? "Disponible" : "Retirada"}</p>
+  <h1>Catálogo de aventuras</h1>
+  <div class="notice notice-warn"><strong>${PRUEBA}.</strong> Las mecánicas funcionan, pero las consignas, edades, fichas y fuentes deben revisarse y aprobarse antes de usarse con chicos reales. Versión de contenido: ${esc(CONTENT_VERSION)}.</div>
+  ${ZONES.map((z) => `<h2 class="zone-title">${esc(z.name)}</h2><div class="plan-grid">${ACTIVITIES.filter((a) => a.zone === z.id).map((a) => { const fv = Rules.validateFicha(FICHAS[a.id], X_PRACTICES); return `<article class="card act-card">
+    <div class="act-card-head">${actIcon(a.id, 64)}<h3>${esc(a.name)}</h3></div><p class="muted">${esc(a.skill)} · ${a.ageMin} a ${a.ageMax} años · ${Store.db.activityState[a.id].enabled ? "Disponible" : "Retirada"}</p>
     <p>${esc(a.instruction)}</p><p class="hint">Niveles: ${a.levels.map(esc).join(" · ")}</p>
-    <p class="hint">Para la familia: ${esc(a.forFamily)}</p></article>`).join("")}</div>`;
+    <p class="small">${esc(TRANSFER[a.ficha.variant].pro(a))}</p>
+    <p>${fv.ok ? '<span class="pill pill-ok">Ficha completa</span>' : `<span class="pill pill-warn">Ficha incompleta: no publicable fuera de la beta</span>`}</p>
+    <details><summary>Qué le falta a la ficha</summary><ul class="small">${fv.errors.map((e) => `<li>${esc(e)}</li>`).join("")}</ul></details></article>`; }).join("")}</div>`).join("")}`;
 
 /* ==========================================================================
    MI CUENTA, DATOS Y BAJA
@@ -849,7 +975,7 @@ const kfmt = (n) => (n > 0 && n < K_MIN ? `<span title="Grupo menor a ${K_MIN}: 
 
 function adminHome(user) {
   const tab = State.params.tab || "indicadores";
-  const tabs = [["indicadores", "Indicadores"], ["usuarios", "Usuarios"], ["contenidos", "Contenidos"], ["reportes", "Reportes"], ["sesiones", "Sesiones activas"], ["datos", "Solicitudes de datos"], ["auditoria", "Auditoría"], ["config", "Configuración de la beta"]];
+  const tabs = [["indicadores", "Indicadores"], ["usuarios", "Usuarios"], ["contenidos", "Contenidos"], ["reportes", "Reportes"], ["sesiones", "Sesiones activas"], ["datos", "Solicitudes de datos"], ["sugerencias", "Sugerencias"], ["auditoria", "Auditoría"], ["config", "Configuración de la beta"]];
   return `<section class="greet greet-azul"><div class="greet-text"><p class="eyebrow">Administración</p><h1>Panel de la beta</h1><p>La administración ve indicadores agregados y datos de cuentas. No ve registros individuales de pacientes.</p></div><div class="greet-art">${Scenes.admin(180)}</div></section>
   <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${tab === k}" class="tab ${tab === k ? "on" : ""}" data-atab="${k}">${l}</button>`).join("")}</div>
   ${AdminTabs[tab](user)}`;
@@ -869,14 +995,15 @@ const AdminTabs = {
     return `<div class="grid-4">
       <div class="card stat"><span class="stat-lab">Cuentas activas</span><span class="stat-num">${active.length}</span><span class="hint">${active.filter((u) => u.role === "profesional").length} profesionales · ${active.filter((u) => u.role === "familia").length} familias</span></div>
       <div class="card stat"><span class="stat-lab">Pruebas por vencer (≤ ${db.config.warnDays} días)</span><span class="stat-num">${trials.filter((x) => x.warn).length}</span><span class="hint">${trials.filter((x) => x.expired).length} vencidas</span></div>
-      <div class="card stat"><span class="stat-lab">Sesiones de actividad (7 días)</span><span class="stat-num">${s7.length}</span><span class="hint">Completadas en 28 días: ${completion}%</span></div>
+      <div class="card stat"><span class="stat-lab">Aventuras jugadas (7 días)</span><span class="stat-num">${s7.length}</span><span class="hint">Completadas en 28 días: ${completion}%</span></div>
       <div class="card stat"><span class="stat-lab">Reportes abiertos</span><span class="stat-num">${openReports}</span><span class="hint">${db.users.filter((u) => u.status === "pendiente").length} solicitudes profesionales pendientes</span></div>
     </div>
     <div class="grid-2"><section class="card"><h2>Sesiones por semana (todas las cuentas)</h2>${bars(weeks, ["Hace 4 sem.", "Hace 3", "Hace 2", "Última"])}</section>
-    <section class="card"><h2>Uso por actividad (28 días)</h2><div class="table-wrap"><table class="tbl compact"><tbody>${byAct.map(([n, v]) => `<tr><td>${esc(n)}</td><td class="num">${kfmt(v)}</td></tr>`).join("")}</tbody></table></div>
+    <section class="card"><h2>Uso por aventura (28 días)</h2><div class="table-wrap"><table class="tbl compact"><tbody>${byAct.map(([n, v]) => `<tr><td>${esc(n)}</td><td class="num">${kfmt(v)}</td></tr>`).join("")}</tbody></table></div>
       <p class="hint">Los grupos de menos de ${K_MIN} se ocultan para reducir el riesgo de identificar a alguien.</p></section></div>
-    <section class="card"><h2>Ánimo declarado (agregado, 28 días)</h2><div class="table-wrap"><table class="tbl compact"><thead><tr><th>Ánimo</th><th>Al empezar</th><th>Al terminar</th></tr></thead><tbody>
-      ${MOODS.map((m) => `<tr><td>${esc(m.label)}</td><td class="num">${kfmt(s28.filter((s) => s.moodStart === m.id).length)}</td><td class="num">${kfmt(s28.filter((s) => s.moodAfter === m.id).length)}</td></tr>`).join("")}</tbody></table></div>
+    <section class="card"><h2>Check-in de ánimo (conteo agregado, sin identificación)</h2><div class="table-wrap"><table class="tbl compact"><thead><tr><th>Respuesta</th><th>Veces</th></tr></thead><tbody>
+      ${(() => { const tot = {}; Object.values(db.moodAgg || {}).forEach((d) => Object.entries(d).forEach(([k, v]) => (tot[k] = (tot[k] || 0) + v))); return Object.entries(tot).map(([k, v]) => `<tr><td>${esc(moodLabel(k))}</td><td class="num">${kfmt(v)}</td></tr>`).join("") || `<tr><td colspan="2">Sin datos.</td></tr>`; })()}</tbody></table></div>
+      <p class="hint">Autorreporte. No es una evaluación emocional. Se cuenta por día, sin vincularlo a ninguna cuenta.</p>
       <p class="hint">${db.users.filter((u) => u.consents?.improvement?.granted).length} cuentas autorizaron el uso para mejora de programas.</p></section>`;
   },
   usuarios() {
@@ -927,6 +1054,15 @@ const AdminTabs = {
     return `<div class="table-wrap"><table class="tbl"><thead><tr><th>N.º</th><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th>Detalle</th><th>Estado</th></tr></thead><tbody>
     ${db.dataRequests.map((r) => `<tr><td class="mono">${r.number}</td><td>${fmtDateTime(r.createdAt)}</td><td>${esc(db.users.find((u) => u.id === r.userId)?.email)}</td><td>${esc(r.kind)}</td><td class="wrap-cell">${esc(r.detail)}</td><td>${esc(r.status)}</td></tr>`).join("") || `<tr><td colspan="6">Sin solicitudes.</td></tr>`}</tbody></table></div>`;
   },
+  sugerencias() {
+    const db = Store.db;
+    const st = ["nueva", "en evaluación profesional", "en evaluación técnica", "aceptada", "descartada"];
+    return `<p>Sugerencias enviadas por familias y profesionales para que las evalúen el equipo profesional y el técnico. Destino del correo: <span class="mono">${esc(LEGAL.suggestionsTo)}</span>.</p>
+    <div class="table-wrap"><table class="tbl"><thead><tr><th>N.º</th><th>Fecha</th><th>Perfil</th><th>Tipo</th><th>Área</th><th>Sugerencia</th><th>Estado</th><th></th></tr></thead><tbody>
+    ${db.suggestions.map((g) => `<tr><td class="mono">${g.number}</td><td>${fmtDateTime(g.createdAt)}</td><td>${esc(roleLabel[g.role])}</td><td>${esc((SUG_KINDS.find((k) => k[0] === g.kind) || [, g.kind])[1])}</td><td>${esc((SUG_AREAS.find((k) => k[0] === g.area) || [, g.area])[1])}</td><td class="wrap-cell">${esc(g.text)}</td>
+      <td><select data-sgstatus="${g.id}" aria-label="Estado de la sugerencia ${g.number}">${st.map((x) => `<option ${g.status === x ? "selected" : ""}>${x}</option>`).join("")}</select></td>
+      <td><a class="btn btn-soft" href="${mailtoSuggestion(g)}">Reenviar por correo</a></td></tr>`).join("") || `<tr><td colspan="8">Todavía no hay sugerencias.</td></tr>`}</tbody></table></div>`;
+  },
   auditoria() {
     const db = Store.db;
     return `<div class="table-wrap"><table class="tbl compact"><thead><tr><th>Fecha</th><th>Cuenta</th><th>Acción</th><th>Detalle</th></tr></thead><tbody>
@@ -958,6 +1094,7 @@ function bindAdmin(user) {
   $$("[data-shift]").forEach((b) => b.addEventListener("click", () => { Store.shiftActivation(user, b.dataset.shift, 5); go("home", { tab: "usuarios" }); }));
   $$("[data-toggle]").forEach((b) => b.addEventListener("click", () => { const id = b.dataset.toggle; Store.setActivity(user, id, !Store.db.activityState[id].enabled); go("home", { tab: "contenidos" }); }));
   $$("[data-rstatus]").forEach((s) => s.addEventListener("change", () => Store.setReportStatus(user, s.dataset.rstatus, s.value)));
+  $$("[data-sgstatus]").forEach((s) => s.addEventListener("change", () => Store.setSuggestionStatus(user, s.dataset.sgstatus, s.value)));
   $$("[data-kill]").forEach((b) => b.addEventListener("click", () => {
     if (b.dataset.kill === user.id) { notice("Esa es tu propia sesión. Usá «Salir».", "warn"); return go("home", { tab: "sesiones" }); }
     Store.adminCloseSession(user, b.dataset.kill); go("home", { tab: "sesiones" }); }));
@@ -982,13 +1119,16 @@ const LegalDocs = {
   beta: { title: "Qué significa que sea una versión beta", body: () => `
     <p>Aprender Siendo está en <strong>etapa beta</strong>: una versión de prueba que usamos con un grupo de participantes invitados para validar que todo funcione antes del lanzamiento.</p>
     <ul><li>Puede haber errores. Si encontrás uno, usá «Reportar un inconveniente» (está en todas las pantallas).</li>
-    <li>Las actividades y textos todavía están en revisión profesional.</li>
-    <li>Esta demostración guarda todo solo en tu navegador, con datos ficticios. No cargues datos reales de pacientes.</li>
+    <li>Las aventuras y textos todavía están en revisión profesional. Lo que dice «${PRUEBA}» es relleno para probar.</li>
+    <li>Esta demostración guarda todo solo en tu navegador, con datos ficticios. No cargues datos reales de chicos ni de familias.</li>
+    <li>Si tenés una idea para mejorar, usá el botón «Sugerencias».</li>
     <li>Durante la beta evaluamos: facilidad de uso, funcionamiento de actividades y seguimiento, permisos y privacidad, control de sesiones, prueba gratuita, baja de cuentas y reportes.</li></ul>` },
   terminos: { title: "Términos de uso", body: () => `${draftBanner}
     <h3>1. Qué es Aprender Siendo</h3><p>Una aplicación con recursos psicopedagógicos para usar en consulta y en casa, con participación de las familias y supervisión profesional. No reemplaza la evaluación ni el tratamiento profesional.</p>
     <h3>2. Versión beta</h3><p>El servicio está en etapa beta, con acceso por invitación. Puede tener errores o cambios.</p>
-    <h3>3. Cuentas</h3><p>Hay cuentas de familia o responsable, de profesional (con matrícula verificada) y de administración. Cada cuenta puede tener una sola sesión activa a la vez.</p>
+    <h3>3. Cuentas</h3><p>Hay cuentas de familia o responsable, de profesional (con matrícula verificada) y de administración. Cada cuenta puede tener una sola sesión activa a la vez. Una familia puede crear un perfil libre (sin profesional), que no incluye interpretación ni seguimiento clínico.</p>
+    <h3>3 bis. Chicos, chicas y adolescentes</h3><p>Entre 3 y 12 años usa la app con el consentimiento de su representante y su propio asentimiento. De 13 a 15 años hacen falta el consentimiento del representante y el asentimiento del adolescente. Desde los 16 años el adolescente puede consentir por sí mismo; se avisa al representante y, si se opone, decide la profesional según el interés superior del adolescente. A los 18 años la persona toma la titularidad de su cuenta.</p>
+    <p class="legal-ph">Texto jurídico pendiente.</p>
     <h3>4. Prueba gratuita</h3><p>Cada cuenta tiene ${Store.db.config.trialDays} días de prueba gratuita desde su activación. La app muestra el tiempo restante y avisa antes del vencimiento. Condiciones posteriores: ${esc(LEGAL.postTrialConditions)}</p>
     <h3>5. Uso responsable</h3><p>Las actividades se hacen siguiendo la indicación de la profesional. Las sugerencias automáticas son orientativas y las revisa la profesional; el desempeño en la app no equivale a mejoría o retroceso clínico.</p>
     <h3>6. Baja</h3><p>Podés dar de baja tu cuenta en cualquier momento desde «Dar de baja mi cuenta».</p>
@@ -997,11 +1137,13 @@ const LegalDocs = {
     <h3>Qué datos tratamos</h3>
     <ul><li><strong>De tu cuenta:</strong> correo, nombre para mostrar, contraseña cifrada, fechas de alta y activación, autorizaciones otorgadas y datos técnicos de la sesión (identificador del dispositivo y navegador, inicio y última actividad).</li>
     <li><strong>De profesionales:</strong> número de matrícula, provincia y fecha de verificación.</li>
-    <li><strong>Del paciente:</strong> un código asignado por el sistema, edad, categoría diagnóstica, actividades indicadas y, por cada actividad, fecha, lugar (casa o consulta), resultados (pasos completados, intentos, pistas), el personaje elegido y el ánimo que el niño eligió al empezar y al terminar. No pedimos nombre, documento, escuela ni domicilio del niño.</li>
+    <li><strong>Del chico, la chica o el adolescente:</strong> un código asignado por el sistema, un apodo, mes y año de nacimiento, categoría (solo la ve la profesional), aventuras indicadas y, por cada aventura, fecha, lugar (casa o consulta), resultados (ítems, aciertos al primer intento, pistas, nivel), el personaje y el compañero elegidos, y las respuestas de «Contar». El check-in de ánimo se guarda vinculado solo si hay profesional, la vinculación está activa y el representante lo consintió; si no, solo se cuenta en forma agregada. No pedimos nombre, documento, escuela ni domicilio.</li>
+    <li><strong>Consentimientos:</strong> quién, cuándo, qué versión del formulario y una huella digital encadenada que permite verificar que el registro no se alteró.</li>
+    <li><strong>Sugerencias:</strong> el texto que escribas, para que lo evalúe el equipo.</li>
     <li><strong>Reportes y solicitudes:</strong> el texto que escribas y la captura que adjuntes.</li></ul>
     <h3>Para qué los usamos</h3><ul><li>Prestar el servicio: mostrar las actividades indicadas y que la profesional haga el seguimiento.</li>
     <li>Solo si lo autorizás aparte: mejorar los programas con datos agregados y sin identificación.</li></ul>
-    <h3>Quién puede verlos</h3><ul><li>La profesional a cargo ve los registros de sus pacientes.</li><li>La familia vinculada ve las actividades indicadas y las realizadas, no el análisis profesional.</li>
+    <h3>Quién puede verlos</h3><ul><li>La profesional a cargo ve los registros de sus pacientes solo mientras la vinculación está activa.</li><li>La familia ve qué se practicó, cuánto tiempo y los desafíos hechos; no ve porcentajes, alertas, interpretación ni el ánimo. Si el paciente tiene 13 años o más, la familia ve solo tiempo y aventuras.</li><li>El adolescente puede descargar sus propios datos.</li>
     <li>La administración ve datos de cuentas e indicadores agregados, no registros individuales de pacientes.</li></ul>
     <h3>Un aviso importante sobre el anonimato</h3><p>Para seguir la evolución de cada paciente usamos un código persistente. Eso <strong>no es anonimato absoluto</strong>: la profesional sabe a quién corresponde y, combinado con otros datos, podría permitir identificar a una persona. Por eso el seguimiento individual se guarda separado de las estadísticas generales, que son agregadas y ocultan los grupos chicos.</p>
     <h3>Cómo los protegemos y cuánto tiempo</h3><p>Acceso según el perfil, contraseñas cifradas, segundo factor para profesionales y administración, una sesión activa por cuenta y registro de auditoría. Conservación: ${esc(LEGAL.retention)}</p>
@@ -1009,8 +1151,9 @@ const LegalDocs = {
     <h3>En esta demostración</h3><p>Todo queda guardado solo en tu navegador; no se envía a ningún servidor.</p>` },
   ia: { title: "Uso de inteligencia artificial", body: () => `${draftBanner}
     <p>Siempre te decimos cuándo interviene una herramienta automática.</p>
-    <ul><li>Los indicadores de seguimiento (adhesión, participación, desempeño, ánimo declarado) se calculan con reglas fijas y verificables, no con un modelo de lenguaje.</li>
-    <li>Las sugerencias que ve la profesional están marcadas como «Sugerencia automática» y requieren su revisión. Nunca se muestran a familias ni a niños.</li>
+    <ul><li>Los indicadores, las alertas, el nivel de cada aventura y los permisos se calculan con reglas fijas y verificables, no con un modelo de lenguaje.</li>
+    <li>En esta beta no interviene ningún modelo de lenguaje: el borrador de informe es una plantilla fija que la profesional revisa, edita y firma.</li>
+    <li>Las preguntas y posibles ajustes que ve la profesional junto a una alerta son orientativos. Nunca se muestran a familias ni a chicos.</li>
     <li>Cuando se incorpore un modelo de lenguaje para redactar resúmenes, recibirá solo indicadores con el código del paciente, sin datos personales, y lo vamos a informar acá antes de activarlo.</li>
     <li>El desempeño en la app no equivale a una mejoría ni a un retroceso clínico. La interpretación es de la profesional.</li></ul>` },
   post: { title: "Qué pasa cuando termina la prueba", body: () => `${draftBanner}
