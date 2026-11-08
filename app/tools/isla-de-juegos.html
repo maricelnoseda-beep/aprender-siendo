@@ -1,17 +1,14 @@
 <!doctype html>
 <!-- Isla de Juegos: juego aportado por la responsable del proyecto (2026-11-01), incorporado como herramienta.
      Cambios de DEV-IA: aviso del resultado de cada ronda al marco de Aprender Siendo (postMessage) y texto de datos actualizado.
-     REVISAR (PSP-SR): consignas, niveles, regla adaptativa (3 aciertos / 3 errores) y la sección "Fundamentos". --><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+     REVISAR (PSP-SR): consignas, niveles, regla adaptativa M10 (ventana de 10, mínimo 5; sube con 85 % y 70 % sin ayuda; baja con menos de 60 % o 3 errores seguidos; una subida por sesión) y la sección "Fundamentos". --><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Isla de Juegos</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* Layout: un mapa de cinco islas (una por área), sesiones cortas de 6 juegos, un solo foco por pantalla. */
 :root{
-  --display:'Fredoka','Trebuchet MS',system-ui,sans-serif;
-  --body:'Lexend','Segoe UI',system-ui,sans-serif;
+  --display:'Trebuchet MS',system-ui,sans-serif;
+  --body:'Segoe UI',system-ui,sans-serif;
   --bg:#EAF3F3; --surface:#FFFFFF; --ink:#14303A; --ink-2:#466470; --line:#C5D9DC;
   --brand:#1B7F86; --on-brand:#FFFFFF; --sun:#F2B33D; --ok:#23895F; --try:#C9791B;
   --c-num:#D9732A; --c-ate:#2B7BBF; --c-mem:#7A55C9; --c-eje:#1E9A6E; --c-len:#D14D7B;
@@ -108,7 +105,7 @@ body.hc .opt{border-width:5px}
 .cell{aspect-ratio:1;border:3px solid var(--line);background:var(--surface);border-radius:18px;display:grid;place-items:center;padding:6px;min-width:0}
 .cell svg{width:70%;height:70%}
 .cell.found{background:color-mix(in srgb,var(--ok) 25%,var(--surface));border-color:var(--ok)}
-.shake{animation:nudge .4s}
+.shake{}
 .sample{width:92px;height:92px;border-radius:50%;border:4px solid var(--c);display:grid;place-items:center;margin:0 auto 12px}
 .sample svg{width:60%;height:60%}
 .tgts{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:360px;width:100%;margin:0 auto}
@@ -305,7 +302,7 @@ function cancelTrial(rows,cols,t,mode,tol){const N=rows*cols,ts=pick(Object.keys
       let found=0,err=0;
       $('.cgrid',ctx.vis).onclick=e=>{const b=e.target.closest('.cell');if(!b||b.classList.contains('found')||ctx.locked())return;
         if(b.dataset.k==='1'){b.classList.add('found');b.disabled=true;found++;SND.tap();ctx.fb(`${found} de ${t}`,'ok');if(found===t)ctx.finish(err<=tol)}
-        else{err++;b.classList.add('shake');ctx.later(()=>b.classList.remove('shake'),500);SND.soft();ctx.fb('Esa no. Mirá bien la figura de arriba.','soft');
+        else{err++;b.classList.add('shake');ctx.later(()=>b.classList.remove('shake'),500);SND.soft();ctx.fb('Casi. Mirá otra vez la figura de arriba.','soft');
           if(err>=3){const u=$('.cell[data-k="1"]:not(.found)',ctx.vis);if(u)u.classList.add('hint')}}}}}}
 
 /* Tarea de flujo de estímulos: vigilancia (ATE) y go/no-go (EJE) */
@@ -443,7 +440,7 @@ const GAMES={num:NUM,ate:ATE,mem:MEM,eje:EJE,len:LEN};
 /* ============ MOTOR: sesión, andamiaje sin error, nivel adaptativo ============ */
 const app=$('#app');
 let SES=null,T=null;
-const PRAISE=['¡Muy bien!','¡Eso es!','¡Genial!','¡Lo lograste!'];
+const PRAISE=['Miraste con atención y lo encontraste.','Probaste y encontraste la respuesta.','Seguiste los pasos.'];
 function clearT(){if(T){T.timers.forEach(clearTimeout);T.timers=[]}}
 function fb(t,c){const f=$('#fb');if(f){f.textContent=t;f.className='fb '+(c||'')}}
 function applyPrefs(){const p=S.prefs,b=document.body;b.classList.toggle('calm',p.calm);b.classList.toggle('hc',p.hc);b.classList.toggle('big',p.big);b.classList.toggle('scanning',p.scan)}
@@ -471,7 +468,7 @@ function drawTrial(tr,lvl){const k=SES.k;
   app.innerHTML=`<div class="top"><button class="icon-btn" id="bExit" type="button" aria-label="Volver al mapa">${ico('home')}</button>
    <div class="dots" aria-label="Juego ${SES.n+1} de ${SES.total}">${[...Array(SES.total)].map((_,i)=>`<i class="${i<SES.n?'done':i===SES.n?'now':''}"></i>`).join('')}</div>
    <button class="icon-btn" id="bSay" type="button" aria-label="Escuchar otra vez">${ico('sound')}</button></div>
-   <div class="stage" style="--c:var(--c-${k})"><div class="chip">${AREAS[k].n} · Nivel ${lvl}</div><div class="prompt">${tr.prompt}</div>
+   <div class="stage" style="--c:var(--c-${k})"><div class="chip">${AREAS[k].n}</div><div class="prompt">${tr.prompt}</div>
    <div class="visual" id="vis">${tr.preview?tr.preview.html+`<button type="button" class="btn alt small" id="bPrev" data-t>${tr.preview.btn}</button>`:(tr.visual||'')}</div>
    <div class="opts" id="opts" style="--cols:${tr.cols||Math.min((tr.opts||[]).length||3,4)}" ${tr.preview?'hidden':''}>${(tr.opts||[]).map((o,i)=>`<button type="button" class="opt" data-t data-i="${i}">${o.h}</button>`).join('')}</div>
    <div class="fb" id="fb" role="status" aria-live="polite"></div></div>`;
@@ -486,7 +483,7 @@ function drawTrial(tr,lvl){const k=SES.k;
     locked:()=>TT.locked,fb,setKey:f=>{TT.key=f},finish:first=>done(first)});
   scanStart()}
 function done(first){if(!T||T.locked)return;T.locked=true;T.errs=first?0:1;
-  fb(first?pick(PRAISE):'¡Lo lograste! Seguimos practicando.','ok');SND.ok();
+  fb(first?pick(PRAISE):'Lo encontraste. Seguimos.','ok');SND.ok();
   const TT=T;TT.timers.push(setTimeout(()=>{if(T===TT)finishTrial()},1400))}
 function choose(i){if(!T||T.locked)return;const tr=T.tr,btn=$(`.opt[data-i="${i}"]`);
   if(!btn||btn.classList.contains('gone')||btn.classList.contains('picked'))return;
@@ -501,15 +498,18 @@ function choose(i){if(!T||T.locked)return;const tr=T.tr,btn=$(`.opt[data-i="${i}
     else if(T.errs===1)say('Probá otra vez.');
     if(T.errs>=2||(!tr.seq&&$$('.opt:not(.gone)').length<=2)){const nx=tr.seq?$(`.opt[data-i="${tr.seq[T.pos]}"]`):$$('.opt').find((b,j)=>tr.opts[j].ok);if(nx)nx.classList.add('hint');fb('Mirá, es este.','soft')}}}
 function finishTrial(){const first=T.errs===0,k=SES.k,p=S.prog[k];SES.n++;if(first)SES.first++;p.tried++;
-  if(first){p.right++;p.streak++;p.miss=0;if(p.streak>=3&&p.level<10){p.level++;p.streak=0;SES.up=true}}
-  else{p.streak=0;p.miss++;if(p.miss>=3&&p.level>1){p.level--;p.miss=0;SES.down=true}}
+  /* Regla M10 (REQ-CLI-M10): ventana de 10 ítems, mínimo 5; el tiempo no cuenta. */
+  if(first)p.right++;
+  p.win=(p.win||[]).concat([{ok:first,h:!!T.hinted}]).slice(-10);p.miss=first?0:(p.miss||0)+1;
+  const n=p.win.length,okP=p.win.filter(x=>x.ok).length/n,noH=p.win.filter(x=>x.ok&&!x.h).length/n;
+  if(p.miss>=3){if(p.level>1){p.level--;SES.down=true}p.miss=0;p.win=[]}
+  else if(n>=5&&okP>=.85&&noH>=.70&&!SES.up&&p.level<10){p.level++;p.win=[];SES.up=true}
+  else if(n>=5&&okP<.60&&p.level>1){p.level--;p.win=[];SES.down=true}
   save();nextTrial()}
 function endSession(){const k=SES.k;scanStop();clearT();T=null;S.prog[k].played++;S.sessions++;S.flowers.push({k});S.flowers=S.flowers.slice(-48);S.last=k;save();SND.done();
-  const st=SES.first>=5?3:SES.first>=3?2:1,msg=SES.up?`¡Subiste al nivel ${S.prog[k].level}!`:SES.down?'Probamos algo un poco más fácil para practicar.':'¡Seguimos practicando!';
-  const star=on=>`<svg viewBox="0 0 40 40" aria-hidden="true" fill="${on?'var(--sun)':'var(--line)'}">${SH.star}</svg>`;
+  const msg='Practicaste en la isla '+AREAS[k].n+'.';
   app.innerHTML=`<div class="stage center" style="--c:var(--c-${k})"><div class="prompt">¡Terminaste!</div>
-   <div class="stars">${star(st>=1)}${star(st>=2)}${star(st>=3)}</div>
-   <p>${SES.first} de ${SES.total} a la primera.</p><p><strong>${msg}</strong></p>
+   <p><strong>${msg}</strong></p>
    <svg viewBox="0 0 40 40" width="96" height="96" aria-hidden="true">${flowerPath(k)}</svg>
    <div class="bubble" id="bub" aria-live="polite">Respirar</div>
    <div class="stack"><button class="btn alt" id="bBreath" type="button" data-t>Respirar un momento</button>
@@ -517,7 +517,7 @@ function endSession(){const k=SES.k;scanStop();clearT();T=null;S.prog[k].played+
    <button class="btn alt" id="bMap" type="button" data-t>Volver al mapa</button></div></div>`;
   try{if(window.parent!==window)window.parent.postMessage({type:'isla-ronda',area:k,first:SES.first,total:SES.total,level:S.prog[k].level},'*')}catch(e){}
   say('¡Terminaste! Nació una flor en tu jardín.');
-  let bt=null;$('#bBreath').onclick=()=>{const b=$('#bub');b.classList.add('on');let n=0;const f=()=>{b.textContent=n%2?'Soltá el aire':'Tomá aire';n++};f();clearInterval(bt);bt=setInterval(f,4000);setTimeout(()=>{clearInterval(bt);b.classList.remove('on');b.textContent='Muy bien'},32000)};
+  let bt=null;$('#bBreath').onclick=()=>{const b=$('#bub');b.classList.add('on');let n=0;const f=()=>{b.textContent=n%2?'Soltá el aire':'Tomá aire';n++};f();clearInterval(bt);bt=setInterval(f,4000);setTimeout(()=>{clearInterval(bt);b.classList.remove('on');b.textContent='Listo'},32000)};
   $('#bAgain').onclick=()=>{clearInterval(bt);startArea(k)};$('#bMap').onclick=()=>{clearInterval(bt);home()};scanStart()}
 function flowerPath(k){return `<g fill="var(--c-${k})"><circle cx="20" cy="8" r="7"/><circle cx="31" cy="16" r="7"/><circle cx="27" cy="29" r="7"/><circle cx="13" cy="29" r="7"/><circle cx="9" cy="16" r="7"/></g><circle cx="20" cy="20" r="5" fill="var(--sun)"/>`}
 
@@ -534,7 +534,7 @@ function home(){stopAll();view='home';const next=()=>{const ks=Object.keys(AREAS
    <button class="icon-btn" id="bSet" type="button" aria-label="Ajustes" data-t>${ico('gear')}</button></div>
    <button class="btn" id="bNext" type="button" data-t>${ico('play')} Seguir jugando</button>
    <div class="map">${Object.entries(AREAS).map(([k,a])=>`<button type="button" class="isle" data-t data-k="${k}" style="--c:var(--c-${k})"><span class="ib">${ico(a.i)}</span><span class="nm2">${a.n}</span><span class="ds">${a.d}</span>
-     <span class="lv">Nivel ${S.prog[k].level}</span><span class="pips">${[...Array(10)].map((_,i)=>`<i class="${i<S.prog[k].level?'on':''}"></i>`).join('')}</span></button>`).join('')}</div>
+</button>`).join('')}</div>
    <section class="garden"><h2>Mi jardín</h2><div class="flowers">${S.flowers.length?S.flowers.map(f=>`<svg viewBox="0 0 40 40" aria-hidden="true">${flowerPath(f.k)}</svg>`).join(''):'<p class="note">Cada vez que termines un juego nace una flor.</p>'}</div></section>`;
   $('#bSet').onclick=settings;$('#bNext').onclick=()=>startArea(next());$$('.isle').forEach(b=>b.onclick=()=>startArea(b.dataset.k));scanStart()}
 function settings(){stopAll();const back=view;

@@ -6,7 +6,7 @@ src = root / "src"
 css = (src / "styles.css").read_text()
 import json
 isla = (root / "tools" / "isla-de-juegos.html").read_text()
-js = "\n".join((src / f).read_text() for f in ["content.js", "store.js", "followup.js", "illustrations.js", "avatars.js", "activities.js", "app.js"])
+js = "\n".join((src / f).read_text() for f in ["content.js", "rules.js", "store.js", "followup.js", "illustrations.js", "avatars.js", "activities.js", "child.js", "app.js"])
 head = """<title>Aprender Siendo Beta</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Aprender Siendo: versión beta de demostración con datos ficticios.">

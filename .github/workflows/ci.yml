@@ -21,6 +21,8 @@ jobs:
         run: |
           sed -n '/<script>/,/<\/script>/p' app/dist/index.html | sed '1d;$d' > /tmp/app.js
           node --check /tmp/app.js
+      - name: Reglas deterministas (casos de prueba de la sección 8)
+        run: node tests/rules.test.js
       - name: Instalar navegador de prueba
         run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
       - name: Prueba de punta a punta

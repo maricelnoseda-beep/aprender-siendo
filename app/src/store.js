@@ -7,7 +7,7 @@
    sea directo. Los permisos se verifican acá, en código (nunca en un modelo).
    ========================================================================== */
 
-const DB_KEY = "as_beta_db_v1";
+const DB_KEY = "as_beta_db_v2";
 const DEVICE_KEY = "as_beta_device";
 const DAY = 86400000;
 
@@ -65,13 +65,14 @@ const Store = (() => {
   async function seed() {
     const t = Date.now();
     db = {
-      schema: 1,
+      schema: 2,
       createdAt: t,
       config: { trialDays: 15, warnDays: 3, sessionIdleMin: 30, clockOffsetDays: 0 },
       users: [], patients: [], plans: [], activitySessions: [], reviews: [],
-      reports: [], dataRequests: [], activeSessions: {}, audit: [],
+      reports: [], dataRequests: [], suggestions: [], activeSessions: {}, audit: [],
+      moodAgg: {}, interventionPlans: [], measures: [], reportApprovals: [],
       activityState: Object.fromEntries(ACTIVITIES.map((a) => [a.id, { enabled: true }])),
-      counters: { report: 0, request: 0 }
+      counters: { report: 0, request: 0, suggestion: 0 }
     };
     const mk = async (role, email, alias, extra = {}) => {
       const salt = uid("s");
@@ -89,56 +90,83 @@ const Store = (() => {
       matricula: { numero: "0000 (ficticia)", provincia: "Neuquén", verificada: true, verifiedAt: t - 5 * DAY, verifiedBy: admin.id }
     });
     const fam = await mk("familia", "familia@demo.aprendersiendo.ar", "Familia Demo", { activatedAt: t - 12 * DAY });
-    await mk("familia", "familia2@demo.aprendersiendo.ar", "Familia Demo 2", { activatedAt: t - 2 * DAY });
+    const fam2 = await mk("familia", "familia2@demo.aprendersiendo.ar", "Familia Demo 2", { activatedAt: t - 2 * DAY });
 
-    // Pacientes sintéticos con patrones distintos para mostrar las señales.
+    const ym = (age, monthShift = 0) => { const d = new Date(t); d.setMonth(d.getMonth() + monthShift); return (d.getFullYear() - age) + "-" + String(d.getMonth() + 1).padStart(2, "0"); };
+    /* Pacientes y perfiles sintéticos: cubren las rutas por edad, los modos y los consentimientos. */
     const P = [
-      { code: "AS-3K7P", age: 7, dx: "dea-lectura", pattern: "estable", fam: [fam.id] },
-      { code: "AS-9M2C", age: 9, dx: "tdah", pattern: "cae", fam: [] },
-      { code: "AS-4T8R", age: 6, dx: "dea-calculo", pattern: "dificultad", fam: [] },
-      { code: "AS-6H1N", age: 11, dx: "en-evaluacion", pattern: "nuevo", fam: [] }
+      { code: "AS-3K7P", alias: "Exploradora", age: 7, dx: "dea-lectura", pattern: "estable", fam: [fam.id], pro: true, consent: ["rep", "assent"], mood: true, share: { objetivos: true } },
+      { code: "AS-9M2C", alias: "Viajero", age: 9, dx: "tdah", pattern: "cae", fam: [], pro: true, consent: ["rep"], mood: true },
+      { code: "AS-4T8R", alias: "Constructor", age: 6, dx: "dea-calculo", pattern: "piso", fam: [], pro: true, consent: ["rep"], mood: true },
+      { code: "AS-6H1N", alias: "Inventora", age: 11, dx: "en-evaluacion", pattern: "triste", fam: [], pro: true, consent: ["rep"], mood: true },
+      { code: "AS-T4QZ", alias: "Mar", age: 14, dx: "en-evaluacion", pattern: "nuevo", fam: [fam.id], pro: true, consent: ["rep"] },
+      { code: "AS-T7LB", alias: "Río", age: 17, dx: "dea-lectura", pattern: "estable", fam: [fam2.id], pro: true, consent: ["teen"], birthShift: 1 },
+      { code: "LIB-SOL4", alias: "Sol", age: 4, dx: null, pattern: "nuevo", fam: [fam.id], pro: false }
     ];
-    const rand = rng(20261101);
-    const moodIds = MOODS.map((m) => m.id);
+    const rand = rng(20261108);
     for (const p of P) {
-      const pat = { id: uid("p"), code: p.code, professionalId: prof.id, ageYears: p.age, diagnosis: p.dx,
-        familyUserIds: p.fam, inviteCode: inviteCode(), createdAt: t - 42 * DAY, status: "activo", avatarId: null, synthetic: true };
+      const pat = { id: uid("p"), code: p.code, alias: p.alias, professionalId: p.pro ? prof.id : null, birthYM: ym(p.age, p.birthShift || 0),
+        diagnosis: p.dx, familyUserIds: p.fam, inviteCode: inviteCode(), createdAt: t - 42 * DAY, status: "activo", avatarId: null,
+        synthetic: true, mode: p.pro ? "vinculado" : "libre", consents: [], moodConsent: !!p.mood, share: p.share || {},
+        companion: { growth: p.pattern === "nuevo" ? 1 : 9, day: null, grownToday: 0 }, adaptive: {}, playToday: { day: null, ms: 0 },
+        objectives: [], desafiosHechos: 0, teen: { termsAt: null, sober: false, privacySeenAt: null } };
       db.patients.push(pat);
-      const acts = p.dx === "dea-calculo" ? ["contar", "secuencias"] : p.dx === "tdah" ? ["distinto", "clasificar"] : ["memoria", "distinto"];
-      acts.forEach((a, i) => db.plans.push({ id: uid("pl"), patientId: pat.id, activityId: a, perWeek: i === 0 ? 3 : 2,
-        level: 1, note: "", createdAt: t - 40 * DAY, active: true }));
-      const days = p.pattern === "nuevo" ? 5 : 40;
-      for (let d = days; d >= 0; d--) {
+      for (const c of p.consent || []) {
+        const map = { rep: ["consentimiento-representante", p.fam[0] || prof.id], assent: ["asentimiento-nino", p.fam[0]], teen: ["consentimiento-adolescente", "adolescente"] }[c];
+        await pushConsent(pat, map[0], map[1], c === "assent" ? "acepta" : "", t - 40 * DAY);
+        if (c === "teen") { await pushConsent(pat, "aviso-enviado", "sistema", "Aviso simulado al representante (beta)", t - 40 * DAY); await pushConsent(pat, "aviso-recibido", p.fam[0], "", t - 39 * DAY); }
+      }
+      const acts = p.dx === "dea-calculo" ? ["contar", "secuencias"] : p.dx === "tdah" ? ["distinto", "clasificar"] : p.age >= 13 ? ["clasificar", "memoria"] : ["memoria", "distinto"];
+      if (p.pro) acts.forEach((a, i) => db.plans.push({ id: uid("pl"), patientId: pat.id, activityId: a, perWeek: i === 0 ? 3 : 2, level: 1, note: "", createdAt: t - 40 * DAY, active: true }));
+      if (p.code === "AS-3K7P") pat.objectives.push({ id: uid("ob"), text: "Contar colecciones hasta 10 sin saltear elementos", baseline: 4, goal: 9, weeks: 8, startAt: t - 49 * DAY,
+        measures: [{ at: t - 35 * DAY, value: 4 }, { at: t - 21 * DAY, value: 5 }, { at: t - 7 * DAY, value: 5 }] });
+      const days = p.pattern === "nuevo" ? 0 : 40;
+      for (let d = days; d >= 1; d--) {
         let prob = 0.5;
-        if (p.pattern === "cae") prob = d > 14 ? 0.7 : 0.12;
-        if (p.pattern === "nuevo") prob = 0.6;
+        if (p.pattern === "cae") prob = d > 14 ? 0.7 : 0.08;
         if (rand() > prob) continue;
         const act = acts[Math.floor(rand() * acts.length)];
-        const level = p.pattern === "dificultad" && act === "contar" ? 2 : d < 15 ? 2 : 1;
-        const items = act === "memoria" ? ({ 1: 3, 2: 4, 3: 6 })[level] : ADAPTIVE_DEMO.roundsPerSession;
-        let ftc = p.pattern === "dificultad" && act === "contar" && d < 14 ? Math.floor(rand() * 2) : Math.floor(items * (0.5 + rand() * 0.5));
-        ftc = Math.min(items, ftc);
-        const attempts = items + (items - ftc) * (1 + Math.floor(rand() * 2));
+        const piso = p.pattern === "piso" && act === "contar" && d < 14;
+        const items = act === "memoria" ? 3 : 5;
+        const ftc = piso ? 0 : Math.min(items, Math.floor(items * (0.5 + rand() * 0.5)));
         const start = t - d * DAY - Math.floor(rand() * 8) * 3600000 - 9 * 3600000;
-        const moodS = moodIds[Math.floor(rand() * 4)];
-        const moodE = p.pattern === "dificultad" && act === "contar" && d < 14 ? (rand() > 0.4 ? "nervios" : "cansancio") : moodIds[Math.floor(rand() * 3)];
+        const opts = CHECKIN.options[Rules.route(p.age) === "13-18" ? "13-18" : Rules.route(p.age) === "3-5" ? "3-5" : "6-12"];
+        const mood = p.pattern === "triste" && d < 12 ? "triste" : opts[Math.floor(rand() * 3)];
         db.activitySessions.push({
           id: uid("as"), patientId: pat.id, activityId: act, context: rand() > 0.75 ? "consulta" : "hogar",
-          startedBy: rand() > 0.75 ? prof.id : (p.fam[0] || prof.id), startAt: start,
-          endAt: start + (180 + Math.floor(rand() * 400)) * 1000, avatarId: AVATARS[Math.floor(rand() * AVATARS.length)].id,
-          moodStart: moodS, moodDuring: moodE, moodAfter: moodE,
-          difficulty: p.pattern === "dificultad" && act === "contar" && d < 14 ? "dificil" : ["facil", "justa"][Math.floor(rand() * 2)],
-          metrics: { level, items, completed: items, firstTry: ftc, attempts, hints: Math.max(0, items - ftc - 1), abandoned: false },
+          startedBy: p.fam[0] || prof.id, startAt: start, endAt: start + (180 + Math.floor(rand() * 400)) * 1000,
+          avatarId: AVATARS[Math.floor(rand() * AVATARS.length)].id, moodStart: p.mood ? mood : null,
+          how: piso ? "dificil" : ["facil", "masomenos"][Math.floor(rand() * 2)], helped: null, desafioHecho: rand() > 0.7,
+          metrics: { level: 1, endLevel: piso ? 1 : 1 + (d < 15 ? 1 : 0), items, completed: items, firstTry: ftc, attempts: items + (items - ftc),
+            hints: Math.max(0, items - ftc - 1), abandoned: false, floorExit: piso, avgMs: 2500 + Math.floor(rand() * 4000) },
           synthetic: true
         });
       }
     }
     db.reports.push({ id: uid("r"), number: "AS-BETA-0001", userId: fam.id, role: "familia", screen: "Inicio familia",
-      description: "Ejemplo sintético: el botón de volver tarda en responder en el celular.", screenshot: null,
-      createdAt: t - 1 * DAY, status: "nuevo" });
+      description: "Ejemplo sintético: el botón de volver tarda en responder en el celular.", screenshot: null, createdAt: t - 1 * DAY, status: "nuevo" });
     db.counters.report = 1;
-    audit(admin.id, "semilla", "Base de demostración creada con datos sintéticos");
+    audit(admin.id, "semilla", "Base de demostración beta 2 creada con datos sintéticos");
     save();
+  }
+
+  /* REQ-CLI-A08: registro de consentimiento encadenado por huella digital (cada entrada
+     incluye la huella de la anterior; alterar una rompe la cadena). */
+  async function pushConsent(p, type, by, detail, at) {
+    const prev = p.consents.length ? p.consents[p.consents.length - 1].hash : "inicio";
+    const entry = { type, by, detail: detail || "", at: at || now(), form: CONSENT_FORMS.version, prev };
+    entry.hash = await hash(JSON.stringify(entry), "consent");
+    p.consents.push(entry);
+    return entry;
+  }
+  async function verifyChain(p) {
+    let prev = "inicio";
+    for (const e of p.consents) {
+      const { hash: h, ...rest } = e;
+      if (rest.prev !== prev || (await hash(JSON.stringify(rest), "consent")) !== h) return false;
+      prev = h;
+    }
+    return true;
   }
 
   function inviteCode() {
@@ -180,7 +208,7 @@ const Store = (() => {
   }
 
   return {
-    async init() { load(); if (!db || db.schema !== 1) await seed(); return db; },
+    async init() { load(); if (!db || db.schema !== 2) await seed(); return db; },
     async reset() { try { localStorage.removeItem(DB_KEY); } catch (e) {} db = null; clearMyToken(); await seed(); },
     reload() { load(); },
     get db() { return db; },
@@ -251,6 +279,12 @@ const Store = (() => {
       audit(user.id, "consentimiento de mejora", granted ? "otorgado" : "retirado"); save();
     },
 
+    /* ---------- edad, ruta y vinculación (código) ---------- */
+    age(p) { return Rules.ageFrom(p.birthYM, now()); },
+    route(p) { return Rules.route(this.age(p)); },
+    link(p) { return p.mode === "vinculado" ? Rules.linkStatus(this.age(p), p.consents) : { status: "libre", missing: [] }; },
+    verifyChain,
+
     /* ---------- permisos de acceso a pacientes (código) ---------- */
     canSeePatient(user, p) {
       if (!user || !p) return false;
@@ -258,6 +292,8 @@ const Store = (() => {
       if (user.role === "familia") return p.familyUserIds.includes(user.id);
       return false; // el administrador no ve datos individuales
     },
+    /* El profesional ve registros solo con la vinculación activa (consentimientos completos). */
+    proHasData(user, p) { return user.role === "profesional" && p.professionalId === user.id && this.link(p).status === "activa"; },
     patientsFor(user) { return db.patients.filter((p) => p.status === "activo" && this.canSeePatient(user, p)); },
 
     linkFamily(user, code) {
@@ -268,12 +304,88 @@ const Store = (() => {
       audit(user.id, "vinculación familia–paciente", p.code); save();
       return { patient: p };
     },
-    createPatient(prof, { ageYears, diagnosis }) {
+    /* Perfil en modo libre: lo crea la familia, sin profesional. Sin interpretación ni historial emocional. */
+    createFreeProfile(fam, { alias, ageYears }) {
+      if (fam.role !== "familia") throw new Error("Sin permiso");
+      const d = new Date(now());
+      const p = { id: uid("p"), code: "LIB-" + patientCode().slice(3), alias: alias.trim().slice(0, 30), professionalId: null,
+        birthYM: (d.getFullYear() - +ageYears) + "-" + String(d.getMonth() + 1).padStart(2, "0"), diagnosis: null,
+        familyUserIds: [fam.id], inviteCode: inviteCode(), createdAt: now(), status: "activo", avatarId: null, mode: "libre",
+        consents: [], moodConsent: false, share: {}, companion: { growth: 0 }, adaptive: {}, playToday: { day: null, ms: 0 },
+        objectives: [], desafiosHechos: 0, teen: { termsAt: null, sober: false, privacySeenAt: null } };
+      db.patients.push(p); audit(fam.id, "perfil en modo libre", p.code); save(); return p;
+    },
+    createPatient(prof, { ageYears, diagnosis, alias }) {
       if (prof.role !== "profesional") throw new Error("Sin permiso");
-      const p = { id: uid("p"), code: patientCode(), professionalId: prof.id, ageYears: +ageYears, diagnosis,
-        familyUserIds: [], inviteCode: inviteCode(), createdAt: now(), status: "activo", avatarId: null };
+      const d = new Date(now());
+      const p = { id: uid("p"), code: patientCode(), alias: (alias || "").trim().slice(0, 30), professionalId: prof.id,
+        birthYM: (d.getFullYear() - +ageYears) + "-" + String(d.getMonth() + 1).padStart(2, "0"), diagnosis,
+        familyUserIds: [], inviteCode: inviteCode(), createdAt: now(), status: "activo", avatarId: null, mode: "vinculado",
+        consents: [], moodConsent: false, share: {}, companion: { growth: 0 }, adaptive: {}, playToday: { day: null, ms: 0 },
+        objectives: [], desafiosHechos: 0, teen: { termsAt: null, sober: false, privacySeenAt: null } };
       db.patients.push(p); audit(prof.id, "alta de paciente", p.code); save(); return p;
     },
+
+    /* ---------- consentimientos (REQ-CLI-M08-3, A01 a A08) ---------- */
+    async consent(user, patientId, type, detail = "") {
+      const p = db.patients.find((x) => x.id === patientId);
+      const allowed = user.role === "familia" ? p.familyUserIds.includes(user.id) : user.role === "profesional" ? p.professionalId === user.id : false;
+      if (!allowed) throw new Error("Sin permiso");
+      const age = this.age(p);
+      // A02: a los 16 y 17 el representante no consiente por el adolescente; a los 13–15 consiente y el adolescente asiente.
+      if (type === "consentimiento-representante" && age >= 16) return { error: "A los 16 y 17 años consiente el propio adolescente. Al representante se le avisa." };
+      const by = ["asentimiento-nino", "asentimiento-adolescente", "consentimiento-adolescente", "titularidad"].includes(type) ? "persona (desde su experiencia)" : user.id;
+      const e = await pushConsent(p, type, by, detail);
+      if (type === "consentimiento-adolescente") {                         // A05: aviso al representante
+        await pushConsent(p, "aviso-enviado", "sistema", "Aviso al representante (simulado en la beta). Plazo: " + new Date(Rules.noticeDeadline(e.at)).toLocaleDateString("es-AR") + ". " + detail);
+      }
+      if (type === "oposicion-representante") p.oppositionPending = true;
+      if (type === "decision-profesional") p.oppositionPending = false;
+      if (type === "titularidad") { p.selfOwner = true; p.familyAuthorized = detail === "autoriza-familia"; }
+      audit(user.id, "registro de consentimiento", p.code + " · " + type); save();
+      return { entry: e };
+    },
+    async noticeReceived(user, patientId) {
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!p.familyUserIds.includes(user.id)) throw new Error("Sin permiso");
+      if (p.consents.some((c) => c.type === "aviso-recibido")) return;
+      await pushConsent(p, "aviso-recibido", user.id, ""); save();
+    },
+    setMoodConsent(user, patientId, granted) {
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!p.familyUserIds.includes(user.id)) throw new Error("Sin permiso");
+      p.moodConsent = !!granted; audit(user.id, "consentimiento autorreporte de ánimo", p.code + " · " + granted); save();
+    },
+    setShare(prof, patientId, key, val) {
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!this.proHasData(prof, p)) throw new Error("Sin permiso");
+      p.share = { ...p.share, [key]: !!val }; audit(prof.id, "compartir con la familia", p.code + " · " + key + "=" + val); save();
+    },
+    setSkillOverride(prof, patientId, act, { fixed, locked }) {          // REQ-CLI-M10-9
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!this.proHasData(prof, p)) throw new Error("Sin permiso");
+      const st = p.adaptive[act] || Rules.newSkillState(1);
+      st.fixed = fixed ? +fixed : null; if (st.fixed) st.level = st.fixed; st.locked = !!locked;
+      p.adaptive[act] = st; audit(prof.id, "nivel fijado o ajuste bloqueado", p.code + " · " + act); save();
+    },
+    saveSkill(patientId, act, st) { const p = db.patients.find((x) => x.id === patientId); p.adaptive[act] = st; save(); },
+    setTeen(patientId, patch) { const p = db.patients.find((x) => x.id === patientId); p.teen = { ...p.teen, ...patch }; save(); },
+    addPlayTime(patientId, ms) {
+      const p = db.patients.find((x) => x.id === patientId);
+      const day = new Date(now()).toDateString();
+      if (!p.playToday || p.playToday.day !== day) p.playToday = { day, ms: 0 };
+      p.playToday.ms += ms; save(); return p.playToday.ms;
+    },
+    playedToday(p) { const day = new Date(now()).toDateString(); return p.playToday && p.playToday.day === day ? p.playToday.ms : 0; },
+    markDesafio(user, patientId) {                                     // REQ-CLI-M06-3: un toque, sin texto
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!this.canSeePatient(user, p)) throw new Error("Sin permiso");
+      p.desafiosHechos = (p.desafiosHechos || 0) + 1;
+      const last = db.activitySessions.filter((s) => s.patientId === patientId).sort((a, b) => b.startAt - a.startAt)[0];
+      if (last) last.desafioHecho = true;
+      save();
+    },
+    plansFor(patientId) { return db.plans.filter((x) => x.patientId === patientId && x.active); },
     setPlan(prof, patientId, activityId, { perWeek, level, note, active }) {
       const p = db.patients.find((x) => x.id === patientId);
       if (!this.canSeePatient(prof, p) || prof.role !== "profesional") throw new Error("Sin permiso");
@@ -282,19 +394,75 @@ const Store = (() => {
       Object.assign(pl, { perWeek: +perWeek, level: +level, note: (note || "").slice(0, 280), active });
       audit(prof.id, "pauta actualizada", p.code + " · " + activityId); save(); return pl;
     },
-    plansFor(patientId) { return db.plans.filter((x) => x.patientId === patientId && x.active); },
+    /* En modo libre la familia elige aventuras: cada una cuenta como "pauta" propia, sin frecuencia exigida. */
+    setFreePlan(fam, patientId, activityId, active) {
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!p.familyUserIds.includes(fam.id) || p.mode !== "libre") throw new Error("Sin permiso");
+      let pl = db.plans.find((x) => x.patientId === patientId && x.activityId === activityId);
+      if (!pl) { pl = { id: uid("pl"), patientId, activityId, perWeek: 0, level: 1, note: "", createdAt: now() }; db.plans.push(pl); }
+      pl.active = active; save();
+    },
     sessionsFor(user, patientId) {
       const p = db.patients.find((x) => x.id === patientId);
       if (!this.canSeePatient(user, p)) return [];
+      if (user.role === "profesional" && !this.proHasData(user, p)) return [];
       return db.activitySessions.filter((s) => s.patientId === patientId).sort((a, b) => b.startAt - a.startAt);
     },
     recordSession(user, rec) {
       const p = db.patients.find((x) => x.id === rec.patientId);
       if (!this.canSeePatient(user, p)) throw new Error("Sin permiso");
-      const s = { id: uid("as"), startedBy: user.id, ...rec };
+      /* REQ-CLI-M02-4: el ánimo se guarda solo con profesional vinculado, vinculación activa y consentimiento.
+         Si no, solo un conteo agregado y sin identificador. */
+      const keepMood = p.mode === "vinculado" && p.moodConsent && this.link(p).status === "activa";
+      if (rec.moodStart) { const k = new Date(now()).toISOString().slice(0, 10); db.moodAgg[k] = db.moodAgg[k] || {}; db.moodAgg[k][rec.moodStart] = (db.moodAgg[k][rec.moodStart] || 0) + 1; }
+      const s = { id: uid("as"), startedBy: user.id, ...rec, moodStart: keepMood ? rec.moodStart : null };
       db.activitySessions.push(s);
       if (rec.avatarId) p.avatarId = rec.avatarId;
       save(); return s;
+    },
+    bumpDesafio(patientId) { const p = db.patients.find((x) => x.id === patientId); p.desafiosHechos = (p.desafiosHechos || 0) + 1; save(); },
+    setCompanion(patientId, c) { const p = db.patients.find((x) => x.id === patientId); p.companion = c; save(); },
+
+    /* ---------- herramientas del profesional (M13, M17, M09) ---------- */
+    saveInterventionPlan(prof, patientId, plan) {
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!this.proHasData(prof, p)) throw new Error("Sin permiso");
+      const okObj = plan.objectives.length && plan.objectives.every((o) => o.text && o.baseline !== "" && o.goal !== "" && +o.weeks > 0);
+      const status = plan.wantActive && okObj && plan.signed ? "activo" : "borrador";
+      const rec = { id: uid("ip"), patientId, at: now(), by: prof.id, signedBy: plan.signed ? `${prof.alias} · Mat. ${prof.matricula?.numero}` : null, ...plan, status };
+      db.interventionPlans.unshift(rec);
+      if (status === "activo") p.objectives = plan.objectives.map((o) => ({ id: uid("ob"), text: o.text, baseline: +o.baseline, goal: +o.goal, weeks: +o.weeks, startAt: now(), measures: [] }));
+      audit(prof.id, "plan de intervención", p.code + " · " + status); save(); return rec;
+    },
+    plansIntervention(prof, patientId) { return db.interventionPlans.filter((x) => x.patientId === patientId && x.by === prof.id); },
+    addObjectiveMeasure(prof, patientId, objId, value) {
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!this.proHasData(prof, p)) throw new Error("Sin permiso");
+      const o = p.objectives.find((x) => x.id === objId); o.measures.push({ at: now(), value: +value }); save();
+    },
+    saveMeasure(prof, patientId, m) {                                   // REQ-CLI-M17-1: solo con profesional vinculado
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!this.proHasData(prof, p)) throw new Error("Sin permiso");
+      db.measures.unshift({ id: uid("me"), patientId, by: prof.id, at: now(), ...m }); audit(prof.id, "medida de progreso", p.code + " · " + m.kind); save();
+    },
+    measuresFor(prof, patientId) { return db.measures.filter((x) => x.patientId === patientId && x.by === prof.id); },
+    approveReport(prof, patientId, text) {                              // REQ-CLI-M09-2
+      const p = db.patients.find((x) => x.id === patientId);
+      if (!this.proHasData(prof, p)) throw new Error("Sin permiso");
+      const r = { id: uid("ra"), patientId, at: now(), text, signedBy: `${prof.alias} · Mat. ${prof.matricula?.numero} (${prof.matricula?.provincia})` };
+      db.reportApprovals.unshift(r); audit(prof.id, "informe aprobado", p.code); save(); return r;
+    },
+
+    /* ---------- sugerencias (profesionales y familias) ---------- */
+    addSuggestion(user, { kind, area, text }) {
+      db.counters.suggestion = (db.counters.suggestion || 0) + 1;
+      const number = "AS-SUG-" + String(db.counters.suggestion).padStart(4, "0");
+      const sg = { id: uid("sg"), number, userId: user.id, role: user.role, kind, area, text: text.slice(0, 2000), createdAt: now(), status: "nueva" };
+      db.suggestions.unshift(sg); audit(user.id, "sugerencia", number); save(); return sg;
+    },
+    setSuggestionStatus(adminUser, id, status) {
+      if (adminUser.role !== "admin") throw new Error("Sin permiso");
+      const s = db.suggestions.find((x) => x.id === id); s.status = status; audit(adminUser.id, "estado de sugerencia", s.number + " · " + status); save();
     },
     saveReview(prof, patientId, review) {
       const p = db.patients.find((x) => x.id === patientId);
