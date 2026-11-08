@@ -240,6 +240,10 @@ async function loginPro(p, email) {
   await m.route(/fonts\./, r => r.abort());
   await m.goto(BASE);
   const over = await m.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+  await m.click('button[data-go=register] >> nth=0');
+  const rg = await m.innerText('#rg-trial');
+  must(/15 días/.test(rg) && /US\$ 20/.test(rg) && /termina el \d/.test(rg), 'caso 21: precio y fin de la prueba visibles desde el alta');
+  log('caso 21: alta con precio y fecha ok');
   log('desborde horizontal en celular:', over);
   await m.screenshot({ path: S + '/13-mobile.png', fullPage: true });
   await b.close();

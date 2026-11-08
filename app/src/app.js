@@ -439,7 +439,9 @@ function bindConsentLinks() {
 Views.register = () => `
   <section class="narrow card">
     <h1>Crear cuenta de familia o responsable</h1>
-    <p>Para acompañar en casa las actividades que indica la profesional.</p>
+    <p>Para acompañar en casa las aventuras que indica la profesional, o para jugar en modo libre.</p>
+    <div class="notice notice-info" id="rg-trial"><strong>Prueba gratuita de ${Store.db.config.trialDays} días.</strong> Si creás la cuenta hoy, la prueba termina el ${fmtDate(Store.now() + Store.db.config.trialDays * DAY)}.
+      ${esc(LEGAL.postTrialConditions)}</div>
     <form id="rg" class="form">
       <label for="rg-alias">¿Cómo querés que te llamemos?</label>
       <input id="rg-alias" required maxlength="40" placeholder="Por ejemplo: Familia de Sol">
@@ -459,7 +461,7 @@ Binders.register = () => {
     const r = await Store.register({ role: "familia", email: $("#rg-email").value, alias: $("#rg-alias").value, pass: $("#rg-pass").value,
       consents: { improvement: $("#c-impr").checked }, inviteCode: $("#rg-code").value });
     if (r.error) { $("#rg-err").textContent = r.error; return; }
-    Store.login(r.user); notice(`¡Listo! Tu prueba gratuita de ${Store.db.config.trialDays} días empezó hoy.`, "ok"); go("home");
+    Store.login(r.user); notice(`¡Listo! Tu prueba gratuita de ${Store.db.config.trialDays} días empezó hoy y termina el ${fmtDate(Store.now() + Store.db.config.trialDays * DAY)}. Te avisamos antes de que termine.`, "ok"); go("home");
   });
 };
 
