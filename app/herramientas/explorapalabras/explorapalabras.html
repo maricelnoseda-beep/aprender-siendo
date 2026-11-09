@@ -1,0 +1,639 @@
+<!doctype html>
+<!-- Explorapalabras: sopas de letras por temática, Estación y grado (especificación de la supervisora, 2026-11-09).
+     Construido por DEV-IA como herramienta del portal (ADR-009). Corre aislado (iframe sin acceso a la app ni a sus datos)
+     y también como archivo suelto para probar con doble clic.
+     CONTENIDO DE PRUEBA NO VALIDADO: el banco de palabras, las imágenes, los textos y los parámetros de cada grado
+     los valida PSP-SR y los aprueba la supervisora (RT-EXP-001). -->
+<html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Explorapalabras</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>__BRAND_FONT__
+/* Identidad: variables --as-* del núcleo (identidad.css). Los valores de respaldo son los mismos, por si la hoja no llega. */
+:root{color-scheme:light dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--as-papel,#fcfaf7);color:var(--as-tinta,#102f54);font-family:var(--as-fuente,"Nunito",system-ui,sans-serif);
+  font-size:18px;line-height:1.45;padding:12px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:4px solid var(--as-foco,#b95325);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto}
+h1,h2{color:var(--as-tinta);line-height:1.2;margin:0}
+h1{font-size:1.65rem;font-weight:800}
+h2{font-size:1.2rem;font-weight:800}
+p{margin:.4em 0}
+.small{font-size:.95rem;color:var(--as-secundario,#526776)}
+.hd{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.marca{width:44px;height:44px;border-radius:12px;background:var(--as-marca) center/contain no-repeat;flex:none}
+.hd .nm{font-weight:800;font-size:1.25rem;margin-right:auto}
+.rotulo{display:inline-block;font-size:.85rem;font-weight:700;color:var(--as-aviso,#805024);background:var(--as-arena,#fff1d7);border-radius:999px;padding:4px 12px}
+.panel{background:var(--as-superficie,#fff);border:1px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio,22px);box-shadow:var(--as-sombra);padding:18px}
+.titulo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.titulo h1{flex:1 1 220px}
+.btn{min-height:48px;border-radius:999px;border:2px solid var(--as-tinta);background:var(--as-tinta);color:var(--as-superficie,#fff);
+  font-weight:800;font-size:1.05rem;padding:8px 22px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.sec{background:var(--as-superficie);color:var(--as-tinta)}
+.btn.suave{background:var(--as-menta,#e0f2eb);color:var(--as-tinta);border-color:var(--as-borde-verde,#75b8a8)}
+.btn.grande{min-height:60px;font-size:1.2rem;padding:10px 28px}
+.btn[disabled]{opacity:.55;cursor:default}
+.btn.icono{min-width:48px;padding:8px 14px}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.opciones{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(var(--min,220px),1fr))}
+.opcion{border:2px solid var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio-control,14px);background:var(--as-superficie);
+  text-align:left;padding:12px 14px;min-height:56px;display:flex;flex-direction:column;gap:4px}
+.opcion:hover{background:var(--as-suave,#f4f6f4)}
+.opcion[aria-checked="true"],.opcion[aria-pressed="true"]{background:var(--as-menta,#e0f2eb);border-color:var(--as-verde,#196b6a);box-shadow:inset 0 0 0 2px var(--as-verde,#196b6a)}
+.opcion .t{font-weight:800}
+.opcion .d{font-size:.92rem;color:var(--as-texto,#354e60)}
+.opcion.centro{align-items:center;text-align:center;justify-content:center}
+.opcion .emo{font-size:2.6rem;line-height:1.1}
+.grupo{margin:16px 0}
+.grupo>h2{margin-bottom:10px}
+.resumen{margin-top:14px;padding:12px 14px;border-radius:var(--as-radio-control,14px);background:var(--as-arena,#fff1d7);color:var(--as-tinta)}
+.temas{--min:150px}
+.tema{min-height:118px}
+.tema .t{font-size:1.05rem}
+.letras-mayus .muestra{font-weight:800;font-size:1.6rem;letter-spacing:.04em}
+/* Juego */
+.juego{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:860px){.juego{grid-template-columns:minmax(0,1fr) 300px;align-items:start}}
+.tablero-marco{overflow:auto;-webkit-overflow-scrolling:touch;padding:4px;border-radius:var(--as-radio,22px)}
+.tablero{position:relative;display:grid;gap:0;margin:0 auto;width:max-content;background:var(--as-superficie);border:1px solid var(--as-borde);
+  border-radius:var(--as-radio-control,14px);padding:6px;user-select:none;-webkit-user-select:none}
+.tablero.arrastre{touch-action:none}
+.celda{width:var(--c,48px);height:var(--c,48px);border:0;background:transparent;border-radius:10px;font-weight:800;
+  font-size:calc(var(--c,48px)*.56);line-height:1;display:grid;place-items:center;position:relative;z-index:2;padding:0;color:var(--as-tinta)}
+.celda:hover{background:var(--as-suave)}
+.celda.inicio{background:var(--as-sol,#ffb82e);color:#102f54}
+.celda.marca-sel{background:color-mix(in srgb,var(--as-sol,#ffb82e) 45%,transparent);color:var(--as-tinta)}
+.celda.hallada{font-weight:900}
+.trazos{position:absolute;inset:0;pointer-events:none;z-index:1}
+.trazos line{stroke-linecap:round;stroke-opacity:.42}
+.lado{display:flex;flex-direction:column;gap:14px}
+.refs{list-style:none;margin:0;padding:0;display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+@media (min-width:860px){.refs{grid-template-columns:1fr}}
+.ref{display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 10px;border:2px solid var(--as-borde);border-radius:var(--as-radio-control,14px);
+  background:var(--as-superficie);width:100%;text-align:left}
+.ref .emo{font-size:1.8rem;line-height:1;flex:none}
+.ref.solo-img{justify-content:center}
+.ref.solo-img .emo{font-size:2.4rem}
+.ref .pal{font-weight:800;font-size:1.1rem;letter-spacing:.03em;overflow-wrap:anywhere}
+.ref .pal.larga{font-size:.95rem;letter-spacing:0}
+.ref .pistab{margin-left:auto;font-weight:900;background:var(--as-sol,#ffb82e);color:#102f54;border-radius:10px;min-width:34px;height:34px;display:grid;place-items:center;font-size:1.2rem;flex:none}
+.ref.hallada{background:var(--as-menta);border-color:var(--as-verde)}
+.ref .ok{margin-left:auto;font-weight:900;color:var(--as-correcto,#196b57)}
+.pistas{display:flex;gap:10px;flex-wrap:wrap}
+.msj{min-height:3.2em;font-weight:700;padding:10px 12px;border-radius:var(--as-radio-control,14px);background:var(--as-suave)}
+.msj:empty{background:transparent}
+.consigna{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.consigna p{flex:1 1 240px;margin:0}
+.cierre{text-align:center}
+.cierre .lista{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0;padding:0;list-style:none}
+.cierre .lista li{background:var(--as-menta);border-radius:999px;padding:6px 14px;font-weight:800}
+.cierre .acciones{justify-content:center}
+.sujecion{position:relative;overflow:hidden;touch-action:none;user-select:none}
+.sujecion i{position:absolute;left:0;bottom:0;height:6px;width:0;background:var(--as-sol,#ffb82e)}
+.sujecion.apretando i{width:100%;transition:width 1.5s linear}
+.sujecion span{position:relative}
+.adulto-pie{margin-top:22px;border-top:1px dashed var(--as-borde);padding-top:14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div class="wrap">
+  <header class="hd" id="hd"></header>
+  <main id="app" aria-live="off"></main>
+  <p class="sr" id="anuncio" role="status" aria-live="polite"></p>
+</div>
+<script type="application/json" id="datos-banco">__BANCO__</script>
+<script type="application/json" id="datos-modulo">__MODULO__</script>
+<script type="application/json" id="datos-inicio">__INICIO__</script>
+<script id="generador">
+"use strict";
+/* ---------- Generador de sopas (lógica pura y determinista con semilla; la prueban tests/explorapalabras.test.js) ---------- */
+const Generador = (() => {
+  const DIRS = { E: [1, 0], S: [0, 1], SE: [1, 1], NE: [1, -1], O: [-1, 0], N: [0, -1], NO: [-1, -1], SO: [-1, 1] };
+  const FRECUENTES = "AAAAEEEEIIIOOOOUURRRSSSNNNLLLTTTCCCDDMMPPBBGGVFHJQZYÑX";
+  const PARECIDAS = { A: "RH", B: "DPR", C: "GO", D: "BOP", E: "FB", F: "EP", G: "COQ", H: "NA", I: "LT", J: "IL", K: "RX", L: "IT", M: "NW", N: "MÑH", "Ñ": "N", O: "QCGD", P: "BRD", Q: "OG", R: "PBK", S: "Z", T: "IL", U: "VO", V: "UY", W: "M", X: "K", Y: "V", Z: "S" };
+  /* Mayúsculas sin tilde ni diéresis; la Ñ se conserva. */
+  function normalizar(p) {
+    return p.toLocaleUpperCase("es").replace(/Ñ/g, "\u0001").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\u0001/g, "Ñ").replace(/[^A-ZÑ]/g, "");
+  }
+  function azar(semilla) {
+    let s = (semilla >>> 0) || 0x9e3779b9;
+    return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; };
+  }
+  const mezclar = (arr, r) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const entra = (n, d, cols, filas) => (DIRS[d][0] === 0 || n <= cols) && (DIRS[d][1] === 0 || n <= filas);
+  const clave = (celdas) => celdas.map(([x, y]) => x + "," + y).sort().join(";");
+
+  function candidatas(tematica, p, conImagen) {
+    const vistas = new Set();
+    return tematica.palabras.filter((w) => {
+      if (conImagen && !w.i) return false;
+      const n = normalizar(w.p);
+      if (vistas.has(n) || n.length < p.largo[0] || n.length > p.largo[1]) return false;
+      if (!p.direcciones.some((d) => entra(n.length, d, p.columnas, p.filas))) return false;
+      vistas.add(n); return true;
+    }).map((w) => ({ texto: w.p, imagen: w.i || null, familiar: !!w.f, norm: normalizar(w.p) }));
+  }
+
+  /* Cuenta en cuántos lugares distintos se puede leer una palabra (en cualquier dirección). */
+  function apariciones(grilla, norm) {
+    const filas = grilla.length, cols = grilla[0].length, vistos = new Set();
+    for (let y = 0; y < filas; y++) for (let x = 0; x < cols; x++) {
+      if (grilla[y][x] !== norm[0]) continue;
+      for (const [dx, dy] of Object.values(DIRS)) {
+        const celdas = [];
+        for (let k = 0; k < norm.length; k++) {
+          const cx = x + dx * k, cy = y + dy * k;
+          if (cx < 0 || cy < 0 || cx >= cols || cy >= filas || grilla[cy][cx] !== norm[k]) { celdas.length = 0; break; }
+          celdas.push([cx, cy]);
+        }
+        if (celdas.length) vistos.add(clave(celdas));
+      }
+    }
+    return vistos.size;
+  }
+
+  function ubicar(grilla, w, p, r, filasUsadas) {
+    const cols = p.columnas, filas = p.filas, n = w.norm.length;
+    const dirs = mezclar(p.direcciones.filter((d) => entra(n, d, cols, filas)), r);
+    for (let intento = 0; intento < 250; intento++) {
+      const d = dirs[intento % dirs.length], [dx, dy] = DIRS[d];
+      const x0 = Math.floor(r() * cols), y0 = Math.floor(r() * filas);
+      const x1 = x0 + dx * (n - 1), y1 = y0 + dy * (n - 1);
+      if (x1 < 0 || y1 < 0 || x1 >= cols || y1 >= filas) continue;
+      if (filasUsadas && filasUsadas.has(y0)) continue;
+      const celdas = []; let cruces = 0, ok = true;
+      for (let k = 0; k < n; k++) {
+        const cx = x0 + dx * k, cy = y0 + dy * k, actual = grilla[cy][cx];
+        if (actual === null) { celdas.push([cx, cy]); continue; }
+        if (!p.cruces || actual !== w.norm[k]) { ok = false; break; }
+        cruces++; celdas.push([cx, cy]);
+      }
+      if (!ok || cruces >= Math.max(1, n - 1)) continue;
+      celdas.forEach(([cx, cy], k) => { grilla[cy][cx] = w.norm[k]; });
+      if (filasUsadas) filasUsadas.add(y0);
+      return { celdas, dir: d };
+    }
+    return null;
+  }
+
+  function rellenar(grilla, palabras, p, r) {
+    const letrasPalabras = [...new Set(palabras.map((w) => w.norm).join(""))];
+    let fuente = FRECUENTES;
+    if (p.relleno === "distinto") {
+      const resto = [...FRECUENTES].filter((c) => !letrasPalabras.includes(c)).join("");
+      if (resto.length >= 4) fuente = resto;
+    }
+    const parecidas = letrasPalabras.map((c) => PARECIDAS[c] || "").join("") || FRECUENTES;
+    const letra = () => {
+      if (p.relleno !== "parecido") return fuente[Math.floor(r() * fuente.length)];
+      const t = r();
+      const de = t < 0.45 ? letrasPalabras.join("") : t < 0.8 ? parecidas : FRECUENTES;
+      return de[Math.floor(r() * de.length)];
+    };
+    const g = grilla.map((fila) => fila.slice());
+    /* Señuelos: comienzos de palabras (2 o 3 letras) que no llegan a formar la palabra. */
+    for (let s = 0; s < (p.senuelos || 0); s++) {
+      const w = palabras[Math.floor(r() * palabras.length)];
+      if (!w || w.norm.length < 4) continue;
+      const pre = w.norm.slice(0, w.norm.length >= 6 ? 3 : 2);
+      for (let intento = 0; intento < 60; intento++) {
+        const [dx, dy] = DIRS[p.direcciones[Math.floor(r() * p.direcciones.length)]];
+        const x0 = Math.floor(r() * p.columnas), y0 = Math.floor(r() * p.filas);
+        const pos = Array.from({ length: pre.length }, (_, k) => [x0 + dx * k, y0 + dy * k]);
+        if (pos.some(([x, y]) => x < 0 || y < 0 || x >= p.columnas || y >= p.filas || g[y][x] !== null)) continue;
+        pos.forEach(([x, y], k) => { g[y][x] = pre[k]; });
+        break;
+      }
+    }
+    for (let y = 0; y < p.filas; y++) for (let x = 0; x < p.columnas; x++) if (g[y][x] === null) g[y][x] = letra();
+    return g;
+  }
+
+  /* Arma una sopa. Devuelve null solo si la temática no tiene ninguna palabra que entre. */
+  function crear(tematica, p, { conImagen = false, semilla = Date.now() } = {}) {
+    const r = azar(semilla);
+    const todas = candidatas(tematica, p, conImagen);
+    if (!todas.length) return null;
+    let cantidad = Math.min(p.palabras, todas.length);
+    const unaPorFila = p.direcciones.length === 1 && p.direcciones[0] === "E" && !p.cruces;
+    if (unaPorFila) cantidad = Math.min(cantidad, p.filas);
+    for (; cantidad > 0; cantidad--) {
+      for (let intento = 0; intento < 120; intento++) {
+        const fam = mezclar(todas.filter((w) => w.familiar), r), resto = mezclar(todas.filter((w) => !w.familiar), r);
+        const orden = p.familiares ? fam.concat(resto) : mezclar(todas, r);
+        const elegidas = orden.slice(0, cantidad).sort((a, b) => b.norm.length - a.norm.length);
+        const grilla = Array.from({ length: p.filas }, () => Array(p.columnas).fill(null));
+        const filasUsadas = unaPorFila ? new Set() : null;
+        const ubicadas = [];
+        for (const w of elegidas) {
+          const u = ubicar(grilla, w, p, r, filasUsadas);
+          if (!u) break;
+          ubicadas.push({ ...w, ...u });
+        }
+        if (ubicadas.length < cantidad) continue;
+        for (let k = 0; k < 30; k++) {
+          const final = rellenar(grilla, ubicadas, p, r);
+          if (ubicadas.every((w) => apariciones(final, w.norm) === 1)) {
+            const enOrden = mezclar(ubicadas, r).map((w) => ({ ...w, clave: clave(w.celdas) }));
+            return { columnas: p.columnas, filas: p.filas, grilla: final, palabras: enOrden, pedidas: p.palabras };
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  /* Celdas entre dos puntos si están en línea recta (horizontal, vertical o diagonal); si no, null. */
+  function linea(a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1];
+    if (!(dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy))) return null;
+    const n = Math.max(Math.abs(dx), Math.abs(dy)), sx = Math.sign(dx), sy = Math.sign(dy);
+    return Array.from({ length: n + 1 }, (_, k) => [a[0] + sx * k, a[1] + sy * k]);
+  }
+  /* Para el arrastre: lleva el punto final a la dirección recta más cercana, dentro de la grilla. */
+  function ajustar(a, b, cols, filas) {
+    const dx = b[0] - a[0], dy = b[1] - a[1];
+    if (!dx && !dy) return a;
+    const ang = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
+    const ux = Math.round(Math.cos(ang)), uy = Math.round(Math.sin(ang));
+    let n = Math.max(Math.abs(dx), Math.abs(dy));
+    while (n > 0 && (a[0] + ux * n < 0 || a[1] + uy * n < 0 || a[0] + ux * n >= cols || a[1] + uy * n >= filas)) n--;
+    return [a[0] + ux * n, a[1] + uy * n];
+  }
+  return { crear, linea, ajustar, normalizar, apariciones, clave, DIRS };
+})();
+if (typeof module !== "undefined") module.exports = Generador;
+</script>
+<script>
+"use strict";
+const leer = (id) => { try { return JSON.parse(document.getElementById(id).textContent); } catch (e) { return null; } };
+const BANCO = leer("datos-banco"), MODULO = leer("datos-modulo"), INICIO = leer("datos-inicio") || {};
+const T = BANCO.textos;
+const EN_MARCO = window.parent !== window;
+/* Pantalla de la persona adulta: en el archivo suelto, siempre; dentro del portal, solo en consulta. */
+const CON_ADULTO = INICIO.adulto !== false;
+const VARIANTES = MODULO.estaciones.variantes;
+const GRADOS = [["facil", "Fácil"], ["intermedio", "Intermedio"], ["dificil", "Difícil"]];
+const COLORES = ["#196b6a", "#ffb82e", "#f58060", "#bd89c4", "#3f8fbf", "#7aa63a"];
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = (t, v) => t.replace(/\{(\w+)\}/g, (_, k) => (k in v ? v[k] : ""));
+const elegir = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+const S = {
+  pantalla: "adulto",
+  estacion: VARIANTES.some((v) => v.estacion === INICIO.estacion) ? INICIO.estacion : "explorar",
+  grado: GRADOS.some(([g]) => g === INICIO.grado) ? INICIO.grado : "facil",
+  tematica: null, modo: "palabras", letras: "mayus", voz: INICIO.voz !== false,
+  sopa: null, halladas: new Set(), pistas: [null, null], inicio: null, arrastrando: false, movido: false,
+  fallidos: 0, t0: 0, informada: false
+};
+const variante = () => VARIANTES.find((v) => v.estacion === S.estacion);
+const params = () => variante().grados[S.grado].parametros;
+const apoyo = (a) => variante().apoyos.includes(a);
+const tematica = () => BANCO.tematicas.find((t) => t.id === S.tematica);
+const verLetra = (c) => (S.letras === "minus" ? c.toLocaleLowerCase("es") : c);
+const verPalabra = (p) => (S.letras === "minus" ? p.toLocaleLowerCase("es") : p);
+
+/* ---------- Audio (REQ-CLI-T09): voz del dispositivo, español rioplatense si está disponible ---------- */
+let VOZ = null;
+function elegirVoz() { try { const v = speechSynthesis.getVoices(); VOZ = v.find((x) => /^es[-_]AR/i.test(x.lang)) || v.find((x) => /^es[-_](419|US|MX)/i.test(x.lang)) || v.find((x) => /^es/i.test(x.lang)) || null; } catch (e) { } }
+if ("speechSynthesis" in window) { elegirVoz(); speechSynthesis.onvoiceschanged = elegirVoz; }
+function decir(t, forzar) {
+  if ((!S.voz && !forzar) || !t || !("speechSynthesis" in window)) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = VOZ ? VOZ.lang : "es-AR"; if (VOZ) u.voice = VOZ; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) { }
+}
+function anunciar(t) { const a = $("#anuncio"); a.textContent = ""; setTimeout(() => { a.textContent = t; }, 30); }
+const escuchar = (t) => `<button class="btn sec icono" data-decir="${esc(t)}" aria-label="${esc(T.escuchar)}">🔊</button>`;
+
+/* ---------- Encabezado ---------- */
+function encabezado() {
+  const voz = `<button class="btn sec icono" id="voz" aria-pressed="${S.voz}" aria-label="${esc(S.voz ? T.audioSi : T.audioNo)}">${S.voz ? "🔊" : "🔇"}</button>`;
+  const completa = !EN_MARCO && (document.fullscreenEnabled || document.webkitFullscreenEnabled)
+    ? `<button class="btn sec" id="completa">${document.fullscreenElement ? "Salir de pantalla completa" : "Pantalla completa"}</button>` : "";
+  $("#hd").innerHTML = (EN_MARCO ? "" : `<span class="marca" aria-hidden="true"></span><span class="nm">Explorapalabras</span>`)
+    + `<span class="rotulo">${esc(T.rotulo)}</span>${EN_MARCO ? '<span style="margin-right:auto"></span>' : ""}${completa}${voz}`;
+  $("#voz").onclick = () => { S.voz = !S.voz; if (!S.voz) try { speechSynthesis.cancel(); } catch (e) { } encabezado(); };
+  const c = $("#completa");
+  if (c) c.onclick = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement);
+  };
+}
+document.addEventListener("fullscreenchange", encabezado);
+
+/* Botón "mantener apretado": las opciones de Estación y grado son de la persona adulta. */
+function sujecion(b, alTerminar, ms = 1500) {
+  let t = null;
+  const ini = (e) => { e.preventDefault(); b.classList.add("apretando"); t = setTimeout(alTerminar, ms); };
+  const fin = () => { b.classList.remove("apretando"); clearTimeout(t); };
+  b.addEventListener("pointerdown", ini); ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => b.addEventListener(ev, fin));
+  b.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && !e.repeat) ini(e); });
+  b.addEventListener("keyup", fin);
+}
+const pieAdulto = () => !CON_ADULTO ? "" : `<div class="adulto-pie"><span class="small">${esc(T.adultoBoton)}:</span>
+  <button class="btn sec sujecion" id="a-adulto"><span>${esc(T.adultoMantener)}</span><i></i></button></div>`;
+
+/* ---------- Pantallas ---------- */
+function mostrar(pantalla) {
+  S.pantalla = pantalla;
+  try { speechSynthesis.cancel(); } catch (e) { }
+  ({ adulto: pAdulto, temas: pTemas, modo: pModo, juego: pJuego, cierre: pCierre })[pantalla]();
+  $$("[data-decir]").forEach((b) => b.addEventListener("click", () => decir(b.dataset.decir, true)));
+  const a = $("#a-adulto"); if (a) sujecion(a, () => mostrar("adulto"));
+  const h = $("#app h1"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
+  window.scrollTo(0, 0);
+}
+
+function pAdulto() {
+  const v = variante(), g = v.grados[S.grado];
+  $("#app").innerHTML = `<section class="panel">
+    <div class="titulo"><h1>${esc(T.adultoTitulo)}</h1></div>
+    <p>${esc(T.adultoAyuda)}</p>
+    <div class="grupo"><h2 id="g-est">Estación</h2>
+      <div class="opciones" role="radiogroup" aria-labelledby="g-est">${VARIANTES.map((x) => `<button class="opcion" role="radio" aria-checked="${x.estacion === S.estacion}" data-est="${x.estacion}">
+        <span class="t">${esc(x.nombre)}</span><span class="d">${esc(T.direcciones[x.estacion])}</span></button>`).join("")}</div></div>
+    <div class="grupo"><h2 id="g-gr">Grado</h2>
+      <div class="opciones" style="--min:150px" role="radiogroup" aria-labelledby="g-gr">${GRADOS.map(([id, nm]) => `<button class="opcion centro" role="radio" aria-checked="${id === S.grado}" data-gr="${id}"><span class="t">${nm}</span></button>`).join("")}</div></div>
+    <div class="resumen"><strong>${esc(v.nombre)} · ${esc(GRADOS.find(([id]) => id === S.grado)[1])}:</strong> ${esc(g.describe)}.
+      <br><span class="small">Apoyos: ${esc(v.apoyos.map((a) => a.replace(/-/g, " ")).join(", "))}. Parámetros propuestos por DEV-IA; los valida PSP-SR.</span></div>
+    <div class="acciones"><button class="btn grande" id="a-seguir">${esc(T.adultoSeguir)}</button>
+      ${S.tematica ? `<button class="btn sec grande" id="a-igual">Jugar otra vez con esta configuración</button>` : ""}</div></section>`;
+  $$("[data-est]").forEach((b) => b.onclick = () => { S.estacion = b.dataset.est; pAdulto(); $(`[data-est="${S.estacion}"]`).focus(); });
+  $$("[data-gr]").forEach((b) => b.onclick = () => { S.grado = b.dataset.gr; pAdulto(); $(`[data-gr="${S.grado}"]`).focus(); });
+  radios("[data-est]"); radios("[data-gr]");
+  $("#a-seguir").onclick = () => { avisar({ type: "explora-config", estacion: S.estacion, grado: S.grado }); mostrar("temas"); };
+  const ig = $("#a-igual"); if (ig) ig.onclick = () => { avisar({ type: "explora-config", estacion: S.estacion, grado: S.grado }); empezar(); };
+}
+/* Grupos de opciones navegables con flechas (patrón radiogroup). */
+function radios(sel) {
+  const bs = $$(sel);
+  bs.forEach((b, i) => {
+    b.tabIndex = b.getAttribute("aria-checked") === "true" || b.getAttribute("aria-pressed") === "true" ? 0 : -1;
+    b.addEventListener("keydown", (e) => {
+      const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (!d) return; e.preventDefault(); const n = bs[(i + d + bs.length) % bs.length]; n.click();
+    });
+  });
+  if (!bs.some((b) => b.tabIndex === 0) && bs[0]) bs[0].tabIndex = 0;
+}
+
+function pTemas() {
+  $("#app").innerHTML = `<section class="panel">
+    <div class="titulo"><h1>${esc(T.temasTitulo)}</h1>${escuchar(T.temasTitulo)}</div>
+    <div class="opciones temas">${BANCO.tematicas.map((t) => `<button class="opcion centro tema" data-tema="${t.id}" aria-pressed="${t.id === S.tematica}">
+      <span class="emo" aria-hidden="true">${t.imagen}</span><span class="t">${esc(t.nombre)}</span></button>`).join("")}</div>
+    ${pieAdulto()}</section>`;
+  $$("[data-tema]").forEach((b) => b.onclick = () => { S.tematica = b.dataset.tema; decir(tematica().nombre); mostrar("modo"); });
+  decir(T.temasTitulo);
+}
+
+function pModo() {
+  const t = tematica();
+  $("#app").innerHTML = `<section class="panel">
+    <div class="titulo"><h1>${esc(t.imagen)} ${esc(t.nombre)}</h1><button class="btn sec" id="m-volver">${esc(T.volver)}</button></div>
+    <div class="grupo"><div class="titulo"><h2 id="g-modo">${esc(T.modoTitulo)}</h2>${escuchar(T.modoTitulo + " " + T.modoPalabras + ", o " + T.modoImagenes)}</div>
+      <div class="opciones" style="--min:200px" role="radiogroup" aria-labelledby="g-modo">
+        <button class="opcion centro" role="radio" data-modo="palabras" aria-checked="${S.modo === "palabras"}"><span class="emo" aria-hidden="true">🔤</span><span class="t">${esc(T.modoPalabras)}</span></button>
+        <button class="opcion centro" role="radio" data-modo="imagenes" aria-checked="${S.modo === "imagenes"}"><span class="emo" aria-hidden="true">🖼️</span><span class="t">${esc(T.modoImagenes)}</span></button></div></div>
+    <div class="grupo"><div class="titulo"><h2 id="g-let">${esc(T.letrasTitulo)}</h2>${escuchar(T.letrasTitulo + " Mayúsculas, o minúsculas")}</div>
+      <div class="opciones" style="--min:200px" role="radiogroup" aria-labelledby="g-let">
+        <button class="opcion centro" role="radio" data-letras="mayus" aria-checked="${S.letras === "mayus"}"><span class="emo" aria-hidden="true" style="font-weight:900">ABC</span><span class="t">${esc(T.letrasMayus)}</span></button>
+        <button class="opcion centro" role="radio" data-letras="minus" aria-checked="${S.letras === "minus"}"><span class="emo" aria-hidden="true" style="font-weight:900">abc</span><span class="t">${esc(T.letrasMinus)}</span></button></div></div>
+    <div class="acciones"><button class="btn grande" id="m-empezar">${esc(T.empezar)}</button></div>
+    ${pieAdulto()}</section>`;
+  $$("[data-modo]").forEach((b) => b.onclick = () => { S.modo = b.dataset.modo; decir(b.textContent.trim()); refrescar(); $(`[data-modo="${S.modo}"]`).focus(); });
+  $$("[data-letras]").forEach((b) => b.onclick = () => { S.letras = b.dataset.letras; decir(S.letras === "mayus" ? "Mayúsculas" : "Minúsculas"); refrescar(); $(`[data-letras="${S.letras}"]`).focus(); });
+  radios("[data-modo]"); radios("[data-letras]");
+  function refrescar() {
+    $$("[data-modo]").forEach((b) => b.setAttribute("aria-checked", b.dataset.modo === S.modo));
+    $$("[data-letras]").forEach((b) => b.setAttribute("aria-checked", b.dataset.letras === S.letras));
+    radios("[data-modo]"); radios("[data-letras]");
+  }
+  $("#m-volver").onclick = () => mostrar("temas");
+  $("#m-empezar").onclick = empezar;
+  decir(T.modoTitulo);
+}
+
+function empezar() {
+  const semilla = INICIO.semilla ? INICIO.semilla + (S.partida = (S.partida || 0) + 1) : (Date.now() ^ Math.floor(Math.random() * 1e9));
+  S.sopa = Generador.crear(tematica(), params(), { conImagen: S.modo === "imagenes", semilla });
+  S.halladas = new Set(); S.pistas = [null, null]; S.inicio = null; S.fallidos = 0; S.t0 = Date.now(); S.informada = false;
+  mostrar("juego");
+}
+
+/* ---------- Juego ---------- */
+function pJuego() {
+  const sp = S.sopa, t = tematica();
+  const consigna = T.direcciones[S.estacion] + " " + T.comoSeJuega;
+  $("#app").innerHTML = `<section class="panel">
+    <div class="titulo"><h1>${esc(t.imagen)} ${esc(t.nombre)}</h1></div>
+    <div class="consigna"><p>${esc(consigna)}</p>${escuchar(consigna)}</div>
+    <div class="juego">
+      <div><div class="zoom" id="zoom"></div><div class="tablero-marco" id="marco"><div class="tablero" id="tablero" role="grid" aria-label="Sopa de letras de ${sp.filas} filas y ${sp.columnas} columnas"
+        style="grid-template-columns:repeat(${sp.columnas},var(--c))">${sp.grilla.map((fila, y) => fila.map((c, x) =>
+          `<button class="celda" role="gridcell" data-x="${x}" data-y="${y}" tabindex="${x === 0 && y === 0 ? 0 : -1}" aria-label="Fila ${y + 1}, columna ${x + 1}: ${c}">${esc(verLetra(c))}</button>`).join("")).join("")}
+        <svg class="trazos" id="trazos" aria-hidden="true"></svg></div></div></div>
+      <div class="lado">
+        <div><h2 id="r-tit">${esc(S.modo === "imagenes" ? T.buscarImagenes : T.buscarPalabras)}</h2>
+          <ul class="refs" aria-labelledby="r-tit" id="refs"></ul></div>
+        <div class="pistas" id="pistas"></div>
+        <p class="msj" id="msj" role="status" aria-live="polite"></p>
+        <div><button class="btn sec" id="j-terminar">${esc(T.terminarAca)}</button></div>
+      </div></div></section>`;
+  pintarRefs(); pintarPistas(); medir(); conectarTablero();
+  $("#j-terminar").onclick = () => terminar(true);
+  if (sp.palabras.length < sp.pedidas) mensaje(`(Para la persona adulta: con esta temática y este modo hay ${sp.palabras.length} palabras de prueba disponibles.)`, false);
+  decir(consigna);
+}
+
+function pintarRefs() {
+  const sp = S.sopa, conImg = S.modo === "imagenes";
+  const junto = !conImg && apoyo("imagen-junto-a-la-palabra");
+  const nombre = conImg && apoyo("nombre-en-audio");
+  $("#refs").innerHTML = sp.palabras.map((w, i) => {
+    const h = S.halladas.has(i), pista = S.pistas.includes(i);
+    const letraPista = pista && !h ? `<span class="pistab" aria-label="Empieza con ${esc(w.norm[0])}">${esc(verLetra(w.norm[0]))}</span>` : "";
+    const ok = h ? `<span class="ok" aria-hidden="true">✓</span>` : "";
+    const estado = h ? ", encontrada" : "";
+    if (conImg) return `<li><button class="ref solo-img ${h ? "hallada" : ""}" data-ref="${i}" aria-label="${esc((h || nombre ? w.texto : "Dibujo " + (i + 1)) + estado)}">
+      <span class="emo" aria-hidden="true">${w.imagen}</span>${h ? `<span class="pal">${esc(verPalabra(w.texto))}</span>` : ""}${letraPista}${ok}</button></li>`;
+    return `<li><button class="ref ${h ? "hallada" : ""}" data-ref="${i}" aria-label="${esc(w.texto + estado)}">
+      ${junto && w.imagen ? `<span class="emo" aria-hidden="true">${w.imagen}</span>` : ""}<span class="pal ${w.norm.length > 9 ? "larga" : ""}">${esc(verPalabra(w.texto))}</span>${letraPista}${ok}</button></li>`;
+  }).join("");
+  $$("[data-ref]").forEach((b) => b.onclick = () => {
+    const w = S.sopa.palabras[+b.dataset.ref];
+    /* Modo palabras: toda palabra escrita tiene audio (T09). Modo dibujos: el nombre en audio es un apoyo de las Estaciones 1 y 2. */
+    if (S.modo === "palabras" || nombre || S.halladas.has(+b.dataset.ref)) decir(w.texto, true);
+  });
+}
+
+function pintarPistas() {
+  $("#pistas").innerHTML = S.pistas.map((p, k) => `<button class="btn ${p === null ? "suave" : "sec"}" data-pista="${k}" ${p === null ? "" : "disabled"}>💡 ${p === null ? esc(T.pista) + " " + (k + 1) : esc(T.pistaUsada)}</button>`).join("");
+  $$("[data-pista]").forEach((b) => b.onclick = () => usarPista(+b.dataset.pista));
+}
+/* Pista: revela solo la primera letra de una palabra pendiente, junto a esa palabra o dibujo. No marca la cuadrícula. */
+function usarPista(k) {
+  if (S.pistas[k] !== null) return;
+  const i = S.sopa.palabras.findIndex((_, j) => !S.halladas.has(j) && !S.pistas.includes(j));
+  if (i < 0) return mensaje(T.pistaSinPendientes);
+  S.pistas[k] = i;
+  const w = S.sopa.palabras[i];
+  /* En modo dibujos sin nombre en audio, la pista no dice la palabra: señala el dibujo con la letra. */
+  const sinNombre = S.modo === "imagenes" && !apoyo("nombre-en-audio");
+  pintarRefs(); pintarPistas();
+  mensaje(fmt(T.pistaDice, { quien: sinNombre ? T.pistaDibujo : verPalabra(w.texto), letra: verLetra(w.norm[0]) }), true,
+    fmt(T.pistaDice, { quien: sinNombre ? T.pistaDibujo : w.texto, letra: w.norm[0] }));
+  const ref = $(`[data-ref="${i}"]`); if (ref) ref.scrollIntoView({ block: "nearest" });
+}
+
+function mensaje(t, hablar = true, paraVoz) { const m = $("#msj"); if (!m) return; m.textContent = t; if (hablar) decir(paraVoz || t); }
+
+/* Tamaño de celda: entre 44 y 64 px (objetivo táctil de la guía de interfaz). Si la cuadrícula no entra
+   (pantallas angostas en las Estaciones 3 y 4), el tablero se desliza y se ofrece verla entera con letras
+   más chicas, nunca por debajo de 24 px (WCAG 2.2, criterio 2.5.8). */
+function medir() {
+  const marco = $("#marco"), tab = $("#tablero"); if (!marco || !tab) return;
+  const disp = marco.clientWidth - 30, cols = S.sopa.columnas, noEntra = cols * 44 > disp + 1;
+  const c = noEntra && S.compacta ? Math.max(24, Math.floor(disp / cols)) : Math.max(44, Math.min(64, Math.floor(disp / cols)));
+  tab.style.setProperty("--c", c + "px");
+  const z = $("#zoom");
+  z.innerHTML = noEntra ? `<p class="small" style="margin:0 0 6px">${S.compacta ? "" : esc(T.deslizar) + " "}<button class="btn sec" id="zoom-b" aria-pressed="${!!S.compacta}">${esc(S.compacta ? T.letrasGrandes : T.verEntera)}</button></p>` : "";
+  if (noEntra) $("#zoom-b").onclick = () => { S.compacta = !S.compacta; medir(); };
+  tab.classList.toggle("arrastre", c * cols <= disp + 1);
+  trazar();
+}
+window.addEventListener("resize", () => { if (S.pantalla === "juego") medir(); });
+
+function centro(x, y) {
+  const tab = $("#tablero"), el = $(`.celda[data-x="${x}"][data-y="${y}"]`);
+  const a = tab.getBoundingClientRect(), b = el.getBoundingClientRect();
+  return [b.left - a.left + b.width / 2, b.top - a.top + b.height / 2, b.width];
+}
+function trazar(previa) {
+  const svg = $("#trazos"), tab = $("#tablero"); if (!svg) return;
+  svg.setAttribute("viewBox", `0 0 ${tab.clientWidth} ${tab.clientHeight}`);
+  svg.setAttribute("width", tab.clientWidth); svg.setAttribute("height", tab.clientHeight);
+  svg.innerHTML = [...S.halladas].map((i) => {
+    const c = S.sopa.palabras[i].celdas, [x1, y1, w] = centro(...c[0]), [x2, y2] = centro(...c[c.length - 1]);
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${COLORES[i % COLORES.length]}" stroke-width="${w * 0.78}"/>`;
+  }).join("");
+  $$(".celda").forEach((el) => el.classList.remove("marca-sel", "inicio", "hallada"));
+  [...S.halladas].forEach((i) => S.sopa.palabras[i].celdas.forEach(([x, y]) => $(`.celda[data-x="${x}"][data-y="${y}"]`).classList.add("hallada")));
+  if (previa) previa.forEach(([x, y]) => $(`.celda[data-x="${x}"][data-y="${y}"]`).classList.add("marca-sel"));
+  if (S.inicio) $(`.celda[data-x="${S.inicio[0]}"][data-y="${S.inicio[1]}"]`).classList.add("inicio");
+}
+
+function conectarTablero() {
+  const tab = $("#tablero");
+  const celdaDe = (el) => (el && el.classList && el.classList.contains("celda") ? [+el.dataset.x, +el.dataset.y] : null);
+  const igual = (a, b) => a && b && a[0] === b[0] && a[1] === b[1];
+  let ultimo = null, porPuntero = false;
+
+  function elegirCelda(c) {
+    if (!S.inicio) {
+      S.inicio = c; trazar();
+      mensaje(fmt(T.elegisteLetra, { letra: verLetra(S.sopa.grilla[c[1]][c[0]]) }), true, fmt(T.elegisteLetra, { letra: S.sopa.grilla[c[1]][c[0]] }));
+      return;
+    }
+    if (igual(S.inicio, c)) { S.inicio = null; trazar(); mensaje(""); return; }
+    const l = Generador.linea(S.inicio, c);
+    if (!l) { mensaje(T.noEnLinea); return; }
+    evaluar(l);
+  }
+  tab.addEventListener("pointerdown", (e) => {
+    const c = celdaDe(e.target.closest(".celda")); if (!c) return;
+    porPuntero = true;
+    if (!S.inicio) { S.arrastrando = tab.classList.contains("arrastre") || e.pointerType === "mouse"; S.movido = false; ultimo = c; elegirCelda(c); if (S.arrastrando) e.preventDefault(); }
+    else { S.arrastrando = false; elegirCelda(c); }
+  });
+  tab.addEventListener("pointermove", (e) => {
+    if (!S.arrastrando || !S.inicio) return;
+    const c = celdaDe(document.elementFromPoint(e.clientX, e.clientY)); if (!c || igual(c, ultimo)) return;
+    ultimo = c; S.movido = true;
+    const fin = Generador.ajustar(S.inicio, c, S.sopa.columnas, S.sopa.filas);
+    trazar(Generador.linea(S.inicio, fin));
+  });
+  const soltar = (e) => {
+    if (!S.arrastrando) return; S.arrastrando = false;
+    if (!S.movido || !S.inicio || !ultimo || igual(ultimo, S.inicio)) { trazar(); return; }
+    const fin = Generador.ajustar(S.inicio, ultimo, S.sopa.columnas, S.sopa.filas);
+    evaluar(Generador.linea(S.inicio, fin));
+  };
+  tab.addEventListener("pointerup", soltar); tab.addEventListener("pointercancel", () => { S.arrastrando = false; trazar(); });
+  /* Teclado: flechas para moverse, Enter o Espacio para elegir la primera y la última letra. */
+  tab.addEventListener("click", (e) => { if (porPuntero) { porPuntero = false; return; } const c = celdaDe(e.target.closest(".celda")); if (c) elegirCelda(c); });
+  tab.addEventListener("keydown", (e) => {
+    const c = celdaDe(e.target.closest(".celda")); if (!c) return;
+    const d = { ArrowRight: [1, 0], ArrowLeft: [-1, 0], ArrowDown: [0, 1], ArrowUp: [0, -1] }[e.key];
+    if (!d) return; e.preventDefault();
+    const x = Math.max(0, Math.min(S.sopa.columnas - 1, c[0] + d[0])), y = Math.max(0, Math.min(S.sopa.filas - 1, c[1] + d[1]));
+    e.target.tabIndex = -1; const n = $(`.celda[data-x="${x}"][data-y="${y}"]`); n.tabIndex = 0; n.focus();
+    if (S.inicio) { const l = Generador.linea(S.inicio, [x, y]); trazar(l || undefined); }
+  });
+}
+
+/* Validación automática: la selección coincide exactamente con las celdas de una palabra (en cualquiera de los dos sentidos). */
+function evaluar(celdas) {
+  const k = Generador.clave(celdas);
+  const i = S.sopa.palabras.findIndex((w) => w.clave === k);
+  S.inicio = null;
+  if (i < 0) { S.fallidos++; trazar(); mensaje(T.noEsta); return; }
+  if (S.halladas.has(i)) { trazar(); mensaje(T.yaEncontrada); return; }
+  S.halladas.add(i);
+  const w = S.sopa.palabras[i];
+  trazar(); pintarRefs();
+  mensaje(fmt(elegir(T.encontrada), { palabra: verPalabra(w.texto) }), true, fmt(elegir(T.encontrada), { palabra: w.texto }));
+  if (S.halladas.size === S.sopa.palabras.length) setTimeout(() => terminar(false), 1600);
+}
+
+function terminar(antes) {
+  const sp = S.sopa, n = S.halladas.size, total = sp.palabras.length;
+  S.completa = !antes && n === total;
+  if (!S.informada) {
+    S.informada = true;
+    avisar({ type: "explora-sopa", tematica: S.tematica, estacion: S.estacion, grado: S.grado, modo: S.modo, letras: S.letras,
+      palabras: total, halladas: n, pistas: S.pistas.filter((p) => p !== null).length, fallidos: S.fallidos, completa: S.completa, ms: Date.now() - S.t0 });
+  }
+  mostrar("cierre");
+}
+
+function pCierre() {
+  const sp = S.sopa, n = S.halladas.size, total = sp.palabras.length, pistas = S.pistas.filter((p) => p !== null).length;
+  const halladas = sp.palabras.filter((_, i) => S.halladas.has(i));
+  let titulo, lineas = [];
+  if (S.completa) {
+    titulo = T.cierreTitulo;
+    lineas.push(total === 1 ? T.cierreUna : fmt(T.cierreCantidad, { n: total }), T.cierreProceso);
+    if (pistas) lineas.push(T.cierrePistas);
+  } else {
+    titulo = T.cierreParcialTitulo;
+    lineas.push(n ? T.cierreParcial : T.cierreNada);
+  }
+  const voz = [titulo, ...lineas, ...(S.completa ? [] : halladas.map((w) => w.texto))].join(" ");
+  $("#app").innerHTML = `<section class="panel cierre">
+    <p class="emo" style="font-size:3rem;margin:0" aria-hidden="true">${S.completa ? "🌟" : "🌱"}</p>
+    <div class="titulo" style="justify-content:center"><h1 style="flex:0 1 auto">${esc(titulo)}</h1>${escuchar(voz)}</div>
+    ${lineas.map((l) => `<p>${esc(l)}</p>`).join("")}
+    ${halladas.length ? `<ul class="lista">${halladas.map((w) => `<li>${w.imagen ? `<span aria-hidden="true">${w.imagen}</span> ` : ""}${esc(verPalabra(w.texto))}</li>`).join("")}</ul>` : ""}
+    <div class="acciones"><button class="btn grande" id="c-otra">${esc(T.otraVez)}</button>
+      <button class="btn sec grande" id="c-tema">${esc(T.otraTematica)}</button>
+      <button class="btn sec grande" id="c-modo">${esc(T.otraForma)}</button></div>
+    ${pieAdulto()}</section>`;
+  $("#c-otra").onclick = empezar;
+  $("#c-tema").onclick = () => mostrar("temas");
+  $("#c-modo").onclick = () => mostrar("modo");
+  decir(voz);
+}
+
+/* Aviso al portal (si corre dentro de él). Solo datos de la partida, nunca datos de la persona. */
+function avisar(d) { try { if (EN_MARCO) window.parent.postMessage(d, "*"); } catch (e) { } }
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && EN_MARCO && !e.defaultPrevented) avisar({ type: "isla-salir-vista-ampliada" }); });
+document.addEventListener("visibilitychange", () => { if (document.hidden) try { speechSynthesis.cancel(); } catch (e) { } });
+
+encabezado();
+mostrar(CON_ADULTO ? "adulto" : "temas");
+</script>
+</body></html>

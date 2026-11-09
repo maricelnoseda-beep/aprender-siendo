@@ -4,6 +4,8 @@
   python3 app/build.py               → app/dist/            versión modular (la que se publica)
   python3 app/build.py --un-archivo  → app/dist-un-archivo/ un solo HTML con todo incrustado
                                        (demostración sin servidor y paquete de revisión de PSP-SR)
+  python3 app/build.py --explorapalabras → app/dist-explorapalabras/Explorapalabras.html
+                                       (el juego solo, para probar con doble clic)
 
 Las imágenes, la fuente y los recursos se escriben en las fuentes como @@asset:<ruta>@@.
 La versión modular los sirve como archivos (se descargan solo cuando aparecen en pantalla);
@@ -14,6 +16,11 @@ import base64, hashlib, json, pathlib, re, shutil, sys
 root = pathlib.Path(__file__).parent
 cfg = json.loads((root / "modulos.json").read_text())
 UN_ARCHIVO = "--un-archivo" in sys.argv
+# Recursos que una herramienta pide recién al abrirse (documentos de marcos aislados y sus datos).
+RECURSOS = ["herramientas/isla-de-juegos/isla.html",
+            "herramientas/explorapalabras/explorapalabras.html",
+            "herramientas/explorapalabras/banco.json",
+            "herramientas/explorapalabras/modulo.json"]
 MIME = {".webp": "image/webp", ".png": "image/png", ".ttf": "font/ttf", ".woff2": "font/woff2"}
 TOKEN = re.compile(r"@@asset:([^@]+)@@")
 read = lambda rel: (root / rel).read_text()
@@ -36,11 +43,25 @@ def catalogo(resolver):
             a["faces"] = [resolver(f) for f in a["faces"]]
     return json.dumps(cat, ensure_ascii=False, separators=(",", ":"))
 
+if "--explorapalabras" in sys.argv:
+    # El juego solo, en un archivo: identidad (Nunito y símbolo) incrustada, banco y parámetros adentro.
+    datauri = lambda rel: "data:%s;base64,%s" % (MIME[pathlib.Path(rel).suffix], base64.b64encode((root / rel).read_bytes()).decode())
+    js = lambda t: t.replace("<", "\\u003c")
+    html = read("herramientas/explorapalabras/explorapalabras.html")
+    html = html.replace("__BRAND_FONT__", TOKEN.sub(lambda m: datauri(m.group(1)), read("nucleo/estilos/identidad.css")), 1)
+    html = (html.replace("__BANCO__", js(json.dumps(json.loads(read("herramientas/explorapalabras/banco.json")), ensure_ascii=False)), 1)
+                .replace("__MODULO__", js(json.dumps(json.loads(read("herramientas/explorapalabras/modulo.json")), ensure_ascii=False)), 1)
+                .replace("__INICIO__", "{}", 1))
+    out = root / "dist-explorapalabras"; out.mkdir(exist_ok=True)
+    (out / "Explorapalabras.html").write_text(html)
+    print("ok explorapalabras", (out / "Explorapalabras.html").stat().st_size, "bytes")
+    sys.exit()
+
 if UN_ARCHIVO:
     datauri = lambda rel: "data:%s;base64,%s" % (MIME[pathlib.Path(rel).suffix], base64.b64encode((root / rel).read_bytes()).decode())
     inline = lambda t: TOKEN.sub(lambda m: datauri(m.group(1)), t)
     styles = "".join('<style%s>%s</style>\n' % (f' id="{s["id"]}"' if s.get("id") else "", inline(read(s["archivo"]))) for s in cfg["estilos"])
-    incrustados = {"herramientas/isla-de-juegos/isla.html": read("herramientas/isla-de-juegos/isla.html")}
+    incrustados = {r: read(r) for r in RECURSOS}
     js = "\n".join(inline(read(f)) for f in cfg["scripts"])
     body = ('<div id="app" aria-live="off"></div>\n'
             '<script id="animal-catalog" type="application/json">' + catalogo(datauri) + "</script>\n"
@@ -78,7 +99,7 @@ for s in cfg["estilos"]:
     css = TOKEN.sub(lambda m: relativo(s["archivo"], asset(m.group(1))), css)
     ref = publicar(s["archivo"], css.encode())
     head += '<link rel="stylesheet"%s href="%s">\n' % (' id="brand-css"' if s.get("id") == "brand-font" else "", ref)
-publicar("herramientas/isla-de-juegos/isla.html")
+for r in RECURSOS: publicar(r)
 scripts = ""
 for f in cfg["scripts"]:
     ref = publicar(f, TOKEN.sub(lambda m: asset(m.group(1)), read(f)).encode())

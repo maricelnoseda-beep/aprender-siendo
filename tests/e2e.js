@@ -193,6 +193,20 @@ async function loginPro(p, email) {
       await p.waitForSelector('text=Rondas terminadas: 1');
       await p.screenshot({ path: S + '/10-isla.png' });
       await p.click('#isla-done');
+    } else if (id === 'explorapalabras') {
+      // Persona adulta elige Estación y grado; quien juega elige temática, modo y letras, y resuelve la sopa entera.
+      const fh = await p.waitForSelector('.explora-frame iframe'); const fr = await fh.contentFrame();
+      await fr.waitForSelector('#a-seguir'); await fr.click('[data-gr=intermedio]'); await fr.click('#a-seguir');
+      await fr.click('[data-tema=frutas]'); await fr.click('[data-modo=imagenes]'); await fr.click('[data-letras=minus]'); await fr.click('#m-empezar');
+      await fr.click('[data-pista="0"]');
+      must(!(await fr.$('.celda.inicio, .celda.marca-sel')), 'la pista no señala la ubicación en la cuadrícula');
+      const ws = await fr.evaluate(() => S.sopa.palabras.map((w) => [w.celdas[0], w.celdas[w.celdas.length - 1]]));
+      for (const [a, z] of ws) { await fr.click(`.celda[data-x="${a[0]}"][data-y="${a[1]}"]`); await fr.click(`.celda[data-x="${z[0]}"][data-y="${z[1]}"]`); }
+      await fr.waitForSelector('#c-otra');
+      must(!/¡Muy bien!|¡Genial!|inteligente|nivel \d|Estación|Fácil|Intermedio|Difícil/i.test(await fr.textContent('#app')), 'el cierre no muestra Estación ni grado ni elogios a la persona');
+      await p.waitForSelector('text=Sopas de letras terminadas: 1');
+      await p.screenshot({ path: S + '/10b-explorapalabras.png' });
+      await p.click('#explora-done');
     } else if (id === 'memoria') {
       await p.click('#ch-stop');
     } else {

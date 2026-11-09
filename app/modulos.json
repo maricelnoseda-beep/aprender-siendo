@@ -30,6 +30,7 @@
     "herramientas/contar/herramienta.js",
     "herramientas/clasificar/herramienta.js",
     "herramientas/memoria/herramienta.js",
+    "herramientas/explorapalabras/herramienta.js",
     "areas/ninos/aventura.js",
     "nucleo/utilidades.js",
     "nucleo/interfaz-comun.js",

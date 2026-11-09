@@ -1,0 +1,1328 @@
+{
+ "estado": "Contenido de prueba no validado",
+ "version": "0.1-prueba",
+ "fecha": "2026-11-09",
+ "autor": "DEV-IA (relleno)",
+ "revisor_clinico": "",
+ "_nota": "Banco de palabras, imágenes y textos para personas: RELLENO de DEV-IA para probar el juego. Lo valida PSP-SR y lo aprueba la supervisora (mensaje RT-EXP-001). Imágenes: emoji del sistema, solo de prueba. f=1 marca vocabulario familiar y concreto (propuesta, REVISAR). i=null: la palabra se usa solo en modo palabras.",
+ "textos": {
+  "rotulo": "Contenido de prueba no validado",
+  "adultoTitulo": "Para la persona adulta que acompaña",
+  "adultoAyuda": "Elegí la Estación y el grado. Quien juega no ve esta elección. Las Estaciones son una referencia orientativa, no diagnóstica.",
+  "adultoSeguir": "Listo, pasarle el juego",
+  "adultoBoton": "Opciones para la persona adulta",
+  "adultoMantener": "Mantener apretado",
+  "temasTitulo": "¿Qué palabras querés explorar?",
+  "modoTitulo": "¿Cómo querés ver lo que hay que buscar?",
+  "modoPalabras": "Con palabras",
+  "modoImagenes": "Con dibujos",
+  "letrasTitulo": "¿Con qué letras?",
+  "letrasMayus": "MAYÚSCULAS",
+  "letrasMinus": "minúsculas",
+  "empezar": "¡Empezar!",
+  "volver": "Volver",
+  "comoSeJuega": "Tocá la primera letra de una palabra y después la última. También podés arrastrar el dedo.",
+  "direcciones": {
+   "explorar": "Las palabras van de izquierda a derecha.",
+   "reconocer": "Las palabras van de izquierda a derecha o de arriba hacia abajo.",
+   "integrar": "Las palabras van de izquierda a derecha, de arriba hacia abajo o en diagonal.",
+   "transferir": "Las palabras pueden ir en cualquier dirección. ¡Algunas, al revés!"
+  },
+  "buscarPalabras": "Palabras para buscar",
+  "buscarImagenes": "Dibujos para buscar",
+  "elegisteLetra": "Elegiste la letra {letra}. Ahora tocá la última letra de la palabra.",
+  "encontrada": [
+   "Encontraste {palabra}. Seguiste las letras una por una.",
+   "Encontraste {palabra}. Buscaste la primera letra y seguiste el camino.",
+   "Encontraste {palabra}. Miraste con calma, letra por letra."
+  ],
+  "noEsta": "Ahí no está. Buscá la primera letra y seguí el camino.",
+  "noEnLinea": "Las letras de una palabra van en línea recta. Probá de nuevo.",
+  "yaEncontrada": "Esa palabra ya la encontraste.",
+  "pista": "Pista",
+  "pistaUsada": "Pista usada",
+  "pistaDice": "{quien} empieza con la letra {letra}.",
+  "pistaSinPendientes": "Todas las palabras ya tienen su pista.",
+  "terminarAca": "Quiero terminar acá",
+  "cierreTitulo": "¡Completaste la sopa de letras!",
+  "cierreCantidad": "Encontraste las {n} palabras.",
+  "cierreUna": "Encontraste la palabra.",
+  "cierreProceso": "Buscaste con calma, letra por letra, y seguiste hasta encontrar todas.",
+  "cierrePistas": "Las pistas te ayudaron a encontrar la primera letra.",
+  "cierreParcialTitulo": "Está bien terminar acá.",
+  "cierreParcial": "Estas son las palabras que encontraste:",
+  "cierreNada": "Lo que probaste también cuenta.",
+  "otraVez": "Jugar otra vez",
+  "otraTematica": "Elegir otras palabras",
+  "otraForma": "Cambiar dibujos o letras",
+  "escuchar": "Escuchar",
+  "audioSi": "Audio activado",
+  "audioNo": "Audio apagado",
+  "pistaDibujo": "El dibujo marcado",
+  "deslizar": "Deslizá para ver el resto de la cuadrícula.",
+  "verEntera": "Ver la cuadrícula entera",
+  "letrasGrandes": "Ver letras grandes"
+ },
+ "tematicas": [
+  {
+   "id": "animales-terrestres",
+   "nombre": "Animales terrestres",
+   "imagen": "🦁",
+   "palabras": [
+    {
+     "p": "PERRO",
+     "i": "🐕",
+     "f": 1
+    },
+    {
+     "p": "GATO",
+     "i": "🐈",
+     "f": 1
+    },
+    {
+     "p": "VACA",
+     "i": "🐄",
+     "f": 1
+    },
+    {
+     "p": "CABALLO",
+     "i": "🐎",
+     "f": 1
+    },
+    {
+     "p": "OVEJA",
+     "i": "🐑",
+     "f": 1
+    },
+    {
+     "p": "CERDO",
+     "i": "🐖",
+     "f": 1
+    },
+    {
+     "p": "CONEJO",
+     "i": "🐇",
+     "f": 1
+    },
+    {
+     "p": "LEÓN",
+     "i": "🦁",
+     "f": 1
+    },
+    {
+     "p": "OSO",
+     "i": "🐻",
+     "f": 1
+    },
+    {
+     "p": "MONO",
+     "i": "🐒",
+     "f": 1
+    },
+    {
+     "p": "TIGRE",
+     "i": "🐅",
+     "f": 0
+    },
+    {
+     "p": "JIRAFA",
+     "i": "🦒",
+     "f": 0
+    },
+    {
+     "p": "ELEFANTE",
+     "i": "🐘",
+     "f": 0
+    },
+    {
+     "p": "CEBRA",
+     "i": "🦓",
+     "f": 0
+    },
+    {
+     "p": "ZORRO",
+     "i": "🦊",
+     "f": 0
+    },
+    {
+     "p": "RATÓN",
+     "i": "🐁",
+     "f": 1
+    },
+    {
+     "p": "CAMELLO",
+     "i": "🐫",
+     "f": 0
+    },
+    {
+     "p": "CANGURO",
+     "i": "🦘",
+     "f": 0
+    },
+    {
+     "p": "ARDILLA",
+     "i": "🐿️",
+     "f": 0
+    },
+    {
+     "p": "RINOCERONTE",
+     "i": "🦏",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "animales-acuaticos",
+   "nombre": "Animales acuáticos",
+   "imagen": "🐬",
+   "palabras": [
+    {
+     "p": "PEZ",
+     "i": "🐟",
+     "f": 1
+    },
+    {
+     "p": "PULPO",
+     "i": "🐙",
+     "f": 1
+    },
+    {
+     "p": "BALLENA",
+     "i": "🐋",
+     "f": 1
+    },
+    {
+     "p": "DELFÍN",
+     "i": "🐬",
+     "f": 1
+    },
+    {
+     "p": "FOCA",
+     "i": "🦭",
+     "f": 1
+    },
+    {
+     "p": "PATO",
+     "i": "🦆",
+     "f": 1
+    },
+    {
+     "p": "RANA",
+     "i": "🐸",
+     "f": 1
+    },
+    {
+     "p": "TORTUGA",
+     "i": "🐢",
+     "f": 1
+    },
+    {
+     "p": "TIBURÓN",
+     "i": "🦈",
+     "f": 1
+    },
+    {
+     "p": "CANGREJO",
+     "i": "🦀",
+     "f": 0
+    },
+    {
+     "p": "PINGÜINO",
+     "i": "🐧",
+     "f": 0
+    },
+    {
+     "p": "CALAMAR",
+     "i": "🦑",
+     "f": 0
+    },
+    {
+     "p": "CAMARÓN",
+     "i": "🦐",
+     "f": 0
+    },
+    {
+     "p": "LANGOSTA",
+     "i": "🦞",
+     "f": 0
+    },
+    {
+     "p": "NUTRIA",
+     "i": "🦦",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "insectos",
+   "nombre": "Insectos",
+   "imagen": "🐝",
+   "palabras": [
+    {
+     "p": "ABEJA",
+     "i": "🐝",
+     "f": 1
+    },
+    {
+     "p": "HORMIGA",
+     "i": "🐜",
+     "f": 1
+    },
+    {
+     "p": "MOSCA",
+     "i": "🪰",
+     "f": 1
+    },
+    {
+     "p": "MARIPOSA",
+     "i": "🦋",
+     "f": 1
+    },
+    {
+     "p": "VAQUITA",
+     "i": "🐞",
+     "f": 1
+    },
+    {
+     "p": "GRILLO",
+     "i": "🦗",
+     "f": 1
+    },
+    {
+     "p": "MOSQUITO",
+     "i": "🦟",
+     "f": 1
+    },
+    {
+     "p": "ORUGA",
+     "i": "🐛",
+     "f": 0
+    },
+    {
+     "p": "ESCARABAJO",
+     "i": "🪲",
+     "f": 0
+    },
+    {
+     "p": "CUCARACHA",
+     "i": "🪳",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "frutas",
+   "nombre": "Frutas",
+   "imagen": "🍎",
+   "palabras": [
+    {
+     "p": "MANZANA",
+     "i": "🍎",
+     "f": 1
+    },
+    {
+     "p": "PERA",
+     "i": "🍐",
+     "f": 1
+    },
+    {
+     "p": "BANANA",
+     "i": "🍌",
+     "f": 1
+    },
+    {
+     "p": "UVA",
+     "i": "🍇",
+     "f": 1
+    },
+    {
+     "p": "NARANJA",
+     "i": "🍊",
+     "f": 1
+    },
+    {
+     "p": "LIMÓN",
+     "i": "🍋",
+     "f": 1
+    },
+    {
+     "p": "FRUTILLA",
+     "i": "🍓",
+     "f": 1
+    },
+    {
+     "p": "SANDÍA",
+     "i": "🍉",
+     "f": 1
+    },
+    {
+     "p": "MELÓN",
+     "i": "🍈",
+     "f": 0
+    },
+    {
+     "p": "CEREZA",
+     "i": "🍒",
+     "f": 0
+    },
+    {
+     "p": "DURAZNO",
+     "i": "🍑",
+     "f": 1
+    },
+    {
+     "p": "ANANÁ",
+     "i": "🍍",
+     "f": 0
+    },
+    {
+     "p": "KIWI",
+     "i": "🥝",
+     "f": 0
+    },
+    {
+     "p": "MANGO",
+     "i": "🥭",
+     "f": 0
+    },
+    {
+     "p": "COCO",
+     "i": "🥥",
+     "f": 0
+    },
+    {
+     "p": "ARÁNDANO",
+     "i": "🫐",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "verduras",
+   "nombre": "Verduras",
+   "imagen": "🥕",
+   "palabras": [
+    {
+     "p": "PAPA",
+     "i": "🥔",
+     "f": 1
+    },
+    {
+     "p": "TOMATE",
+     "i": "🍅",
+     "f": 1
+    },
+    {
+     "p": "LECHUGA",
+     "i": "🥬",
+     "f": 1
+    },
+    {
+     "p": "CHOCLO",
+     "i": "🌽",
+     "f": 1
+    },
+    {
+     "p": "CEBOLLA",
+     "i": "🧅",
+     "f": 1
+    },
+    {
+     "p": "ZANAHORIA",
+     "i": "🥕",
+     "f": 1
+    },
+    {
+     "p": "ZAPALLO",
+     "i": "🎃",
+     "f": 1
+    },
+    {
+     "p": "AJO",
+     "i": "🧄",
+     "f": 0
+    },
+    {
+     "p": "BRÓCOLI",
+     "i": "🥦",
+     "f": 0
+    },
+    {
+     "p": "PEPINO",
+     "i": "🥒",
+     "f": 0
+    },
+    {
+     "p": "BERENJENA",
+     "i": "🍆",
+     "f": 0
+    },
+    {
+     "p": "AJÍ",
+     "i": "🌶️",
+     "f": 0
+    },
+    {
+     "p": "MORRÓN",
+     "i": "🫑",
+     "f": 0
+    },
+    {
+     "p": "BATATA",
+     "i": "🍠",
+     "f": 0
+    },
+    {
+     "p": "PALTA",
+     "i": "🥑",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "instrumentos",
+   "nombre": "Instrumentos musicales",
+   "imagen": "🎸",
+   "palabras": [
+    {
+     "p": "PIANO",
+     "i": "🎹",
+     "f": 1
+    },
+    {
+     "p": "GUITARRA",
+     "i": "🎸",
+     "f": 1
+    },
+    {
+     "p": "TAMBOR",
+     "i": "🥁",
+     "f": 1
+    },
+    {
+     "p": "VIOLÍN",
+     "i": "🎻",
+     "f": 1
+    },
+    {
+     "p": "TROMPETA",
+     "i": "🎺",
+     "f": 1
+    },
+    {
+     "p": "CAMPANA",
+     "i": "🔔",
+     "f": 1
+    },
+    {
+     "p": "SAXOFÓN",
+     "i": "🎷",
+     "f": 0
+    },
+    {
+     "p": "ACORDEÓN",
+     "i": "🪗",
+     "f": 0
+    },
+    {
+     "p": "BANJO",
+     "i": "🪕",
+     "f": 0
+    },
+    {
+     "p": "CORNETA",
+     "i": "📯",
+     "f": 0
+    },
+    {
+     "p": "FLAUTA",
+     "i": null,
+     "f": 1
+    },
+    {
+     "p": "ARPA",
+     "i": null,
+     "f": 0
+    },
+    {
+     "p": "BOMBO",
+     "i": null,
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "deportes",
+   "nombre": "Deportes",
+   "imagen": "🏅",
+   "palabras": [
+    {
+     "p": "FÚTBOL",
+     "i": "⚽",
+     "f": 1
+    },
+    {
+     "p": "TENIS",
+     "i": "🎾",
+     "f": 1
+    },
+    {
+     "p": "BÁSQUET",
+     "i": "🏀",
+     "f": 1
+    },
+    {
+     "p": "VÓLEY",
+     "i": "🏐",
+     "f": 1
+    },
+    {
+     "p": "NATACIÓN",
+     "i": "🏊",
+     "f": 1
+    },
+    {
+     "p": "HOCKEY",
+     "i": "🏑",
+     "f": 1
+    },
+    {
+     "p": "RUGBY",
+     "i": "🏉",
+     "f": 0
+    },
+    {
+     "p": "CICLISMO",
+     "i": "🚴",
+     "f": 0
+    },
+    {
+     "p": "GOLF",
+     "i": "⛳",
+     "f": 0
+    },
+    {
+     "p": "BÉISBOL",
+     "i": "⚾",
+     "f": 0
+    },
+    {
+     "p": "SURF",
+     "i": "🏄",
+     "f": 0
+    },
+    {
+     "p": "KARATE",
+     "i": "🥋",
+     "f": 0
+    },
+    {
+     "p": "PATINAJE",
+     "i": "⛸️",
+     "f": 0
+    },
+    {
+     "p": "REMO",
+     "i": "🚣",
+     "f": 0
+    },
+    {
+     "p": "ESQUÍ",
+     "i": "⛷️",
+     "f": 0
+    },
+    {
+     "p": "ATLETISMO",
+     "i": "🏃",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "futbol",
+   "nombre": "Fútbol",
+   "imagen": "⚽",
+   "palabras": [
+    {
+     "p": "PELOTA",
+     "i": "⚽",
+     "f": 1
+    },
+    {
+     "p": "ARCO",
+     "i": "🥅",
+     "f": 1
+    },
+    {
+     "p": "CAMISETA",
+     "i": "👕",
+     "f": 1
+    },
+    {
+     "p": "BOTINES",
+     "i": "👟",
+     "f": 1
+    },
+    {
+     "p": "GUANTES",
+     "i": "🧤",
+     "f": 1
+    },
+    {
+     "p": "MEDIAS",
+     "i": "🧦",
+     "f": 1
+    },
+    {
+     "p": "TROFEO",
+     "i": "🏆",
+     "f": 1
+    },
+    {
+     "p": "ESTADIO",
+     "i": "🏟️",
+     "f": 0
+    },
+    {
+     "p": "TARJETA",
+     "i": "🟨",
+     "f": 0
+    },
+    {
+     "p": "BANDERÍN",
+     "i": "🚩",
+     "f": 0
+    },
+    {
+     "p": "MEDALLA",
+     "i": "🏅",
+     "f": 0
+    },
+    {
+     "p": "CRONÓMETRO",
+     "i": "⏱️",
+     "f": 0
+    },
+    {
+     "p": "GOL",
+     "i": null,
+     "f": 1
+    },
+    {
+     "p": "CANCHA",
+     "i": null,
+     "f": 1
+    },
+    {
+     "p": "PENAL",
+     "i": null,
+     "f": 0
+    },
+    {
+     "p": "ÁRBITRO",
+     "i": null,
+     "f": 0
+    },
+    {
+     "p": "ARQUERO",
+     "i": null,
+     "f": 0
+    },
+    {
+     "p": "TRIBUNA",
+     "i": null,
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "juegos-actuales",
+   "nombre": "Juegos actuales",
+   "imagen": "🎮",
+   "palabras": [
+    {
+     "p": "CONTROL",
+     "i": "🎮",
+     "f": 1
+    },
+    {
+     "p": "JOYSTICK",
+     "i": "🕹️",
+     "f": 0
+    },
+    {
+     "p": "CELULAR",
+     "i": "📱",
+     "f": 1
+    },
+    {
+     "p": "TABLET",
+     "i": null,
+     "f": 1
+    },
+    {
+     "p": "COMPUTADORA",
+     "i": "💻",
+     "f": 0
+    },
+    {
+     "p": "AURICULARES",
+     "i": "🎧",
+     "f": 0
+    },
+    {
+     "p": "PANTALLA",
+     "i": "🖥️",
+     "f": 1
+    },
+    {
+     "p": "ROBOT",
+     "i": "🤖",
+     "f": 1
+    },
+    {
+     "p": "DADOS",
+     "i": "🎲",
+     "f": 1
+    },
+    {
+     "p": "CARTAS",
+     "i": "🃏",
+     "f": 1
+    },
+    {
+     "p": "ROMPECABEZAS",
+     "i": "🧩",
+     "f": 0
+    },
+    {
+     "p": "AJEDREZ",
+     "i": "♟️",
+     "f": 0
+    },
+    {
+     "p": "BLOQUES",
+     "i": "🧱",
+     "f": 1
+    },
+    {
+     "p": "MAPA",
+     "i": "🗺️",
+     "f": 0
+    },
+    {
+     "p": "NAVE",
+     "i": "🚀",
+     "f": 0
+    },
+    {
+     "p": "CASTILLO",
+     "i": "🏰",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "juguetes",
+   "nombre": "Juguetes",
+   "imagen": "🧸",
+   "palabras": [
+    {
+     "p": "OSITO",
+     "i": "🧸",
+     "f": 1
+    },
+    {
+     "p": "YOYÓ",
+     "i": "🪀",
+     "f": 1
+    },
+    {
+     "p": "AUTITO",
+     "i": "🚗",
+     "f": 1
+    },
+    {
+     "p": "TREN",
+     "i": "🚂",
+     "f": 1
+    },
+    {
+     "p": "GLOBO",
+     "i": "🎈",
+     "f": 1
+    },
+    {
+     "p": "PELOTA",
+     "i": "🏐",
+     "f": 1
+    },
+    {
+     "p": "BALDE",
+     "i": "🪣",
+     "f": 1
+    },
+    {
+     "p": "BARRILETE",
+     "i": "🪁",
+     "f": 1
+    },
+    {
+     "p": "PATINETA",
+     "i": "🛹",
+     "f": 0
+    },
+    {
+     "p": "MONOPATÍN",
+     "i": "🛴",
+     "f": 0
+    },
+    {
+     "p": "CRAYONES",
+     "i": "🖍️",
+     "f": 0
+    },
+    {
+     "p": "MAMUSHKA",
+     "i": "🪆",
+     "f": 0
+    },
+    {
+     "p": "BICICLETA",
+     "i": "🚲",
+     "f": 0
+    },
+    {
+     "p": "TAMBOR",
+     "i": "🥁",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "familia",
+   "nombre": "Familia",
+   "imagen": "👪",
+   "palabras": [
+    {
+     "p": "MAMÁ",
+     "i": "👩",
+     "f": 1
+    },
+    {
+     "p": "PAPÁ",
+     "i": "👨",
+     "f": 1
+    },
+    {
+     "p": "BEBÉ",
+     "i": "👶",
+     "f": 1
+    },
+    {
+     "p": "ABUELA",
+     "i": "👵",
+     "f": 1
+    },
+    {
+     "p": "ABUELO",
+     "i": "👴",
+     "f": 1
+    },
+    {
+     "p": "HERMANA",
+     "i": "👧",
+     "f": 1
+    },
+    {
+     "p": "HERMANO",
+     "i": "👦",
+     "f": 1
+    },
+    {
+     "p": "TÍA",
+     "i": null,
+     "f": 0
+    },
+    {
+     "p": "TÍO",
+     "i": null,
+     "f": 0
+    },
+    {
+     "p": "PRIMA",
+     "i": null,
+     "f": 0
+    },
+    {
+     "p": "PRIMO",
+     "i": null,
+     "f": 0
+    },
+    {
+     "p": "FAMILIA",
+     "i": "👪",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "casa",
+   "nombre": "Casa",
+   "imagen": "🏠",
+   "palabras": [
+    {
+     "p": "CASA",
+     "i": "🏠",
+     "f": 1
+    },
+    {
+     "p": "CAMA",
+     "i": "🛏️",
+     "f": 1
+    },
+    {
+     "p": "SILLA",
+     "i": "🪑",
+     "f": 1
+    },
+    {
+     "p": "PUERTA",
+     "i": "🚪",
+     "f": 1
+    },
+    {
+     "p": "VENTANA",
+     "i": "🪟",
+     "f": 1
+    },
+    {
+     "p": "SOFÁ",
+     "i": "🛋️",
+     "f": 1
+    },
+    {
+     "p": "LLAVE",
+     "i": "🔑",
+     "f": 1
+    },
+    {
+     "p": "DUCHA",
+     "i": "🚿",
+     "f": 0
+    },
+    {
+     "p": "BAÑERA",
+     "i": "🛁",
+     "f": 0
+    },
+    {
+     "p": "INODORO",
+     "i": "🚽",
+     "f": 0
+    },
+    {
+     "p": "ESPEJO",
+     "i": "🪞",
+     "f": 0
+    },
+    {
+     "p": "RELOJ",
+     "i": "⏰",
+     "f": 0
+    },
+    {
+     "p": "ESCOBA",
+     "i": "🧹",
+     "f": 0
+    },
+    {
+     "p": "TAZA",
+     "i": "☕",
+     "f": 1
+    },
+    {
+     "p": "PLATO",
+     "i": "🍽️",
+     "f": 0
+    },
+    {
+     "p": "TELEVISOR",
+     "i": "📺",
+     "f": 0
+    },
+    {
+     "p": "JABÓN",
+     "i": "🧼",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "escuela",
+   "nombre": "Escuela",
+   "imagen": "🏫",
+   "palabras": [
+    {
+     "p": "LÁPIZ",
+     "i": "✏️",
+     "f": 1
+    },
+    {
+     "p": "LIBRO",
+     "i": "📕",
+     "f": 1
+    },
+    {
+     "p": "MOCHILA",
+     "i": "🎒",
+     "f": 1
+    },
+    {
+     "p": "REGLA",
+     "i": "📏",
+     "f": 1
+    },
+    {
+     "p": "TIJERA",
+     "i": "✂️",
+     "f": 1
+    },
+    {
+     "p": "CUADERNO",
+     "i": "📓",
+     "f": 1
+    },
+    {
+     "p": "CRAYÓN",
+     "i": "🖍️",
+     "f": 0
+    },
+    {
+     "p": "ESCUELA",
+     "i": "🏫",
+     "f": 1
+    },
+    {
+     "p": "CARPETA",
+     "i": "📁",
+     "f": 0
+    },
+    {
+     "p": "LAPICERA",
+     "i": "🖊️",
+     "f": 0
+    },
+    {
+     "p": "PINCEL",
+     "i": "🖌️",
+     "f": 0
+    },
+    {
+     "p": "ESCUADRA",
+     "i": "📐",
+     "f": 0
+    },
+    {
+     "p": "ÁBACO",
+     "i": "🧮",
+     "f": 0
+    },
+    {
+     "p": "GLOBO",
+     "i": "🌍",
+     "f": 0
+    },
+    {
+     "p": "GOMA",
+     "i": null,
+     "f": 1
+    },
+    {
+     "p": "PIZARRÓN",
+     "i": null,
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "transporte",
+   "nombre": "Medios de transporte",
+   "imagen": "🚌",
+   "palabras": [
+    {
+     "p": "AUTO",
+     "i": "🚗",
+     "f": 1
+    },
+    {
+     "p": "BARCO",
+     "i": "🚢",
+     "f": 1
+    },
+    {
+     "p": "AVIÓN",
+     "i": "✈️",
+     "f": 1
+    },
+    {
+     "p": "TREN",
+     "i": "🚆",
+     "f": 1
+    },
+    {
+     "p": "MOTO",
+     "i": "🏍️",
+     "f": 1
+    },
+    {
+     "p": "BICI",
+     "i": "🚲",
+     "f": 1
+    },
+    {
+     "p": "COLECTIVO",
+     "i": "🚌",
+     "f": 1
+    },
+    {
+     "p": "CAMIÓN",
+     "i": "🚚",
+     "f": 0
+    },
+    {
+     "p": "TAXI",
+     "i": "🚕",
+     "f": 0
+    },
+    {
+     "p": "SUBTE",
+     "i": "🚇",
+     "f": 0
+    },
+    {
+     "p": "HELICÓPTERO",
+     "i": "🚁",
+     "f": 0
+    },
+    {
+     "p": "COHETE",
+     "i": "🚀",
+     "f": 0
+    },
+    {
+     "p": "LANCHA",
+     "i": "🚤",
+     "f": 0
+    },
+    {
+     "p": "AMBULANCIA",
+     "i": "🚑",
+     "f": 0
+    },
+    {
+     "p": "TRACTOR",
+     "i": "🚜",
+     "f": 0
+    },
+    {
+     "p": "VELERO",
+     "i": "⛵",
+     "f": 0
+    },
+    {
+     "p": "CANOA",
+     "i": "🛶",
+     "f": 0
+    }
+   ]
+  },
+  {
+   "id": "vestimenta",
+   "nombre": "Vestimenta",
+   "imagen": "👕",
+   "palabras": [
+    {
+     "p": "REMERA",
+     "i": "👕",
+     "f": 1
+    },
+    {
+     "p": "PANTALÓN",
+     "i": "👖",
+     "f": 1
+    },
+    {
+     "p": "VESTIDO",
+     "i": "👗",
+     "f": 1
+    },
+    {
+     "p": "MEDIAS",
+     "i": "🧦",
+     "f": 1
+    },
+    {
+     "p": "ZAPATILLAS",
+     "i": "👟",
+     "f": 1
+    },
+    {
+     "p": "GORRA",
+     "i": "🧢",
+     "f": 1
+    },
+    {
+     "p": "BUFANDA",
+     "i": "🧣",
+     "f": 0
+    },
+    {
+     "p": "GUANTES",
+     "i": "🧤",
+     "f": 0
+    },
+    {
+     "p": "CAMPERA",
+     "i": "🧥",
+     "f": 0
+    },
+    {
+     "p": "SOMBRERO",
+     "i": "👒",
+     "f": 0
+    },
+    {
+     "p": "SHORT",
+     "i": "🩳",
+     "f": 0
+    },
+    {
+     "p": "BOTAS",
+     "i": "👢",
+     "f": 0
+    },
+    {
+     "p": "MALLA",
+     "i": "🩱",
+     "f": 0
+    },
+    {
+     "p": "ANTEOJOS",
+     "i": "👓",
+     "f": 0
+    },
+    {
+     "p": "OJOTAS",
+     "i": "🩴",
+     "f": 0
+    },
+    {
+     "p": "ZAPATOS",
+     "i": "👞",
+     "f": 0
+    }
+   ]
+  }
+ ]
+}

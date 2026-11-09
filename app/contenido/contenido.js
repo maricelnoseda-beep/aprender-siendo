@@ -159,6 +159,17 @@ const ACTIVITIES = [
     ok: ["Miraste fila por fila y la encontraste."], err: ["Casi. Probá mirar fila por fila."], ficha: { variant: "B" }
   },
   {
+    /* Explorapalabras (especificación de la supervisora, 2026-11-09). Todo PRUEBA: textos, edades y fichas los valida PSP-SR (RT-EXP-001).
+       Sin sugerencia por diagnóstico (RT-EST-001, P6). Banco de palabras y parámetros: app/herramientas/explorapalabras/. */
+    id: "explorapalabras", name: "Explorapalabras", zone: "mirar", skill: "buscar palabras letra por letra", pillar: "Comunicar",
+    area: "Reconocimiento de letras y palabras, atención y discriminación visual", ageMin: 5, ageMax: 18, suggestedFor: [],
+    instruction: "Elegí qué palabras querés buscar y encontralas en la sopa de letras. Cuando termines, tocá «Terminé de jugar».",
+    forFamily: "Antes de empezar, una persona adulta elige la Estación y el grado. Acompañá sin señalar dónde está la palabra: podés sugerir buscar primero la primera letra.",
+    levels: ["Fácil", "Intermedio", "Difícil"], strategies: ["Buscar la primera letra", "Seguir el camino de las letras", "Usar una pista"],
+    discover: "Busco la primera letra de la palabra. Cuando la encuentro, miro las letras de al lado para seguir el camino.",
+    ok: ["Buscaste la primera letra y seguiste el camino."], err: [], ficha: { variant: "B" }
+  },
+  {
     id: "contar", name: "Contar y elegir", zone: "numeros", skill: "contar y comparar", pillar: "Hacer",
     area: "Cálculo inicial", ageMin: 4, ageMax: 8, suggestedFor: ["dea-calculo", "en-evaluacion", "di"],
     instruction: "Contá los puntos y tocá el número correcto.",
