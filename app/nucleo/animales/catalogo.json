@@ -1,0 +1,523 @@
+[
+ {
+  "label": "Granja",
+  "animals": [
+   {
+    "id": "cerdo",
+    "label": "Cerdo",
+    "faces": [
+     "nucleo/animales/cerdo/0.webp",
+     "nucleo/animales/cerdo/1.webp",
+     "nucleo/animales/cerdo/2.webp",
+     "nucleo/animales/cerdo/3.webp",
+     "nucleo/animales/cerdo/4.webp",
+     "nucleo/animales/cerdo/5.webp",
+     "nucleo/animales/cerdo/6.webp",
+     "nucleo/animales/cerdo/7.webp",
+     "nucleo/animales/cerdo/8.webp",
+     "nucleo/animales/cerdo/9.webp"
+    ]
+   },
+   {
+    "id": "gato",
+    "label": "Gato",
+    "faces": [
+     "nucleo/animales/gato/0.webp",
+     "nucleo/animales/gato/1.webp",
+     "nucleo/animales/gato/2.webp",
+     "nucleo/animales/gato/3.webp",
+     "nucleo/animales/gato/4.webp",
+     "nucleo/animales/gato/5.webp",
+     "nucleo/animales/gato/6.webp",
+     "nucleo/animales/gato/7.webp",
+     "nucleo/animales/gato/8.webp",
+     "nucleo/animales/gato/9.webp"
+    ]
+   },
+   {
+    "id": "oveja",
+    "label": "Oveja",
+    "faces": [
+     "nucleo/animales/oveja/0.webp",
+     "nucleo/animales/oveja/1.webp",
+     "nucleo/animales/oveja/2.webp",
+     "nucleo/animales/oveja/3.webp",
+     "nucleo/animales/oveja/4.webp",
+     "nucleo/animales/oveja/5.webp",
+     "nucleo/animales/oveja/6.webp",
+     "nucleo/animales/oveja/7.webp",
+     "nucleo/animales/oveja/8.webp",
+     "nucleo/animales/oveja/9.webp"
+    ]
+   },
+   {
+    "id": "pato",
+    "label": "Pato",
+    "faces": [
+     "nucleo/animales/pato/0.webp",
+     "nucleo/animales/pato/1.webp",
+     "nucleo/animales/pato/2.webp",
+     "nucleo/animales/pato/3.webp",
+     "nucleo/animales/pato/4.webp",
+     "nucleo/animales/pato/5.webp",
+     "nucleo/animales/pato/6.webp",
+     "nucleo/animales/pato/7.webp",
+     "nucleo/animales/pato/8.webp",
+     "nucleo/animales/pato/9.webp"
+    ]
+   },
+   {
+    "id": "perro",
+    "label": "Perro",
+    "faces": [
+     "nucleo/animales/perro/0.webp",
+     "nucleo/animales/perro/1.webp",
+     "nucleo/animales/perro/2.webp",
+     "nucleo/animales/perro/3.webp",
+     "nucleo/animales/perro/4.webp",
+     "nucleo/animales/perro/5.webp",
+     "nucleo/animales/perro/6.webp",
+     "nucleo/animales/perro/7.webp",
+     "nucleo/animales/perro/8.webp",
+     "nucleo/animales/perro/9.webp"
+    ]
+   },
+   {
+    "id": "pollito",
+    "label": "Pollito",
+    "faces": [
+     "nucleo/animales/pollito/0.webp",
+     "nucleo/animales/pollito/1.webp",
+     "nucleo/animales/pollito/2.webp",
+     "nucleo/animales/pollito/3.webp",
+     "nucleo/animales/pollito/4.webp",
+     "nucleo/animales/pollito/5.webp",
+     "nucleo/animales/pollito/6.webp",
+     "nucleo/animales/pollito/7.webp",
+     "nucleo/animales/pollito/8.webp",
+     "nucleo/animales/pollito/9.webp"
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Dinosaurios",
+  "animals": [
+   {
+    "id": "anquilosaurio",
+    "label": "Anquilosaurio",
+    "faces": [
+     "nucleo/animales/anquilosaurio/0.webp",
+     "nucleo/animales/anquilosaurio/1.webp",
+     "nucleo/animales/anquilosaurio/2.webp",
+     "nucleo/animales/anquilosaurio/3.webp",
+     "nucleo/animales/anquilosaurio/4.webp",
+     "nucleo/animales/anquilosaurio/5.webp",
+     "nucleo/animales/anquilosaurio/6.webp",
+     "nucleo/animales/anquilosaurio/7.webp",
+     "nucleo/animales/anquilosaurio/8.webp",
+     "nucleo/animales/anquilosaurio/9.webp"
+    ]
+   },
+   {
+    "id": "diplodocus",
+    "label": "Diplodocus",
+    "faces": [
+     "nucleo/animales/diplodocus/0.webp",
+     "nucleo/animales/diplodocus/1.webp",
+     "nucleo/animales/diplodocus/2.webp",
+     "nucleo/animales/diplodocus/3.webp",
+     "nucleo/animales/diplodocus/4.webp",
+     "nucleo/animales/diplodocus/5.webp",
+     "nucleo/animales/diplodocus/6.webp",
+     "nucleo/animales/diplodocus/7.webp",
+     "nucleo/animales/diplodocus/8.webp",
+     "nucleo/animales/diplodocus/9.webp"
+    ]
+   },
+   {
+    "id": "estegosaurio",
+    "label": "Estegosaurio",
+    "faces": [
+     "nucleo/animales/estegosaurio/0.webp",
+     "nucleo/animales/estegosaurio/1.webp",
+     "nucleo/animales/estegosaurio/2.webp",
+     "nucleo/animales/estegosaurio/3.webp",
+     "nucleo/animales/estegosaurio/4.webp",
+     "nucleo/animales/estegosaurio/5.webp",
+     "nucleo/animales/estegosaurio/6.webp",
+     "nucleo/animales/estegosaurio/7.webp",
+     "nucleo/animales/estegosaurio/8.webp",
+     "nucleo/animales/estegosaurio/9.webp"
+    ]
+   },
+   {
+    "id": "parasaurolofo",
+    "label": "Parasaurólofo",
+    "faces": [
+     "nucleo/animales/parasaurolofo/0.webp",
+     "nucleo/animales/parasaurolofo/1.webp",
+     "nucleo/animales/parasaurolofo/2.webp",
+     "nucleo/animales/parasaurolofo/3.webp",
+     "nucleo/animales/parasaurolofo/4.webp",
+     "nucleo/animales/parasaurolofo/5.webp",
+     "nucleo/animales/parasaurolofo/6.webp",
+     "nucleo/animales/parasaurolofo/7.webp",
+     "nucleo/animales/parasaurolofo/8.webp",
+     "nucleo/animales/parasaurolofo/9.webp"
+    ]
+   },
+   {
+    "id": "tiranosaurio_rex",
+    "label": "Tiranosaurio rex",
+    "faces": [
+     "nucleo/animales/tiranosaurio_rex/0.webp",
+     "nucleo/animales/tiranosaurio_rex/1.webp",
+     "nucleo/animales/tiranosaurio_rex/2.webp",
+     "nucleo/animales/tiranosaurio_rex/3.webp",
+     "nucleo/animales/tiranosaurio_rex/4.webp",
+     "nucleo/animales/tiranosaurio_rex/5.webp",
+     "nucleo/animales/tiranosaurio_rex/6.webp",
+     "nucleo/animales/tiranosaurio_rex/7.webp",
+     "nucleo/animales/tiranosaurio_rex/8.webp",
+     "nucleo/animales/tiranosaurio_rex/9.webp"
+    ]
+   },
+   {
+    "id": "triceratops",
+    "label": "Triceratops",
+    "faces": [
+     "nucleo/animales/triceratops/0.webp",
+     "nucleo/animales/triceratops/1.webp",
+     "nucleo/animales/triceratops/2.webp",
+     "nucleo/animales/triceratops/3.webp",
+     "nucleo/animales/triceratops/4.webp",
+     "nucleo/animales/triceratops/5.webp",
+     "nucleo/animales/triceratops/6.webp",
+     "nucleo/animales/triceratops/7.webp",
+     "nucleo/animales/triceratops/8.webp",
+     "nucleo/animales/triceratops/9.webp"
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Selva",
+  "animals": [
+   {
+    "id": "cebra",
+    "label": "Cebra",
+    "faces": [
+     "nucleo/animales/cebra/0.webp",
+     "nucleo/animales/cebra/1.webp",
+     "nucleo/animales/cebra/2.webp",
+     "nucleo/animales/cebra/3.webp",
+     "nucleo/animales/cebra/4.webp",
+     "nucleo/animales/cebra/5.webp",
+     "nucleo/animales/cebra/6.webp",
+     "nucleo/animales/cebra/7.webp",
+     "nucleo/animales/cebra/8.webp",
+     "nucleo/animales/cebra/9.webp"
+    ]
+   },
+   {
+    "id": "elefante",
+    "label": "Elefante",
+    "faces": [
+     "nucleo/animales/elefante/0.webp",
+     "nucleo/animales/elefante/1.webp",
+     "nucleo/animales/elefante/2.webp",
+     "nucleo/animales/elefante/3.webp",
+     "nucleo/animales/elefante/4.webp",
+     "nucleo/animales/elefante/5.webp",
+     "nucleo/animales/elefante/6.webp",
+     "nucleo/animales/elefante/7.webp",
+     "nucleo/animales/elefante/8.webp",
+     "nucleo/animales/elefante/9.webp"
+    ]
+   },
+   {
+    "id": "jirafa",
+    "label": "Jirafa",
+    "faces": [
+     "nucleo/animales/jirafa/0.webp",
+     "nucleo/animales/jirafa/1.webp",
+     "nucleo/animales/jirafa/2.webp",
+     "nucleo/animales/jirafa/3.webp",
+     "nucleo/animales/jirafa/4.webp",
+     "nucleo/animales/jirafa/5.webp",
+     "nucleo/animales/jirafa/6.webp",
+     "nucleo/animales/jirafa/7.webp",
+     "nucleo/animales/jirafa/8.webp",
+     "nucleo/animales/jirafa/9.webp"
+    ]
+   },
+   {
+    "id": "leon",
+    "label": "León",
+    "faces": [
+     "nucleo/animales/leon/0.webp",
+     "nucleo/animales/leon/1.webp",
+     "nucleo/animales/leon/2.webp",
+     "nucleo/animales/leon/3.webp",
+     "nucleo/animales/leon/4.webp",
+     "nucleo/animales/leon/5.webp",
+     "nucleo/animales/leon/6.webp",
+     "nucleo/animales/leon/7.webp",
+     "nucleo/animales/leon/8.webp",
+     "nucleo/animales/leon/9.webp"
+    ]
+   },
+   {
+    "id": "mono",
+    "label": "Mono",
+    "faces": [
+     "nucleo/animales/mono/0.webp",
+     "nucleo/animales/mono/1.webp",
+     "nucleo/animales/mono/2.webp",
+     "nucleo/animales/mono/3.webp",
+     "nucleo/animales/mono/4.webp",
+     "nucleo/animales/mono/5.webp",
+     "nucleo/animales/mono/6.webp",
+     "nucleo/animales/mono/7.webp",
+     "nucleo/animales/mono/8.webp",
+     "nucleo/animales/mono/9.webp"
+    ]
+   },
+   {
+    "id": "oso",
+    "label": "Oso",
+    "faces": [
+     "nucleo/animales/oso/0.webp",
+     "nucleo/animales/oso/1.webp",
+     "nucleo/animales/oso/2.webp",
+     "nucleo/animales/oso/3.webp",
+     "nucleo/animales/oso/4.webp",
+     "nucleo/animales/oso/5.webp",
+     "nucleo/animales/oso/6.webp",
+     "nucleo/animales/oso/7.webp",
+     "nucleo/animales/oso/8.webp",
+     "nucleo/animales/oso/9.webp"
+    ]
+   },
+   {
+    "id": "tigre",
+    "label": "Tigre",
+    "faces": [
+     "nucleo/animales/tigre/0.webp",
+     "nucleo/animales/tigre/1.webp",
+     "nucleo/animales/tigre/2.webp",
+     "nucleo/animales/tigre/3.webp",
+     "nucleo/animales/tigre/4.webp",
+     "nucleo/animales/tigre/5.webp",
+     "nucleo/animales/tigre/6.webp",
+     "nucleo/animales/tigre/7.webp",
+     "nucleo/animales/tigre/8.webp",
+     "nucleo/animales/tigre/9.webp"
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Mar",
+  "animals": [
+   {
+    "id": "ballena",
+    "label": "Ballena",
+    "faces": [
+     "nucleo/animales/ballena/0.webp",
+     "nucleo/animales/ballena/1.webp",
+     "nucleo/animales/ballena/2.webp",
+     "nucleo/animales/ballena/3.webp",
+     "nucleo/animales/ballena/4.webp",
+     "nucleo/animales/ballena/5.webp",
+     "nucleo/animales/ballena/6.webp",
+     "nucleo/animales/ballena/7.webp",
+     "nucleo/animales/ballena/8.webp",
+     "nucleo/animales/ballena/9.webp"
+    ]
+   },
+   {
+    "id": "delfin",
+    "label": "Delfín",
+    "faces": [
+     "nucleo/animales/delfin/0.webp",
+     "nucleo/animales/delfin/1.webp",
+     "nucleo/animales/delfin/2.webp",
+     "nucleo/animales/delfin/3.webp",
+     "nucleo/animales/delfin/4.webp",
+     "nucleo/animales/delfin/5.webp",
+     "nucleo/animales/delfin/6.webp",
+     "nucleo/animales/delfin/7.webp",
+     "nucleo/animales/delfin/8.webp",
+     "nucleo/animales/delfin/9.webp"
+    ]
+   },
+   {
+    "id": "estrella_de_mar",
+    "label": "Estrella de mar",
+    "faces": [
+     "nucleo/animales/estrella_de_mar/0.webp",
+     "nucleo/animales/estrella_de_mar/1.webp",
+     "nucleo/animales/estrella_de_mar/2.webp",
+     "nucleo/animales/estrella_de_mar/3.webp",
+     "nucleo/animales/estrella_de_mar/4.webp",
+     "nucleo/animales/estrella_de_mar/5.webp",
+     "nucleo/animales/estrella_de_mar/6.webp",
+     "nucleo/animales/estrella_de_mar/7.webp",
+     "nucleo/animales/estrella_de_mar/8.webp",
+     "nucleo/animales/estrella_de_mar/9.webp"
+    ]
+   },
+   {
+    "id": "pez_payaso",
+    "label": "Pez payaso",
+    "faces": [
+     "nucleo/animales/pez_payaso/0.webp",
+     "nucleo/animales/pez_payaso/1.webp",
+     "nucleo/animales/pez_payaso/2.webp",
+     "nucleo/animales/pez_payaso/3.webp",
+     "nucleo/animales/pez_payaso/4.webp",
+     "nucleo/animales/pez_payaso/5.webp",
+     "nucleo/animales/pez_payaso/6.webp",
+     "nucleo/animales/pez_payaso/7.webp",
+     "nucleo/animales/pez_payaso/8.webp",
+     "nucleo/animales/pez_payaso/9.webp"
+    ]
+   },
+   {
+    "id": "pulpo",
+    "label": "Pulpo",
+    "faces": [
+     "nucleo/animales/pulpo/0.webp",
+     "nucleo/animales/pulpo/1.webp",
+     "nucleo/animales/pulpo/2.webp",
+     "nucleo/animales/pulpo/3.webp",
+     "nucleo/animales/pulpo/4.webp",
+     "nucleo/animales/pulpo/5.webp",
+     "nucleo/animales/pulpo/6.webp",
+     "nucleo/animales/pulpo/7.webp",
+     "nucleo/animales/pulpo/8.webp",
+     "nucleo/animales/pulpo/9.webp"
+    ]
+   },
+   {
+    "id": "tiburon",
+    "label": "Tiburón",
+    "faces": [
+     "nucleo/animales/tiburon/0.webp",
+     "nucleo/animales/tiburon/1.webp",
+     "nucleo/animales/tiburon/2.webp",
+     "nucleo/animales/tiburon/3.webp",
+     "nucleo/animales/tiburon/4.webp",
+     "nucleo/animales/tiburon/5.webp",
+     "nucleo/animales/tiburon/6.webp",
+     "nucleo/animales/tiburon/7.webp",
+     "nucleo/animales/tiburon/8.webp",
+     "nucleo/animales/tiburon/9.webp"
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Insectos y araña",
+  "animals": [
+   {
+    "id": "abeja",
+    "label": "Abeja",
+    "faces": [
+     "nucleo/animales/abeja/0.webp",
+     "nucleo/animales/abeja/1.webp",
+     "nucleo/animales/abeja/2.webp",
+     "nucleo/animales/abeja/3.webp",
+     "nucleo/animales/abeja/4.webp",
+     "nucleo/animales/abeja/5.webp",
+     "nucleo/animales/abeja/6.webp",
+     "nucleo/animales/abeja/7.webp",
+     "nucleo/animales/abeja/8.webp",
+     "nucleo/animales/abeja/9.webp"
+    ]
+   },
+   {
+    "id": "arana",
+    "label": "Araña",
+    "faces": [
+     "nucleo/animales/arana/0.webp",
+     "nucleo/animales/arana/1.webp",
+     "nucleo/animales/arana/2.webp",
+     "nucleo/animales/arana/3.webp",
+     "nucleo/animales/arana/4.webp",
+     "nucleo/animales/arana/5.webp",
+     "nucleo/animales/arana/6.webp",
+     "nucleo/animales/arana/7.webp",
+     "nucleo/animales/arana/8.webp",
+     "nucleo/animales/arana/9.webp"
+    ]
+   },
+   {
+    "id": "grillo",
+    "label": "Grillo",
+    "faces": [
+     "nucleo/animales/grillo/0.webp",
+     "nucleo/animales/grillo/1.webp",
+     "nucleo/animales/grillo/2.webp",
+     "nucleo/animales/grillo/3.webp",
+     "nucleo/animales/grillo/4.webp",
+     "nucleo/animales/grillo/5.webp",
+     "nucleo/animales/grillo/6.webp",
+     "nucleo/animales/grillo/7.webp",
+     "nucleo/animales/grillo/8.webp",
+     "nucleo/animales/grillo/9.webp"
+    ]
+   },
+   {
+    "id": "hormiga",
+    "label": "Hormiga",
+    "faces": [
+     "nucleo/animales/hormiga/0.webp",
+     "nucleo/animales/hormiga/1.webp",
+     "nucleo/animales/hormiga/2.webp",
+     "nucleo/animales/hormiga/3.webp",
+     "nucleo/animales/hormiga/4.webp",
+     "nucleo/animales/hormiga/5.webp",
+     "nucleo/animales/hormiga/6.webp",
+     "nucleo/animales/hormiga/7.webp",
+     "nucleo/animales/hormiga/8.webp",
+     "nucleo/animales/hormiga/9.webp"
+    ]
+   },
+   {
+    "id": "mariposa",
+    "label": "Mariposa",
+    "faces": [
+     "nucleo/animales/mariposa/0.webp",
+     "nucleo/animales/mariposa/1.webp",
+     "nucleo/animales/mariposa/2.webp",
+     "nucleo/animales/mariposa/3.webp",
+     "nucleo/animales/mariposa/4.webp",
+     "nucleo/animales/mariposa/5.webp",
+     "nucleo/animales/mariposa/6.webp",
+     "nucleo/animales/mariposa/7.webp",
+     "nucleo/animales/mariposa/8.webp",
+     "nucleo/animales/mariposa/9.webp"
+    ]
+   },
+   {
+    "id": "mosquito",
+    "label": "Mosquito",
+    "faces": [
+     "nucleo/animales/mosquito/0.webp",
+     "nucleo/animales/mosquito/1.webp",
+     "nucleo/animales/mosquito/2.webp",
+     "nucleo/animales/mosquito/3.webp",
+     "nucleo/animales/mosquito/4.webp",
+     "nucleo/animales/mosquito/5.webp",
+     "nucleo/animales/mosquito/6.webp",
+     "nucleo/animales/mosquito/7.webp",
+     "nucleo/animales/mosquito/8.webp",
+     "nucleo/animales/mosquito/9.webp"
+    ]
+   }
+  ]
+ }
+]

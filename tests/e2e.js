@@ -44,9 +44,10 @@ async function loginPro(p, email) {
 
 (async () => {
   const b = await chromium.launch();
-  const ctx = await b.newContext({ viewport: { width: 1200, height: 900 } });
+  const ctx = await b.newContext({ viewport: { width: 1200, height: 900 }, ...(process.env.SEMILLA ? { reducedMotion: 'reduce' } : {}) });
   await ctx.route(/fonts\.(googleapis|gstatic)/, r => r.abort());
   await ctx.addInitScript(() => { window.__AS_FAST = true; });
+  if (process.env.SEMILLA) await ctx.addInitScript(() => { let s = 12345; Math.random = () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646; });
   const p = await ctx.newPage(); global.__page = p;
   const errs = []; p.on('pageerror', e => errs.push('pageerror: ' + e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
   await p.goto(BASE);

@@ -1,6 +1,8 @@
 app/dist/
+app/dist-un-archivo/
 node_modules/
 *.png
+!app/nucleo/imagenes/**/*.png
 .env
 .env.*
 .DS_Store

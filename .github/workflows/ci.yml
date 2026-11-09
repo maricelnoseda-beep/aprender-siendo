@@ -17,10 +17,10 @@ jobs:
         with: { node-version: "22" }
       - name: Armar
         run: python3 app/build.py
-      - name: Verificar sintaxis
-        run: |
-          sed -n '/<script>/,/<\/script>/p' app/dist/index.html | sed '1d;$d' > /tmp/app.js
-          node --check /tmp/app.js
+      - name: Armar también la versión de un solo archivo (paquete de revisión)
+        run: python3 app/build.py --un-archivo
+      - name: Verificar sintaxis de cada módulo
+        run: for f in $(find app/dist -name '*.js'); do node --check "$f" || exit 1; done
       - name: Reglas deterministas (casos de prueba de la sección 8)
         run: node tests/rules.test.js
       - name: Instalar navegador de prueba
@@ -29,7 +29,7 @@ jobs:
         run: |
           (cd app/dist && python3 -m http.server 8765 &) && sleep 1
           node tests/e2e.js
-      - name: Huella del artefacto
-        run: sha256sum app/dist/index.html | tee app/dist/SHA256
+      - name: Huella del artefacto (manifiesto con la huella de cada archivo y módulo)
+        run: sha256sum app/dist/manifiesto.json
       - uses: actions/upload-artifact@v4
-        with: { name: aprender-siendo-dist, path: app/dist/ }
+        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/" }

@@ -1,0 +1,45 @@
+{
+  "_nota": "Orden de carga del portal. Cada carpeta de app/areas y app/herramientas es un módulo con su modulo.json. Un cambio en nucleo/ exige la batería completa (ADR-009).",
+  "version": "0.4.0-beta2",
+  "estilos": [
+    {
+      "archivo": "nucleo/estilos/identidad.css",
+      "id": "brand-font"
+    },
+    {
+      "archivo": "nucleo/estilos/portal.css"
+    },
+    {
+      "archivo": "nucleo/estilos/actividades.css",
+      "id": "as-interfaz-actividades"
+    }
+  ],
+  "catalogo_animales": "nucleo/animales/catalogo.json",
+  "scripts": [
+    "nucleo/recursos.js",
+    "contenido/contenido.js",
+    "nucleo/reglas.js",
+    "nucleo/datos.js",
+    "nucleo/indicadores.js",
+    "nucleo/ilustraciones.js",
+    "nucleo/marca.js",
+    "nucleo/motor-actividades.js",
+    "herramientas/isla-de-juegos/herramienta.js",
+    "herramientas/secuencias/herramienta.js",
+    "herramientas/distinto/herramienta.js",
+    "herramientas/contar/herramienta.js",
+    "herramientas/clasificar/herramienta.js",
+    "herramientas/memoria/herramienta.js",
+    "areas/ninos/aventura.js",
+    "nucleo/utilidades.js",
+    "nucleo/interfaz-comun.js",
+    "nucleo/render.js",
+    "areas/inicio/inicio.js",
+    "areas/familia/familia.js",
+    "areas/profesional/profesional.js",
+    "areas/cuenta/cuenta.js",
+    "areas/administracion/administracion.js",
+    "areas/legal/legal.js",
+    "nucleo/arranque.js"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "cuenta",
+  "nombre": "Mi cuenta, datos y baja",
+  "tipo": "area",
+  "version": "0.4.0-beta2",
+  "fec": "a completar por PSP-SR",
+  "estado": "borrador: sin aprobación clínica ni técnica",
+  "activo": true
+}

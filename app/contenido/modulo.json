@@ -1,0 +1,9 @@
+{
+  "id": "contenido",
+  "nombre": "Contenido dirigido a personas y umbrales clínicos (BORRADOR, REVISAR por PSP-SR y la supervisora)",
+  "tipo": "contenido",
+  "version": "0.4.0-beta2",
+  "fec": "a completar por PSP-SR",
+  "estado": "borrador: sin aprobación clínica ni técnica",
+  "activo": true
+}
