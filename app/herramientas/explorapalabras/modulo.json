@@ -1,0 +1,402 @@
+{
+  "id": "explorapalabras",
+  "nombre": "Explorapalabras",
+  "tipo": "herramienta",
+  "version": "0.1.0-prueba",
+  "fecha": "2026-11-09",
+  "origen": "Especificación de la supervisora «Explorapalabras» (2026-11-09)",
+  "fec": "a completar por PSP-SR (mensaje RT-EXP-001)",
+  "estado": "borrador: sin aprobación clínica ni técnica · contenido de prueba no validado",
+  "activo": true,
+  "_nota": "Los parámetros de cada grado son la propuesta técnica de DEV-IA a partir de la especificación. Qué cambia en cada grado es contenido clínico: lo valida PSP-SR y lo aprueba la supervisora (CRIT-EST-001 §4 y §5, RT-EST-001 B.2).",
+  "estaciones": {
+    "criterio": "CRIT-EST-001 v1.0",
+    "estado_clinico": "propuesto por DEV-IA",
+    "variantes": [
+      {
+        "estacion": "explorar",
+        "nombre": "Estación 1: Explorar",
+        "habilidades": [
+          "identificacion-letras-palabras-familiares",
+          "asociacion-visual-auditiva",
+          "atencion-consignas-simples"
+        ],
+        "dimensiones_que_cambian": [
+          "cantidad-estimulos",
+          "extension-palabras",
+          "complejidad-relaciones"
+        ],
+        "apoyos": [
+          "imagen-junto-a-la-palabra",
+          "nombre-en-audio",
+          "dos-pistas-primera-letra",
+          "palabra-encontrada-marcada"
+        ],
+        "modalidad_respuesta": [
+          "tocar-primera-y-ultima-letra",
+          "arrastrar"
+        ],
+        "adaptaciones": [
+          "modo-palabras-o-imagenes",
+          "mayuscula-o-minuscula",
+          "tiempo-sin-limite"
+        ],
+        "progresion": "REVISAR PSP-SR",
+        "grados": {
+          "facil": {
+            "describe": "3 palabras cortas en una cuadrícula de 6 × 4, solo de izquierda a derecha; las letras de relleno no aparecen en las palabras",
+            "parametros": {
+              "columnas": 6,
+              "filas": 4,
+              "palabras": 3,
+              "largo": [
+                3,
+                6
+              ],
+              "direcciones": [
+                "E"
+              ],
+              "relleno": "distinto",
+              "senuelos": 0,
+              "cruces": false,
+              "familiares": true
+            }
+          },
+          "intermedio": {
+            "describe": "4 palabras en 7 × 5, solo de izquierda a derecha; relleno con letras cualesquiera",
+            "parametros": {
+              "columnas": 7,
+              "filas": 5,
+              "palabras": 4,
+              "largo": [
+                3,
+                6
+              ],
+              "direcciones": [
+                "E"
+              ],
+              "relleno": "mixto",
+              "senuelos": 0,
+              "cruces": false,
+              "familiares": true
+            }
+          },
+          "dificil": {
+            "describe": "5 palabras en 8 × 6, solo de izquierda a derecha; relleno con letras de las mismas palabras",
+            "parametros": {
+              "columnas": 8,
+              "filas": 6,
+              "palabras": 5,
+              "largo": [
+                3,
+                7
+              ],
+              "direcciones": [
+                "E"
+              ],
+              "relleno": "parecido",
+              "senuelos": 0,
+              "cruces": false,
+              "familiares": true
+            }
+          }
+        }
+      },
+      {
+        "estacion": "reconocer",
+        "nombre": "Estación 2: Reconocer",
+        "habilidades": [
+          "reconocimiento-palabras",
+          "asociacion-imagen-palabra",
+          "discriminacion-visual",
+          "atencion-sostenida"
+        ],
+        "dimensiones_que_cambian": [
+          "cantidad-estimulos",
+          "extension-palabras",
+          "complejidad-relaciones"
+        ],
+        "apoyos": [
+          "imagen-junto-a-la-palabra",
+          "nombre-en-audio",
+          "dos-pistas-primera-letra",
+          "palabra-encontrada-marcada"
+        ],
+        "modalidad_respuesta": [
+          "tocar-primera-y-ultima-letra",
+          "arrastrar"
+        ],
+        "adaptaciones": [
+          "modo-palabras-o-imagenes",
+          "mayuscula-o-minuscula",
+          "tiempo-sin-limite"
+        ],
+        "progresion": "REVISAR PSP-SR",
+        "grados": {
+          "facil": {
+            "describe": "4 palabras en 7 × 7, horizontales y verticales; relleno con letras que no están en las palabras",
+            "parametros": {
+              "columnas": 7,
+              "filas": 7,
+              "palabras": 4,
+              "largo": [
+                3,
+                6
+              ],
+              "direcciones": [
+                "E",
+                "S"
+              ],
+              "relleno": "distinto",
+              "senuelos": 0,
+              "cruces": false,
+              "familiares": true
+            }
+          },
+          "intermedio": {
+            "describe": "6 palabras en 8 × 8, horizontales y verticales; relleno con letras cualesquiera",
+            "parametros": {
+              "columnas": 8,
+              "filas": 8,
+              "palabras": 6,
+              "largo": [
+                3,
+                7
+              ],
+              "direcciones": [
+                "E",
+                "S"
+              ],
+              "relleno": "mixto",
+              "senuelos": 0,
+              "cruces": false,
+              "familiares": true
+            }
+          },
+          "dificil": {
+            "describe": "7 palabras en 9 × 9, horizontales y verticales que pueden cruzarse; relleno con letras de las mismas palabras",
+            "parametros": {
+              "columnas": 9,
+              "filas": 9,
+              "palabras": 7,
+              "largo": [
+                3,
+                8
+              ],
+              "direcciones": [
+                "E",
+                "S"
+              ],
+              "relleno": "parecido",
+              "senuelos": 0,
+              "cruces": true,
+              "familiares": true
+            }
+          }
+        }
+      },
+      {
+        "estacion": "integrar",
+        "nombre": "Estación 3: Integrar",
+        "habilidades": [
+          "lectura-comprension-palabras",
+          "organizacion-planificacion",
+          "memoria-de-trabajo"
+        ],
+        "dimensiones_que_cambian": [
+          "cantidad-estimulos",
+          "extension-palabras",
+          "complejidad-relaciones",
+          "necesidad-planificacion",
+          "disponibilidad-apoyos"
+        ],
+        "apoyos": [
+          "nombre-en-audio-al-tocar-la-palabra",
+          "dos-pistas-primera-letra",
+          "palabra-encontrada-marcada"
+        ],
+        "modalidad_respuesta": [
+          "tocar-primera-y-ultima-letra",
+          "arrastrar"
+        ],
+        "adaptaciones": [
+          "modo-palabras-o-imagenes",
+          "mayuscula-o-minuscula",
+          "tiempo-sin-limite"
+        ],
+        "progresion": "REVISAR PSP-SR",
+        "grados": {
+          "facil": {
+            "describe": "6 palabras más largas en 9 × 9: horizontales, verticales y en diagonal hacia abajo",
+            "parametros": {
+              "columnas": 9,
+              "filas": 9,
+              "palabras": 6,
+              "largo": [
+                4,
+                8
+              ],
+              "direcciones": [
+                "E",
+                "S",
+                "SE"
+              ],
+              "relleno": "mixto",
+              "senuelos": 0,
+              "cruces": true,
+              "familiares": false
+            }
+          },
+          "intermedio": {
+            "describe": "7 palabras en 10 × 10: suma la diagonal hacia arriba",
+            "parametros": {
+              "columnas": 10,
+              "filas": 10,
+              "palabras": 7,
+              "largo": [
+                4,
+                9
+              ],
+              "direcciones": [
+                "E",
+                "S",
+                "SE",
+                "NE"
+              ],
+              "relleno": "mixto",
+              "senuelos": 0,
+              "cruces": true,
+              "familiares": false
+            }
+          },
+          "dificil": {
+            "describe": "8 palabras en 11 × 11, cuatro direcciones; relleno con letras de las mismas palabras",
+            "parametros": {
+              "columnas": 11,
+              "filas": 11,
+              "palabras": 8,
+              "largo": [
+                4,
+                10
+              ],
+              "direcciones": [
+                "E",
+                "S",
+                "SE",
+                "NE"
+              ],
+              "relleno": "parecido",
+              "senuelos": 0,
+              "cruces": true,
+              "familiares": false
+            }
+          }
+        }
+      },
+      {
+        "estacion": "transferir",
+        "nombre": "Estación 4: Transferir",
+        "habilidades": [
+          "planificacion-estrategias-complejas",
+          "flexibilidad-cognitiva",
+          "autonomia-autocorreccion"
+        ],
+        "dimensiones_que_cambian": [
+          "cantidad-estimulos",
+          "extension-palabras",
+          "complejidad-relaciones",
+          "necesidad-planificacion"
+        ],
+        "apoyos": [
+          "nombre-en-audio-al-tocar-la-palabra",
+          "dos-pistas-primera-letra",
+          "palabra-encontrada-marcada"
+        ],
+        "modalidad_respuesta": [
+          "tocar-primera-y-ultima-letra",
+          "arrastrar"
+        ],
+        "adaptaciones": [
+          "modo-palabras-o-imagenes",
+          "mayuscula-o-minuscula",
+          "tiempo-sin-limite"
+        ],
+        "progresion": "REVISAR PSP-SR",
+        "grados": {
+          "facil": {
+            "describe": "8 palabras en 11 × 11, cuatro direcciones hacia adelante",
+            "parametros": {
+              "columnas": 11,
+              "filas": 11,
+              "palabras": 8,
+              "largo": [
+                4,
+                11
+              ],
+              "direcciones": [
+                "E",
+                "S",
+                "SE",
+                "NE"
+              ],
+              "relleno": "mixto",
+              "senuelos": 0,
+              "cruces": true,
+              "familiares": false
+            }
+          },
+          "intermedio": {
+            "describe": "9 palabras en 12 × 12: suma palabras al revés en horizontal y vertical",
+            "parametros": {
+              "columnas": 12,
+              "filas": 12,
+              "palabras": 9,
+              "largo": [
+                4,
+                12
+              ],
+              "direcciones": [
+                "E",
+                "S",
+                "SE",
+                "NE",
+                "O",
+                "N"
+              ],
+              "relleno": "parecido",
+              "senuelos": 2,
+              "cruces": true,
+              "familiares": false
+            }
+          },
+          "dificil": {
+            "describe": "10 palabras en 13 × 13, en las ocho direcciones; relleno parecido y comienzos de palabras que despistan",
+            "parametros": {
+              "columnas": 13,
+              "filas": 13,
+              "palabras": 10,
+              "largo": [
+                4,
+                13
+              ],
+              "direcciones": [
+                "E",
+                "S",
+                "SE",
+                "NE",
+                "O",
+                "N",
+                "NO",
+                "SO"
+              ],
+              "relleno": "parecido",
+              "senuelos": 4,
+              "cruces": true,
+              "familiares": false
+            }
+          }
+        }
+      }
+    ]
+  }
+}

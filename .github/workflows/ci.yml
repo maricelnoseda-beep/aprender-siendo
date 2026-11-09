@@ -23,6 +23,8 @@ jobs:
         run: for f in $(find app/dist -name '*.js'); do node --check "$f" || exit 1; done
       - name: Reglas deterministas (casos de prueba de la sección 8)
         run: node tests/rules.test.js
+      - name: Explorapalabras (generador en las 15 temáticas × 4 Estaciones × 3 grados y ficha de Estaciones)
+        run: node tests/explorapalabras.test.js && python3 app/build.py --explorapalabras
       - name: Instalar navegador de prueba
         run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
       - name: Prueba de punta a punta
@@ -32,4 +34,4 @@ jobs:
       - name: Huella del artefacto (manifiesto con la huella de cada archivo y módulo)
         run: sha256sum app/dist/manifiesto.json
       - uses: actions/upload-artifact@v4
-        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/" }
+        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/\napp/dist-explorapalabras/" }
