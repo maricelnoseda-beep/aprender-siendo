@@ -18,7 +18,7 @@ jobs:
         with: { ref: "${{ inputs.version }}" }
       - run: python3 app/build.py
       - name: Bloqueo técnico — verificar aprobaciones y huella
-        run: python3 scripts/check_approvals.py "${{ inputs.version }}" app/dist/index.html
+        run: python3 scripts/check_approvals.py "${{ inputs.version }}" app/dist/manifiesto.json
   deploy:
     needs: gate
     runs-on: ubuntu-24.04

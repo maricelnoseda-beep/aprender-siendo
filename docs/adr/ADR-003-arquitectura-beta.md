@@ -1,6 +1,6 @@
 # ADR-003 — Beta de demostración en un solo archivo
 
-- **Estado:** vigente (2026-11-01).
+- **Estado:** reemplazado por ADR-009 (2026-11-09). La versión de un solo archivo sigue existiendo solo como salida opcional del armado (`--un-archivo`).
 
 ## Decisión
 La v0.x es una app web en un solo archivo HTML, sin dependencias salvo Google Fonts. Los datos son sintéticos y se guardan en el navegador (`localStorage`) mediante una capa (`app/src/store.js`) que expone las operaciones de la futura API. Los permisos se programan en código. El contenido clínico está aislado en `app/src/content.js` y marcado REVISAR.

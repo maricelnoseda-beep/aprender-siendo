@@ -1,9 +1,11 @@
 // Pruebas de las reglas deterministas de la beta 2 (ONB-MEJ-001-R v2.0, sección 8).
 // Corre sin navegador: node tests/rules.test.js
 const fs = require("fs"), path = require("path"), vm = require("vm");
-const ctx = { console };
+const app = (f) => path.join(__dirname, "..", "app", f);
+const catalogo = fs.readFileSync(app("nucleo/animales/catalogo.json"), "utf8");
+const ctx = { console, document: { getElementById: (id) => (id === "animal-catalog" ? { textContent: catalogo } : null) } };
 vm.createContext(ctx);
-for (const f of ["content.js", "rules.js"]) vm.runInContext(fs.readFileSync(path.join(__dirname, "..", "app", "src", f), "utf8").replace(/^const (\w+) =/gm, "var $1 ="), ctx);
+for (const f of ["contenido/contenido.js", "nucleo/reglas.js"]) vm.runInContext(fs.readFileSync(app(f), "utf8").replace(/^const (\w+) =/gm, "var $1 ="), ctx);
 const { Rules } = ctx;
 let fails = 0, n = 0;
 const ok = (cond, name) => { n++; if (!cond) { fails++; console.log("FALLA:", name); } else console.log("ok  ", name); };
@@ -102,8 +104,10 @@ const ok = (cond, name) => { n++; if (!cond) { fails++; console.log("FALLA:", na
 }
 /* Caso 9: "misión" no aparece en la interfaz ni en los textos. */
 {
-  const src = ["content.js", "app.js", "activities.js", "rules.js", "store.js"].map((f) => fs.readFileSync(path.join(__dirname, "..", "app", "src", f), "utf8")).join("\n")
-    + fs.readFileSync(path.join(__dirname, "..", "app", "tools", "isla-de-juegos.html"), "utf8");
+  // Recorre todos los módulos del portal (núcleo, contenido, áreas y herramientas), no solo algunos archivos.
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+  const src = ["contenido", "nucleo", "areas", "herramientas"].flatMap((d) => walk(app(d))).filter((f) => /\.(js|html)$/.test(f))
+    .map((f) => fs.readFileSync(f, "utf8")).join("\n");
   const hits = (src.replace(/"Misiones"/g, "").match(/misi[oó]n(es)?\b/gi) || []);
   ok(hits.length === 0, "caso 9: cero apariciones de «misión» (" + hits.length + ")");
 }
