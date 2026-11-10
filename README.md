@@ -10,6 +10,7 @@ python3 app/build.py                         # versión modular en app/dist/ (la
 (cd app/dist && python3 -m http.server 8765)  # abrir http://localhost:8765/
 python3 app/build.py --un-archivo            # un solo HTML en app/dist-un-archivo/ (demo sin servidor, paquete de revisión)
 python3 app/build.py --explorapalabras       # Explorapalabras solo, para probar con doble clic (app/dist-explorapalabras/)
+python3 app/build.py --luci                  # Aventura de búsqueda con Luci sola, para probar con doble clic (app/dist-luci/)
 ```
 Cuentas de demostración en la portada. Contraseña: `beta2026`.
 
@@ -20,10 +21,11 @@ Cuentas de demostración en la portada. Contraseña: `beta2026`.
 | `app/nucleo/` | Una sola copia para todo el portal: datos y permisos (`datos.js`), reglas en código (`reglas.js`), indicadores (`indicadores.js`), encabezado, Luci, navegación, estilos, fuente, imágenes y animales. **Un cambio acá exige la batería completa** |
 | `app/contenido/contenido.js` | **Contenido clínico y textos para personas (BORRADOR, REVISAR por PSP-SR y la supervisora)** |
 | `app/areas/<área>/` | Inicio, niños (aventuras), familia, profesional, cuenta, administración, textos legales |
-| `app/herramientas/<id>/` | Una carpeta por herramienta (`herramienta.js` + `modulo.json`): Isla de Juegos, Memoria, ¿Qué sigue?, Encontrá el distinto, Contar y elegir, Ordená por color o forma, Explorapalabras (con `banco.json` de prueba y ficha de Estaciones en `modulo.json`; ver `docs/herramientas/RT-EXP-001_explorapalabras.md`) |
+| `app/herramientas/<id>/` | Una carpeta por herramienta (`herramienta.js` + `modulo.json`): Isla de Juegos, Memoria, ¿Qué sigue?, Encontrá el distinto, Contar y elegir, Ordená por color o forma, Explorapalabras (con `banco.json` de prueba y ficha de Estaciones en `modulo.json`; ver `docs/herramientas/RT-EXP-001_explorapalabras.md`), Aventura de búsqueda con Luci (FEC-013, título de trabajo; láminas de relleno en `banco.json`, ficha por variante y grado en `modulo.json`; ver `docs/herramientas/RT-LUC-001_aventura_luci.md`) |
 | `docs/marca/` | **Manual de marca y guía de interfaz: vinculantes para todo cambio o agregado** |
-| `tests/e2e.js`, `tests/rules.test.js`, `tests/explorapalabras.test.js` | Punta a punta (con `SEMILLA=1` para comparar capturas) y reglas deterministas |
+| `tests/e2e.js`, `tests/rules.test.js`, `tests/explorapalabras.test.js`, `tests/luci.test.js`, `tests/luci.e2e.js` | Punta a punta (con `SEMILLA=1` para comparar capturas) y reglas deterministas |
 | `docs/adr/` | Decisiones: alojamiento (001), proveedor de IA (002), beta en un archivo (003, reemplazada), estructura modular (009) |
+| `scripts/originalidad.py` | Sección 0 de FEC-013: busca nombres de la obra original en todo el repositorio por huellas (el control no contiene los nombres) |
 | `approvals/`, `scripts/check_approvals.py` | Registros de aprobación y bloqueo técnico del pase a producción (huella de `app/dist/manifiesto.json`) |
 | `.github/workflows/` | CI, despliegue al entorno de prueba y pase a producción con doble aprobación |
 

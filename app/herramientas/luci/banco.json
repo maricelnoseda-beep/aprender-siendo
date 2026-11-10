@@ -1,0 +1,4063 @@
+{
+ "estado": "Contenido de prueba no validado",
+ "version": "0.1-prueba",
+ "fecha": "2026-11-09",
+ "autor": "DEV-IA (relleno)",
+ "revisor_clinico": "",
+ "_nota": "Textos, consignas, devoluciones, pistas y láminas: RELLENO de DEV-IA a partir de FEC-013 v0.1 para probar la aventura. Los textos para personas los valida PSP-SR y los aprueba la supervisora. Las láminas se arman con un generador de formas simples (sin IA generativa) y no pasaron la revisión humana de la sección 0 ni de M03-4/A14.",
+ "textos": {
+  "rotulo": "Contenido de prueba no validado",
+  "tituloTrabajo": "título de trabajo",
+  "adultoTitulo": "Para la persona adulta que acompaña",
+  "adultoAyuda": "Elegí la ruta de edad, la variante y el grado. Quien juega no ve esta elección. La Estación es un dato de la actividad, no de la persona.",
+  "adultoSeguir": "Listo, pasarle la aventura",
+  "adultoBoton": "Opciones para la persona adulta",
+  "adultoMantener": "Mantener apretado",
+  "empezar": "Empezar",
+  "escuchar": "Escuchar",
+  "audioSi": "Audio activado",
+  "audioNo": "Audio apagado",
+  "ayuda": "Pedir ayuda",
+  "ayudaUsada": "Pedí una ayuda.",
+  "ayudaChica": "Ayuda",
+  "verModelo": "Ver a quién busco",
+  "verLista": "Ver la lista",
+  "verPistas": "Ver las pistas",
+  "acercar": "Acercar",
+  "alejar": "Alejar",
+  "verTodo": "Ver toda la escena",
+  "teclado": "Con el teclado: flechas para mover el señalador, Enter para tocar.",
+  "descubrirTitulo": "Así se busca",
+  "estrategias": {
+   "primero-miro-como-es": "Primero miro cómo es Luci. Después la busco.",
+   "me-fijo-en-el-detalle": "Me fijo en el detalle que lo hace distinto.",
+   "busco-por-partes": "Busco por partes, como en una cuadrícula, y voy tachando lo que encontré.",
+   "junto-pistas-y-descarto": "Junto las pistas, descarto lugares y reviso si mi respuesta cumple todas.",
+   "miro-de-arriba-abajo": "Miro de arriba hacia abajo, de a una parte por vez."
+  },
+  "consignas": {
+   "explorar1": "Encontrá a Luci.",
+   "explorar2a": "Encontrá a Luci y después su farolito.",
+   "explorar2b": "Ahora encontrá el farolito de Luci.",
+   "marca1": "Encontrá la marca de Luci.",
+   "marca2a": "Encontrá la marca de Luci y después el farolito marcado.",
+   "marca2b": "Ahora encontrá el farolito con la marca.",
+   "reconocerDibujo": "Buscá {articulo} {nombre} de Luci. Tiene su gota de luz.",
+   "reconocerNombre": "Buscá {articulo} {nombre} de Luci.",
+   "integrarObjetos": "Encontrá las cosas de la lista.",
+   "integrarCategoria": "Juntá 3 cosas que sirven para un día de {uso}.",
+   "integrarCambio": "Ahora, solo las que son de {material}.",
+   "transferir": "¿Dónde está Luci? Juntá las pistas y tocá el lugar.",
+   "transferirTabla": "¿En qué fila está la marca de Luci? Juntá las pistas y tocá la fila."
+  },
+  "atributos": {
+   "mochila-abierta": {
+    "consigna": "Buscá la mochila que está abierta.",
+    "senuelo": "Esa mochila está cerrada. Buscá la abierta."
+   },
+   "taza-chica": {
+    "consigna": "Buscá la taza más chica.",
+    "senuelo": "Esa taza es más grande. Buscá la más chica."
+   },
+   "farolito-arriba": {
+    "consigna": "Buscá el farolito que está arriba del banco.",
+    "senuelo": "Ese farolito está al lado del banco. Buscá el que está arriba."
+   }
+  },
+  "usos": {
+   "frio": "frío",
+   "lluvia": "lluvia",
+   "paseo": "paseo"
+  },
+  "materiales": {
+   "tela": "tela",
+   "goma": "goma",
+   "metal": "metal"
+  },
+  "acierto": {
+   "explorar": [
+    "La encontraste mirando por partes.",
+    "Te fijaste en la forma de las alas y eso te ayudó."
+   ],
+   "explorarMarca": [
+    "Bien encontrada. Te fijaste en la forma, no solo en el color."
+   ],
+   "farolito": [
+    "Encontraste el farolito. Lo buscaste después de encontrar a Luci, en orden."
+   ],
+   "reconocer": [
+    "Te fijaste en el detalle que lo hace distinto."
+   ],
+   "integrar": [
+    "Lo encontraste buscando por partes."
+   ],
+   "integrarFin": [
+    "Encontraste todo. Buscaste por partes y fuiste tachando."
+   ],
+   "transferir": [
+    "Juntaste las pistas.",
+    "Descartaste lugares y llegaste."
+   ],
+   "transferirAdolescente": [
+    "Bien descartado. Las pistas se cumplen."
+   ]
+  },
+  "senuelo": {
+   "color": "Ese se parece. Mirá la forma de la luz.",
+   "colorMarca": "Ese tiene el mismo color. Mirá la forma.",
+   "categoria": "Ese no tiene la gota de luz de Luci. Mirá el detalle.",
+   "otro": "Ese no es. Probá mirar otra parte.",
+   "noEnLista": "Eso no está en la lista. Mirá la lista otra vez.",
+   "yaEncontrado": "Eso ya lo encontraste.",
+   "noCumpleCategoria": "Eso no sirve para un día de {uso}.",
+   "noCumpleMaterial": "Eso no es de {material}.",
+   "lugar": "Ese lugar no cumple todas las pistas. Revisá: «{pista}»",
+   "primeroLuci": "Primero buscá a Luci. Después, el farolito."
+  },
+  "nada": "Ahí no hay nada para tocar. Probá en otra parte.",
+  "ayudaPasos": [
+   "Te repito la consigna.",
+   "Mirá otra vez lo que buscás.",
+   "Está en esta mitad.",
+   "Está en esta parte.",
+   "Mirá cómo se encuentra."
+  ],
+  "demo": {
+   "explorar": "Acá está. Primero miré cómo es Luci y después la busqué por partes.",
+   "reconocer": "Acá está. Me fijé en el detalle que lo hace distinto.",
+   "integrar": "Acá está. Busqué por partes, de una zona por vez.",
+   "transferir": "Es este lugar: cumple todas las pistas."
+  },
+  "masAyudaInicio": "Vamos a probar algo nuevo.",
+  "pistaSiguiente": "Siguiente pista",
+  "pistasTitulo": "Pistas",
+  "descartar": "Marcar lugares que descarto",
+  "elegir": "Elegir el lugar",
+  "descartado": "Descartado",
+  "planTitulo": "Antes de empezar, ¿cómo vas a buscar?",
+  "planes": [
+   {
+    "id": "pistas-de-a-una",
+    "texto": "Leo las pistas de a una y voy descartando."
+   },
+   {
+    "id": "mas-facil-primero",
+    "texto": "Empiezo por la pista más fácil."
+   },
+   {
+    "id": "descarto-lo-que-no",
+    "texto": "Primero descarto lo que seguro no es."
+   }
+  ],
+  "verificarTitulo": "¿Cumple todas?",
+  "verificarSi": "Sí, cumple todas",
+  "verificarNo": "Reviso otra vez",
+  "listaTitulo": "Lista",
+  "listaOculta": "La lista está guardada. Podés volver a verla.",
+  "mapaTitulo": "El mapa de Luci",
+  "mapaAdolescente": "Mapa de estrategias",
+  "mapaTexto": "Se iluminó una parte del mapa: {zona}.",
+  "zonas": {
+   "explorar": "El bosque de mirar",
+   "reconocer": "El camino de los detalles",
+   "integrar": "La chacra de las partes",
+   "transferir": "El puerto de las pistas"
+  },
+  "seguir": "Seguir",
+  "saltear": "Saltear",
+  "hacerTitulo": "Para hacer fuera de la pantalla (opcional)",
+  "hacer": {
+   "explorar": "Escondé un objeto a la vista en una habitación y que lo busque otra persona. Después se cambian.",
+   "reconocer": "Escondé un objeto a la vista en una habitación y que lo busque otra persona. Después se cambian.",
+   "integrar": "Hagan una lista de 3 cosas para guardar la ropa o preparar la mochila y búsquenlas por partes de la habitación.",
+   "transferir": "Una persona da 2 o 3 pistas sobre dónde dejó algo de la casa y la otra lo encuentra.",
+   "adolescente": "En tu próxima tarea, antes de buscar un dato en un texto, decidí qué estás buscando y por qué parte vas a empezar."
+  },
+  "hacerSeguridad": "Nada de buscar en la calle, salir solo, subirse a muebles ni lugares con riesgo.",
+  "loHicimos": "Lo hicimos",
+  "contarTitulo": "¿Qué te ayudó?",
+  "contarComo": "¿Cómo te resultó?",
+  "contarAdulto": "Conversen juntos: ¿qué te ayudó a encontrar?",
+  "como": [
+   {
+    "id": "facil",
+    "texto": "Fácil",
+    "picto": "🙂"
+   },
+   {
+    "id": "mas-o-menos",
+    "texto": "Más o menos",
+    "picto": "😐"
+   },
+   {
+    "id": "dificil",
+    "texto": "Difícil",
+    "picto": "😮"
+   }
+  ],
+  "cierreTitulo": "Terminaste el recorrido.",
+  "cierreProceso": "Buscaste con calma, de a una parte por vez.",
+  "cierreSuave": "Por hoy, llegamos hasta acá. La aventura sigue otro día.",
+  "otraVez": "Jugar otra vez",
+  "pisoTexto": "Vamos a probar algo nuevo.",
+  "conversarTitulo": "Lámina para conversar",
+  "conversarGuia": "Para la persona adulta: preguntá, esperá y ampliá lo que dice. No hay respuestas correctas y no se registra nada.",
+  "conversarPreguntas": [
+   "¿Qué está haciendo esta persona?",
+   "¿Qué ves arriba de todo?",
+   "¿Qué pasaría si empieza a llover?",
+   "¿A dónde te gustaría ir de esta escena?"
+  ],
+  "terminar": "Terminar",
+  "editorialIntro": "Buscá la marca de Luci: un cuadrado con una gota de luz.",
+  "revision": {
+   "titulo": "Herramientas de revisión del banco (solo equipo)",
+   "grises": "Ver en escala de grises",
+   "daltonismo": "Simular visión de colores atípica",
+   "zonas": "Mostrar zonas de toque",
+   "contraste": "Alto contraste"
+  }
+ },
+ "objetos": {
+  "luci": {
+   "nombre": "Luci",
+   "articulo": "",
+   "forma": "luciernaga",
+   "color": "sol",
+   "categoria": "luci",
+   "w": 70,
+   "h": 70,
+   "material": "otro",
+   "usos": [],
+   "rol": "objetivo",
+   "rasgos": []
+  },
+  "marca-luci": {
+   "nombre": "la marca de Luci",
+   "articulo": "",
+   "forma": "gota-en-cuadro",
+   "color": "sol",
+   "categoria": "luci",
+   "w": 54,
+   "h": 54,
+   "material": "otro",
+   "usos": [],
+   "rol": "objetivo",
+   "rasgos": []
+  },
+  "farolito": {
+   "nombre": "farolito",
+   "articulo": "el",
+   "forma": "farolito",
+   "color": "sol",
+   "categoria": "farolito",
+   "w": 46,
+   "h": 60,
+   "material": "metal",
+   "usos": [
+    "noche"
+   ],
+   "rol": "cosa-de-luci",
+   "rasgos": []
+  },
+  "mochila": {
+   "nombre": "mochila",
+   "articulo": "la",
+   "forma": "mochila",
+   "color": "verde",
+   "categoria": "mochila",
+   "w": 56,
+   "h": 62,
+   "material": "tela",
+   "usos": [
+    "paseo"
+   ],
+   "rol": "cosa-de-luci",
+   "rasgos": []
+  },
+  "bufanda": {
+   "nombre": "bufanda",
+   "articulo": "la",
+   "forma": "bufanda",
+   "color": "verde",
+   "categoria": "bufanda",
+   "w": 70,
+   "h": 40,
+   "material": "tela",
+   "usos": [
+    "frio"
+   ],
+   "rol": "cosa-de-luci",
+   "rasgos": []
+  },
+  "libreta": {
+   "nombre": "libreta",
+   "articulo": "la",
+   "forma": "libreta",
+   "color": "lila",
+   "categoria": "libreta",
+   "w": 46,
+   "h": 56,
+   "material": "papel",
+   "usos": [
+    "escuela"
+   ],
+   "rol": "cosa-de-luci",
+   "rasgos": []
+  },
+  "mapa": {
+   "nombre": "mapa",
+   "articulo": "el",
+   "forma": "mapa",
+   "color": "arena",
+   "categoria": "mapa",
+   "w": 62,
+   "h": 46,
+   "material": "papel",
+   "usos": [
+    "paseo"
+   ],
+   "rol": "cosa-de-luci",
+   "rasgos": []
+  },
+  "taza": {
+   "nombre": "taza",
+   "articulo": "la",
+   "forma": "taza",
+   "color": "coral",
+   "categoria": "taza",
+   "w": 48,
+   "h": 42,
+   "material": "loza",
+   "usos": [
+    "cocina"
+   ],
+   "rol": "cosa-de-luci",
+   "rasgos": []
+  },
+  "flor-sol": {
+   "nombre": "flor",
+   "articulo": "la",
+   "forma": "flor",
+   "color": "sol",
+   "categoria": "planta",
+   "w": 40,
+   "h": 54,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "pelota-sol": {
+   "nombre": "pelota",
+   "articulo": "la",
+   "forma": "pelota",
+   "color": "sol",
+   "categoria": "juguete",
+   "w": 40,
+   "h": 40,
+   "material": "goma",
+   "usos": [
+    "juego"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "mariposa-sol": {
+   "nombre": "mariposa",
+   "articulo": "la",
+   "forma": "mariposa",
+   "color": "sol",
+   "categoria": "insecto",
+   "w": 50,
+   "h": 42,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "hoja-sol": {
+   "nombre": "hoja",
+   "articulo": "la",
+   "forma": "hoja",
+   "color": "sol",
+   "categoria": "planta",
+   "w": 42,
+   "h": 42,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "estrella-sol": {
+   "nombre": "estrella de papel",
+   "articulo": "la",
+   "forma": "estrella",
+   "color": "sol",
+   "categoria": "juguete",
+   "w": 42,
+   "h": 42,
+   "material": "papel",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "limon": {
+   "nombre": "limón",
+   "articulo": "el",
+   "forma": "limon",
+   "color": "sol",
+   "categoria": "fruta",
+   "w": 40,
+   "h": 34,
+   "material": "otro",
+   "usos": [
+    "cocina"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "mariposa-lila": {
+   "nombre": "mariposa",
+   "articulo": "la",
+   "forma": "mariposa",
+   "color": "lila",
+   "categoria": "insecto",
+   "w": 50,
+   "h": 42,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "vaquita": {
+   "nombre": "vaquita de San Antonio",
+   "articulo": "la",
+   "forma": "vaquita",
+   "color": "coral",
+   "categoria": "insecto",
+   "w": 38,
+   "h": 34,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "caracol": {
+   "nombre": "caracol",
+   "articulo": "el",
+   "forma": "caracol",
+   "color": "lila",
+   "categoria": "animal",
+   "w": 46,
+   "h": 36,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "flor-coral": {
+   "nombre": "flor",
+   "articulo": "la",
+   "forma": "flor",
+   "color": "coral",
+   "categoria": "planta",
+   "w": 40,
+   "h": 54,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "flor-lila": {
+   "nombre": "flor",
+   "articulo": "la",
+   "forma": "flor",
+   "color": "lila",
+   "categoria": "planta",
+   "w": 40,
+   "h": 54,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "arbusto": {
+   "nombre": "arbusto",
+   "articulo": "el",
+   "forma": "arbusto",
+   "color": "verde",
+   "categoria": "planta",
+   "w": 80,
+   "h": 56,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "pelota-coral": {
+   "nombre": "pelota",
+   "articulo": "la",
+   "forma": "pelota",
+   "color": "coral",
+   "categoria": "juguete",
+   "w": 40,
+   "h": 40,
+   "material": "goma",
+   "usos": [
+    "juego"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "pelota-lila": {
+   "nombre": "pelota",
+   "articulo": "la",
+   "forma": "pelota",
+   "color": "lila",
+   "categoria": "juguete",
+   "w": 40,
+   "h": 40,
+   "material": "goma",
+   "usos": [
+    "juego"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "manzana": {
+   "nombre": "manzana",
+   "articulo": "la",
+   "forma": "manzana",
+   "color": "coral",
+   "categoria": "fruta",
+   "w": 38,
+   "h": 40,
+   "material": "otro",
+   "usos": [
+    "cocina"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "pera": {
+   "nombre": "pera",
+   "articulo": "la",
+   "forma": "pera",
+   "color": "verde",
+   "categoria": "fruta",
+   "w": 36,
+   "h": 46,
+   "material": "otro",
+   "usos": [
+    "cocina"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "zanahoria": {
+   "nombre": "zanahoria",
+   "articulo": "la",
+   "forma": "zanahoria",
+   "color": "coral",
+   "categoria": "verdura",
+   "w": 22,
+   "h": 56,
+   "material": "otro",
+   "usos": [
+    "cocina"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "libro-verde": {
+   "nombre": "libro",
+   "articulo": "el",
+   "forma": "libro",
+   "color": "verde",
+   "categoria": "libro",
+   "w": 44,
+   "h": 52,
+   "material": "papel",
+   "usos": [
+    "escuela"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "libro-coral": {
+   "nombre": "libro",
+   "articulo": "el",
+   "forma": "libro",
+   "color": "coral",
+   "categoria": "libro",
+   "w": 44,
+   "h": 52,
+   "material": "papel",
+   "usos": [
+    "escuela"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "lapiz": {
+   "nombre": "lápiz",
+   "articulo": "el",
+   "forma": "lapiz",
+   "color": "lila",
+   "categoria": "util",
+   "w": 14,
+   "h": 60,
+   "material": "madera",
+   "usos": [
+    "escuela"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "maceta": {
+   "nombre": "maceta",
+   "articulo": "la",
+   "forma": "maceta",
+   "color": "coral",
+   "categoria": "planta",
+   "w": 44,
+   "h": 52,
+   "material": "barro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "regadera": {
+   "nombre": "regadera",
+   "articulo": "la",
+   "forma": "regadera",
+   "color": "verde",
+   "categoria": "herramienta",
+   "w": 58,
+   "h": 44,
+   "material": "metal",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "barrilete": {
+   "nombre": "barrilete",
+   "articulo": "el",
+   "forma": "barrilete",
+   "color": "lila",
+   "categoria": "juguete",
+   "w": 48,
+   "h": 60,
+   "material": "tela",
+   "usos": [
+    "viento"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "globo-verde": {
+   "nombre": "globo",
+   "articulo": "el",
+   "forma": "globo",
+   "color": "verde",
+   "categoria": "juguete",
+   "w": 34,
+   "h": 58,
+   "material": "goma",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "paraguas": {
+   "nombre": "paraguas",
+   "articulo": "el",
+   "forma": "paraguas",
+   "color": "lila",
+   "categoria": "abrigo",
+   "w": 60,
+   "h": 60,
+   "material": "tela",
+   "usos": [
+    "lluvia"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "botas": {
+   "nombre": "botas de lluvia",
+   "articulo": "las",
+   "forma": "botas",
+   "color": "verde",
+   "categoria": "abrigo",
+   "w": 50,
+   "h": 50,
+   "material": "goma",
+   "usos": [
+    "lluvia"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "piloto": {
+   "nombre": "piloto",
+   "articulo": "el",
+   "forma": "piloto",
+   "color": "coral",
+   "categoria": "abrigo",
+   "w": 52,
+   "h": 62,
+   "material": "plastico",
+   "usos": [
+    "lluvia"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "gorra": {
+   "nombre": "gorra",
+   "articulo": "la",
+   "forma": "gorra",
+   "color": "lila",
+   "categoria": "abrigo",
+   "w": 50,
+   "h": 32,
+   "material": "tela",
+   "usos": [
+    "sol"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "guantes": {
+   "nombre": "guantes",
+   "articulo": "los",
+   "forma": "guantes",
+   "color": "coral",
+   "categoria": "abrigo",
+   "w": 50,
+   "h": 40,
+   "material": "tela",
+   "usos": [
+    "frio"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "campera": {
+   "nombre": "campera",
+   "articulo": "la",
+   "forma": "campera",
+   "color": "lila",
+   "categoria": "abrigo",
+   "w": 58,
+   "h": 62,
+   "material": "tela",
+   "usos": [
+    "frio",
+    "lluvia"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "termo": {
+   "nombre": "termo",
+   "articulo": "el",
+   "forma": "termo",
+   "color": "verde",
+   "categoria": "cocina",
+   "w": 24,
+   "h": 62,
+   "material": "metal",
+   "usos": [
+    "frio",
+    "paseo"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "pava": {
+   "nombre": "pava",
+   "articulo": "la",
+   "forma": "pava",
+   "color": "lila",
+   "categoria": "cocina",
+   "w": 56,
+   "h": 46,
+   "material": "metal",
+   "usos": [
+    "frio",
+    "cocina"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "silla": {
+   "nombre": "silla",
+   "articulo": "la",
+   "forma": "silla",
+   "color": "verde",
+   "categoria": "mueble",
+   "w": 44,
+   "h": 60,
+   "material": "madera",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "bicicleta": {
+   "nombre": "bicicleta",
+   "articulo": "la",
+   "forma": "bicicleta",
+   "color": "coral",
+   "categoria": "vehiculo",
+   "w": 90,
+   "h": 56,
+   "material": "metal",
+   "usos": [
+    "paseo"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "caja": {
+   "nombre": "caja",
+   "articulo": "la",
+   "forma": "caja",
+   "color": "arena",
+   "categoria": "caja",
+   "w": 50,
+   "h": 44,
+   "material": "carton",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "cajon-fruta": {
+   "nombre": "cajón de fruta",
+   "articulo": "el",
+   "forma": "cajon",
+   "color": "arena",
+   "categoria": "caja",
+   "w": 70,
+   "h": 44,
+   "material": "madera",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "canasta": {
+   "nombre": "canasta",
+   "articulo": "la",
+   "forma": "canasta",
+   "color": "arena",
+   "categoria": "caja",
+   "w": 56,
+   "h": 44,
+   "material": "mimbre",
+   "usos": [
+    "paseo"
+   ],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "banco-plaza": {
+   "nombre": "banco",
+   "articulo": "el",
+   "forma": "banco",
+   "color": "verde",
+   "categoria": "mueble",
+   "w": 104,
+   "h": 46,
+   "material": "madera",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "planta-maceta": {
+   "nombre": "planta",
+   "articulo": "la",
+   "forma": "planta",
+   "color": "verde",
+   "categoria": "planta",
+   "w": 44,
+   "h": 60,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "persona-a": {
+   "nombre": "persona",
+   "articulo": "la",
+   "forma": "persona",
+   "color": "verde",
+   "categoria": "persona",
+   "w": 54,
+   "h": 92,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": [],
+   "piel": 0,
+   "pelo": 0,
+   "apoyos": []
+  },
+  "persona-b": {
+   "nombre": "persona",
+   "articulo": "la",
+   "forma": "persona",
+   "color": "coral",
+   "categoria": "persona",
+   "w": 54,
+   "h": 92,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": [],
+   "piel": 1,
+   "pelo": 1,
+   "apoyos": []
+  },
+  "persona-c": {
+   "nombre": "persona con silla de ruedas",
+   "articulo": "la",
+   "forma": "persona",
+   "color": "lila",
+   "categoria": "persona",
+   "w": 54,
+   "h": 92,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": [],
+   "piel": 2,
+   "pelo": 2,
+   "apoyos": [
+    "silla-de-ruedas"
+   ]
+  },
+  "persona-d": {
+   "nombre": "persona con bastón blanco",
+   "articulo": "la",
+   "forma": "persona",
+   "color": "tinta",
+   "categoria": "persona",
+   "w": 54,
+   "h": 92,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": [],
+   "piel": 3,
+   "pelo": 3,
+   "apoyos": [
+    "baston-blanco"
+   ]
+  },
+  "persona-e": {
+   "nombre": "persona con audífono",
+   "articulo": "la",
+   "forma": "persona",
+   "color": "verde",
+   "categoria": "persona",
+   "w": 54,
+   "h": 92,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": [],
+   "piel": 4,
+   "pelo": 0,
+   "apoyos": [
+    "audifono"
+   ]
+  },
+  "persona-f": {
+   "nombre": "persona con tablero de comunicación",
+   "articulo": "la",
+   "forma": "persona",
+   "color": "lila",
+   "categoria": "persona",
+   "w": 54,
+   "h": 92,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": [],
+   "piel": 0,
+   "pelo": 1,
+   "apoyos": [
+    "tablero-de-comunicacion"
+   ]
+  },
+  "persona-g": {
+   "nombre": "persona",
+   "articulo": "la",
+   "forma": "persona",
+   "color": "coral",
+   "categoria": "persona",
+   "w": 54,
+   "h": 92,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": [],
+   "piel": 1,
+   "pelo": 2,
+   "apoyos": []
+  },
+  "persona-h": {
+   "nombre": "persona",
+   "articulo": "la",
+   "forma": "persona",
+   "color": "tinta",
+   "categoria": "persona",
+   "w": 54,
+   "h": 92,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": [],
+   "piel": 2,
+   "pelo": 3,
+   "apoyos": []
+  },
+  "pin": {
+   "nombre": "marcador de mapa",
+   "articulo": "el",
+   "forma": "pin",
+   "color": "coral",
+   "categoria": "pictograma",
+   "w": 40,
+   "h": 52,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "flecha": {
+   "nombre": "flecha",
+   "articulo": "la",
+   "forma": "flecha",
+   "color": "verde",
+   "categoria": "pictograma",
+   "w": 50,
+   "h": 40,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "circulo": {
+   "nombre": "círculo",
+   "articulo": "el",
+   "forma": "circulo",
+   "color": "lila",
+   "categoria": "pictograma",
+   "w": 40,
+   "h": 40,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "ticket": {
+   "nombre": "boleto",
+   "articulo": "el",
+   "forma": "ticket",
+   "color": "arena",
+   "categoria": "pictograma",
+   "w": 56,
+   "h": 34,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "wifi": {
+   "nombre": "señal",
+   "articulo": "la",
+   "forma": "senal",
+   "color": "verde",
+   "categoria": "pictograma",
+   "w": 44,
+   "h": 40,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "cuadro-sol": {
+   "nombre": "cuadrado",
+   "articulo": "el",
+   "forma": "cuadro",
+   "color": "sol",
+   "categoria": "pictograma",
+   "w": 40,
+   "h": 40,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "triangulo-sol": {
+   "nombre": "triángulo",
+   "articulo": "el",
+   "forma": "triangulo",
+   "color": "sol",
+   "categoria": "pictograma",
+   "w": 44,
+   "h": 40,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  },
+  "rombo-sol": {
+   "nombre": "rombo",
+   "articulo": "el",
+   "forma": "rombo",
+   "color": "sol",
+   "categoria": "pictograma",
+   "w": 40,
+   "h": 44,
+   "material": "otro",
+   "usos": [],
+   "rol": "relleno",
+   "rasgos": []
+  }
+ },
+ "fondos": {
+  "plaza": {
+   "estilo": "infantil",
+   "nombre": "plaza"
+  },
+  "feria": {
+   "estilo": "infantil",
+   "nombre": "feria de frutas y verduras"
+  },
+  "biblioteca": {
+   "estilo": "infantil",
+   "nombre": "biblioteca"
+  },
+  "rio": {
+   "estilo": "infantil",
+   "nombre": "costa del río"
+  },
+  "chacra": {
+   "estilo": "infantil",
+   "nombre": "chacra de frutales"
+  },
+  "montana": {
+   "estilo": "infantil",
+   "nombre": "montaña con nieve"
+  },
+  "barrio": {
+   "estilo": "infantil",
+   "nombre": "mapa de un barrio",
+   "solo_transferir": true,
+   "lugares": [
+    {
+     "id": "muelle",
+     "nombre": "el muelle",
+     "attrs": {
+      "agua": true,
+      "verde": false,
+      "adentro": false,
+      "vende_plantado": false,
+      "juego": false
+     }
+    },
+    {
+     "id": "sauces",
+     "nombre": "la orilla con sauces",
+     "attrs": {
+      "agua": true,
+      "verde": true,
+      "adentro": false,
+      "vende_plantado": false,
+      "juego": false
+     }
+    },
+    {
+     "id": "verduleria",
+     "nombre": "la verdulería",
+     "attrs": {
+      "agua": false,
+      "verde": true,
+      "adentro": true,
+      "vende_plantado": false,
+      "juego": false
+     }
+    },
+    {
+     "id": "vivero",
+     "nombre": "el vivero",
+     "attrs": {
+      "agua": false,
+      "verde": true,
+      "adentro": true,
+      "vende_plantado": true,
+      "juego": false
+     }
+    },
+    {
+     "id": "hamacas",
+     "nombre": "la plaza de las hamacas",
+     "attrs": {
+      "agua": false,
+      "verde": true,
+      "adentro": false,
+      "vende_plantado": false,
+      "juego": true
+     }
+    },
+    {
+     "id": "kiosco",
+     "nombre": "el kiosco",
+     "attrs": {
+      "agua": false,
+      "verde": false,
+      "adentro": true,
+      "vende_plantado": false,
+      "juego": false
+     }
+    },
+    {
+     "id": "puente",
+     "nombre": "el puente",
+     "attrs": {
+      "agua": true,
+      "verde": false,
+      "adentro": false,
+      "vende_plantado": false,
+      "juego": false
+     }
+    },
+    {
+     "id": "cancha",
+     "nombre": "la cancha",
+     "attrs": {
+      "agua": false,
+      "verde": true,
+      "adentro": false,
+      "vende_plantado": false,
+      "juego": true
+     }
+    }
+   ],
+   "pistas": [
+    {
+     "clave": "agua",
+     "valor": true,
+     "texto": "Está cerca del agua.",
+     "picto": "agua"
+    },
+    {
+     "clave": "verde",
+     "valor": true,
+     "texto": "Está al lado de algo verde.",
+     "picto": "verde"
+    },
+    {
+     "clave": "adentro",
+     "valor": true,
+     "texto": "Está adentro de un negocio.",
+     "picto": "negocio"
+    },
+    {
+     "clave": "juego",
+     "valor": true,
+     "texto": "Está donde se juega.",
+     "picto": "juego"
+    },
+    {
+     "clave": "agua",
+     "valor": true,
+     "negar": true,
+     "texto": "No está cerca del agua.",
+     "picto": "agua"
+    },
+    {
+     "clave": "adentro",
+     "valor": true,
+     "negar": true,
+     "texto": "No está adentro de un negocio.",
+     "picto": "negocio"
+    },
+    {
+     "clave": "verde",
+     "valor": true,
+     "negar": true,
+     "texto": "No está al lado de nada verde.",
+     "picto": "verde"
+    },
+    {
+     "clave": "vende_plantado",
+     "valor": true,
+     "inferencia": true,
+     "texto": "Está donde se vende lo que se planta.",
+     "picto": "planta"
+    },
+    {
+     "clave": "juego",
+     "valor": true,
+     "inferencia": true,
+     "texto": "Está donde los chicos van a pasar la tarde corriendo.",
+     "picto": "juego"
+    },
+    {
+     "clave": "agua",
+     "valor": true,
+     "inferencia": true,
+     "negar": false,
+     "texto": "Está donde se podría pescar.",
+     "picto": "agua"
+    }
+   ]
+  },
+  "terminal": {
+   "estilo": "editorial",
+   "nombre": "terminal"
+  },
+  "biblioteca-ed": {
+   "estilo": "editorial",
+   "nombre": "biblioteca"
+  },
+  "feria-ciencias": {
+   "estilo": "editorial",
+   "nombre": "feria de ciencias"
+  },
+  "ciudad-noche": {
+   "estilo": "editorial",
+   "nombre": "ciudad de noche"
+  },
+  "horario": {
+   "estilo": "editorial",
+   "nombre": "horario de colectivos",
+   "solo_transferir": true,
+   "tabla": "horario"
+  },
+  "cartelera": {
+   "estilo": "editorial",
+   "nombre": "cartelera de un club",
+   "solo_transferir": true,
+   "tabla": "cartelera"
+  }
+ },
+ "tablas": {
+  "horario": {
+   "titulo": "Horarios de la mañana · Terminal (datos de prueba)",
+   "columnas": [
+    "Línea",
+    "Destino",
+    "Sale",
+    "Llega"
+   ],
+   "lineas": [
+    "Línea 3",
+    "Línea 5",
+    "Línea 8",
+    "Línea 12",
+    "Línea 21"
+   ],
+   "destinos": [
+    "Centro",
+    "Hospital",
+    "Universidad",
+    "Barrio Norte"
+   ],
+   "inferencias": {
+    "Hospital": "Te deja donde atienden a personas que necesitan un médico.",
+    "Universidad": "Te deja donde se cursan carreras.",
+    "Centro": "Te deja cerca de los bancos y los negocios.",
+    "Barrio Norte": "Va hacia las casas del lado de la barda."
+   },
+   "pista_hora": "Llega antes de las 8.",
+   "pista_hora_neg": "Llega después de las 8.",
+   "pista_destino": "Va a {destino}.",
+   "pista_linea_neg": "No es la {linea}."
+  },
+  "cartelera": {
+   "titulo": "Cartelera del club (datos de prueba)",
+   "columnas": [
+    "Actividad",
+    "Día",
+    "Hora",
+    "Lugar"
+   ],
+   "lineas": [
+    "Ajedrez",
+    "Vóley",
+    "Teatro",
+    "Robótica",
+    "Huerta"
+   ],
+   "destinos": [
+    "Salón",
+    "Gimnasio",
+    "Patio",
+    "Biblioteca"
+   ],
+   "inferencias": {
+    "Gimnasio": "Es donde está la red y el piso de madera.",
+    "Patio": "Es al aire libre.",
+    "Biblioteca": "Es donde hay que hablar bajito.",
+    "Salón": "Es en el lugar de los actos."
+   },
+   "pista_hora": "Empieza antes de las 18.",
+   "pista_hora_neg": "Empieza después de las 18.",
+   "pista_destino": "Es en {destino}.",
+   "pista_linea_neg": "No es {linea}."
+  }
+ },
+ "laminas": [
+  {
+   "id": "EXP-FAC-INF-01",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 1037,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-INF-02",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 1074,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-INF-03",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 1111,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-INF-04",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 1148,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-INF-05",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 1185,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-INF-06",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 1222,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-EDI-01",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 1259,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-EDI-02",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 1296,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-EDI-03",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 1333,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-EDI-04",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 1370,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-EDI-05",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 1407,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-FAC-EDI-06",
+   "variante": "explorar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 1444,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-INF-01",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 1481,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-INF-02",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 1518,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-INF-03",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 1555,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-INF-04",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 1592,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-INF-05",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 1629,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-INF-06",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 1666,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-EDI-01",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 1703,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-EDI-02",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 1740,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-EDI-03",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 1777,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-EDI-04",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 1814,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-EDI-05",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 1851,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-INT-EDI-06",
+   "variante": "explorar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 1888,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-INF-01",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 1925,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-INF-02",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 1962,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-INF-03",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 1999,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-INF-04",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 2036,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-INF-05",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 2073,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-INF-06",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 2110,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-EDI-01",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 2147,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-EDI-02",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 2184,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-EDI-03",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 2221,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-EDI-04",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 2258,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-EDI-05",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 2295,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "EXP-DIF-EDI-06",
+   "variante": "explorar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 2332,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-INF-01",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 2369,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-INF-02",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 2406,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-INF-03",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 2443,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-INF-04",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 2480,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-INF-05",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 2517,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-INF-06",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 2554,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-EDI-01",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 2591,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-EDI-02",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 2628,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-EDI-03",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 2665,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-EDI-04",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 2702,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-EDI-05",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 2739,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-FAC-EDI-06",
+   "variante": "reconocer",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 2776,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-INF-01",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 2813,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-INF-02",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 2850,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-INF-03",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 2887,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-INF-04",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 2924,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-INF-05",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 2961,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-INF-06",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 2998,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-EDI-01",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 3035,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-EDI-02",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 3072,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-EDI-03",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 3109,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-EDI-04",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 3146,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-EDI-05",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 3183,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-INT-EDI-06",
+   "variante": "reconocer",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 3220,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-INF-01",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 3257,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-INF-02",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 3294,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-INF-03",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 3331,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-INF-04",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 3368,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-INF-05",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 3405,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-INF-06",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 3442,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-EDI-01",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 3479,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-EDI-02",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 3516,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-EDI-03",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 3553,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-EDI-04",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 3590,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-EDI-05",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 3627,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "REC-DIF-EDI-06",
+   "variante": "reconocer",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 3664,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-INF-01",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 3701,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-INF-02",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 3738,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-INF-03",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 3775,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-INF-04",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 3812,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-INF-05",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 3849,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-INF-06",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 3886,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-EDI-01",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 3923,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-EDI-02",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 3960,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-EDI-03",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 3997,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-EDI-04",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 4034,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-EDI-05",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 4071,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-FAC-EDI-06",
+   "variante": "integrar",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 4108,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-INF-01",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 4145,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-INF-02",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 4182,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-INF-03",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 4219,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-INF-04",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 4256,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-INF-05",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 4293,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-INF-06",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 4330,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-EDI-01",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 4367,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-EDI-02",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 4404,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-EDI-03",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 4441,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-EDI-04",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 4478,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-EDI-05",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 4515,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-INT-EDI-06",
+   "variante": "integrar",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 4552,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-INF-01",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "chacra",
+   "semilla": 4589,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-INF-02",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "montana",
+   "semilla": 4626,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-INF-03",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 4663,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-INF-04",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 4700,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-INF-05",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "biblioteca",
+   "semilla": 4737,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-INF-06",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 4774,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-EDI-01",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 4811,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-EDI-02",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 4848,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-EDI-03",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "feria-ciencias",
+   "semilla": 4885,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-EDI-04",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "ciudad-noche",
+   "semilla": 4922,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-EDI-05",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "terminal",
+   "semilla": 4959,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "INT-DIF-EDI-06",
+   "variante": "integrar",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "biblioteca-ed",
+   "semilla": 4996,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-INF-01",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5033,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-INF-02",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5070,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-INF-03",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5107,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-INF-04",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5144,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-INF-05",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5181,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-INF-06",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5218,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-EDI-01",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 5255,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-EDI-02",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 5292,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-EDI-03",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 5329,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-EDI-04",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 5366,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-EDI-05",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 5403,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-FAC-EDI-06",
+   "variante": "transferir",
+   "grado": "facil",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 5440,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-INF-01",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5477,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-INF-02",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5514,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-INF-03",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5551,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-INF-04",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5588,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-INF-05",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5625,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-INF-06",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5662,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-EDI-01",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 5699,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-EDI-02",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 5736,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-EDI-03",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 5773,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-EDI-04",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 5810,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-EDI-05",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 5847,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-INT-EDI-06",
+   "variante": "transferir",
+   "grado": "intermedio",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 5884,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-INF-01",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5921,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-INF-02",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5958,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-INF-03",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 5995,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-INF-04",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 6032,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-INF-05",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 6069,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-INF-06",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "infantil",
+   "fondo": "barrio",
+   "semilla": 6106,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-EDI-01",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 6143,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-EDI-02",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 6180,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-EDI-03",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 6217,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-EDI-04",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 6254,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-EDI-05",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "horario",
+   "semilla": 6291,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "TRA-DIF-EDI-06",
+   "variante": "transferir",
+   "grado": "dificil",
+   "estilo": "editorial",
+   "fondo": "cartelera",
+   "semilla": 6328,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "CONV-INF-01",
+   "variante": "conversar",
+   "grado": null,
+   "estilo": "infantil",
+   "fondo": "plaza",
+   "semilla": 9000,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "CONV-INF-02",
+   "variante": "conversar",
+   "grado": null,
+   "estilo": "infantil",
+   "fondo": "feria",
+   "semilla": 9011,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  },
+  {
+   "id": "CONV-INF-03",
+   "variante": "conversar",
+   "grado": null,
+   "estilo": "infantil",
+   "fondo": "rio",
+   "semilla": 9022,
+   "version": "0.1.0",
+   "estado": "relleno",
+   "origen": "generador procedural de DEV-IA (sin IA generativa)",
+   "revision": {
+    "parecido_obras_protegidas": null,
+    "escala_de_grises": null,
+    "contenido_M03_4_A14": null,
+    "revisor": null,
+    "fecha": null
+   }
+  }
+ ]
+}

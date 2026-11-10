@@ -6,6 +6,8 @@
                                        (demostración sin servidor y paquete de revisión de PSP-SR)
   python3 app/build.py --explorapalabras → app/dist-explorapalabras/Explorapalabras.html
                                        (el juego solo, para probar con doble clic)
+  python3 app/build.py --luci        → app/dist-luci/Aventura_de_Luci.html
+                                       (la aventura de búsqueda de Luci sola, para probar con doble clic)
 
 Las imágenes, la fuente y los recursos se escriben en las fuentes como @@asset:<ruta>@@.
 La versión modular los sirve como archivos (se descargan solo cuando aparecen en pantalla);
@@ -20,7 +22,10 @@ UN_ARCHIVO = "--un-archivo" in sys.argv
 RECURSOS = ["herramientas/isla-de-juegos/isla.html",
             "herramientas/explorapalabras/explorapalabras.html",
             "herramientas/explorapalabras/banco.json",
-            "herramientas/explorapalabras/modulo.json"]
+            "herramientas/explorapalabras/modulo.json",
+            "herramientas/luci/luci.html",
+            "herramientas/luci/banco.json",
+            "herramientas/luci/modulo.json"]
 MIME = {".webp": "image/webp", ".png": "image/png", ".ttf": "font/ttf", ".woff2": "font/woff2"}
 TOKEN = re.compile(r"@@asset:([^@]+)@@")
 read = lambda rel: (root / rel).read_text()
@@ -55,6 +60,20 @@ if "--explorapalabras" in sys.argv:
     out = root / "dist-explorapalabras"; out.mkdir(exist_ok=True)
     (out / "Explorapalabras.html").write_text(html)
     print("ok explorapalabras", (out / "Explorapalabras.html").stat().st_size, "bytes")
+    sys.exit()
+
+if "--luci" in sys.argv:
+    # La aventura sola, en un archivo: identidad, imagen de Luci, banco y ficha adentro.
+    datauri = lambda rel: "data:%s;base64,%s" % (MIME[pathlib.Path(rel).suffix], base64.b64encode((root / rel).read_bytes()).decode())
+    js = lambda t: t.replace("<", "\\u003c")
+    html = read("herramientas/luci/luci.html")
+    html = html.replace("__BRAND_FONT__", TOKEN.sub(lambda m: datauri(m.group(1)), read("nucleo/estilos/identidad.css")), 1)
+    html = (html.replace("__BANCO__", js(json.dumps(json.loads(read("herramientas/luci/banco.json")), ensure_ascii=False)), 1)
+                .replace("__MODULO__", js(json.dumps(json.loads(read("herramientas/luci/modulo.json")), ensure_ascii=False)), 1)
+                .replace("__INICIO__", json.dumps({"luci": datauri("nucleo/imagenes/luci.webp")}), 1))
+    out = root / "dist-luci"; out.mkdir(exist_ok=True)
+    (out / "Aventura_de_Luci.html").write_text(html)
+    print("ok luci", (out / "Aventura_de_Luci.html").stat().st_size, "bytes")
     sys.exit()
 
 if UN_ARCHIVO:

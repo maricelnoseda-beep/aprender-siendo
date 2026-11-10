@@ -170,6 +170,17 @@ const ACTIVITIES = [
     ok: ["Buscaste la primera letra y seguiste el camino."], err: [], ficha: { variant: "B" }
   },
   {
+    /* Aventura de búsqueda con Luci (FEC-013 v0.1 de PSP-SR, título de trabajo). Todo PRUEBA: textos y láminas los valida PSP-SR (RT-LUC-001).
+       Sin sugerencia por diagnóstico (RT-EST-001, P6). Láminas, consignas y ficha: app/herramientas/luci/. */
+    id: "luci", name: "¿Dónde está Luci? (título de trabajo)", zone: "mirar", skill: "mirar con atención, comparar y seguir pistas", pillar: "Pensar",
+    area: "Búsqueda visual en escenas ilustradas", ageMin: 3, ageMax: 18, suggestedFor: [],
+    instruction: "Buscá a Luci y a sus cosas en la escena. Cuando termines, tocá «Terminé de jugar».",
+    forFamily: "En esta aventura se busca a Luci y a sus cosas en dibujos llenos de detalles. Se practica mirar con atención, comparar y seguir pistas. Acompañá sin señalar dónde está.",
+    levels: ["Fácil", "Intermedio", "Difícil"], strategies: ["Mirar cómo es lo que busco", "Buscar por partes", "Juntar las pistas"],
+    discover: "Miro de arriba hacia abajo, de a una parte por vez.",
+    ok: ["La encontraste mirando por partes."], err: [], ficha: { variant: "B" }
+  },
+  {
     id: "contar", name: "Contar y elegir", zone: "numeros", skill: "contar y comparar", pillar: "Hacer",
     area: "Cálculo inicial", ageMin: 4, ageMax: 8, suggestedFor: ["dea-calculo", "en-evaluacion", "di"],
     instruction: "Contá los puntos y tocá el número correcto.",

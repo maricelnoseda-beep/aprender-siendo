@@ -1,0 +1,568 @@
+{
+ "id": "luci",
+ "nombre": "¿Dónde está Luci?",
+ "nombre_es_de_trabajo": true,
+ "tipo": "herramienta",
+ "version": "0.1.0-prueba",
+ "fecha": "2026-11-09",
+ "origen": "FEC-013 v0.1 (PSP-SR, 2026-11-09)",
+ "fec": "FEC-013 v0.1",
+ "revision_tecnica": "RT-LUC-001 v1.0",
+ "estado": "borrador: sin aprobación clínica ni técnica · contenido de prueba no validado",
+ "activo": true,
+ "_nota": "Ficha técnica de la aventura. Los parámetros de cada grado traducen la sección 5.3 de FEC-013; los números (cantidad de elementos, tamaños) son propuesta de DEV-IA y los valida PSP-SR. El título es de trabajo hasta la decisión de la supervisora y el equipo legal (FEC-013, P1).",
+ "ficha": {
+  "habilidad": "Mirar con atención, comparar y seguir pistas para encontrar algo en un dibujo con muchos detalles.",
+  "para_que_sirve": "En esta aventura se busca a Luci y a sus cosas en dibujos llenos de detalles. Se practica mirar con atención, comparar y seguir pistas.",
+  "edad": "3 a 18 años (la edad decide la presentación; la Estación es de la actividad)",
+  "nivel_evidencia": "C",
+  "rotulo_evidencia": "Basada en práctica clínica, con evidencia limitada",
+  "fuentes": [
+   "DOI 10.1016/j.actpsy.2013.03.008",
+   "DOI 10.1177/0956797614533801",
+   "DOI 10.3102/0034654309332561",
+   "PMID 932126",
+   "PMID 28344365",
+   "DOI 10.1177/1529100612453266",
+   "DOI 10.1037/a0028228",
+   "DOI 10.1177/0963721417712760",
+   "https://www.w3.org/TR/WCAG22/"
+  ],
+  "ficha_biblioteca": "pendiente (FEC-001)",
+  "declaracion_transferencia": {
+   "B": "Esta aventura practica una estrategia dentro de la app. No hay evidencia de que mejore la atención, la lectura ni el rendimiento escolar fuera de la app.",
+   "transferir": "Transferir describe lo que pide la actividad: aplicar una estrategia a situaciones nuevas dentro de la app. No garantiza que la persona la use fuera de la app.",
+   "conversar": "La práctica con evidencia es la conversación con una persona adulta, no la pantalla."
+  },
+  "dosis_sugerida": "Una sesión dentro del tiempo de la ruta (T08). Opcional: «Hacer» fuera de pantalla, 5 a 10 minutos.",
+  "fecha_verificacion": "2026-11-09",
+  "autor": "PSP-SR",
+  "revisor_clinico": "",
+  "no_es": "No es un test de atención ni de visión, no mide ni ubica a la persona en una Estación y no reemplaza la enseñanza explícita.",
+  "texto_profesional": "Esta aventura no evalúa la atención ni la visión. Si observa en la vida diaria dificultades visuales persistentes (acercarse mucho a las imágenes, entrecerrar los ojos, cansancio visual), considere la derivación a oftalmología.",
+  "limitacion_accesibilidad": "No es accesible para personas ciegas. Tiene alto contraste, zoom y objetivos más grandes para baja visión. Alternativa auditiva pendiente (FEC-013, P4)."
+ },
+ "vocabulario_dimensiones_propuesto": {
+  "_nota": "La lista cerrada de CRIT-EST-001 §4 no tiene estas tres dimensiones que usa FEC-013. DEV-IA propone sumarlas (RT-LUC-001, pregunta T1). Ninguna es cantidad-estimulos.",
+  "semejanza-distractores": "Cuánto se parecen los señuelos al objetivo",
+  "modalidad-presentacion": "Cómo se presenta lo que hay que buscar (dibujo, nombre, descripción)",
+  "tipo-objetivo": "Qué se busca (personaje u objeto cotidiano)"
+ },
+ "estaciones": {
+  "criterio": "CRIT-EST-001 v1.0",
+  "estado_clinico": "FEC-013 v0.1 (borrador de PSP-SR)",
+  "variantes": [
+   {
+    "estacion": "explorar",
+    "nombre": "Estación 1: Explorar",
+    "titulo_variante": "Encontrá a Luci",
+    "habilidades": [
+     "reconocimiento-visual",
+     "atencion-sostenida",
+     "seguimiento-de-consignas"
+    ],
+    "estrategia": "primero-miro-como-es",
+    "apoyos": [
+     "modelo-visible",
+     "consigna-en-audio",
+     "escalera-de-ayudas"
+    ],
+    "modalidad_respuesta": [
+     "tocar"
+    ],
+    "adaptaciones": [
+     "zoom-y-desplazamiento",
+     "zona-de-toque-ampliada",
+     "alto-contraste",
+     "tiempo-sin-limite",
+     "teclado"
+    ],
+    "transferencia": "B",
+    "grados": {
+     "facil": {
+      "describe": "Encontrar a Luci en una escena despejada (12 elementos). Ningún elemento comparte el color de Luci. Luci se muestra sola y en grande durante todo el ítem.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "elementos": 12,
+       "senuelos_color": 0,
+       "modelo": "visible",
+       "pasos": 1,
+       "tam": 78,
+       "ofrece_ayuda": "boton-visible"
+      }
+     },
+     "intermedio": {
+      "describe": "Más elementos (24); 5 comparten el color de Luci pero no su forma. El modelo se muestra al inicio y después se oculta (volver a verlo es una ayuda).",
+      "cambia_respecto_al_anterior": [
+       "cantidad-estimulos",
+       "semejanza-distractores",
+       "disponibilidad-apoyos"
+      ],
+      "parametros": {
+       "elementos": 24,
+       "senuelos_color": 5,
+       "modelo": "inicio",
+       "pasos": 1,
+       "tam": 66,
+       "ofrece_ayuda": "boton"
+      }
+     },
+     "dificil": {
+      "describe": "Dos pasos en orden: encontrar a Luci y después su farolito (objeto cotidiano).",
+      "cambia_respecto_al_anterior": [
+       "cantidad-pasos",
+       "tipo-objetivo"
+      ],
+      "parametros": {
+       "elementos": 26,
+       "senuelos_color": 5,
+       "modelo": "inicio",
+       "pasos": 2,
+       "tam": 62,
+       "ofrece_ayuda": "disponible"
+      }
+     }
+    },
+    "dimensiones_que_cambian": [
+     "cantidad-estimulos",
+     "semejanza-distractores",
+     "disponibilidad-apoyos",
+     "cantidad-pasos",
+     "tipo-objetivo"
+    ],
+    "progresion": "Dentro de la variante, M10 mueve entre Fácil, Intermedio y Difícil (EST-05). El cambio de variante nunca es automático: se sugiere con Difícil sostenido en 3 sesiones en días distintos (P3 de RT-EST-001-R)."
+   },
+   {
+    "estacion": "reconocer",
+    "nombre": "Estación 2: Reconocer",
+    "titulo_variante": "Las cosas perdidas de Luci",
+    "habilidades": [
+     "discriminacion-visual",
+     "atencion-sostenida",
+     "asociacion-imagen-palabra",
+     "seguimiento-de-consignas"
+    ],
+    "estrategia": "me-fijo-en-el-detalle",
+    "apoyos": [
+     "dibujo-modelo",
+     "nombre-en-audio",
+     "escalera-de-ayudas"
+    ],
+    "modalidad_respuesta": [
+     "tocar"
+    ],
+    "adaptaciones": [
+     "zoom-y-desplazamiento",
+     "zona-de-toque-ampliada",
+     "alto-contraste",
+     "tiempo-sin-limite",
+     "teclado",
+     "palabra-escrita-solo-en-rutas-que-leen"
+    ],
+    "transferencia": "B",
+    "grados": {
+     "facil": {
+      "describe": "Encontrar una cosa de Luci (con su gota de luz) mostrada con dibujo y nombrada en audio. Los demás elementos son de otras categorías.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "elementos": 16,
+       "presentacion": "dibujo-y-audio",
+       "senuelos_categoria": 0,
+       "atributo": false,
+       "ofrece_ayuda": "boton-visible"
+      }
+     },
+     "intermedio": {
+      "describe": "Encontrar la cosa de Luci solo por su nombre. Hay 4 señuelos de la misma categoría sin la gota de luz.",
+      "cambia_respecto_al_anterior": [
+       "modalidad-presentacion",
+       "semejanza-distractores",
+       "disponibilidad-apoyos"
+      ],
+      "parametros": {
+       "elementos": 22,
+       "presentacion": "nombre",
+       "senuelos_categoria": 4,
+       "atributo": false,
+       "ofrece_ayuda": "boton"
+      }
+     },
+     "dificil": {
+      "describe": "Encontrar por una descripción con un atributo o una relación espacial: la mochila abierta, la taza más chica, el farolito arriba del banco.",
+      "cambia_respecto_al_anterior": [
+       "complejidad-consignas",
+       "grado-abstraccion",
+       "complejidad-relaciones"
+      ],
+      "parametros": {
+       "elementos": 24,
+       "presentacion": "descripcion",
+       "senuelos_categoria": 4,
+       "atributo": true,
+       "ofrece_ayuda": "disponible"
+      }
+     }
+    },
+    "dimensiones_que_cambian": [
+     "modalidad-presentacion",
+     "semejanza-distractores",
+     "disponibilidad-apoyos",
+     "complejidad-consignas",
+     "grado-abstraccion",
+     "complejidad-relaciones"
+    ],
+    "progresion": "Dentro de la variante, M10 mueve entre Fácil, Intermedio y Difícil (EST-05). El cambio de variante nunca es automático: se sugiere con Difícil sostenido en 3 sesiones en días distintos (P3 de RT-EST-001-R)."
+   },
+   {
+    "estacion": "integrar",
+    "nombre": "Estación 3: Integrar",
+    "titulo_variante": "El recorrido de Luci",
+    "habilidades": [
+     "organizacion-y-planificacion",
+     "memoria-de-trabajo",
+     "flexibilidad-cognitiva",
+     "atencion-sostenida"
+    ],
+    "estrategia": "busco-por-partes",
+    "apoyos": [
+     "lista-visible-que-se-tacha",
+     "zonas-dibujadas",
+     "escalera-de-ayudas"
+    ],
+    "modalidad_respuesta": [
+     "tocar"
+    ],
+    "adaptaciones": [
+     "zoom-y-desplazamiento",
+     "zona-de-toque-ampliada",
+     "alto-contraste",
+     "tiempo-sin-limite",
+     "teclado"
+    ],
+    "transferencia": "B",
+    "grados": {
+     "facil": {
+      "describe": "Encontrar una lista de 3 objetos. La lista queda visible con dibujos y se tacha sola. La escena aparece dividida en 4 zonas marcadas.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "elementos": 18,
+       "lista": 3,
+       "lista_visible": "siempre",
+       "zonas_dibujadas": true,
+       "consigna": "objetos",
+       "cambio_regla": false,
+       "ofrece_ayuda": "boton-visible"
+      }
+     },
+     "intermedio": {
+      "describe": "La lista se muestra y después se oculta (volver a verla es una ayuda). Sin zonas dibujadas: la persona elige por dónde empezar.",
+      "cambia_respecto_al_anterior": [
+       "disponibilidad-apoyos",
+       "necesidad-planificacion"
+      ],
+      "parametros": {
+       "elementos": 22,
+       "lista": 3,
+       "lista_visible": "inicio",
+       "zonas_dibujadas": false,
+       "consigna": "objetos",
+       "cambio_regla": false,
+       "ofrece_ayuda": "boton"
+      }
+     },
+     "dificil": {
+      "describe": "La lista es por categoría o función (por ejemplo, cosas para un día de frío) y a mitad de la tarea cambia la regla (solo las que son de tela).",
+      "cambia_respecto_al_anterior": [
+       "grado-abstraccion",
+       "complejidad-consignas"
+      ],
+      "parametros": {
+       "elementos": 22,
+       "lista": 3,
+       "lista_visible": "inicio",
+       "zonas_dibujadas": false,
+       "consigna": "categoria",
+       "cambio_regla": true,
+       "ofrece_ayuda": "disponible"
+      }
+     }
+    },
+    "dimensiones_que_cambian": [
+     "disponibilidad-apoyos",
+     "necesidad-planificacion",
+     "grado-abstraccion",
+     "complejidad-consignas"
+    ],
+    "progresion": "Dentro de la variante, M10 mueve entre Fácil, Intermedio y Difícil (EST-05). El cambio de variante nunca es automático: se sugiere con Difícil sostenido en 3 sesiones en días distintos (P3 de RT-EST-001-R)."
+   },
+   {
+    "estacion": "transferir",
+    "nombre": "Estación 4: Transferir",
+    "titulo_variante": "Las pistas de Luci",
+    "habilidades": [
+     "resolucion-de-problemas",
+     "autocorreccion",
+     "generalizacion",
+     "transferencia-a-situaciones-nuevas",
+     "comprension-de-consignas-escritas"
+    ],
+    "estrategia": "junto-pistas-y-descarto",
+    "apoyos": [
+     "pistas-de-a-una",
+     "descarte-automatico",
+     "verificacion-antes-de-confirmar",
+     "escalera-de-ayudas"
+    ],
+    "modalidad_respuesta": [
+     "tocar"
+    ],
+    "adaptaciones": [
+     "zoom-y-desplazamiento",
+     "zona-de-toque-ampliada",
+     "alto-contraste",
+     "tiempo-sin-limite",
+     "teclado",
+     "pistas-en-audio-y-pictograma-en-3-a-8"
+    ],
+    "transferencia": "B",
+    "grados": {
+     "facil": {
+      "describe": "Encontrar dónde está Luci combinando 2 pistas que llegan de a una. Los lugares descartados se oscurecen solos.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "pistas": 2,
+       "negativas": 0,
+       "inferencias": 0,
+       "descarte": "automatico",
+       "plan": false,
+       "verificar": false,
+       "ofrece_ayuda": "boton-visible"
+      }
+     },
+     "intermedio": {
+      "describe": "3 pistas, una negativa. La persona marca los lugares que descarta.",
+      "cambia_respecto_al_anterior": [
+       "complejidad-relaciones",
+       "cantidad-pasos",
+       "disponibilidad-apoyos"
+      ],
+      "parametros": {
+       "pistas": 3,
+       "negativas": 1,
+       "inferencias": 0,
+       "descarte": "persona",
+       "plan": false,
+       "verificar": false,
+       "ofrece_ayuda": "boton"
+      }
+     },
+     "dificil": {
+      "describe": "Pistas que piden inferir. Antes de empezar se elige un plan; al responder se muestran las pistas y se pregunta si las cumple todas.",
+      "cambia_respecto_al_anterior": [
+       "grado-abstraccion",
+       "necesidad-planificacion"
+      ],
+      "parametros": {
+       "pistas": 3,
+       "negativas": 1,
+       "inferencias": 1,
+       "descarte": "persona",
+       "plan": true,
+       "verificar": true,
+       "ofrece_ayuda": "disponible"
+      }
+     }
+    },
+    "dimensiones_que_cambian": [
+     "complejidad-relaciones",
+     "cantidad-pasos",
+     "disponibilidad-apoyos",
+     "grado-abstraccion",
+     "necesidad-planificacion"
+    ],
+    "progresion": "Dentro de la variante, M10 mueve entre Fácil, Intermedio y Difícil (EST-05). El cambio de variante nunca es automático: se sugiere con Difícil sostenido en 3 sesiones en días distintos (P3 de RT-EST-001-R)."
+   }
+  ]
+ },
+ "rutas": {
+  "3-5": {
+   "estilo": "infantil",
+   "audio": "primero",
+   "sesion_min": [
+    10,
+    15
+   ],
+   "items_por_recorrido": 3,
+   "toque_min_px": 44,
+   "luci": "luciernaga"
+  },
+  "6-8": {
+   "estilo": "infantil",
+   "audio": "por-defecto",
+   "sesion_min": [
+    20,
+    20
+   ],
+   "items_por_recorrido": 4,
+   "toque_min_px": 24,
+   "luci": "luciernaga"
+  },
+  "9-12": {
+   "estilo": "infantil",
+   "audio": "opcional",
+   "sesion_min": [
+    25,
+    30
+   ],
+   "items_por_recorrido": 4,
+   "toque_min_px": 24,
+   "luci": "luciernaga"
+  },
+  "13-18": {
+   "estilo": "editorial",
+   "audio": "opcional",
+   "sesion_min": [
+    30,
+    40
+   ],
+   "items_por_recorrido": 4,
+   "toque_min_px": 24,
+   "luci": "marca"
+  }
+ },
+ "publicacion": {
+  "_nota": "REQ-CLI-LUC-09: una variante aparece en el catálogo de una ruta solo si tiene versión para esa ruta. En el prototipo «versión» quiere decir «versión de prueba»; ninguna está aprobada.",
+  "3-5": {
+   "explorar": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "reconocer": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "integrar": [],
+   "transferir": [],
+   "conversar": true
+  },
+  "6-8": {
+   "explorar": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "reconocer": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "integrar": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "transferir": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "conversar": false
+  },
+  "9-12": {
+   "explorar": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "reconocer": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "integrar": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "transferir": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "conversar": false
+  },
+  "13-18": {
+   "explorar": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "reconocer": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "integrar": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "transferir": [
+    "facil",
+    "intermedio",
+    "dificil"
+   ],
+   "conversar": false
+  }
+ },
+ "pendientes_de_decision": {
+  "3-5/integrar/facil": "FEC-013 P3 (supervisora): ¿E3 Fácil se publica en la ruta 3–5?"
+ },
+ "ayudas": {
+  "_nota": "Escalera de la sección 5.4. Los pasos 2 a 5 cuentan como «con ayuda» para M10-3; el paso 1 no (REQ-CLI-LUC-08).",
+  "pasos": [
+   "repetir-consigna",
+   "volver-a-ver-modelo-o-lista",
+   "senalar-mitad",
+   "senalar-cuarto",
+   "demostracion-guiada"
+  ],
+  "cuentan_como_ayuda_desde": 2
+ },
+ "m10": {
+  "_nota": "Reglas M10 de la beta 2 (6.10), en código. Valores de la ficha de PSP-SR.",
+  "ventana": 10,
+  "minimo": 5,
+  "subir_aciertos": 0.85,
+  "subir_sin_ayuda": 0.7,
+  "mantener_desde": 0.6,
+  "errores_seguidos": 3,
+  "pasos_por_sesion": 1
+ },
+ "cambio_de_estacion": {
+  "_nota": "P3 de RT-EST-001-R. Nunca automático.",
+  "sesiones": 3,
+  "dias_distintos": true,
+  "grado": "dificil",
+  "texto_con_profesional": "Revisar cambio de Estación",
+  "texto_modo_libre": "Hay aventuras nuevas para probar"
+ },
+ "originalidad": {
+  "_nota": "Sección 0 de FEC-013 (bloqueante). Rasgos y roles prohibidos en el catálogo de objetos y personajes; la prueba los busca en banco.json. La búsqueda de nombres de la obra original se hace por huellas (scripts/originalidad.py) para que el repositorio no contenga esos nombres.",
+  "rasgos_prohibidos": [
+   "rayas",
+   "rayas-rojas-y-blancas",
+   "gorro-con-pompon",
+   "anteojos-redondos",
+   "baston-de-caminante"
+  ],
+  "roles_prohibidos": [
+   "mago",
+   "perro-companero",
+   "gemelo-malvado",
+   "grupo-de-seguidores"
+  ]
+ }
+}

@@ -207,6 +207,19 @@ async function loginPro(p, email) {
       await p.waitForSelector('text=Sopas de letras terminadas: 1');
       await p.screenshot({ path: S + '/10b-explorapalabras.png' });
       await p.click('#explora-done');
+    } else if (id === 'luci') {
+      // Aventura de Luci (FEC-013): el profesional elige variante y grado; quien juega encuentra a Luci y el portal recibe el ítem.
+      const fh = await p.waitForSelector('.luci-frame iframe'); const fr = await fh.contentFrame();
+      await fr.waitForSelector('#a-seguir'); await fr.click('[data-gr=facil]'); await fr.click('#a-seguir'); await fr.click('#d-empezar');
+      await fr.waitForSelector('#escena');
+      must(!/Estación|Fácil|Intermedio|Difícil|nivel \d/i.test(await fr.textContent('#app')), 'la aventura de Luci no muestra Estación ni grado a quien juega');
+      const c = await fr.evaluate(() => { const e = S.item.esc.elementos.find((x) => x.uid === S.item.esc.objetivos[0]); const svg = document.querySelector('#escena');
+        const pt = svg.createSVGPoint(); pt.x = e.x + e.w / 2; pt.y = e.y + e.h / 2; const q = pt.matrixTransform(svg.getScreenCTM()); return { x: q.x, y: q.y }; });
+      const box = await fh.boundingBox(); await p.mouse.click(box.x + c.x, box.y + c.y);
+      await fr.waitForSelector('#j-seguir');
+      await p.waitForSelector('text=Búsquedas terminadas: 1');
+      await p.screenshot({ path: S + '/10c-luci.png' });
+      await p.click('#luci-done');
     } else if (id === 'memoria') {
       await p.click('#ch-stop');
     } else {

@@ -25,13 +25,17 @@ jobs:
         run: node tests/rules.test.js
       - name: Explorapalabras (generador en las 15 temáticas × 4 Estaciones × 3 grados y ficha de Estaciones)
         run: node tests/explorapalabras.test.js && python3 app/build.py --explorapalabras
+      - name: Aventura de Luci (FEC-013) · sección 0 (originalidad) y ficha por grado (REQ-CLI-LUC-02)
+        run: python3 scripts/originalidad.py && node tests/luci.test.js && python3 app/build.py --luci
       - name: Instalar navegador de prueba
         run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
       - name: Prueba de punta a punta
         run: |
           (cd app/dist && python3 -m http.server 8765 &) && sleep 1
           node tests/e2e.js
+      - name: Aventura de Luci de punta a punta (archivo suelto)
+        run: node tests/luci.e2e.js
       - name: Huella del artefacto (manifiesto con la huella de cada archivo y módulo)
         run: sha256sum app/dist/manifiesto.json
       - uses: actions/upload-artifact@v4
-        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/\napp/dist-explorapalabras/" }
+        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/\napp/dist-explorapalabras/\napp/dist-luci/" }

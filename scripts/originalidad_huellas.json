@@ -1,0 +1,15 @@
+{
+ "_nota": "Huellas SHA-256 (con prefijo luci-sec0:) de los nombres propios de la obra original del g\u00e9nero (personajes, autor). Se guardan como huellas para que el repositorio no contenga esos nombres (FEC-013, REQ-CLI-LUC-00b). La lista en claro la custodia el equipo legal; para agregar un t\u00e9rmino, sumar su huella.",
+ "prefijo": "luci-sec0:",
+ "huellas": [
+  "30bb6c234d0f097dd349070f5f79e920453a625fa9f7f2c8d67abf9c2cd1b49b",
+  "32a7e500da98208ff9651e3ebd9a3836de50ea4d7e8b8090ba9e19bfe5563687",
+  "6134dc8dff5c6f61e390a9d18e5eeb1337ae4545e0bd83c53ea192ab560287a5",
+  "af432bf8a02ed26663496bd68d6b43ae8a365722a1f71dcba0f4db78fd4780c7",
+  "b8639102392638ecfa909eacc1d10794e52441374631286d87bdd7065d2de795",
+  "e30125b3629cd20112973e30a63f0894cf7d6b17bf46ae915719566b671724fc",
+  "e7f5e92ed4439485fc6f3db89f308914716473fe0c24fa915e21e8865806ac33",
+  "f3e627aa442be8cf0f062226e9bc4bde6cea0906ca2edaa6061ad060add1cada",
+  "f5ca35e86d8d8067ac7a447294f358cd2310351b36b389111c7bd5edb0bc42f7"
+ ]
+}

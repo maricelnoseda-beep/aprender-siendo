@@ -1,0 +1,1019 @@
+<!doctype html>
+<!-- Aventura de búsqueda con Luci (título de trabajo), FEC-013 v0.1 de PSP-SR, 2026-11-09.
+     Construida por DEV-IA como herramienta del portal (ADR-009). Corre aislada (iframe sin acceso a la app ni a sus datos)
+     y también como archivo suelto para probar con doble clic.
+     CONTENIDO DE PRUEBA NO VALIDADO: láminas, textos, consignas, pistas y parámetros de cada grado los valida PSP-SR
+     y los aprueba la supervisora (RT-LUC-001). Las láminas salen de un generador de formas simples, sin IA generativa. -->
+<html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Aventura de Luci</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>__BRAND_FONT__
+/* Identidad: variables --as-* del núcleo (identidad.css). Los valores de respaldo son los mismos, por si la hoja no llega. */
+:root{color-scheme:light dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--as-papel,#fcfaf7);color:var(--as-tinta,#102f54);font-family:var(--as-fuente,"Nunito",system-ui,sans-serif);
+  font-size:18px;line-height:1.45;padding:12px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:4px solid var(--as-foco,#b95325);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2{color:var(--as-tinta);line-height:1.2;margin:0}
+h1{font-size:1.6rem;font-weight:800}
+h2{font-size:1.15rem;font-weight:800}
+p{margin:.4em 0}
+.small{font-size:.95rem;color:var(--as-secundario,#526776)}
+.hd{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.marca{width:44px;height:44px;border-radius:12px;background:var(--as-marca) center/contain no-repeat;flex:none}
+.hd .nm{font-weight:800;font-size:1.2rem;margin-right:auto}
+.hd .nm small{font-weight:700;font-size:.8rem;color:var(--as-secundario,#526776)}
+.rotulo{display:inline-block;font-size:.85rem;font-weight:700;color:var(--as-aviso,#805024);background:var(--as-arena,#fff1d7);border-radius:999px;padding:4px 12px}
+.panel{background:var(--as-superficie,#fff);border:1px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio,22px);box-shadow:var(--as-sombra);padding:18px}
+.titulo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.titulo h1{flex:1 1 220px}
+.btn{min-height:48px;border-radius:999px;border:2px solid var(--as-tinta);background:var(--as-tinta);color:var(--as-superficie,#fff);
+  font-weight:800;font-size:1.05rem;padding:8px 22px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.sec{background:var(--as-superficie);color:var(--as-tinta)}
+.btn.suave{background:var(--as-menta,#e0f2eb);color:var(--as-tinta);border-color:var(--as-borde-verde,#75b8a8)}
+.btn.grande{min-height:60px;font-size:1.2rem;padding:10px 28px}
+.btn.icono{min-width:48px;padding:8px 14px}
+.btn.chico{min-height:44px;font-size:.95rem;padding:6px 16px}
+.btn[disabled]{opacity:.55;cursor:default}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.opciones{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(var(--min,200px),1fr))}
+.opcion{border:2px solid var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio-control,14px);background:var(--as-superficie);
+  text-align:left;padding:10px 14px;min-height:52px;display:flex;flex-direction:column;gap:2px}
+.opcion:hover{background:var(--as-suave,#f4f6f4)}
+.opcion[aria-checked="true"],.opcion[aria-pressed="true"]{background:var(--as-menta,#e0f2eb);border-color:var(--as-verde,#196b6a);box-shadow:inset 0 0 0 2px var(--as-verde,#196b6a)}
+.opcion[disabled]{opacity:.5;cursor:default}
+.opcion .t{font-weight:800}
+.opcion .d{font-size:.9rem;color:var(--as-texto,#354e60)}
+.opcion.centro{align-items:center;text-align:center;justify-content:center}
+.grupo{margin:14px 0}
+.grupo>h2{margin-bottom:8px}
+.resumen{margin-top:12px;padding:12px 14px;border-radius:var(--as-radio-control,14px);background:var(--as-arena,#fff1d7);color:var(--as-tinta)}
+.casillas{display:flex;flex-wrap:wrap;gap:8px 18px}
+.casillas label{display:flex;align-items:center;gap:8px;min-height:44px}
+.casillas input{width:22px;height:22px}
+/* Juego */
+.juego{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.juego{grid-template-columns:minmax(0,1fr) 290px;align-items:start}}
+.consigna{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.consigna p{flex:1 1 220px;margin:0;font-weight:800;font-size:1.2rem}
+.escena-marco{position:relative;border-radius:var(--as-radio-control,14px);overflow:hidden;border:1px solid var(--as-borde);background:#fff}
+#escena{display:block;width:100%;height:auto;aspect-ratio:3/2;touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+#escena:focus-visible{outline:4px solid var(--as-foco,#b95325);outline-offset:-4px}
+.zoom{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
+.lado{display:flex;flex-direction:column;gap:12px}
+.modelo{display:flex;align-items:center;gap:12px;padding:10px;border:2px solid var(--as-borde);border-radius:var(--as-radio-control,14px);background:var(--as-superficie)}
+.modelo svg{width:96px;height:96px;flex:none}
+.modelo.grande svg{width:130px;height:130px}
+.lista{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.lista li{display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 10px;border:2px solid var(--as-borde);border-radius:var(--as-radio-control,14px);background:var(--as-superficie);font-weight:800}
+.lista li svg{width:44px;height:44px;flex:none}
+.lista li.hallada{background:var(--as-menta);border-color:var(--as-verde);text-decoration:line-through;text-decoration-thickness:3px}
+.lista li.oculta{justify-content:center;color:var(--as-secundario)}
+.pistas li{font-weight:700}
+.pistas li .picto{font-size:1.4rem}
+.msj{min-height:3.2em;font-weight:700;padding:10px 12px;border-radius:var(--as-radio-control,14px);background:var(--as-suave)}
+.msj:empty{background:transparent}
+.modo-e4{display:flex;gap:8px;flex-wrap:wrap}
+.dialogo{position:fixed;inset:0;background:rgb(16 47 84 / 45%);display:grid;place-items:center;padding:16px;z-index:10}
+.dialogo .panel{max-width:520px;width:100%}
+.cierre{text-align:center}
+.cierre .acciones{justify-content:center}
+.mapa svg{width:100%;max-width:520px;height:auto}
+.sujecion{position:relative;overflow:hidden;touch-action:none;user-select:none}
+.sujecion i{position:absolute;left:0;bottom:0;height:6px;width:0;background:var(--as-sol,#ffb82e)}
+.sujecion.apretando i{width:100%;transition:width 1.5s linear}
+.sujecion span{position:relative}
+.adulto-pie{margin-top:20px;border-top:1px dashed var(--as-borde);padding-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* Revisión del banco (solo equipo) */
+.grises #escena,.grises .modelo svg,.grises .lista svg{filter:grayscale(1)}
+.daltonismo #escena,.daltonismo .modelo svg,.daltonismo .lista svg{filter:url(#f-deuteranopia)}
+.contraste #escena{filter:contrast(1.35)}
+/* Ruta 13–18: estética editorial, sin dibujos infantiles (EST-03, A15) */
+body.editorial{--as-radio:10px;--as-radio-control:8px}
+body.editorial .opcion,body.editorial .lista li{border-width:1px}
+body.editorial h1{font-weight:800;letter-spacing:-.01em}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="f-deuteranopia"><feColorMatrix type="matrix" values="0.367 0.861 -0.228 0 0 0.280 0.673 0.047 0 0 -0.012 0.043 0.969 0 0 0 0 0 1 0"/></filter></svg>
+<div class="wrap">
+  <header class="hd" id="hd"></header>
+  <main id="app" aria-live="off"></main>
+  <p class="sr" id="anuncio" role="status" aria-live="polite"></p>
+</div>
+<script type="application/json" id="datos-banco">__BANCO__</script>
+<script type="application/json" id="datos-modulo">__MODULO__</script>
+<script type="application/json" id="datos-inicio">__INICIO__</script>
+<script id="motor">
+"use strict";
+/* ---------- Motor: lógica pura y determinista con semilla (la prueba tests/luci.test.js sin navegador) ----------
+   Compone cada ítem a partir de una lámina del banco, resuelve las pistas, decide qué se tocó y aplica las reglas
+   de dificultad en código (M10). Ningún modelo de lenguaje interviene (DEV-IA §4). */
+const Motor = (() => {
+  const VB = { w: 1200, h: 800 };
+  const GR = ["facil", "intermedio", "dificil"];
+  function azar(semilla) {
+    let s = (semilla >>> 0) || 0x9e3779b9;
+    return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; };
+  }
+  const mezclar = (arr, r) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const uno = (arr, r) => arr[Math.floor(r() * arr.length)];
+  const choca = (a, b, gap) => a.x < b.x + b.w + gap && b.x < a.x + a.w + gap && a.y < b.y + b.h + gap && b.y < a.y + a.h + gap;
+
+  /* Catálogo de una ruta (REQ-CLI-LUC-09): solo variantes y grados con versión para esa ruta. */
+  function variantesDeRuta(modulo, ruta) {
+    const pub = (modulo.publicacion || {})[ruta] || {};
+    return modulo.estaciones.variantes.filter((v) => (pub[v.estacion] || []).length).map((v) => ({ estacion: v.estacion, grados: pub[v.estacion].slice() }));
+  }
+  const conversarEnRuta = (modulo, ruta) => !!((modulo.publicacion || {})[ruta] || {}).conversar;
+  const estiloDeRuta = (modulo, ruta) => ((modulo.rutas || {})[ruta] || {}).estilo || "infantil";
+
+  /* Láminas disponibles para una variante, grado y estilo. */
+  const laminasDe = (banco, variante, grado, estilo) => banco.laminas.filter((l) => l.variante === variante && l.grado === grado && l.estilo === estilo);
+
+  /* Ubica rectángulos sin superponerse dentro del área de la escena. */
+  function ubicador(r, area, gap) {
+    const puestos = [];
+    return {
+      puestos,
+      poner(w, h, fijo) {
+        if (fijo) { const q = { x: fijo.x, y: fijo.y, w, h }; puestos.push(q); return q; }
+        for (let t = 0; t < 600; t++) {
+          const q = { x: area.x + r() * (area.w - w), y: area.y + r() * (area.h - h), w, h };
+          if (!puestos.some((p) => choca(p, q, gap))) { puestos.push(q); return q; }
+        }
+        return null;
+      }
+    };
+  }
+  const AREA = { infantil: { x: 24, y: 210, w: 1152, h: 566 }, editorial: { x: 24, y: 150, w: 1152, h: 626 } };
+
+  /* Arma un ítem. Devuelve la escena con elementos, objetivos y lo que hace falta para mostrarlo. */
+  function componer(lamina, banco, modulo, opciones = {}) {
+    const r = azar(lamina.semilla + (opciones.vuelta || 0) * 7919);
+    const O = banco.objetos, estilo = lamina.estilo, fondo = banco.fondos[lamina.fondo];
+    const variante = modulo.estaciones.variantes.find((v) => v.estacion === lamina.variante);
+    const p = variante ? variante.grados[lamina.grado].parametros : {};
+    const esc = { vb: VB, lamina: lamina.id, variante: lamina.variante, grado: lamina.grado, estilo, fondo: lamina.fondo, elementos: [], objetivos: [], p };
+    const ub = ubicador(r, AREA[estilo] || AREA.infantil, estilo === "editorial" ? 18 : 14);
+    let uid = 0;
+    const agregar = (oid, rol, extra = {}, fijo) => {
+      const ob = O[oid]; if (!ob) return null;
+      const k = (extra.escala || (rol === "relleno" ? 0.9 + r() * 0.35 : 1)) * (estilo === "editorial" ? 1.2 : 1.3);
+      const w = Math.round((extra.w || ob.w) * k), h = Math.round((extra.h || ob.h) * k);
+      const q = ub.poner(w, h, fijo); if (!q) return null;
+      const e = { uid: "e" + (++uid), obj: oid, forma: ob.forma, color: extra.color || ob.color, categoria: ob.categoria, rol, x: Math.round(q.x), y: Math.round(q.y), w, h,
+        marca: !!extra.marca, attrs: extra.attrs || {}, tocable: extra.tocable !== false };
+      esc.elementos.push(e); return e;
+    };
+    const objetivoPrincipal = estilo === "editorial" ? "marca-luci" : "luci";
+    const relleno = (n, excluir) => {
+      const pool = Object.keys(O).filter((k) => { const ob = O[k];
+        if (ob.rol !== "relleno" || ob.color === "sol" || excluir(k, ob)) return false;
+        if (estilo === "editorial") return ob.categoria === "pictograma" || ["libro", "util", "caja", "vehiculo", "mueble", "persona", "abrigo", "cocina"].includes(ob.categoria);
+        return ob.categoria !== "pictograma"; });
+      for (let i = 0; i < n * 3 && esc.elementos.length < n + esc.objetivos.length + 40 && pool.length; i++) {
+        if (esc.elementos.filter((e) => e.rol === "relleno").length >= n) break;
+        agregar(uno(pool, r), "relleno");
+      }
+    };
+    const SOL_INF = ["flor-sol", "pelota-sol", "mariposa-sol", "hoja-sol", "estrella-sol", "limon"];
+    const SOL_ED = ["cuadro-sol", "triangulo-sol", "rombo-sol", "estrella-sol"];
+
+    if (lamina.variante === "explorar") {
+      const t = agregar(objetivoPrincipal, "objetivo", { escala: (p.tam || 70) / 70 });
+      esc.objetivos.push(t.uid);
+      if (p.pasos === 2) { const f = agregar("farolito", "objetivo2", { marca: true }); esc.objetivos.push(f.uid); }
+      for (let i = 0; i < (p.senuelos_color || 0); i++) agregar(uno(estilo === "editorial" ? SOL_ED : SOL_INF, r), "senuelo-color");
+      relleno(p.elementos - (p.senuelos_color || 0), (k, ob) => ob.forma === "farolito");
+      esc.consigna = estilo === "editorial" ? (p.pasos === 2 ? "marca2a" : "marca1") : (p.pasos === 2 ? "explorar2a" : "explorar1");
+      esc.modelo = [objetivoPrincipal].concat(p.pasos === 2 ? ["farolito"] : []);
+    } else if (lamina.variante === "reconocer") {
+      if (p.atributo) {
+        const at = uno(["mochila-abierta", "taza-chica", "farolito-arriba"], r);
+        esc.atributo = at;
+        if (at === "farolito-arriba") {
+          // Cada banco se ubica con su espacio arriba y al costado reservado; el farolito va arriba de uno solo y al costado de los demás.
+          const f = { w: Math.round(O.farolito.w * 1.3), h: Math.round(O.farolito.h * 1.3) }, bw = 135, bh = 60;
+          for (let i = 0; i < 5; i++) {
+            const q = ub.poner(bw + f.w + 6, bh + f.h + 4); if (!q) continue;
+            const b = { uid: "e" + (++uid), obj: "banco-plaza", forma: "banco", color: "verde", categoria: "mueble", rol: "apoyo", x: Math.round(q.x), y: Math.round(q.y + f.h + 4), w: bw, h: bh, marca: false, attrs: {}, tocable: true };
+            const fx = i === 0 ? b.x + bw / 2 - f.w / 2 : b.x + bw + 6, fy = i === 0 ? q.y : b.y + bh - f.h;
+            const e = { uid: "e" + (++uid), obj: "farolito", forma: "farolito", color: "sol", categoria: "farolito", rol: i === 0 ? "objetivo" : "senuelo-atributo",
+              x: Math.round(fx), y: Math.round(fy), w: f.w, h: f.h, marca: false, attrs: { arribaDe: i === 0 ? b.uid : null, alLadoDe: i === 0 ? null : b.uid }, tocable: true };
+            esc.elementos.push(b, e); if (i === 0) esc.objetivos.push(e.uid);
+          }
+        } else {
+          const oid = at === "mochila-abierta" ? "mochila" : "taza";
+          const t = agregar(oid, "objetivo", at === "mochila-abierta" ? { attrs: { abierta: true } } : { escala: 0.62, attrs: { chica: true } });
+          esc.objetivos.push(t.uid);
+          const cols = ["verde", "coral", "lila", "verde"];
+          for (let i = 0; i < p.senuelos_categoria; i++)
+            agregar(oid, "senuelo-atributo", at === "mochila-abierta" ? { color: cols[i % 4], attrs: { abierta: false } } : { escala: 1 + 0.12 * i, color: cols[i % 4] });
+        }
+        esc.consigna = "atributo";
+      } else {
+        const oid = uno(["farolito", "mochila", "bufanda", "libreta", "mapa", "taza"], r);
+        const t = agregar(oid, "objetivo", { marca: true }); esc.objetivos.push(t.uid);
+        const cols = [O[oid].color, "coral", "lila", O[oid].color];
+        for (let i = 0; i < (p.senuelos_categoria || 0); i++) agregar(oid, "senuelo-categoria", { color: cols[i % 4] });
+        esc.buscado = oid;
+        esc.consigna = p.presentacion === "dibujo-y-audio" ? "reconocerDibujo" : "reconocerNombre";
+        if (p.presentacion === "dibujo-y-audio") esc.modelo = [oid];
+      }
+      const formasObj = new Set(esc.elementos.map((e) => e.forma));
+      relleno(p.elementos - esc.elementos.length, (k, ob) => formasObj.has(ob.forma));
+    } else if (lamina.variante === "integrar") {
+      if (p.consigna === "categoria") {
+        const usos = ["frio", "lluvia", "paseo"].filter((u) => {
+          const c = Object.keys(O).filter((k) => O[k].usos.includes(u) && O[k].categoria !== "luci");
+          return c.filter((k) => O[k].material === "tela").length >= 3 && c.some((k) => O[k].material !== "tela");
+        });
+        const uso = uno(usos, r);
+        const cands = Object.keys(O).filter((k) => O[k].usos.includes(uso) && O[k].categoria !== "luci");
+        for (const k of cands) { const e = agregar(k, "categoria"); if (e) esc.objetivos.push(e.uid); }
+        esc.regla = { uso, material: "tela", necesarios: 3 };
+        esc.consigna = "integrarCategoria";
+        relleno(p.elementos - esc.elementos.length, (k, ob) => ob.usos.includes(uso));
+      } else {
+        const listables = Object.keys(O).filter((k) => O[k].rol === "relleno" && O[k].color !== "sol" && !["persona", "pictograma", "mueble"].includes(O[k].categoria)
+          && (estilo !== "editorial" || ["libro", "util", "caja", "vehiculo", "abrigo", "cocina"].includes(O[k].categoria)));
+        const formas = []; const lista = [];
+        for (const k of mezclar(listables, r)) { if (lista.length >= p.lista) break; if (formas.includes(O[k].forma)) continue; formas.push(O[k].forma); lista.push(k); }
+        for (const k of lista) { const e = agregar(k, "lista"); esc.objetivos.push(e.uid); }
+        esc.lista = lista;
+        esc.consigna = "integrarObjetos";
+        relleno(p.elementos - esc.elementos.length, (k, ob) => formas.includes(ob.forma));
+      }
+      if (p.zonas_dibujadas) esc.zonas4 = true;
+    } else if (lamina.variante === "transferir") {
+      if (fondo.tabla) {
+        const T = banco.tablas[fondo.tabla];
+        // La tabla se rearma hasta que las pistas dejen una sola fila (con datos al azar no siempre se puede).
+        for (let intento = 0; intento < 60 && !esc.pistas; intento++) {
+        const filas = mezclar(T.lineas, r).map((linea, i) => {
+          const hora = fondo.tabla === "horario" ? 6 * 60 + 30 + Math.floor(r() * 7) * 15 : 15 * 60 + Math.floor(r() * 8) * 30;
+          const limite = fondo.tabla === "horario" ? 8 * 60 : 18 * 60;
+          const destino = uno(T.destinos, r);
+          const sale = fondo.tabla === "horario" ? hora - 25 - Math.floor(r() * 3) * 5 : hora;
+          return { id: "f" + i, nombre: linea, celdas: [linea, destino, hhmm(sale), hhmm(hora)], attrs: { antes: hora < limite, destino, linea } };
+        });
+        const pool = [{ clave: "antes", valor: true, texto: T.pista_hora }, { clave: "antes", valor: false, texto: T.pista_hora_neg }];
+        for (const d of T.destinos) { pool.push({ clave: "destino", valor: d, texto: T.pista_destino.replace("{destino}", d) }); pool.push({ clave: "destino", valor: d, inferencia: true, texto: T.inferencias[d] }); }
+        for (const l of T.lineas) pool.push({ clave: "linea", valor: l, negar: true, texto: T.pista_linea_neg.replace("{linea}", l) });
+        const x0 = 80, y0 = 150, anchos = [260, 340, 200, 200], alto = 92;
+        filas.forEach((f, k) => { f.x = x0; f.y = y0 + k * alto; f.w = 1000; f.h = alto - 8; });
+        esc.lugares = filas; esc.tabla = { titulo: T.titulo, columnas: T.columnas, anchos, x0, y0 };
+        esc.pistas = resolverPistas(filas, pool, p, r);
+        }
+        esc.consigna = "transferirTabla";
+      } else {
+        const lug = mezclar(fondo.lugares, r);
+        const cols = 4, ancho = VB.w / cols, alto = (VB.h - 20) / 2;
+        esc.lugares = lug.map((l, i) => ({ id: l.id, nombre: l.nombre, attrs: l.attrs, x: (i % cols) * ancho, y: 10 + Math.floor(i / cols) * alto, w: ancho, h: alto }));
+        esc.pistas = resolverPistas(esc.lugares, fondo.pistas, p, r);
+        esc.consigna = "transferir";
+      }
+      if (esc.pistas) esc.objetivo = esc.pistas.lugar;
+    } else if (lamina.variante === "conversar") {
+      relleno(14, () => false);
+    }
+    return esc;
+  }
+  const hhmm = (m) => Math.floor(m / 60) + ":" + String(m % 60).padStart(2, "0");
+
+  /* Pistas: busca un conjunto que deje un solo lugar posible. Ninguna pista sola alcanza (hay que integrarlas). */
+  const cumple = (lugar, c) => (lugar.attrs[c.clave] === c.valor) !== !!c.negar;
+  function resolverPistas(lugares, pool, p, r) {
+    const k = p.pistas || 2, neg = p.negativas || 0, inf = p.inferencias || 0;
+    for (const lugar of mezclar(lugares, r)) {
+      const validas = pool.filter((c) => cumple(lugar, c) && lugares.filter((l) => cumple(l, c)).length > 1);
+      const combos = [];
+      const rec = (desde, sel) => {
+        if (sel.length === k) { combos.push(sel.slice()); return; }
+        for (let i = desde; i < validas.length; i++) { sel.push(validas[i]); rec(i + 1, sel); sel.pop(); }
+      };
+      rec(0, []);
+      const ok = combos.filter((cs) => cs.filter((c) => c.negar).length === neg && cs.filter((c) => c.inferencia).length === inf
+        && new Set(cs.map((c) => c.clave)).size === cs.length
+        && lugares.filter((l) => cs.every((c) => cumple(l, c))).length === 1);
+      if (ok.length) {
+        const cs = mezclar(uno(ok, r), r).sort((a, b) => (a.negar ? 1 : 0) - (b.negar ? 1 : 0));
+        return { lugar: lugar.id, lista: cs.map((c) => ({ texto: c.texto, picto: c.picto || null, clave: c.clave, valor: c.valor, negar: !!c.negar, inferencia: !!c.inferencia })) };
+      }
+    }
+    return null;
+  }
+  const lugaresPosibles = (esc, cuantas) => esc.lugares.filter((l) => esc.pistas.lista.slice(0, cuantas).every((c) => cumple(l, c))).map((l) => l.id);
+  const primeraQueNoCumple = (esc, lugarId) => { const l = esc.lugares.find((x) => x.id === lugarId); return esc.pistas.lista.find((c) => !cumple(l, c)) || null; };
+
+  /* Zona de toque (REQ: WCAG 2.5.8): nunca menor que el mínimo de la ruta en píxeles de pantalla, con margen de tolerancia.
+     pxPorUnidad = píxeles de pantalla por unidad de la lámina (cambia con el zoom). */
+  function zonaDeToque(e, pxPorUnidad, minPx, tolPx = 6) {
+    const minU = minPx / pxPorUnidad, tol = tolPx / pxPorUnidad;
+    const w = Math.max(e.w, minU) + 2 * tol, h = Math.max(e.h, minU) + 2 * tol;
+    return { x: e.x + e.w / 2 - w / 2, y: e.y + e.h / 2 - h / 2, w, h };
+  }
+  /* Qué se tocó: el elemento cuya zona contiene el punto y cuyo centro está más cerca. Objetivos y señuelos se tratan igual. */
+  function queSeToco(esc, punto, pxPorUnidad, minPx) {
+    let mejor = null, dmin = Infinity;
+    for (const e of esc.elementos) {
+      if (!e.tocable) continue;
+      const z = zonaDeToque(e, pxPorUnidad, minPx);
+      if (punto.x < z.x || punto.x > z.x + z.w || punto.y < z.y || punto.y > z.y + z.h) continue;
+      const d = Math.hypot((punto.x - (e.x + e.w / 2)) / z.w, (punto.y - (e.y + e.h / 2)) / z.h);
+      if (d < dmin) { dmin = d; mejor = e; }
+    }
+    return mejor;
+  }
+  const lugarEn = (esc, punto) => (esc.lugares || []).find((l) => l.x !== undefined && punto.x >= l.x && punto.x <= l.x + l.w && punto.y >= l.y && punto.y <= l.y + l.h) || null;
+
+  /* Escalera de ayudas (REQ-CLI-LUC-08): el paso 1 (repetir la consigna) no cuenta como ayuda; 2 a 5, sí. */
+  const cuentaComoAyuda = (paso, modulo) => paso >= ((modulo && modulo.ayudas && modulo.ayudas.cuentan_como_ayuda_desde) || 2);
+
+  /* Mitad o cuarto de la escena donde está el objetivo (pasos 3 y 4). */
+  function region(esc, e, paso) {
+    const cx = e.x + e.w / 2, cy = e.y + e.h / 2, W = esc.vb.w, H = esc.vb.h;
+    if (paso === 3) return cx < W / 2 ? { x: 0, y: 0, w: W / 2, h: H } : { x: W / 2, y: 0, w: W / 2, h: H };
+    return { x: cx < W / 2 ? 0 : W / 2, y: cy < H / 2 ? 0 : H / 2, w: W / 2, h: H / 2 };
+  }
+
+  /* M10 (beta 2, 6.10) dentro de la variante (EST-05). El tiempo no interviene (M10-7, REQ-CLI-LUC-03). */
+  function ajusteM10(historial, grado, opciones = {}) {
+    const m = opciones.m10 || { ventana: 10, minimo: 5, subir_aciertos: 0.85, subir_sin_ayuda: 0.7, mantener_desde: 0.6, errores_seguidos: 3 };
+    const i = GR.indexOf(grado);
+    if (opciones.fijo) return { grado, motivo: "fijado por el profesional (M10-9)" };
+    if (opciones.erroresSeguidos >= m.errores_seguidos) {
+      return i > 0 ? { grado: GR[i - 1], motivo: "3 errores seguidos (M10-5)", masAyuda: true } : { grado, motivo: "3 errores seguidos en el grado mínimo", masAyuda: true };
+    }
+    const v = historial.slice(-m.ventana);
+    if (v.length < m.minimo) return { grado, motivo: "menos de 5 ítems (M10-2)" };
+    const ac = v.filter((x) => x.acierto).length / v.length, sa = v.filter((x) => x.acierto && !x.conAyuda).length / v.length;
+    if (ac >= m.subir_aciertos && sa >= m.subir_sin_ayuda && i < 2 && !opciones.yaSubio && opciones.checkinEstandar !== false) return { grado: GR[i + 1], motivo: "subir (M10-3)", subio: true };
+    if (ac < m.mantener_desde && i > 0) return { grado: GR[i - 1], motivo: "menos de 60 % (M10-5)" };
+    return { grado, motivo: "mantener (M10-4)" };
+  }
+
+  /* Sugerencia de cambio de variante (P3 de RT-EST-001-R): nunca cambia sola. */
+  function sugerenciaDeEstacion(sesiones, variante, modulo, conProfesional) {
+    const c = modulo.cambio_de_estacion;
+    const dias = new Set(sesiones.filter((s) => s.variante === variante && s.grado === c.grado && s.sostenido).map((s) => s.dia));
+    if (dias.size < c.sesiones) return null;
+    return { texto: conProfesional ? c.texto_con_profesional : c.texto_modo_libre, cambiaSola: false };
+  }
+
+  return { VB, GR, azar, mezclar, variantesDeRuta, conversarEnRuta, estiloDeRuta, laminasDe, componer, resolverPistas, cumple, lugaresPosibles,
+    primeraQueNoCumple, zonaDeToque, queSeToco, lugarEn, cuentaComoAyuda, region, ajusteM10, sugerenciaDeEstacion };
+})();
+if (typeof module !== "undefined") module.exports = Motor;
+</script>
+<script id="dibujo">
+"use strict";
+/* ---------- Dibujo de láminas de relleno (SVG con formas simples, paleta de marca) ----------
+   Prototipo: las láminas definitivas las produce el equipo de marca (RT-LUC-001 §3). Sin tramas ni rayas (sección 0). */
+const Dibujo = (() => {
+  const C = { sol: "#FFB82E", verde: "#196B6A", coral: "#F58060", lila: "#BD89C4", tinta: "#102F54", arena: "#F3DDB0", menta: "#E0F2EB",
+    agua: "#9CCFE0", hoja: "#7AA63A", papel: "#FCFAF7", gris: "#DAE3E1", blanco: "#FFFFFF", noche: "#1D3557", piedra: "#B8C4C2" };
+  const ED = { verde: "#3F6E6D", coral: "#C9826F", lila: "#9C8AA8", arena: "#E5D9C2", sol: "#FFB82E", tinta: "#102F54" };
+  const PIEL = ["#8D5524", "#C68642", "#E0AC69", "#F1C27D", "#FFDBAC"];
+  const col = (c, ed) => (ed && ED[c]) || C[c] || c;
+  const T = 'stroke="#102F54" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"';
+  const gota = (x, y, s) => `<path d="M${x} ${y - s} C${x + s * .9} ${y - s * .1} ${x + s * .75} ${y + s * .8} ${x} ${y + s * .8} C${x - s * .75} ${y + s * .8} ${x - s * .9} ${y - s * .1} ${x} ${y - s}Z" fill="#FFB82E" ${T}/>`;
+  let LUCI = null;
+  const S = {
+    luciernaga: () => LUCI ? `<image href="${LUCI}" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid meet"/>`
+      : `<ellipse cx="34" cy="38" rx="26" ry="18" fill="#E0F2EB" ${T}/><ellipse cx="66" cy="38" rx="26" ry="18" fill="#E0F2EB" ${T}/><ellipse cx="50" cy="60" rx="16" ry="22" fill="#102F54"/><circle cx="50" cy="32" r="14" fill="#6FC3B2" ${T}/>${gota(50, 82, 13)}`,
+    "gota-en-cuadro": () => `<rect x="6" y="6" width="88" height="88" rx="18" fill="#FCFAF7" stroke="#102F54" stroke-width="6" vector-effect="non-scaling-stroke"/>${gota(50, 52, 26)}<path d="M50 12v6M80 30l-5 4M20 30l5 4" ${T} fill="none"/>`,
+    farolito: (c) => `<path d="M35 18 C35 4 65 4 65 18" fill="none" ${T}/><rect x="28" y="16" width="44" height="12" rx="4" fill="#102F54"/><rect x="30" y="28" width="40" height="52" rx="10" fill="${c}" ${T}/><rect x="26" y="80" width="48" height="12" rx="4" fill="#102F54"/>`,
+    mochila: (c, a) => `<path d="M30 30 C30 14 70 14 70 30" fill="none" ${T}/><rect x="16" y="26" width="68" height="70" rx="18" fill="${c}" ${T}/>`
+      + (a.abierta ? `<ellipse cx="50" cy="32" rx="30" ry="9" fill="#102F54"/><path d="M20 30 L32 4 L74 4 L80 30" fill="${c}" ${T}/>` : `<path d="M16 46 C16 30 84 30 84 46 L84 52 L16 52Z" fill="${c}" ${T}/><rect x="44" y="50" width="12" height="10" rx="3" fill="#FCFAF7" ${T}/>`)
+      + `<rect x="30" y="66" width="40" height="20" rx="6" fill="none" ${T}/>`,
+    bufanda: (c) => `<path d="M8 28 C30 14 70 14 92 28 C92 40 80 42 70 38 L70 90 L52 90 L54 40 C40 38 22 44 8 40Z" fill="${c}" ${T}/><path d="M54 90v8M60 90v8M66 90v8" ${T}/>`,
+    libreta: (c) => `<rect x="18" y="10" width="64" height="84" rx="8" fill="${c}" ${T}/><path d="M30 34h40M30 50h40M30 66h28" ${T}/><circle cx="30" cy="10" r="4" fill="#FCFAF7" ${T}/><circle cx="50" cy="10" r="4" fill="#FCFAF7" ${T}/><circle cx="70" cy="10" r="4" fill="#FCFAF7" ${T}/>`,
+    mapa: (c) => `<path d="M6 20 L34 10 L66 20 L94 10 L94 84 L66 94 L34 84 L6 94Z" fill="${c}" ${T}/><path d="M34 10V84M66 20V94" ${T}/><path d="M16 70 C30 50 50 70 60 46 S80 34 86 28" fill="none" stroke="#196B6A" stroke-width="3" stroke-dasharray="6 6" vector-effect="non-scaling-stroke"/>`,
+    taza: (c) => `<path d="M14 24 H74 L68 86 C66 92 22 92 20 86Z" fill="${c}" ${T}/><path d="M74 36 C96 36 96 66 70 66" fill="none" ${T}/>`,
+    flor: (c) => `<path d="M50 50 V98" ${T} stroke="#196B6A"/><path d="M50 78 C62 66 76 70 76 70 C70 82 58 82 50 80" fill="#7AA63A" ${T}/>${[0, 72, 144, 216, 288].map((a) => `<circle cx="${50 + 18 * Math.cos(a * Math.PI / 180)}" cy="${32 + 18 * Math.sin(a * Math.PI / 180)}" r="14" fill="${c}" ${T}/>`).join("")}<circle cx="50" cy="32" r="10" fill="#FCFAF7" ${T}/>`,
+    pelota: (c) => `<circle cx="50" cy="50" r="44" fill="${c}" ${T}/><path d="M10 40 C40 56 60 56 90 40 M30 12 C44 40 44 60 30 88" fill="none" ${T}/>`,
+    mariposa: (c) => `<ellipse cx="28" cy="34" rx="24" ry="22" fill="${c}" ${T}/><ellipse cx="72" cy="34" rx="24" ry="22" fill="${c}" ${T}/><ellipse cx="32" cy="72" rx="16" ry="16" fill="${c}" ${T}/><ellipse cx="68" cy="72" rx="16" ry="16" fill="${c}" ${T}/><rect x="45" y="18" width="10" height="70" rx="5" fill="#102F54"/>`,
+    hoja: (c) => `<path d="M10 90 C10 30 50 6 92 8 C92 56 64 92 10 90Z" fill="${c}" ${T}/><path d="M12 88 C40 60 60 40 88 12" fill="none" ${T}/>`,
+    estrella: (c) => `<path d="M50 4 L62 36 L96 38 L70 60 L80 94 L50 74 L20 94 L30 60 L4 38 L38 36Z" fill="${c}" ${T}/>`,
+    limon: (c) => `<path d="M6 50 C14 20 86 20 94 50 C86 80 14 80 6 50Z" fill="${c}" ${T}/>`,
+    vaquita: (c) => `<path d="M10 74 C10 20 90 20 90 74Z" fill="${c}" ${T}/><circle cx="50" cy="76" r="12" fill="#102F54"/><path d="M50 34 V74" ${T}/><circle cx="32" cy="54" r="6" fill="#102F54"/><circle cx="68" cy="54" r="6" fill="#102F54"/>`,
+    caracol: (c) => `<path d="M6 86 H90 C96 86 96 76 88 74 L70 70" fill="#E0AC69" ${T}/><circle cx="50" cy="50" r="34" fill="${c}" ${T}/><path d="M50 50 m0 -6 a6 6 0 1 1 -6 6 a14 14 0 1 1 14 14 a22 22 0 1 1 -22 -22" fill="none" ${T}/>`,
+    arbusto: (c) => `<circle cx="28" cy="60" r="26" fill="#7AA63A" ${T}/><circle cx="72" cy="60" r="26" fill="#7AA63A" ${T}/><circle cx="50" cy="40" r="30" fill="${c}" ${T}/><rect x="6" y="80" width="88" height="14" rx="6" fill="#7AA63A" ${T}/>`,
+    manzana: (c) => `<path d="M50 26 C80 10 98 40 86 70 C78 92 58 94 50 86 C42 94 22 92 14 70 C2 40 20 10 50 26Z" fill="${c}" ${T}/><path d="M50 26 C50 14 56 8 62 4" fill="none" ${T}/><path d="M54 18 C66 6 80 12 80 12 C72 24 60 22 54 18" fill="#7AA63A" ${T}/>`,
+    pera: (c) => `<path d="M50 10 C64 10 62 34 74 50 C92 74 74 96 50 96 C26 96 8 74 26 50 C38 34 36 10 50 10Z" fill="${c}" ${T}/><path d="M50 10 V2" ${T}/>`,
+    zanahoria: (c) => `<path d="M24 24 H76 L52 98 H48Z" fill="${c}" ${T}/><path d="M36 24 C30 8 40 4 46 18 M50 24 C50 4 60 2 56 22 M64 24 C70 8 80 10 66 26" fill="#7AA63A" ${T}/>`,
+    libro: (c) => `<rect x="14" y="6" width="72" height="88" rx="6" fill="${c}" ${T}/><rect x="14" y="6" width="14" height="88" rx="4" fill="#102F54"/><rect x="38" y="24" width="38" height="14" rx="3" fill="#FCFAF7" ${T}/>`,
+    lapiz: (c) => `<path d="M30 4 H70 V76 L50 98 L30 76Z" fill="${c}" ${T}/><path d="M30 76 H70" ${T}/><path d="M44 90 L50 98 L56 90Z" fill="#102F54"/>`,
+    maceta: (c) => `<path d="M10 30 H90 L80 96 H20Z" fill="${c}" ${T}/><rect x="4" y="22" width="92" height="16" rx="5" fill="${c}" ${T}/>`,
+    regadera: (c) => `<rect x="20" y="30" width="50" height="60" rx="10" fill="${c}" ${T}/><path d="M70 50 L96 20 M90 14 L100 26" fill="none" ${T}/><path d="M30 30 C30 6 60 6 60 30" fill="none" ${T}/>`,
+    barrilete: (c) => `<path d="M50 4 L88 44 L50 84 L12 44Z" fill="${c}" ${T}/><path d="M50 4 V84 M12 44 H88" ${T}/><path d="M50 84 C40 90 60 94 50 100" fill="none" ${T}/>`,
+    globo: (c) => `<ellipse cx="50" cy="36" rx="34" ry="34" fill="${c}" ${T}/><path d="M50 70 C40 80 60 90 50 100" fill="none" ${T}/>`,
+    paraguas: (c) => `<path d="M4 50 C4 10 96 10 96 50 C88 44 80 44 72 50 C64 44 58 44 50 50 C42 44 36 44 28 50 C20 44 12 44 4 50Z" fill="${c}" ${T}/><path d="M50 50 V88 C50 98 38 98 38 88" fill="none" ${T}/>`,
+    botas: (c) => `<path d="M10 10 H40 V70 H50 C56 70 56 92 50 92 H10Z" fill="${c}" ${T}/><path d="M54 10 H84 V70 H94 C100 70 100 92 94 92 H54Z" fill="${c}" ${T}/>`,
+    piloto: (c) => `<path d="M30 6 H70 L94 30 L84 44 L76 36 V96 H24 V36 L16 44 L6 30Z" fill="${c}" ${T}/><path d="M50 10 V96" ${T}/><circle cx="58" cy="40" r="3" fill="#102F54"/><circle cx="58" cy="60" r="3" fill="#102F54"/>`,
+    gorra: (c) => `<path d="M14 70 C14 20 86 20 86 70Z" fill="${c}" ${T}/><path d="M60 70 H98 C98 80 70 82 60 76Z" fill="${c}" ${T}/>`,
+    guantes: (c) => `<path d="M8 90 V40 C8 20 40 20 40 40 V90Z" fill="${c}" ${T}/><path d="M60 90 V40 C60 20 92 20 92 40 V90Z" fill="${c}" ${T}/>`,
+    campera: (c) => `<path d="M30 6 H70 L94 30 V96 H76 V44 V96 H24 V44 V96 H6 V30Z" fill="${c}" ${T}/><path d="M50 10 V96" ${T}/><path d="M30 6 C40 20 60 20 70 6" fill="none" ${T}/>`,
+    termo: (c) => `<rect x="30" y="16" width="40" height="80" rx="10" fill="${c}" ${T}/><rect x="34" y="4" width="32" height="14" rx="4" fill="#102F54"/>`,
+    pava: (c) => `<path d="M16 90 C10 50 30 34 50 34 C70 34 90 50 84 90Z" fill="${c}" ${T}/><path d="M84 60 L100 40" ${T}/><path d="M30 34 C30 10 70 10 70 34" fill="none" ${T}/>`,
+    silla: (c) => `<rect x="20" y="4" width="10" height="92" rx="3" fill="${c}" ${T}/><rect x="20" y="52" width="60" height="10" rx="3" fill="${c}" ${T}/><rect x="70" y="56" width="10" height="40" rx="3" fill="${c}" ${T}/><rect x="20" y="8" width="10" height="40" fill="${c}"/>`,
+    bicicleta: (c) => `<circle cx="22" cy="70" r="20" fill="none" ${T}/><circle cx="78" cy="70" r="20" fill="none" ${T}/><path d="M22 70 L42 34 H70 L78 70 M42 34 L52 70 L70 34 M38 24 H50" fill="none" stroke="${c}" stroke-width="5" vector-effect="non-scaling-stroke"/>`,
+    caja: (c) => `<rect x="8" y="22" width="84" height="70" rx="4" fill="${c}" ${T}/><path d="M8 22 L22 8 H78 L92 22" fill="${c}" ${T}/>`,
+    cajon: (c) => `<rect x="6" y="20" width="88" height="72" rx="4" fill="${c}" ${T}/><circle cx="30" cy="22" r="12" fill="#F58060" ${T}/><circle cx="54" cy="18" r="12" fill="#7AA63A" ${T}/><circle cx="76" cy="22" r="12" fill="#BD89C4" ${T}/>`,
+    canasta: (c) => `<path d="M8 40 H92 L82 94 H18Z" fill="${c}" ${T}/><path d="M24 40 C24 4 76 4 76 40" fill="none" ${T}/>`,
+    banco: (c) => `<rect x="4" y="30" width="92" height="16" rx="5" fill="${c}" ${T}/><rect x="4" y="54" width="92" height="12" rx="4" fill="${c}" ${T}/><path d="M14 66 V96 M86 66 V96" ${T}/>`,
+    planta: (c) => `<path d="M24 60 H76 L70 98 H30Z" fill="#F58060" ${T}/><path d="M50 60 C20 50 20 20 30 10 C40 30 50 40 50 60 C50 40 60 26 76 16 C80 40 70 54 50 60" fill="${c}" ${T}/>`,
+    persona: (c, a, ob, ed) => {
+      const piel = ed ? "#8A8F95" : PIEL[ob.piel || 0];
+      let s = "";
+      if ((ob.apoyos || []).includes("silla-de-ruedas")) s += `<circle cx="50" cy="80" r="18" fill="none" ${T}/><path d="M24 62 H70 V80" fill="none" ${T}/>`;
+      s += `<rect x="28" y="36" width="44" height="${(ob.apoyos || []).includes("silla-de-ruedas") ? 32 : 46}" rx="16" fill="${c}" ${T}/>`;
+      if (!(ob.apoyos || []).includes("silla-de-ruedas")) s += `<path d="M38 80 V98 M62 80 V98" ${T}/>`;
+      s += `<circle cx="50" cy="20" r="16" fill="${piel}" ${T}/>`;
+      if (!ed) s += [`<path d="M34 16 C36 0 64 0 66 16 C58 10 42 10 34 16Z" fill="#102F54"/>`, `<path d="M34 18 C30 0 70 0 66 18 L66 30 C62 22 38 22 34 30Z" fill="#5A3A22"/>`, `<circle cx="50" cy="6" r="7" fill="#102F54"/>`, ``][ob.pelo || 0];
+      if ((ob.apoyos || []).includes("baston-blanco")) s += `<path d="M72 50 L90 98" stroke="#FFFFFF" stroke-width="6" vector-effect="non-scaling-stroke"/><path d="M72 50 L90 98" fill="none" ${T} stroke-width="1"/>`;
+      if ((ob.apoyos || []).includes("audifono")) s += `<circle cx="34" cy="22" r="4" fill="#BD89C4" ${T}/>`;
+      if ((ob.apoyos || []).includes("tablero-de-comunicacion")) s += `<rect x="54" y="48" width="34" height="26" rx="3" fill="#FCFAF7" ${T}/><circle cx="63" cy="58" r="3" fill="#F58060"/><rect x="70" y="55" width="7" height="7" fill="#196B6A"/><path d="M80 56 l4 6 h-8z" fill="#BD89C4"/>`;
+      return s;
+    },
+    pin: (c) => `<path d="M50 96 C30 66 14 52 14 36 C14 14 30 4 50 4 C70 4 86 14 86 36 C86 52 70 66 50 96Z" fill="${c}" ${T}/><circle cx="50" cy="36" r="12" fill="#FCFAF7" ${T}/>`,
+    flecha: (c) => `<path d="M6 36 H56 V14 L96 50 L56 86 V64 H6Z" fill="${c}" ${T}/>`,
+    circulo: (c) => `<circle cx="50" cy="50" r="42" fill="${c}" ${T}/>`,
+    ticket: (c) => `<path d="M6 16 H94 V40 C86 40 86 60 94 60 V84 H6 V60 C14 60 14 40 6 40Z" fill="${c}" ${T}/><path d="M66 18 V82" stroke="#102F54" stroke-width="2" stroke-dasharray="4 5" vector-effect="non-scaling-stroke"/>`,
+    senal: (c) => `<path d="M10 40 C36 14 64 14 90 40 M24 56 C40 40 60 40 76 56 M38 72 C46 64 54 64 62 72" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"/><circle cx="50" cy="86" r="7" fill="${c}"/>`,
+    cuadro: (c) => `<rect x="8" y="8" width="84" height="84" rx="16" fill="${c}" ${T}/>`,
+    triangulo: (c) => `<path d="M50 6 L94 92 H6Z" fill="${c}" ${T}/>`,
+    rombo: (c) => `<path d="M50 4 L92 50 L50 96 L8 50Z" fill="${c}" ${T}/>`
+  };
+  function objeto(e, banco, ed) {
+    const ob = banco.objetos[e.obj] || {};
+    const f = S[e.forma] || S.caja;
+    let s = f(col(e.color, ed), e.attrs || {}, ob, ed);
+    if (e.marca) s += gota(84, 16, 12);
+    return s;
+  }
+  function grupo(e, banco, ed) {
+    return `<g data-uid="${e.uid}" transform="translate(${e.x} ${e.y}) scale(${e.w / 100} ${e.h / 100})">${objeto(e, banco, ed)}</g>`;
+  }
+  /* Figura suelta (modelo, lista): un elemento en una caja de 100 × 100. */
+  function figura(oid, banco, opciones = {}) {
+    const ob = banco.objetos[oid];
+    const e = { uid: "m", obj: oid, forma: ob.forma, color: ob.color, x: 0, y: 0, w: 100, h: 100, marca: !!opciones.marca, attrs: opciones.attrs || {} };
+    return `<svg viewBox="-6 -6 112 112" role="img" aria-label="${opciones.label || ""}">${objeto(e, banco, opciones.editorial)}</svg>`;
+  }
+
+  /* Fondos (escenarios). Nada se mueve; la interfaz alrededor es lisa (M03-3). */
+  const arbol = (x, y, s, c = "#7AA63A") => `<rect x="${x - 6 * s}" y="${y}" width="${12 * s}" height="${50 * s}" fill="#8D5524"/><circle cx="${x}" cy="${y - 4 * s}" r="${34 * s}" fill="${c}" ${T}/>`;
+  const FONDOS = {
+    plaza: () => `<rect width="1200" height="800" fill="#EAF5F1"/><rect y="190" width="1200" height="610" fill="#D5E8C4"/><path d="M0 520 C300 470 900 570 1200 500 V560 C900 630 300 530 0 580Z" fill="#F3DDB0"/>${arbol(90, 110, 1.4)}${arbol(300, 120, 1.2, "#5E9440")}${arbol(940, 110, 1.4)}${arbol(1120, 120, 1.1, "#5E9440")}<ellipse cx="610" cy="170" rx="120" ry="34" fill="#9CCFE0" ${T}/><rect x="598" y="96" width="24" height="70" fill="#B8C4C2" ${T}/>`,
+    feria: () => `<rect width="1200" height="800" fill="#EAF5F1"/><rect y="190" width="1200" height="610" fill="#F3DDB0"/>${[0, 1, 2, 3].map((i) => `<rect x="${40 + i * 290}" y="70" width="250" height="120" fill="#FCFAF7" ${T}/><path d="M${30 + i * 290} 70 H${300 + i * 290} L${280 + i * 290} 30 H${50 + i * 290}Z" fill="${["#196B6A", "#BD89C4", "#F58060", "#196B6A"][i]}" ${T}/>`).join("")}`,
+    biblioteca: () => `<rect width="1200" height="800" fill="#FFF1D7"/><rect y="200" width="1200" height="600" fill="#F3DDB0"/>${[0, 1, 2, 3, 4].map((i) => `<rect x="${30 + i * 236}" y="20" width="210" height="170" fill="#C68642" ${T}/>${[0, 1, 2].map((j) => `<rect x="${40 + i * 236}" y="${30 + j * 54}" width="190" height="44" fill="#E0AC69"/>`).join("")}`).join("")}`,
+    rio: () => `<rect width="1200" height="800" fill="#EAF5F1"/><path d="M0 120 C300 90 900 160 1200 110 V200 H0Z" fill="#9CCFE0" ${T}/><rect y="200" width="1200" height="600" fill="#D5E8C4"/>${arbol(120, 60, .9)}${arbol(1060, 60, .9, "#5E9440")}`,
+    chacra: () => `<rect width="1200" height="800" fill="#EAF5F1"/><rect y="190" width="1200" height="610" fill="#D5E8C4"/>${[0, 1, 2, 3, 4, 5, 6].map((i) => arbol(80 + i * 170, 100, 1, i % 2 ? "#5E9440" : "#7AA63A")).join("")}`,
+    montana: () => `<rect width="1200" height="800" fill="#EAF5F1"/><path d="M0 200 L220 40 L400 200 L640 20 L880 200 L1060 60 L1200 180 V200Z" fill="#B8C4C2" ${T}/><path d="M180 70 L220 40 L260 70 L240 80 Z M600 50 L640 20 L680 50 L650 60Z M1030 82 L1060 60 L1090 82Z" fill="#FFFFFF"/><rect y="200" width="1200" height="600" fill="#F4F6F4"/>`,
+    barrio: () => `<rect width="1200" height="800" fill="#FCFAF7"/>`,
+    terminal: () => `<rect width="1200" height="800" fill="#EEF0EF"/><rect y="0" width="1200" height="130" fill="#DAE3E1"/>${[0, 1, 2, 3, 4, 5].map((i) => `<rect x="${30 + i * 196}" y="24" width="170" height="80" rx="4" fill="#FFFFFF" stroke="#526776" stroke-width="2"/><text x="${115 + i * 196}" y="74" font-size="30" text-anchor="middle" fill="#526776" font-family="Nunito,sans-serif">${i + 1}</text>`).join("")}`,
+    "biblioteca-ed": () => `<rect width="1200" height="800" fill="#F4F2EE"/>${[0, 1, 2, 3, 4, 5].map((i) => `<rect x="${20 + i * 196}" y="16" width="180" height="120" fill="#E5D9C2" stroke="#526776" stroke-width="2"/>`).join("")}`,
+    "feria-ciencias": () => `<rect width="1200" height="800" fill="#F1F4F6"/>${[0, 1, 2, 3].map((i) => `<rect x="${40 + i * 290}" y="20" width="240" height="110" fill="#FFFFFF" stroke="#526776" stroke-width="2"/><rect x="${60 + i * 290}" y="40" width="${80 + 30 * i}" height="12" fill="#9C8AA8"/><rect x="${60 + i * 290}" y="66" width="160" height="8" fill="#DAE3E1"/><rect x="${60 + i * 290}" y="84" width="120" height="8" fill="#DAE3E1"/>`).join("")}`,
+    "ciudad-noche": () => `<rect width="1200" height="800" fill="#24344D"/>${[0, 1, 2, 3, 4, 5, 6, 7].map((i) => `<rect x="${i * 150}" y="${20 + (i % 3) * 20}" width="140" height="${120 - (i % 3) * 20}" fill="#33465F"/>`).join("")}<rect y="140" width="1200" height="660" fill="#3A4B60"/>`,
+    horario: () => `<rect width="1200" height="800" fill="#F4F2EE"/>`,
+    cartelera: () => `<rect width="1200" height="800" fill="#F4F2EE"/>`
+  };
+  const LUGARES = {
+    muelle: (l) => `<rect x="${l.x}" y="${l.y}" width="${l.w}" height="${l.h * .55}" fill="#9CCFE0"/><rect x="${l.x + l.w * .35}" y="${l.y + l.h * .2}" width="${l.w * .3}" height="${l.h * .55}" fill="#C68642" ${T}/>`,
+    sauces: (l) => `<rect x="${l.x}" y="${l.y}" width="${l.w}" height="${l.h * .45}" fill="#9CCFE0"/>${arbol(l.x + l.w * .3, l.y + l.h * .55, 1)}${arbol(l.x + l.w * .72, l.y + l.h * .6, .8, "#5E9440")}`,
+    verduleria: (l) => `<rect x="${l.x + 30}" y="${l.y + 50}" width="${l.w - 60}" height="${l.h - 80}" fill="#FCFAF7" ${T}/><path d="M${l.x + 20} ${l.y + 50} H${l.x + l.w - 20} L${l.x + l.w - 40} ${l.y + 20} H${l.x + 40}Z" fill="#196B6A" ${T}/><circle cx="${l.x + 90}" cy="${l.y + l.h - 50}" r="16" fill="#7AA63A" ${T}/><circle cx="${l.x + 130}" cy="${l.y + l.h - 50}" r="16" fill="#F58060" ${T}/><rect x="${l.x + l.w / 2 + 20}" y="${l.y + l.h - 100}" width="40" height="70" fill="#102F54"/>`,
+    vivero: (l) => `<rect x="${l.x + 30}" y="${l.y + 50}" width="${l.w - 60}" height="${l.h - 80}" fill="#E0F2EB" ${T}/><path d="M${l.x + 20} ${l.y + 50} H${l.x + l.w - 20} L${l.x + l.w - 40} ${l.y + 20} H${l.x + 40}Z" fill="#BD89C4" ${T}/>${[0, 1, 2].map((i) => `<path d="M${l.x + 70 + i * 50} ${l.y + l.h - 40} C${l.x + 50 + i * 50} ${l.y + l.h - 80} ${l.x + 90 + i * 50} ${l.y + l.h - 90} ${l.x + 70 + i * 50} ${l.y + l.h - 40}" fill="#7AA63A" ${T}/>`).join("")}<rect x="${l.x + l.w / 2 + 50}" y="${l.y + l.h - 100}" width="40" height="70" fill="#102F54"/>`,
+    hamacas: (l) => `<rect x="${l.x}" y="${l.y}" width="${l.w}" height="${l.h}" fill="#D5E8C4"/><path d="M${l.x + 60} ${l.y + l.h - 30} L${l.x + 100} ${l.y + 50} L${l.x + 200} ${l.y + 50} L${l.x + 240} ${l.y + l.h - 30}" fill="none" ${T}/><path d="M${l.x + 130} ${l.y + 50} V${l.y + 150} M${l.x + 170} ${l.y + 50} V${l.y + 150}" ${T}/><rect x="${l.x + 122}" y="${l.y + 150}" width="56" height="10" fill="#F58060" ${T}/>${arbol(l.x + 50, l.y + 60, .6)}`,
+    kiosco: (l) => `<rect x="${l.x + 60}" y="${l.y + 60}" width="${l.w - 120}" height="${l.h - 90}" fill="#FFF1D7" ${T}/><rect x="${l.x + 50}" y="${l.y + 40}" width="${l.w - 100}" height="30" fill="#F58060" ${T}/><rect x="${l.x + 90}" y="${l.y + 100}" width="${l.w - 180}" height="50" fill="#9CCFE0" ${T}/>`,
+    puente: (l) => `<rect x="${l.x}" y="${l.y + l.h * .3}" width="${l.w}" height="${l.h * .4}" fill="#9CCFE0"/><path d="M${l.x} ${l.y + l.h * .5} C${l.x + l.w * .3} ${l.y + l.h * .2} ${l.x + l.w * .7} ${l.y + l.h * .2} ${l.x + l.w} ${l.y + l.h * .5}" fill="none" stroke="#B8C4C2" stroke-width="18"/><path d="M${l.x} ${l.y + l.h * .5} C${l.x + l.w * .3} ${l.y + l.h * .2} ${l.x + l.w * .7} ${l.y + l.h * .2} ${l.x + l.w} ${l.y + l.h * .5}" fill="none" ${T}/>`,
+    cancha: (l) => `<rect x="${l.x + 20}" y="${l.y + 30}" width="${l.w - 40}" height="${l.h - 60}" fill="#7AA63A" ${T}/><path d="M${l.x + l.w / 2} ${l.y + 30} V${l.y + l.h - 30}" stroke="#FFFFFF" stroke-width="4"/><circle cx="${l.x + l.w / 2}" cy="${l.y + l.h / 2}" r="34" fill="none" stroke="#FFFFFF" stroke-width="4"/>`
+  };
+  const escapar = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  /* Escena completa. opciones: { banco, rotulos (lee), descartes:Set, posibles:[ids], ayuda:{rect}, zonas:{px,min}, mostrarLuci:lugarId } */
+  function escena(esc, o) {
+    const ed = esc.estilo === "editorial";
+    let s = (FONDOS[esc.fondo] || FONDOS.plaza)();
+    if (esc.lugares && !esc.tabla) {
+      for (const l of esc.lugares) {
+        s += `<g data-lugar="${l.id}"><rect x="${l.x + 3}" y="${l.y + 3}" width="${l.w - 6}" height="${l.h - 6}" rx="14" fill="#FFFFFF" stroke="#526776" stroke-width="2"/>${(LUGARES[l.id] || (() => ""))(l)}`
+          + (o.rotulos ? `<rect x="${l.x + 12}" y="${l.y + l.h - 46}" width="${l.w - 24}" height="34" rx="10" fill="#FCFAF7" opacity=".92"/><text x="${l.x + l.w / 2}" y="${l.y + l.h - 22}" text-anchor="middle" font-size="22" font-weight="800" fill="#102F54" font-family="Nunito,sans-serif">${escapar(l.nombre)}</text>` : "") + `</g>`;
+      }
+      s += `<text x="600" y="70" text-anchor="middle" font-size="34" font-weight="800" fill="#102F54" font-family="Nunito,sans-serif">${escapar(o.tituloMapa || "")}</text>`;
+    }
+    if (esc.tabla) {
+      const { x0, y0, anchos } = esc.tabla;
+      s += `<text x="${x0}" y="100" font-size="34" font-weight="800" fill="#102F54" font-family="Nunito,sans-serif">${escapar(esc.tabla.titulo)}</text>`;
+      let x = x0; esc.tabla.columnas.forEach((c, i) => { s += `<text x="${x + 16}" y="${y0 - 16}" font-size="24" font-weight="800" fill="#526776" font-family="Nunito,sans-serif">${escapar(c)}</text>`; x += anchos[i]; });
+      esc.lugares.forEach((f, k) => {
+        s += `<g data-lugar="${f.id}"><rect x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}" rx="8" fill="#FFFFFF" stroke="#526776" stroke-width="2"/>`;
+        let xx = x0; f.celdas.forEach((c, i) => { s += `<text x="${xx + 16}" y="${f.y + 54}" font-size="30" fill="#102F54" font-family="Nunito,sans-serif">${escapar(c)}</text>`; xx += anchos[i]; });
+        s += `</g>`;
+      });
+    }
+    if (esc.zonas4 && o.zonas4 !== false) s += `<path d="M600 0 V800 M0 400 H1200" stroke="#196B6A" stroke-width="5" stroke-dasharray="18 12"/>${[["1", 40, 60], ["2", 1140, 60], ["3", 40, 460], ["4", 1140, 460]].map(([n, x, y]) => `<circle cx="${x}" cy="${y}" r="26" fill="#196B6A"/><text x="${x}" y="${y + 9}" text-anchor="middle" font-size="26" font-weight="800" fill="#FFFFFF" font-family="Nunito,sans-serif">${n}</text>`).join("")}`;
+    for (const e of esc.elementos) s += grupo(e, o.banco, ed);
+    if (esc.lugares) {
+      for (const l of esc.lugares) {
+        if ((o.descartes && o.descartes.has(l.id)) || (o.posibles && !o.posibles.includes(l.id)))
+          s += `<g pointer-events="none"><rect x="${l.x}" y="${l.y}" width="${l.w}" height="${l.h}" fill="#102F54" opacity=".55"/><path d="M${l.x + 30} ${l.y + 30} L${l.x + l.w - 30} ${l.y + l.h - 30}" stroke="#FCFAF7" stroke-width="6" opacity=".7"/></g>`;
+      }
+      if (o.mostrarLuci) {
+        const l = esc.lugares.find((x) => x.id === o.mostrarLuci);
+        const tam = esc.tabla ? 70 : 96;
+        s += `<g transform="translate(${l.x + l.w - tam - 10} ${l.y + (l.h - tam) / 2}) scale(${tam / 100})">${S[ed ? "gota-en-cuadro" : "luciernaga"]()}</g>`;
+      }
+    }
+    if (o.ayuda) s += `<path d="M0 0H1200V800H0Z M${o.ayuda.x} ${o.ayuda.y}h${o.ayuda.w}v${o.ayuda.h}h-${o.ayuda.w}Z" fill="#102F54" opacity=".45" fill-rule="evenodd" pointer-events="none"/><rect x="${o.ayuda.x + 4}" y="${o.ayuda.y + 4}" width="${o.ayuda.w - 8}" height="${o.ayuda.h - 8}" fill="none" stroke="#FFB82E" stroke-width="8" pointer-events="none"/>`;
+    if (o.resaltar) for (const uid of o.resaltar) { const e = esc.elementos.find((x) => x.uid === uid) || (esc.lugares || []).find((x) => x.id === uid); if (e) s += `<rect x="${e.x - 12}" y="${e.y - 12}" width="${e.w + 24}" height="${e.h + 24}" rx="18" fill="none" stroke="#FFB82E" stroke-width="10" pointer-events="none"/><rect x="${e.x - 12}" y="${e.y - 12}" width="${e.w + 24}" height="${e.h + 24}" rx="18" fill="none" stroke="#102F54" stroke-width="3" pointer-events="none"/>`; }
+    if (o.zonasToque) for (const e of esc.elementos) { if (!e.tocable) continue; const z = o.zonasToque(e); s += `<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" fill="none" stroke="${/objetivo|lista|categoria/.test(e.rol) ? "#196B6A" : "#B95325"}" stroke-width="2" stroke-dasharray="6 4" pointer-events="none"/>`; }
+    if (o.toque) s += `<circle cx="${o.toque.x}" cy="${o.toque.y}" r="22" fill="none" stroke="#102F54" stroke-width="5" pointer-events="none"/>`;
+    if (o.cursor) s += `<g pointer-events="none"><circle cx="${o.cursor.x}" cy="${o.cursor.y}" r="26" fill="none" stroke="#FCFAF7" stroke-width="9"/><circle cx="${o.cursor.x}" cy="${o.cursor.y}" r="26" fill="none" stroke="#B95325" stroke-width="5"/><path d="M${o.cursor.x - 40} ${o.cursor.y}h24M${o.cursor.x + 16} ${o.cursor.y}h24M${o.cursor.x} ${o.cursor.y - 40}v24M${o.cursor.x} ${o.cursor.y + 16}v24" stroke="#B95325" stroke-width="5"/></g>`;
+    return s;
+  }
+  function luciImagen(url) { LUCI = url || null; }
+  return { escena, figura, luciImagen, COLORES: C, EDITORIAL: ED, FORMAS: Object.keys(S) };
+})();
+if (typeof module !== "undefined") module.exports.Dibujo = Dibujo;
+</script>
+<script id="interfaz">
+"use strict";
+const leer = (id) => { try { return JSON.parse(document.getElementById(id).textContent); } catch (e) { return null; } };
+const BANCO = leer("datos-banco"), MODULO = leer("datos-modulo"), INICIO = leer("datos-inicio") || {};
+const T = BANCO.textos;
+const EN_MARCO = window.parent !== window;
+/* Pantalla de la persona adulta: en el archivo suelto, siempre; dentro del portal, solo en consulta. */
+const CON_ADULTO = INICIO.adulto !== false;
+const VARIANTES = MODULO.estaciones.variantes;
+const GRADOS = [["facil", "Fácil"], ["intermedio", "Intermedio"], ["dificil", "Difícil"]];
+const RUTAS = [["3-5", "3 a 5 años"], ["6-8", "6 a 8 años"], ["9-12", "9 a 12 años"], ["13-18", "13 a 18 años"]];
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = (t, v) => t.replace(/\{(\w+)\}/g, (_, k) => (k in v ? v[k] : ""));
+const elegir = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const PICTO = { agua: "💧", verde: "🌳", negocio: "🏪", juego: "⚽", planta: "🌱" };
+Dibujo.luciImagen(INICIO.luci);
+
+const S = {
+  ruta: RUTAS.some(([r]) => r === INICIO.ruta) ? INICIO.ruta : "6-8",
+  estacion: INICIO.estacion || "explorar", grado: INICIO.grado || "facil",
+  profesional: !!INICIO.profesional, fijo: false, sobrio: false, voz: INICIO.voz,
+  revision: { grises: false, daltonismo: false, zonas: false, contraste: false },
+  recorrido: null, item: null, historial: {}, sesion: { t0: 0, subio: false, seguidos: 0, enPiso: 0, items: [] }, mapa: new Set(), vuelta: 0, idx: {}
+};
+const ruta = () => MODULO.rutas[S.ruta];
+const editorial = () => ruta().estilo === "editorial";
+const lee = () => S.ruta === "9-12" || S.ruta === "13-18";
+const variante = () => VARIANTES.find((v) => v.estacion === S.estacion);
+if (S.voz === undefined) S.voz = ["primero", "por-defecto"].includes(ruta().audio);
+
+/* ---------- Audio (T09): voz del dispositivo, español rioplatense si está disponible ---------- */
+let VOZ = null;
+function elegirVoz() { try { const v = speechSynthesis.getVoices(); VOZ = v.find((x) => /^es[-_]AR/i.test(x.lang)) || v.find((x) => /^es[-_](419|US|MX)/i.test(x.lang)) || v.find((x) => /^es/i.test(x.lang)) || null; } catch (e) { } }
+if ("speechSynthesis" in window) { elegirVoz(); speechSynthesis.onvoiceschanged = elegirVoz; }
+function decir(t, forzar) {
+  if ((!S.voz && !forzar) || !t || !("speechSynthesis" in window)) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = VOZ ? VOZ.lang : "es-AR"; if (VOZ) u.voice = VOZ; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) { }
+}
+function anunciar(t) { const a = $("#anuncio"); a.textContent = ""; setTimeout(() => { a.textContent = t; }, 30); }
+const escuchar = (t) => `<button class="btn sec icono" data-decir="${esc(t)}" aria-label="${esc(T.escuchar)}">🔊</button>`;
+
+/* ---------- Encabezado ---------- */
+function encabezado() {
+  document.body.classList.toggle("editorial", editorial());
+  for (const k of Object.keys(S.revision)) document.body.classList.toggle(k, S.revision[k]);
+  const voz = `<button class="btn sec icono" id="voz" aria-pressed="${S.voz}" aria-label="${esc(S.voz ? T.audioSi : T.audioNo)}">${S.voz ? "🔊" : "🔇"}</button>`;
+  const sobrio = editorial() ? `<button class="btn sec chico" id="sobrio" aria-pressed="${S.sobrio}">Modo sobrio</button>` : "";
+  const completa = !EN_MARCO && (document.fullscreenEnabled || document.webkitFullscreenEnabled)
+    ? `<button class="btn sec chico" id="completa">${document.fullscreenElement ? "Salir de pantalla completa" : "Pantalla completa"}</button>` : "";
+  $("#hd").innerHTML = (EN_MARCO ? "" : `<span class="marca" aria-hidden="true"></span><span class="nm">${esc(MODULO.nombre)} <small>(${esc(T.tituloTrabajo)})</small></span>`)
+    + `<span class="rotulo">${esc(T.rotulo)}</span>${EN_MARCO ? '<span style="margin-right:auto"></span>' : ""}${sobrio}${completa}${voz}`;
+  $("#voz").onclick = () => { S.voz = !S.voz; if (!S.voz) try { speechSynthesis.cancel(); } catch (e) { } encabezado(); };
+  const so = $("#sobrio"); if (so) so.onclick = () => { S.sobrio = !S.sobrio; encabezado(); };
+  const c = $("#completa");
+  if (c) c.onclick = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement);
+  };
+}
+document.addEventListener("fullscreenchange", encabezado);
+
+function sujecion(b, alTerminar, ms = 1500) {
+  let t = null;
+  const ini = (e) => { e.preventDefault(); b.classList.add("apretando"); t = setTimeout(alTerminar, ms); };
+  const fin = () => { b.classList.remove("apretando"); clearTimeout(t); };
+  b.addEventListener("pointerdown", ini); ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => b.addEventListener(ev, fin));
+  b.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && !e.repeat) ini(e); });
+  b.addEventListener("keyup", fin);
+}
+const pieAdulto = () => !CON_ADULTO ? "" : `<div class="adulto-pie"><span class="small">${esc(T.adultoBoton)}:</span>
+  <button class="btn sec sujecion chico" id="a-adulto"><span>${esc(T.adultoMantener)}</span><i></i></button></div>`;
+
+function mostrar(pantalla, arg) {
+  S.pantalla = pantalla;
+  try { speechSynthesis.cancel(); } catch (e) { }
+  ({ adulto: pAdulto, descubrir: pDescubrir, plan: pPlan, juego: pJuego, mapa: pMapa, hacer: pHacer, contar: pContar, cierre: pCierre, conversar: pConversar })[pantalla](arg);
+  encabezado();
+  $$("[data-decir]").forEach((b) => b.addEventListener("click", () => decir(b.dataset.decir, true)));
+  const a = $("#a-adulto"); if (a) sujecion(a, () => mostrar("adulto"));
+  const h = $("#app h1"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
+  window.scrollTo(0, 0);
+}
+function radios(sel) {
+  const bs = $$(sel);
+  bs.forEach((b, i) => { b.tabIndex = b.getAttribute("aria-checked") === "true" ? 0 : -1;
+    b.addEventListener("keydown", (e) => { const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key]; if (!d) return; e.preventDefault();
+      const ok = bs.filter((x) => !x.disabled); const j = (ok.indexOf(b) + d + ok.length) % ok.length; ok[j].click(); }); });
+  if (!bs.some((b) => b.tabIndex === 0) && bs[0]) bs[0].tabIndex = 0;
+}
+
+/* ---------- Pantalla de la persona adulta (o del profesional) ---------- */
+function pAdulto() {
+  const catalogo = Motor.variantesDeRuta(MODULO, S.ruta);
+  if (!catalogo.some((c) => c.estacion === S.estacion)) S.estacion = catalogo[0].estacion;
+  const grados = catalogo.find((c) => c.estacion === S.estacion).grados;
+  if (!grados.includes(S.grado)) S.grado = grados[0];
+  const v = variante(), g = v.grados[S.grado];
+  const ocultas = VARIANTES.filter((x) => !catalogo.some((c) => c.estacion === x.estacion));
+  const transf = v.estacion === "transferir" ? MODULO.ficha.declaracion_transferencia.transferir : MODULO.ficha.declaracion_transferencia.B;
+  $("#app").innerHTML = `<section class="panel">
+    <div class="titulo"><h1>${esc(T.adultoTitulo)}</h1></div>
+    <p>${esc(T.adultoAyuda)}</p>
+    <div class="grupo"><h2 id="g-ruta">Ruta de edad (decide la presentación)</h2>
+      <div class="opciones" style="--min:150px" role="radiogroup" aria-labelledby="g-ruta">${RUTAS.map(([id, nm]) => `<button class="opcion centro" role="radio" aria-checked="${id === S.ruta}" data-ruta="${id}"><span class="t">${nm}</span></button>`).join("")}</div></div>
+    <div class="grupo"><h2 id="g-est">Variante (Estación de la actividad)</h2>
+      <div class="opciones" role="radiogroup" aria-labelledby="g-est">${catalogo.map((c) => { const x = VARIANTES.find((y) => y.estacion === c.estacion); return `<button class="opcion" role="radio" aria-checked="${x.estacion === S.estacion}" data-est="${x.estacion}">
+        <span class="t">${esc(x.nombre)}</span><span class="d">${esc(x.titulo_variante)}</span></button>`; }).join("")}</div>
+      ${ocultas.length ? `<p class="small">En esta ruta no hay versión de: ${ocultas.map((x) => esc(x.nombre)).join(", ")} (REQ-CLI-LUC-09).${S.ruta === "3-5" ? " E3 Fácil para 3 a 5 años espera la decisión de la supervisora (FEC-013, P3)." : ""}</p>` : ""}</div>
+    <div class="grupo"><h2 id="g-gr">Grado</h2>
+      <div class="opciones" style="--min:140px" role="radiogroup" aria-labelledby="g-gr">${GRADOS.filter(([id]) => grados.includes(id)).map(([id, nm]) => `<button class="opcion centro" role="radio" aria-checked="${id === S.grado}" data-gr="${id}"><span class="t">${nm}</span></button>`).join("")}</div></div>
+    <div class="grupo casillas">
+      <label><input type="checkbox" id="a-prof" ${S.profesional ? "checked" : ""}> Con profesional vinculado (registra alertas para el profesional)</label>
+      <label><input type="checkbox" id="a-fijo" ${S.fijo ? "checked" : ""}> Fijar el grado (sin ajuste automático, M10-9)</label></div>
+    <div class="resumen"><strong>${esc(v.nombre)} · ${esc(v.titulo_variante)} · ${esc(GRADOS.find(([id]) => id === S.grado)[1])}:</strong> ${esc(g.describe)}
+      <br><span class="small">Estrategia que se modela: «${esc(T.estrategias[v.estrategia])}» · ${esc(MODULO.ficha.rotulo_evidencia)} (nivel ${esc(MODULO.ficha.nivel_evidencia)}).
+      ${esc(transf)}</span>
+      <br><span class="small">${esc(MODULO.ficha.no_es)} ${esc(MODULO.ficha.limitacion_accesibilidad)}</span></div>
+    <details class="grupo"><summary><strong>${esc(T.revision.titulo)}</strong></summary>
+      <div class="casillas" style="margin-top:8px">${Object.keys(S.revision).map((k) => `<label><input type="checkbox" data-rev="${k}" ${S.revision[k] ? "checked" : ""}> ${esc(T.revision[k])}</label>`).join("")}</div>
+      <p class="small">Sirven para la revisión humana de cada lámina: forma en escala de grises (REQ-CLI-LUC-01), colores atípicos (caso 5) y zonas de toque.</p></details>
+    <div class="acciones"><button class="btn grande" id="a-seguir">${esc(T.adultoSeguir)}</button>
+      ${Motor.conversarEnRuta(MODULO, S.ruta) ? `<button class="btn sec grande" id="a-conversar">${esc(T.conversarTitulo)}</button>` : ""}</div></section>`;
+  $$("[data-ruta]").forEach((b) => b.onclick = () => { S.ruta = b.dataset.ruta; S.voz = ["primero", "por-defecto"].includes(ruta().audio); pAdulto(); encabezado(); $(`[data-ruta="${S.ruta}"]`).focus(); });
+  $$("[data-est]").forEach((b) => b.onclick = () => { S.estacion = b.dataset.est; pAdulto(); $(`[data-est="${S.estacion}"]`).focus(); });
+  $$("[data-gr]").forEach((b) => b.onclick = () => { S.grado = b.dataset.gr; pAdulto(); $(`[data-gr="${S.grado}"]`).focus(); });
+  radios("[data-ruta]"); radios("[data-est]"); radios("[data-gr]");
+  $("#a-prof").onchange = (e) => { S.profesional = e.target.checked; };
+  $("#a-fijo").onchange = (e) => { S.fijo = e.target.checked; };
+  $$("[data-rev]").forEach((c) => c.onchange = () => { S.revision[c.dataset.rev] = c.checked; encabezado(); });
+  $("#a-seguir").onclick = () => { avisar({ type: "luci-config", ruta: S.ruta, estacion: S.estacion, grado: S.grado }); empezarRecorrido(); };
+  const cv = $("#a-conversar"); if (cv) cv.onclick = () => mostrar("conversar");
+}
+
+/* ---------- Recorrido: descubrir → jugar → (mapa) → hacer → contar ---------- */
+function empezarRecorrido() {
+  S.recorrido = { total: ruta().items_por_recorrido, hechos: 0, estrategiasUsadas: new Set() };
+  if (!S.sesion.t0) S.sesion.t0 = Date.now();
+  mostrar("descubrir");
+}
+function pDescubrir() {
+  const v = variante(), estr = T.estrategias[v.estrategia];
+  const fig = editorial() ? Dibujo.figura("marca-luci", BANCO, { label: "La marca de Luci" }) : Dibujo.figura("luci", BANCO, { label: "Luci" });
+  const extra = editorial() ? T.editorialIntro : T.estrategias["miro-de-arriba-abajo"];
+  $("#app").innerHTML = `<section class="panel">
+    <div class="titulo"><h1>${esc(T.descubrirTitulo)}</h1>${escuchar(estr + " " + extra)}</div>
+    <div class="modelo grande">${fig}<div><p style="font-size:1.25rem;font-weight:800">${esc(estr)}</p><p>${esc(extra)}</p></div></div>
+    <div class="acciones"><button class="btn grande" id="d-empezar">${esc(T.empezar)}</button></div>${pieAdulto()}</section>`;
+  $("#d-empezar").onclick = () => (v.grados[S.grado].parametros.plan ? mostrar("plan") : siguienteItem());
+  decir(estr + " " + extra);
+}
+function pPlan() {
+  $("#app").innerHTML = `<section class="panel"><div class="titulo"><h1>${esc(T.planTitulo)}</h1>${escuchar(T.planTitulo + " " + T.planes.map((p) => p.texto).join(" "))}</div>
+    <div class="opciones" style="--min:240px">${T.planes.map((p) => `<button class="opcion" data-plan="${p.id}"><span class="t">${esc(p.texto)}</span></button>`).join("")}</div></section>`;
+  $$("[data-plan]").forEach((b) => b.onclick = () => { S.plan = b.dataset.plan; siguienteItem(); });
+}
+
+function elegirLamina() {
+  const est = ruta().estilo, ls = Motor.laminasDe(BANCO, S.estacion, S.grado, est);
+  const k = S.estacion + "/" + S.grado + "/" + est;
+  if (S.idx[k] === undefined) S.idx[k] = INICIO.semilla ? 0 : Math.floor(Math.random() * ls.length);
+  const l = ls[S.idx[k] % ls.length]; S.idx[k]++;
+  if (S.idx[k] % ls.length === 0) S.vuelta++;
+  return l;
+}
+function siguienteItem(masAyuda) {
+  const lam = elegirLamina();
+  const e = Motor.componer(lam, BANCO, MODULO, { vuelta: S.vuelta });
+  const p = e.p;
+  S.item = { esc: e, encontrados: [], senuelos: 0, ayuda: masAyuda ? 2 : 0, t0: Date.now(), descartes: new Set(), pistasVistas: p.descarte === "automatico" ? 1 : (p.pistas || 0),
+    modeloVisible: true,
+    ocultarEn: (p.modelo === "inicio" || p.lista_visible === "inicio") && !masAyuda ? 1 : 0, fase: 1, toque: null, cursor: null, terminado: false, modoE4: "elegir",
+    vista: { x: 0, y: 0, w: 1200, h: 800 } };
+  mostrar("juego", masAyuda);
+}
+function consignaTexto() {
+  const e = S.item.esc, c = T.consignas;
+  if (e.consigna === "atributo") return T.atributos[e.atributo].consigna;
+  if (e.consigna === "reconocerDibujo" || e.consigna === "reconocerNombre") { const o = BANCO.objetos[e.buscado]; return fmt(c[e.consigna], { articulo: o.articulo, nombre: o.nombre }); }
+  if (e.consigna === "integrarCategoria") return fmt(c.integrarCategoria, { uso: T.usos[e.regla.uso] }) + (S.item.fase === 1 ? "" : " " + fmt(c.integrarCambio, { material: T.materiales[e.regla.material] }));
+  if (e.consigna === "explorar2a" || e.consigna === "marca2a") return S.item.encontrados.length ? c[e.consigna.replace("2a", "2b")] : c[e.consigna];
+  return c[e.consigna];
+}
+
+/* ---------- Juego ---------- */
+function pJuego(masAyuda, silencio) {
+  const it = S.item, e = it.esc, p = e.p;
+  const lado = [];
+  if (e.modelo && it.modeloVisible) lado.push(`<div class="modelo${e.variante === "explorar" && p.modelo === "visible" ? " grande" : ""}">${e.modelo.map((m) => Dibujo.figura(m, BANCO, { marca: m !== "luci" && m !== "marca-luci", editorial: editorial(), label: BANCO.objetos[m].nombre })).join("")}</div>`);
+  if (e.lista) lado.push(`<h2>${esc(T.listaTitulo)}</h2><ul class="lista" id="lista">${it.modeloVisible ? e.lista.map((k, i) => `<li class="${it.encontrados.includes(e.objetivos[i]) ? "hallada" : ""}">${Dibujo.figura(k, BANCO, { editorial: editorial() })}${esc(BANCO.objetos[k].nombre)}</li>`).join("")
+    : `<li class="oculta">${esc(T.listaOculta)}</li>`}</ul>`);
+  if (e.pistas) lado.push(`<h2>${esc(T.pistasTitulo)}</h2><ul class="lista pistas">${e.pistas.lista.slice(0, it.pistasVistas).map((c) => `<li>${c.picto && PICTO[c.picto] ? `<span class="picto" aria-hidden="true">${PICTO[c.picto]}</span> ` : ""}${esc(c.texto)} ${escuchar(c.texto)}</li>`).join("")}</ul>`
+    + (it.pistasVistas < e.pistas.lista.length ? `<button class="btn suave" id="j-pista">${esc(T.pistaSiguiente)}</button>` : "")
+    + (p.descarte === "persona" ? `<div class="modo-e4" role="radiogroup" aria-label="Qué hace el toque"><button class="opcion centro" role="radio" aria-checked="${it.modoE4 === "elegir"}" data-modo="elegir"><span class="t">${esc(T.elegir)}</span></button><button class="opcion centro" role="radio" aria-checked="${it.modoE4 === "descartar"}" data-modo="descartar"><span class="t">${esc(T.descartar)}</span></button></div>` : ""));
+  const ofrece = p.ofrece_ayuda;
+  lado.push(ofrece === "disponible" ? `<button class="btn sec chico" id="j-ayuda">${esc(T.ayudaChica)}</button>` : `<button class="btn ${ofrece === "boton-visible" ? "suave grande" : "sec"}" id="j-ayuda">${esc(T.ayuda)}</button>`);
+  lado.push(`<p class="msj" id="msj" role="status" aria-live="polite"></p>`);
+  const cons = consignaTexto();
+  $("#app").innerHTML = `<section class="panel">
+    <div class="consigna"><h1 class="sr">${esc(cons)}</h1><p id="consigna">${esc(cons)}</p>${escuchar(cons)}</div>
+    <div class="juego"><div><div class="escena-marco"><svg id="escena" viewBox="0 0 1200 800" tabindex="0" role="application" aria-label="${esc("Escena para buscar. " + T.teclado)}" aria-describedby="consigna"></svg></div>
+      <div class="zoom"><button class="btn sec icono" id="z-mas" aria-label="${esc(T.acercar)}">＋</button><button class="btn sec icono" id="z-menos" aria-label="${esc(T.alejar)}">－</button><button class="btn sec chico" id="z-todo">${esc(T.verTodo)}</button></div>
+      <p class="small">${esc(T.teclado)}</p></div>
+    <aside class="lado">${lado.join("")}</aside></div>${pieAdulto()}</section>`;
+  pintar(); conectarEscena();
+  $("#j-ayuda").onclick = pedirAyuda;
+  const jp = $("#j-pista"); if (jp) jp.onclick = () => { it.pistasVistas++; pJuego(false, true); decir(e.pistas.lista[it.pistasVistas - 1].texto); };
+  $$("[data-modo]").forEach((b) => b.onclick = () => { it.modoE4 = b.dataset.modo; pJuego(false, true); $(`[data-modo="${it.modoE4}"]`).focus(); });
+  $("#z-mas").onclick = () => zoom(1 / 1.5); $("#z-menos").onclick = () => zoom(1.5); $("#z-todo").onclick = () => { it.vista = { x: 0, y: 0, w: 1200, h: 800 }; pintar(); };
+  if (silencio) return;
+  if (masAyuda === true) mensaje(T.masAyudaInicio);
+  else if (e.pistas) decir(cons + " " + e.pistas.lista.slice(0, it.pistasVistas).map((c) => c.texto).join(" "));
+  else decir(cons);
+}
+function pxPorUnidad() { const svg = $("#escena"); const r = svg.getBoundingClientRect(); return (r.width || 600) / S.item.vista.w; }
+function pintar() {
+  const it = S.item, e = it.esc, svg = $("#escena"); if (!svg) return;
+  const v = it.vista; svg.setAttribute("viewBox", `${v.x} ${v.y} ${v.w} ${v.h}`);
+  const posibles = e.pistas && e.p.descarte === "automatico" ? Motor.lugaresPosibles(e, it.pistasVistas) : null;
+  svg.innerHTML = Dibujo.escena(e, { banco: BANCO, rotulos: lee() || editorial(), tituloMapa: "", descartes: it.descartes, posibles, ayuda: it.rectAyuda, resaltar: it.resaltar,
+    zonasToque: S.revision.zonas ? (x) => Motor.zonaDeToque(x, pxPorUnidad(), ruta().toque_min_px) : null, toque: it.toque, cursor: it.cursor, mostrarLuci: it.mostrarLuci, zonas4: e.zonas4 });
+}
+function zoom(f, cx, cy) {
+  const v = S.item.vista, nw = Math.min(1200, Math.max(240, v.w * f)), nh = nw * 800 / 1200;
+  cx = cx ?? v.x + v.w / 2; cy = cy ?? v.y + v.h / 2;
+  v.x = Math.min(1200 - nw, Math.max(0, cx - (cx - v.x) * nw / v.w)); v.y = Math.min(800 - nh, Math.max(0, cy - (cy - v.y) * nh / v.h)); v.w = nw; v.h = nh;
+  pintar();
+}
+function puntoSVG(ev) { const svg = $("#escena"); const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; return pt.matrixTransform(svg.getScreenCTM().inverse()); }
+function conectarEscena() {
+  const svg = $("#escena"), it = S.item, ptrs = new Map();
+  let arrastre = null, pinza = null;
+  svg.addEventListener("pointerdown", (ev) => {
+    svg.setPointerCapture(ev.pointerId); ptrs.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+    if (ptrs.size === 1) arrastre = { x: ev.clientX, y: ev.clientY, v: { ...it.vista }, movio: false };
+    if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinza = { d: Math.hypot(a.x - b.x, a.y - b.y), w: it.vista.w }; arrastre = null; }
+  });
+  svg.addEventListener("pointermove", (ev) => {
+    if (!ptrs.has(ev.pointerId)) return; ptrs.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+    if (pinza && ptrs.size === 2) { const [a, b] = [...ptrs.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y); if (d > 0) zoom((pinza.w * pinza.d / d) / it.vista.w); return; }
+    if (!arrastre) return;
+    const dx = ev.clientX - arrastre.x, dy = ev.clientY - arrastre.y;
+    if (Math.hypot(dx, dy) > 8) arrastre.movio = true;
+    if (arrastre.movio && it.vista.w < 1200) { const k = it.vista.w / svg.getBoundingClientRect().width;
+      it.vista.x = Math.min(1200 - it.vista.w, Math.max(0, arrastre.v.x - dx * k)); it.vista.y = Math.min(800 - it.vista.h, Math.max(0, arrastre.v.y - dy * k)); pintar(); }
+  });
+  const fin = (ev) => {
+    const eraUno = ptrs.size === 1; ptrs.delete(ev.pointerId); if (ptrs.size < 2) pinza = null;
+    if (eraUno && arrastre && !arrastre.movio && ev.type === "pointerup") tocar(puntoSVG(ev));
+    if (!ptrs.size) arrastre = null;
+  };
+  svg.addEventListener("pointerup", fin); svg.addEventListener("pointercancel", fin);
+  svg.addEventListener("wheel", (ev) => { ev.preventDefault(); const p = puntoSVG(ev); zoom(ev.deltaY > 0 ? 1.25 : 0.8, p.x, p.y); }, { passive: false });
+  svg.addEventListener("keydown", (ev) => {
+    const paso = 40, d = { ArrowLeft: [-paso, 0], ArrowRight: [paso, 0], ArrowUp: [0, -paso], ArrowDown: [0, paso] }[ev.key];
+    if (d) { ev.preventDefault(); const c = it.cursor || { x: 600, y: 400 }; it.cursor = { x: Math.min(1190, Math.max(10, c.x + d[0])), y: Math.min(790, Math.max(10, c.y + d[1])) }; pintar(); return; }
+    if ((ev.key === "Enter" || ev.key === " ") && it.cursor) { ev.preventDefault(); tocar(it.cursor); }
+    if (ev.key === "+" || ev.key === "=") zoom(1 / 1.5); if (ev.key === "-") zoom(1.5);
+  });
+}
+function mensaje(t, hablar = true) { const m = $("#msj"); if (!m) return; m.textContent = t; if (hablar) decir(t); }
+
+/* Qué pasa con cada toque. Devoluciones del banco cerrado (M18): acierto nombra el proceso; señuelo, tono neutro con pista. */
+function tocar(pt) {
+  const it = S.item, e = it.esc; if (it.terminado) return;
+  it.toque = { x: pt.x, y: pt.y };
+  /* Modelo o lista «al inicio»: se ocultan al empezar a buscar; volver a verlos es el paso 2 de la escalera. */
+  if (it.ocultarEn && !it.ocultado) { it.ocultado = true; it.modeloVisible = false; pJuego(false, true); }
+  if (e.lugares) return tocarLugar(Motor.lugarEn(e, pt));
+  const el = Motor.queSeToco(e, pt, pxPorUnidad(), ruta().toque_min_px);
+  if (!el) { pintar(); return mensaje(T.nada); }
+  if (it.encontrados.includes(el.uid)) { pintar(); return mensaje(T.senuelo.yaEncontrado); }
+  const esObjetivo = e.objetivos.includes(el.uid);
+  if (e.variante === "explorar") {
+    if (el.rol === "objetivo2" && !it.encontrados.length) { pintar(); return mensaje(T.senuelo.primeroLuci); }
+    if (esObjetivo) return hallado(el, el.rol === "objetivo2" ? elegir(T.acierto.farolito) : elegir(editorial() ? T.acierto.explorarMarca : T.acierto.explorar));
+    return error(el.rol === "senuelo-color" ? (editorial() ? T.senuelo.colorMarca : T.senuelo.color) : T.senuelo.otro);
+  }
+  if (e.variante === "reconocer") {
+    if (esObjetivo) return hallado(el, elegir(T.acierto.reconocer));
+    if (el.rol === "senuelo-atributo") return error(T.atributos[e.atributo].senuelo);
+    return error(el.rol === "senuelo-categoria" ? T.senuelo.categoria : T.senuelo.otro);
+  }
+  if (e.variante === "integrar") {
+    if (e.regla) {
+      if (!esObjetivo) return error(fmt(T.senuelo.noCumpleCategoria, { uso: T.usos[e.regla.uso] }));
+      if (it.fase === 2 && BANCO.objetos[el.obj].material !== e.regla.material) return error(fmt(T.senuelo.noCumpleMaterial, { material: T.materiales[e.regla.material] }));
+      return hallado(el, elegir(T.acierto.integrar));
+    }
+    if (esObjetivo) return hallado(el, elegir(T.acierto.integrar));
+    return error(T.senuelo.noEnLista);
+  }
+}
+function tocarLugar(l) {
+  const it = S.item, e = it.esc;
+  if (!l) { pintar(); return; }
+  if (it.modoE4 === "descartar") { it.descartes.has(l.id) ? it.descartes.delete(l.id) : it.descartes.add(l.id); pintar(); return anunciar(it.descartes.has(l.id) ? T.descartado : l.nombre); }
+  if (e.p.descarte === "automatico" && !Motor.lugaresPosibles(e, it.pistasVistas).includes(l.id)) { pintar(); return mensaje(fmt(T.senuelo.lugar, { pista: (Motor.primeraQueNoCumple(e, l.id) || {}).texto || "" })); }
+  const confirmar = () => {
+    if (l.id === e.objetivo) { it.mostrarLuci = l.id; return hallado({ uid: l.id }, elegir(editorial() ? T.acierto.transferirAdolescente : T.acierto.transferir)); }
+    const c = Motor.primeraQueNoCumple(e, l.id); error(fmt(T.senuelo.lugar, { pista: c ? c.texto : "" }));
+  };
+  if (e.p.verificar) return dialogoVerificar(l, confirmar);
+  confirmar();
+}
+function dialogoVerificar(l, confirmar) {
+  const e = S.item.esc, d = document.createElement("div");
+  d.className = "dialogo"; d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "true"); d.setAttribute("aria-labelledby", "v-t");
+  d.innerHTML = `<div class="panel"><div class="titulo"><h2 id="v-t">${esc(T.verificarTitulo)}</h2>${escuchar(T.verificarTitulo + " " + e.pistas.lista.map((c) => c.texto).join(" "))}</div><p><strong>${esc(l.nombre)}</strong></p>
+    <ul class="lista pistas">${e.pistas.lista.map((c) => `<li>${esc(c.texto)}</li>`).join("")}</ul>
+    <div class="acciones"><button class="btn" id="v-si">${esc(T.verificarSi)}</button><button class="btn sec" id="v-no">${esc(T.verificarNo)}</button></div></div>`;
+  document.body.appendChild(d);
+  d.querySelector("[data-decir]").onclick = (ev) => decir(ev.currentTarget.dataset.decir, true);
+  const cerrar = () => { d.remove(); $("#escena") && $("#escena").focus(); };
+  d.querySelector("#v-si").onclick = () => { cerrar(); confirmar(); };
+  d.querySelector("#v-no").onclick = () => { S.item.autocorrecciones = (S.item.autocorrecciones || 0) + 1; cerrar(); };
+  d.addEventListener("keydown", (ev) => { if (ev.key === "Escape") cerrar(); });
+  d.querySelector("#v-si").focus();
+}
+function hallado(el, texto) {
+  const it = S.item, e = it.esc;
+  it.encontrados.push(el.uid); S.sesion.seguidos = 0; it.resaltar = it.encontrados.slice();
+  let listo = true;
+  if (e.variante === "explorar" && e.p.pasos === 2) listo = it.encontrados.length >= 2;
+  if (e.lista) listo = e.objetivos.every((u) => it.encontrados.includes(u));
+  if (e.regla) {
+    if (it.fase === 1) { it.fase = 2; texto += " " + fmt(T.consignas.integrarCambio, { material: T.materiales[e.regla.material] }); }
+    listo = it.encontrados.length >= e.regla.necesarios;
+  }
+  if (listo) return terminarItem(true, e.lista || e.regla ? elegir(T.acierto.integrarFin) : texto);
+  if (e.lista || e.regla || e.modelo) { pJuego(false, true); mensaje(texto); } else { pintar(); mensaje(texto); }
+}
+function error(texto) {
+  const it = S.item; it.senuelos++; S.sesion.seguidos++;
+  pintar(); mensaje(texto);
+  const m = MODULO.m10;
+  if (S.sesion.seguidos >= m.errores_seguidos) {
+    const enPiso = S.grado === "facil";
+    if (enPiso && S.sesion.yaBajo) S.sesion.enPiso += S.sesion.seguidos;
+    if (enPiso && S.sesion.enPiso >= m.errores_seguidos) return piso();
+    S.sesion.seguidos = 0; S.sesion.yaBajo = true;
+    return terminarItem(false, T.masAyudaInicio, true);
+  }
+}
+/* Ayuda (escalera de la sección 5.4). */
+function pedirAyuda() {
+  const it = S.item, e = it.esc;
+  it.ayuda = Math.min(5, it.ayuda + 1);
+  const paso = it.ayuda;
+  if (paso === 1) { const c = consignaTexto(); mensaje(T.ayudaPasos[0] + " " + c + (e.pistas ? " " + e.pistas.lista.slice(0, it.pistasVistas).map((x) => x.texto).join(" ") : "")); return; }
+  if (paso === 2) { it.modeloVisible = true; it.ocultado = true; if (e.pistas) it.pistasVistas = Math.max(it.pistasVistas, 1); pJuego(false, true); return mensaje(T.ayudaPasos[1]); }
+  const objetivo = objetivoPendiente();
+  if (!objetivo) return;
+  if (paso === 3 || paso === 4) { it.rectAyuda = Motor.region(e, objetivo, paso); pintar(); return mensaje(T.ayudaPasos[paso - 1]); }
+  it.rectAyuda = null; it.resaltar = [objetivo.uid || objetivo.id];
+  if (e.lugares) it.mostrarLuci = objetivo.id;
+  pintar(); mensaje(T.ayudaPasos[4] + " " + T.demo[e.variante]);
+  setTimeout(() => { if (S.item === it && !it.terminado) { if (e.lugares) return terminarItem(true, T.demo[e.variante]); hallado(objetivo.uid ? objetivo : { uid: objetivo.id }, T.demo[e.variante]); } }, 2600);
+}
+function objetivoPendiente() {
+  const e = S.item.esc;
+  if (e.lugares) return e.lugares.find((l) => l.id === e.objetivo);
+  let pend = e.objetivos.filter((u) => !S.item.encontrados.includes(u));
+  if (e.regla && S.item.fase === 2) pend = pend.filter((u) => BANCO.objetos[e.elementos.find((x) => x.uid === u).obj].material === e.regla.material);
+  return e.elementos.find((x) => x.uid === pend[0]);
+}
+
+/* Fin del ítem: registro, M10 y siguiente paso. Sin puntaje, estrellas ni contador (T04). */
+function terminarItem(logrado, texto, masAyuda) {
+  const it = S.item, e = it.esc; it.terminado = true;
+  const reg = { variante: e.variante, grado: e.grado, lamina: e.lamina, acierto: logrado, senuelos: it.senuelos, ayudaMax: it.ayuda,
+    conAyuda: Motor.cuentaComoAyuda(it.ayuda, MODULO), ms: Date.now() - it.t0, autocorrecciones: it.autocorrecciones || 0, plan: S.plan || null };
+  S.sesion.items.push(reg);
+  (S.historial[e.variante] = S.historial[e.variante] || []).push(reg);
+  S.recorrido.hechos++; S.recorrido.estrategiasUsadas.add(variante().estrategia);
+  avisar({ type: "luci-item", ...reg });
+  pintar(); mensaje(texto);
+  const aj = Motor.ajusteM10(S.historial[e.variante], S.grado, { m10: MODULO.m10, fijo: S.fijo, yaSubio: S.sesion.subio, erroresSeguidos: masAyuda ? MODULO.m10.errores_seguidos : 0, checkinEstandar: INICIO.checkinEstandar });
+  if (aj.subio) S.sesion.subio = true;
+  const cambio = aj.grado !== S.grado; S.grado = aj.grado;
+  const pasado = (Date.now() - S.sesion.t0) / 60000 > ruta().sesion_min[1];
+  const acc = $(".lado");
+  const b = document.createElement("button"); b.className = "btn grande"; b.id = "j-seguir"; b.textContent = T.seguir;
+  b.onclick = () => {
+    if (pasado) return mostrar("mapa", { suave: true });
+    if (S.recorrido.hechos >= S.recorrido.total) return mostrar("mapa");
+    siguienteItem(masAyuda || (cambio && aj.masAyuda));
+  };
+  acc && acc.insertBefore(b, $("#msj")); b.focus({ preventScroll: true });
+}
+/* Piso (M10-6): demostración guiada, se deja la aventura por esta sesión y, si hay profesional, se registra la alerta. */
+function piso() {
+  const it = S.item, obj = objetivoPendiente(); it.terminado = true;
+  if (obj) { it.resaltar = [obj.uid || obj.id]; if (it.esc.lugares) it.mostrarLuci = obj.id; }
+  pintar(); mensaje(T.demo[it.esc.variante] + " " + T.pisoTexto);
+  avisar({ type: "luci-piso", variante: it.esc.variante, alerta: S.profesional });
+  S.sesion.items.push({ variante: it.esc.variante, grado: it.esc.grado, lamina: it.esc.lamina, acierto: false, senuelos: it.senuelos, ayudaMax: 5, conAyuda: true, piso: true });
+  const b = document.createElement("button"); b.className = "btn grande"; b.id = "j-seguir"; b.textContent = T.seguir;
+  b.onclick = () => mostrar("cierre", { piso: true });
+  $(".lado").insertBefore(b, $("#msj")); b.focus({ preventScroll: true });
+}
+
+/* ---------- Mapa de Luci (M03-1: se ilumina por participación y nunca se apaga) ---------- */
+function pMapa(o = {}) {
+  S.mapa.add(S.estacion); S.suave = !!o.suave;
+  if (editorial() && S.sobrio) return mostrar("hacer");
+  const zonas = ["explorar", "reconocer", "integrar", "transferir"];
+  const pos = [[120, 120], [380, 90], [150, 280], [400, 260]];
+  const svg = `<svg viewBox="0 0 520 380" role="img" aria-label="${esc(editorial() ? T.mapaAdolescente : T.mapaTitulo)}"><rect width="520" height="380" rx="22" fill="#E0F2EB"/>
+    ${zonas.map((z, i) => `<g><circle cx="${pos[i][0]}" cy="${pos[i][1]}" r="62" fill="${S.mapa.has(z) ? "#FFB82E" : "#DAE3E1"}" stroke="#102F54" stroke-width="3"/><text x="${pos[i][0]}" y="${pos[i][1] + 92}" text-anchor="middle" font-size="17" font-weight="800" fill="#102F54" font-family="Nunito,sans-serif">${esc(T.zonas[z])}</text></g>`).join("")}</svg>`;
+  const txt = fmt(T.mapaTexto, { zona: T.zonas[S.estacion] });
+  $("#app").innerHTML = `<section class="panel cierre mapa"><div class="titulo" style="justify-content:center"><h1 style="flex:0 1 auto">${esc(editorial() ? T.mapaAdolescente : T.mapaTitulo)}</h1>${escuchar(txt)}</div>
+    ${svg}<p>${esc(txt)}</p><div class="acciones"><button class="btn grande" id="m-seguir">${esc(T.seguir)}</button></div></section>`;
+  $("#m-seguir").onclick = () => mostrar("hacer"); decir(txt);
+}
+function pHacer() {
+  const t = editorial() ? T.hacer.adolescente : T.hacer[S.estacion];
+  $("#app").innerHTML = `<section class="panel"><div class="titulo"><h1>${esc(T.hacerTitulo)}</h1>${escuchar(t)}</div><p style="font-size:1.2rem">${esc(t)}</p><p class="small">${esc(T.hacerSeguridad)}</p>
+    <div class="acciones"><button class="btn grande" id="h-hecho">${esc(T.loHicimos)}</button><button class="btn sec grande" id="h-saltear">${esc(T.saltear)}</button></div></section>`;
+  $("#h-hecho").onclick = () => { avisar({ type: "luci-hacer" }); mostrar("contar"); };
+  $("#h-saltear").onclick = () => mostrar("contar"); decir(t);
+}
+function pContar() {
+  if (S.ruta === "3-5") {
+    $("#app").innerHTML = `<section class="panel"><div class="titulo"><h1>${esc(T.contarTitulo)}</h1>${escuchar(T.contarAdulto)}</div><p>${esc(T.contarAdulto)}</p>
+      <div class="acciones"><button class="btn grande" id="c-seguir">${esc(T.seguir)}</button></div></section>`;
+    $("#c-seguir").onclick = () => mostrar("cierre"); decir(T.contarAdulto); return;
+  }
+  const v = variante(); const estr = [[v.estrategia, T.estrategias[v.estrategia]], ["miro-de-arriba-abajo", T.estrategias["miro-de-arriba-abajo"]], ["pedi-ayuda", T.ayudaUsada]];
+  let ayudo = null, como = null;
+  $("#app").innerHTML = `<section class="panel"><div class="titulo"><h1>${esc(T.contarTitulo)}</h1>${escuchar(T.contarTitulo + " " + estr.map(([, t]) => t).join(" "))}</div>
+    <div class="opciones" style="--min:220px" role="radiogroup" aria-label="${esc(T.contarTitulo)}">${estr.map(([k, t]) => `<button class="opcion" role="radio" aria-checked="false" data-ayudo="${k}"><span class="t">${esc(t)}</span></button>`).join("")}</div>
+    <div class="titulo" style="margin-top:16px"><h2>${esc(T.contarComo)}</h2>${escuchar(T.contarComo)}</div>
+    <div class="opciones" style="--min:120px" role="radiogroup" aria-label="${esc(T.contarComo)}">${T.como.map((c) => `<button class="opcion centro" role="radio" aria-checked="false" data-como="${c.id}"><span style="font-size:2rem" aria-hidden="true">${c.picto}</span><span class="t">${esc(c.texto)}</span></button>`).join("")}</div>
+    <div class="acciones"><button class="btn grande" id="c-seguir">${esc(T.seguir)}</button><button class="btn sec grande" id="c-saltear">${esc(T.saltear)}</button></div></section>`;
+  const marcar = (sel, b) => $$(sel).forEach((x) => x.setAttribute("aria-checked", String(x === b)));
+  $$("[data-ayudo]").forEach((b) => b.onclick = () => { ayudo = b.dataset.ayudo; marcar("[data-ayudo]", b); });
+  $$("[data-como]").forEach((b) => b.onclick = () => { como = b.dataset.como; marcar("[data-como]", b); });
+  radios("[data-ayudo]"); radios("[data-como]");
+  $("#c-seguir").onclick = () => { if (ayudo || como) avisar({ type: "luci-contar", ayudo, como }); mostrar("cierre"); };
+  $("#c-saltear").onclick = () => mostrar("cierre");
+}
+function pCierre(o = {}) {
+  const t1 = o.piso ? T.pisoTexto : S.suave ? T.cierreSuave : T.cierreTitulo;
+  const t2 = o.piso ? "" : T.cierreProceso;
+  $("#app").innerHTML = `<section class="panel cierre"><div class="titulo" style="justify-content:center"><h1 style="flex:0 1 auto">${esc(t1)}</h1>${escuchar(t1 + " " + t2)}</div><p>${esc(t2)}</p>
+    <div class="acciones">${S.suave ? "" : `<button class="btn grande" id="c-otra">${esc(T.otraVez)}</button>`}</div>${pieAdulto()}</section>`;
+  const b = $("#c-otra"); if (b) b.onclick = () => (o.piso ? mostrar("adulto") : empezarRecorrido());
+  avisar({ type: "luci-fin", piso: !!o.piso, suave: !!S.suave });
+  decir(t1 + " " + t2);
+}
+
+/* ---------- Lámina para conversar (3–5): no se registra nada ---------- */
+function pConversar() {
+  const ls = BANCO.laminas.filter((l) => l.variante === "conversar");
+  const lam = ls[Math.floor(Math.random() * ls.length)];
+  const e = Motor.componer(lam, BANCO, MODULO, {});
+  $("#app").innerHTML = `<section class="panel"><div class="titulo"><h1>${esc(T.conversarTitulo)}</h1></div>
+    <p class="resumen">${esc(T.conversarGuia)}</p>
+    <div class="juego"><div class="escena-marco"><svg id="escena-conv" viewBox="0 0 1200 800" role="img" aria-label="Escena para conversar">${Dibujo.escena(e, { banco: BANCO })}</svg></div>
+    <aside class="lado"><ul class="lista pistas">${T.conversarPreguntas.map((q) => `<li>${esc(q)} ${escuchar(q)}</li>`).join("")}</ul>
+    <button class="btn grande" id="cv-fin">${esc(T.terminar)}</button></aside></div></section>`;
+  $("#cv-fin").onclick = () => mostrar(CON_ADULTO ? "adulto" : "cierre");
+}
+
+/* Aviso al portal (si corre dentro de él). Solo datos del juego, nunca datos de la persona. */
+function avisar(d) { try { if (EN_MARCO) window.parent.postMessage(d, "*"); } catch (e) { } }
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && EN_MARCO && !e.defaultPrevented && !$(".dialogo")) avisar({ type: "isla-salir-vista-ampliada" }); });
+document.addEventListener("visibilitychange", () => { if (document.hidden) try { speechSynthesis.cancel(); } catch (e) { } });
+
+encabezado();
+if (!CON_ADULTO) { S.recorrido = { total: ruta().items_por_recorrido, hechos: 0, estrategiasUsadas: new Set() }; S.sesion.t0 = Date.now(); }
+mostrar(CON_ADULTO ? "adulto" : "descubrir");
+</script>
+</body></html>
