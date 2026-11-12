@@ -1,0 +1,973 @@
+<!doctype html>
+<!-- «Los tres cerditos»: cinco actividades por Estaciones (reelaboración de la supervisora, 2026-11-10; decisiones D1–D4, 2026-11-11).
+     Construida por DEV-IA como herramienta del portal (ADR-009). Corre aislada (iframe sin acceso a la app ni a sus datos)
+     y también como archivo suelto para probar con doble clic.
+     CONTENIDO DE PRUEBA NO VALIDADO: consignas, frases, parejas, situaciones, clasificación de respuestas, pistas y parámetros
+     los valida PSP-SR y los aprueba la supervisora (RT-CER-001). Ilustraciones de relleno con formas simples, sin IA generativa
+     y sin imágenes de terceros (D3). Ningún modelo de lenguaje interviene: todo se corrige con el banco, en código. -->
+<html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Los tres cerditos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>__BRAND_FONT__
+:root{color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--as-papel,#fcfaf7);color:var(--as-tinta,#102f54);font-family:var(--as-fuente,"Nunito",system-ui,sans-serif);
+  font-size:18px;line-height:1.45;padding:12px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:4px solid var(--as-foco,#b95325);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2{color:var(--as-tinta,#102f54);line-height:1.2;margin:0}
+h1{font-size:1.6rem;font-weight:800}
+h2{font-size:1.15rem;font-weight:800}
+p{margin:.4em 0}
+.small{font-size:.95rem;color:var(--as-secundario,#526776)}
+.hd{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.marca{width:44px;height:44px;border-radius:12px;background:var(--as-marca) center/contain no-repeat;flex:none}
+.hd .nm{font-weight:800;font-size:1.2rem;margin-right:auto}
+.rotulo{display:inline-block;font-size:.85rem;font-weight:700;color:var(--as-aviso,#805024);background:var(--as-arena,#fff1d7);border-radius:999px;padding:4px 12px}
+.panel{background:var(--as-superficie,#fff);border:1px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio,22px);box-shadow:var(--as-sombra,0 2px 10px rgb(16 47 84 / 6%));padding:18px}
+.btn{min-height:48px;border-radius:999px;border:2px solid var(--as-tinta,#102f54);background:var(--as-tinta,#102f54);color:var(--as-superficie,#fff);
+  font-weight:800;font-size:1.05rem;padding:8px 22px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.sec{background:var(--as-superficie,#fff);color:var(--as-tinta,#102f54)}
+.btn.suave{background:var(--as-menta,#e0f2eb);color:var(--as-tinta,#102f54);border-color:var(--as-borde-verde,#75b8a8)}
+.btn.icono{min-width:48px;padding:8px 14px}
+.btn.chico{min-height:44px;font-size:.95rem;padding:6px 16px}
+.btn.ofrecida{box-shadow:0 0 0 4px var(--as-sol,#ffb82e)}
+.btn[disabled]{opacity:.55;cursor:default}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.opciones{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(var(--min,200px),1fr))}
+.opcion{border:2px solid var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio-control,14px);background:var(--as-superficie,#fff);
+  text-align:left;padding:10px 14px;min-height:52px;display:flex;flex-direction:column;gap:2px}
+.opcion:hover{background:var(--as-suave,#f4f6f4)}
+.opcion[aria-pressed="true"],.opcion[aria-checked="true"]{background:var(--as-menta,#e0f2eb);border-color:var(--as-verde,#196b6a);box-shadow:inset 0 0 0 2px var(--as-verde,#196b6a)}
+.opcion[disabled]{opacity:.45;cursor:default}
+.opcion .t{font-weight:800}
+.opcion .d{font-size:.9rem;color:var(--as-texto,#354e60)}
+.grupo{margin:14px 0}
+.grupo>h2{margin-bottom:8px}
+.casillas label{display:flex;align-items:center;gap:8px;min-height:44px}
+.casillas input{width:22px;height:22px}
+.consigna{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.consigna p{flex:1 1 220px;margin:0;font-weight:800;font-size:1.2rem}
+.juego{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.juego{grid-template-columns:minmax(0,1fr) 280px;align-items:start}}
+.lado{display:flex;flex-direction:column;gap:12px}
+.msj{min-height:3.2em;font-weight:700;padding:10px 12px;border-radius:var(--as-radio-control,14px);background:var(--as-suave,#f4f6f4)}
+.msj:empty{background:transparent}
+.escena-marco{position:relative;border-radius:var(--as-radio-control,14px);overflow:hidden;border:1px solid var(--as-borde,#dae3e1);background:#fff}
+#escena{display:block;width:100%;height:auto;aspect-ratio:3/2;user-select:none;-webkit-user-select:none}
+#escena [data-el]{cursor:pointer}
+#escena [data-el]:focus{outline:none}
+#escena [data-el]:focus-visible .marco-foco{stroke:#b95325;stroke-width:6;stroke-dasharray:none}
+.marco-foco{fill:transparent;stroke:transparent}
+/* Memotest */
+.cartas{display:grid;gap:10px;grid-template-columns:repeat(var(--cols,4),minmax(0,150px))}
+@media (max-width:520px){.cartas{grid-template-columns:repeat(var(--cols-movil,3),minmax(0,1fr))}}
+.carta{aspect-ratio:1;border-radius:var(--as-radio-control,14px);border:3px solid var(--as-tinta,#102f54);background:var(--as-tinta,#102f54);
+  display:flex;align-items:center;justify-content:center;padding:6px;min-height:96px}
+.carta .dorso{width:44%;opacity:.9}
+.carta.vista{background:#fff}
+.carta.hallada{background:var(--as-menta,#e0f2eb);border-color:var(--as-verde,#196b6a)}
+.carta.candidata{box-shadow:0 0 0 5px var(--as-sol,#ffb82e)}
+.carta svg{width:86%;height:86%}
+.carta .pal{font-weight:800;font-size:1.15rem;text-align:center;overflow-wrap:anywhere}
+/* Ubicar (orden y rompecabezas) */
+.tablero{display:grid;gap:8px}
+.ranura{border:3px dashed var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio-control,14px);background:var(--as-superficie,#fff);min-height:80px;padding:4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.ranura.llena{border-style:solid}
+.ranura.marcada{box-shadow:0 0 0 5px var(--as-sol,#ffb82e)}
+.ranura .ref{position:absolute;inset:0;opacity:.22;pointer-events:none}
+.ranura .ref svg{width:100%;height:100%}
+.ranura .etq{font-size:.85rem;font-weight:800;color:var(--as-secundario,#526776)}
+.bandeja{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ficha{border:3px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);background:#fff;padding:3px;min-width:64px;min-height:64px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.ficha[aria-pressed="true"]{border-color:var(--as-coral,#f58060);box-shadow:0 0 0 3px var(--as-coral,#f58060)}
+.ficha.mal{border-color:var(--as-sol,#ffb82e);box-shadow:0 0 0 4px var(--as-sol,#ffb82e)}
+.ficha svg{display:block}
+.ficha .fr{font-size:.85rem;font-weight:700;max-width:220px;text-align:center}
+.pieza svg{width:100%;height:100%}
+.rompe .ranura{padding:0;min-height:0;border-width:2px}
+.rompe .ranura .ficha{border:0;padding:0;width:100%;height:100%;border-radius:0}
+.rompe .bandeja .ficha{width:clamp(64px,18vw,110px)}
+/* Escena y frase */
+.escenas{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.esc-card{display:flex;flex-direction:column;gap:6px;border:2px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);background:#fff;padding:6px}
+.esc-card svg{width:100%;height:auto;aspect-ratio:3/2;border-radius:10px}
+.esc-card .destino{min-height:52px;border:2px dashed var(--as-borde-verde,#75b8a8);border-radius:10px;background:var(--as-superficie,#fff);font-weight:700;font-size:.92rem;padding:6px;text-align:left}
+.esc-card .destino.puesta{border-style:solid;background:var(--as-menta,#e0f2eb)}
+.esc-card.marcada{box-shadow:0 0 0 5px var(--as-sol,#ffb82e)}
+.frases{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.frase{border:2px solid var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio-control,14px);background:#fff;text-align:left;padding:10px 12px;min-height:48px;font-weight:700}
+.frase[aria-pressed="true"]{border-color:var(--as-coral,#f58060);box-shadow:0 0 0 3px var(--as-coral,#f58060)}
+/* Salvemos */
+.situacion{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.situacion svg{width:110px;height:110px;flex:none}
+.situacion p{flex:1 1 240px;font-weight:800;font-size:1.15rem}
+.opcion svg{width:72px;height:72px;flex:none}
+.opcion.fig{flex-direction:row;align-items:center;gap:12px}
+.consecuencia{padding:12px 14px;border-radius:var(--as-radio-control,14px);background:var(--as-arena,#fff1d7);font-weight:700}
+.pasos-hechos{list-style:none;padding:0;margin:8px 0;display:flex;flex-wrap:wrap;gap:8px}
+.pasos-hechos li{background:var(--as-menta,#e0f2eb);border-radius:999px;padding:6px 14px;font-weight:800}
+.modelo-img{border:2px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);overflow:hidden;background:#fff}
+.modelo-img svg{display:block;width:100%;height:auto}
+.dialogo{position:fixed;inset:0;background:rgb(16 47 84 / 45%);display:grid;place-items:center;padding:16px;z-index:10}
+.dialogo .panel{max-width:760px;width:100%}
+table.reg{border-collapse:collapse;width:100%;font-size:.9rem}
+table.reg th,table.reg td{border-bottom:1px solid var(--as-borde,#dae3e1);padding:6px;text-align:left;vertical-align:top}
+.tabla-scroll{overflow-x:auto}
+.cierre{text-align:center}
+.cierre .acciones{justify-content:center}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div class="wrap">
+  <header class="hd" id="hd"></header>
+  <main id="app" aria-live="off"></main>
+  <p class="sr" id="anuncio" role="status" aria-live="polite"></p>
+</div>
+<script type="application/json" id="datos-banco">__BANCO__</script>
+<script type="application/json" id="datos-modulo">__MODULO__</script>
+<script type="application/json" id="datos-inicio">__INICIO__</script>
+<script id="motor">
+"use strict";
+/* ---------- Motor: lógica pura y determinista (la prueba tests/cerditos.test.js sin navegador) ----------
+   Corrección por el banco, M10, retiro de apoyos y registro: todo en código. Ningún modelo de lenguaje (DEV-IA §4). */
+const Motor = (() => {
+  const GR = ["facil", "intermedio", "dificil"];
+  const ACT = ["detectives", "memotest", "escena_frase", "rompecabezas", "salvemos"];
+  const CLASES = ["adecuada", "parcial", "no-adecuada"];
+  const AUTONOMIA = ["autonomo", "con-pista", "con-ayuda-especifica", "con-demostracion"];
+  function azar(semilla) {
+    let s = (semilla >>> 0) || 0x9e3779b9;
+    return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; };
+  }
+  const mezclar = (arr, r) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  /* Mezcla que nunca deja el orden resuelto (si no, no hay nada que ordenar). */
+  function mezclarDistinto(arr, r) {
+    if (arr.length < 2) return arr.slice();
+    for (let t = 0; t < 30; t++) { const a = mezclar(arr, r); if (a.some((x, i) => x !== arr[i])) return a; }
+    return arr.slice().reverse();
+  }
+  const semillaDe = (texto, vuelta = 0) => { let h = 2166136261; for (const c of String(texto) + "#" + vuelta) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+
+  /* M10 (beta 2, 6.10) dentro de cada actividad. El tiempo no interviene (M10-7). Nunca cambia de actividad ni de Estación. */
+  function ajusteM10(historial, grado, opciones = {}) {
+    const m = opciones.m10 || { ventana: 10, minimo: 5, subir_aciertos: 0.85, subir_sin_ayuda: 0.7, mantener_desde: 0.6, errores_seguidos: 3 };
+    const i = GR.indexOf(grado);
+    if (opciones.fijo) return { grado, motivo: "fijado por el profesional (M10-9)" };
+    if (opciones.erroresSeguidos >= m.errores_seguidos)
+      return i > 0 ? { grado: GR[i - 1], motivo: "3 errores seguidos (M10-5)", masAyuda: true } : { grado, motivo: "3 errores seguidos en el grado mínimo", masAyuda: true };
+    const v = historial.slice(-m.ventana);
+    if (v.length < m.minimo) return { grado, motivo: "menos de 5 ítems (M10-2)" };
+    const ac = v.filter((x) => x.acierto).length / v.length, sa = v.filter((x) => x.acierto && !x.conAyuda).length / v.length;
+    if (ac >= m.subir_aciertos && sa >= m.subir_sin_ayuda && i < 2 && !opciones.yaSubio) return { grado: GR[i + 1], motivo: "subir (M10-3)", subio: true };
+    if (ac < m.mantener_desde && i > 0) return { grado: GR[i - 1], motivo: "menos de 60 % (M10-5)" };
+    return { grado, motivo: "mantener (M10-4)" };
+  }
+
+  /* Escala de apoyos 0–3 (TC-§3.B) y retiro progresivo (propuesta T2): si el ítem salió sin errores con el apoyo
+     inicial o menos, el siguiente arranca un nivel más abajo. Nunca sube solo: las ayudas se piden. */
+  function siguienteApoyo(actual, r, baja = 1) {
+    actual = Math.max(0, Math.min(3, actual | 0));
+    if (!actual) return 0;
+    return r.errores === 0 && r.apoyo_max <= actual ? Math.max(0, actual - baja) : actual;
+  }
+  const autonomia = (n) => AUTONOMIA[Math.max(0, Math.min(3, n | 0))];
+
+  /* Qué cuenta como acierto para M10 (modulo.criterio_acierto, a validar por PSP-SR). */
+  function acierto(actividad, r) {
+    if (actividad === "memotest") return r.errores <= (r.parejas || 0);
+    if (actividad === "salvemos") return r.resultado === "adecuada" && (!r.etapas || !r.etapas.justificacion || r.etapas.justificacion.coherente_primera !== false);
+    if (actividad === "escena_frase") return r.errores === 0 && (!r.etapas.justificacion || r.etapas.justificacion.coherente_primera !== false);
+    return r.errores === 0;
+  }
+
+  /* Registro mínimo por ítem (TC-§3.C). Normaliza y acota cada campo: nada de texto libre. */
+  function registro(base) {
+    const n = (x, max) => Math.max(0, Math.min(max, Math.round(+x || 0)));
+    const apoyo_max = n(base.apoyo_max, 3);
+    return {
+      actividad: ACT.includes(base.actividad) ? base.actividad : "?", estacion: String(base.estacion || "").slice(0, 12),
+      grado: GR.includes(base.grado) ? base.grado : "?", item: String(base.item || "").slice(0, 20),
+      resultado: base.resultado === true ? "correcto" : base.resultado === false ? "incorrecto" : CLASES.includes(base.resultado) ? base.resultado : "correcto",
+      etapas: base.etapas || {}, intentos: n(base.intentos, 999), errores: n(base.errores, 999),
+      apoyos: (base.apoyos || []).map((a) => String(a).slice(0, 40)).slice(0, 20), apoyo_max,
+      lectura: !!base.lectura, autocorreccion: !!base.autocorreccion, autonomia: autonomia(apoyo_max), ms: n(base.ms, 3600000)
+    };
+  }
+
+  /* Memotest: cada pareja da dos tarjetas; solo son pareja las dos de la misma entrada del banco. */
+  function cartasMemotest(item, semilla) {
+    const cartas = item.parejas.flatMap((p, i) => [{ id: i + "a", par: i, ...p.a }, { id: i + "b", par: i, ...p.b }]);
+    return mezclar(cartas, azar(semilla));
+  }
+  const esPareja = (c1, c2) => !!c1 && !!c2 && c1.par === c2.par && c1.id !== c2.id;
+  const claveCarta = (c) => c.txt ? "t:" + c.txt.toLowerCase() : "f:" + c.fig + JSON.stringify(c.attrs || {});
+
+  /* Ubicar (ordenar escenas y rompecabezas): la ficha k va en la ranura k. */
+  const malUbicadas = (ranuras) => ranuras.map((f, i) => (f !== null && f !== undefined && f !== i ? i : -1)).filter((i) => i >= 0);
+  const completo = (ranuras) => ranuras.every((f, i) => f === i);
+  function piezas(item, semilla) {
+    const total = item.cols * item.filas;
+    return mezclarDistinto([...Array(total).keys()], azar(semilla));
+  }
+
+  /* Salvemos */
+  const opcion = (lista, id) => (lista || []).find((o) => o.id === id);
+  function materialesOk(item, elegidos) {
+    const ok = item.materiales.opciones.filter((o) => o.ok).map((o) => o.id).sort();
+    return JSON.stringify([...elegidos].sort()) === JSON.stringify(ok);
+  }
+  const coherente = (just, idOpcion) => !!just && (just.coherente_con || []).includes(idOpcion);
+
+  /* Validación del banco contra la ficha (corre en CI). Devuelve la lista de problemas. */
+  const PROHIBIDO = /misi[oó]n|muy bien|genial|inteligente|puntaje|puntos|\bnivel\b|estaci[oó]n|f[aá]cil|intermedio|dif[ií]cil|peligro|miedo|comer|com[ií]a|matar|sangre|muerte|muri[oó]/i;
+  function validarBanco(banco, modulo) {
+    const err = [], A = banco.actividades || {};
+    const V = (act) => modulo.estaciones.variantes.find((v) => v.actividad === act);
+    const textos = [];
+    for (const act of ACT) {
+      if (!A[act]) { err.push(`${act}: falta en el banco`); continue; }
+      if (!V(act)) err.push(`${act}: falta la variante en modulo.json`);
+      for (const g of GR) if (!(A[act][g] || []).length) err.push(`${act}/${g}: sin ítems`);
+    }
+    const ids = new Set();
+    for (const act of ACT) for (const g of GR) for (const it of (A[act] || {})[g] || []) {
+      if (ids.has(it.id)) err.push(`${it.id}: id repetido`); ids.add(it.id);
+      const p = ((V(act) || {}).grados || {})[g] ? V(act).grados[g].parametros : {};
+      if (act === "detectives") {
+        const els = new Set(it.elementos.map((e) => e.id));
+        if (els.size !== it.elementos.length) err.push(`${it.id}: elementos con id repetido`);
+        if (!it.objetivos.every((o) => els.has(o))) err.push(`${it.id}: objetivo inexistente`);
+        if (it.objetivos.length !== (p.pasos || 1)) err.push(`${it.id}: cantidad de pasos distinta de la ficha`);
+        if (!it.region2 || !it.pista1 || !it.ok || !it.consigna) err.push(`${it.id}: faltan pista, región, devolución o consigna`);
+        if (!it.elementos.every((e) => e.nombre)) err.push(`${it.id}: elemento sin nombre accesible`);
+        textos.push(it.consigna, it.pista1, it.ok);
+      }
+      if (act === "memotest") {
+        if (it.tipo !== p.tipo) err.push(`${it.id}: tipo ${it.tipo} distinto de la ficha (${p.tipo})`);
+        if (it.parejas.length !== p.parejas) err.push(`${it.id}: ${it.parejas.length} parejas, la ficha dice ${p.parejas}`);
+        const claves = new Map();
+        it.parejas.forEach((pa, i) => [pa.a, pa.b].forEach((c) => { const k = claveCarta(c); if (claves.has(k) && claves.get(k) !== i) err.push(`${it.id}: «${k}» aparece en dos parejas (una tarjeta con dos parejas posibles)`); claves.set(k, i); }));
+        if (p.tipo === "imagen-palabra" && !it.parejas.every((pa) => pa.a.fig && pa.b.txt)) err.push(`${it.id}: cada pareja debe ser imagen y palabra`);
+        if (p.tipo === "palabra-palabra" && !it.parejas.every((pa) => pa.a.txt && pa.b.txt && pa.pista)) err.push(`${it.id}: palabra-palabra con pista semántica`);
+        it.parejas.forEach((pa) => textos.push(pa.a.txt, pa.b.txt, pa.pista));
+      }
+      if (act === "escena_frase") {
+        const esc = it.escenas;
+        if (!esc.every((e) => banco.escenas_cuento[e])) err.push(`${it.id}: escena inexistente`);
+        if (new Set(esc).size !== esc.length) err.push(`${it.id}: escena repetida`);
+        const fr = esc.map((e) => it.frases[e]);
+        if (!fr.every(Boolean) || new Set(fr).size !== fr.length) err.push(`${it.id}: cada escena necesita una frase distinta`);
+        const min = g === "facil" ? 3 : g === "intermedio" ? 5 : 7;
+        if (esc.length < min || (g !== "dificil" && esc.length !== min)) err.push(`${it.id}: ${esc.length} escenas para ${g}`);
+        if (p.justificar) {
+          const j = it.justificacion;
+          if (!j || j.opciones.filter((o) => o.ok).length !== 1 || !j.opciones.every((o) => o.fig)) err.push(`${it.id}: la justificación necesita opciones con dibujo y una sola coherente (D1)`);
+          else textos.push(j.pregunta, ...j.opciones.map((o) => o.txt));
+        }
+        textos.push(...fr);
+      }
+      if (act === "rompecabezas") {
+        if (!banco.escenas_cuento[it.escena]) err.push(`${it.id}: escena inexistente`);
+        if (it.cols * it.filas !== p.piezas) err.push(`${it.id}: ${it.cols * it.filas} piezas, la ficha dice ${p.piezas}`);
+        if (it.guia !== p.guia || it.verificar !== p.verificar) err.push(`${it.id}: guía o verificación distinta de la ficha`);
+      }
+      if (act === "salvemos") {
+        const chk = (ops, quien) => {
+          if (!ops.some((o) => o.clase === "adecuada")) err.push(`${it.id}/${quien}: sin opción adecuada`);
+          if (!ops.every((o) => CLASES.includes(o.clase) && o.consecuencia && o.fig && o.txt)) err.push(`${it.id}/${quien}: cada opción necesita clase, consecuencia, dibujo y texto`);
+          ops.forEach((o) => textos.push(o.txt, o.consecuencia));
+        };
+        textos.push(it.situacion);
+        if (it.tipo === "plan") {
+          if (!p.plan && !p.pasos_del_plan) err.push(`${it.id}: plan en un grado sin plan`);
+          if (it.materiales.opciones.filter((o) => o.ok).length !== it.materiales.elegir) err.push(`${it.id}: materiales correctos ≠ cantidad a elegir`);
+          if (it.pasos.orden.length < 3) err.push(`${it.id}: el plan necesita al menos 3 pasos`);
+          chk(it.imprevisto.opciones, "imprevisto");
+          textos.push(it.materiales.consigna, it.pasos.consigna, it.imprevisto.consigna, ...it.materiales.opciones.map((o) => o.txt), ...it.pasos.orden.map((o) => o.txt));
+        } else {
+          chk(it.opciones, "opciones");
+          if (g === "facil" && it.opciones.length !== p.alternativas) err.push(`${it.id}: Fácil lleva ${p.alternativas} alternativas`);
+          if (g === "intermedio" && (it.opciones.length < 3 || it.opciones.length > p.alternativas)) err.push(`${it.id}: Intermedio lleva 3 a ${p.alternativas} alternativas`);
+          if (p.justificar) {
+            const j = it.justificacion;
+            if (!j || !j.opciones.every((o) => o.fig && Array.isArray(o.coherente_con))) err.push(`${it.id}: justificación con dibujos y coherencia declarada (D1)`);
+            else {
+              for (const o of it.opciones.filter((x) => x.clase === "adecuada")) if (!j.opciones.some((x) => x.coherente_con.includes(o.id))) err.push(`${it.id}: la opción ${o.id} no tiene justificación coherente`);
+              if (!j.opciones.some((x) => !x.coherente_con.length)) err.push(`${it.id}: falta una justificación no coherente`);
+              textos.push(j.pregunta, ...j.opciones.map((o) => o.txt));
+            }
+          }
+        }
+      }
+    }
+    for (const t of textos.filter(Boolean)) if (PROHIBIDO.test(t)) err.push(`texto para quien juega con palabra no permitida: «${t}»`);
+    return err;
+  }
+  return { GR, ACT, CLASES, AUTONOMIA, azar, mezclar, mezclarDistinto, semillaDe, ajusteM10, siguienteApoyo, autonomia, acierto, registro,
+    cartasMemotest, esPareja, claveCarta, malUbicadas, completo, piezas, opcion, materialesOk, coherente, validarBanco, PROHIBIDO };
+})();
+if (typeof module !== "undefined") module.exports = Motor;
+</script>
+<script id="dibujo">
+"use strict";
+/* ---------- Ilustraciones de relleno (D3): formas simples con la paleta de marca y contorno tinta. Sin imágenes de terceros.
+   Las definitivas las dibuja el equipo de marca y pasan revisión humana de parecido (RT-CER-001 B.7). ---------- */
+const Dibujo = (() => {
+  const INK = "#102F54";
+  const C = { verde: "#196B6A", sol: "#FFB82E", coral: "#F58060", lila: "#BD89C4", rosa: "#F9C6BA", rosaOsc: "#EE9C8C", gris: "#B8C4C2", grisOsc: "#8A9A98",
+    madera: "#C68E5A", maderaOsc: "#9C6A3C", paja: "#F2CF6B", cielo: "#E3F1F4", pasto: "#CFE6C9", pastoOsc: "#A9D2A0", blanco: "#FFFFFF", humo: "#DDE3E2" };
+  const T = `stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
+  const col = (c, def) => C[c] || c || def;
+  const F = {
+    cerdito(a = {}) {
+      const p = col(a.panuelo, C.verde);
+      const silla = a.silla ? `<circle cx="70" cy="82" r="16" fill="none" ${T}/><circle cx="70" cy="82" r="3" fill="${INK}"/><path d="M24 70 H70 M70 66 V48" fill="none" ${T}/>` : "";
+      const patas = a.silla ? "" : `<rect x="32" y="78" width="9" height="14" rx="3" fill="${C.rosaOsc}" ${T}/><rect x="58" y="78" width="9" height="14" rx="3" fill="${C.rosaOsc}" ${T}/>`;
+      const ant = a.anteojos ? `<circle cx="42" cy="32" r="6.5" fill="none" ${T}/><circle cx="58" cy="32" r="6.5" fill="none" ${T}/><path d="M48.5 32 H51.5" ${T}/>` : "";
+      return `${patas}<ellipse cx="50" cy="64" rx="28" ry="20" fill="${C.rosa}" ${T}/>${silla}<path d="M76 60 c8 -4 8 6 2 4" fill="none" ${T}/>`
+        + `<path d="M32 22 L30 8 L42 16Z M68 22 L70 8 L58 16Z" fill="${C.rosaOsc}" ${T}/><circle cx="50" cy="32" r="19" fill="${C.rosa}" ${T}/>`
+        + `<circle cx="43" cy="30" r="2.6" fill="${INK}"/><circle cx="57" cy="30" r="2.6" fill="${INK}"/><ellipse cx="50" cy="40" rx="8" ry="5.5" fill="${C.rosaOsc}" ${T}/>`
+        + `<circle cx="47" cy="40" r="1.5" fill="${INK}"/><circle cx="53" cy="40" r="1.5" fill="${INK}"/>${ant}<path d="M36 50 L64 50 L50 60Z" fill="${p}" ${T}/>`;
+    },
+    lobo(a = {}) {
+      const sopla = a.soplando ? `<path d="M6 34 H-14 M8 42 H-20 M6 50 H-14" stroke="${C.grisOsc}" stroke-width="4" stroke-linecap="round"/>` : "";
+      const humo = a.corriendo ? `<circle cx="92" cy="58" r="8" fill="${C.humo}" ${T}/><circle cx="102" cy="48" r="6" fill="${C.humo}" ${T}/><path d="M86 74 l-8 10 M74 76 l4 12" ${T}/>` : "";
+      const patas = a.corriendo ? `<path d="M30 80 l-12 10 M44 82 l-4 14 M60 82 l10 10 M70 80 l14 6" ${T}/>` : `<rect x="34" y="78" width="8" height="16" rx="3" fill="${C.gris}" ${T}/><rect x="58" y="78" width="8" height="16" rx="3" fill="${C.gris}" ${T}/>`;
+      const boca = a.soplando ? `<circle cx="22" cy="42" r="3.5" fill="${INK}"/>` : `<path d="M22 46 q6 4 12 0" fill="none" ${T}/>`;
+      return `${humo}${patas}<ellipse cx="54" cy="66" rx="28" ry="17" fill="${C.gris}" ${T}/><path d="M80 60 C96 52 98 70 84 70Z" fill="${C.gris}" ${T}/>`
+        + `<path d="M36 22 L34 4 L48 16Z M60 22 L64 4 L52 14Z" fill="${C.grisOsc}" ${T}/><circle cx="48" cy="32" r="18" fill="${C.gris}" ${T}/>`
+        + `<path d="M34 36 C24 36 16 40 16 44 C16 48 26 50 36 46Z" fill="${C.gris}" ${T}/><circle cx="16" cy="43" r="3" fill="${INK}"/>`
+        + `<circle cx="44" cy="28" r="2.6" fill="${INK}"/><circle cx="56" cy="28" r="2.6" fill="${INK}"/>${boca}${sopla}`;
+    },
+    casa(a = {}) {
+      const m = a.material || "paja";
+      const fill = m === "paja" ? C.paja : m === "madera" ? C.madera : C.coral;
+      let tex = "";
+      if (m === "paja") for (let x = 22; x < 80; x += 8) tex += `<path d="M${x} 52 V92" stroke="${C.maderaOsc}" stroke-width="1.5" opacity=".6"/>`;
+      if (m === "madera") for (let y = 58; y < 92; y += 9) tex += `<path d="M16 ${y} H84" stroke="${C.maderaOsc}" stroke-width="2"/>`;
+      if (m === "ladrillos") for (let y = 58, k = 0; y < 92; y += 8, k++) { tex += `<path d="M16 ${y} H84" stroke="${INK}" stroke-width="1" opacity=".45"/>`; for (let x = 20 + (k % 2) * 7; x < 84; x += 14) tex += `<path d="M${x} ${y - 8} V${y}" stroke="${INK}" stroke-width="1" opacity=".45"/>`; }
+      const techoFill = m === "paja" ? C.paja : m === "madera" ? C.maderaOsc : "#C4573E";
+      const chimenea = m === "ladrillos" ? `<rect x="64" y="14" width="11" height="22" fill="${C.coral}" ${T}/>` + (a.humo ? `<circle cx="70" cy="8" r="5" fill="${C.humo}" ${T}/><circle cx="78" cy="0" r="6" fill="${C.humo}" ${T}/>` : "") : "";
+      const vuela = a.volando;
+      const techo = `<path d="M8 52 L50 14 L92 52Z" fill="${techoFill}" ${T}/>`;
+      const viento = vuela ? `<path d="M-6 30 q14 -8 26 0 M-10 44 q16 -8 30 0" fill="none" stroke="${C.grisOsc}" stroke-width="3" stroke-linecap="round"/>` : "";
+      return `${chimenea}${vuela ? `<g transform="translate(18 -16) rotate(16 50 36)">${techo}</g>` : techo}<rect x="16" y="50" width="68" height="44" fill="${fill}" ${T}/>${tex}`
+        + `<rect x="42" y="66" width="16" height="28" rx="3" fill="${C.blanco}" ${T}/><rect x="22" y="58" width="14" height="12" fill="${C.cielo}" ${T}/>${viento}`;
+    },
+    fardo: () => `<rect x="10" y="30" width="80" height="50" rx="10" fill="${C.paja}" ${T}/><path d="M10 46 H90 M10 62 H90 M34 30 V80 M66 30 V80" stroke="${C.maderaOsc}" stroke-width="2" opacity=".7"/>`,
+    tablas: () => `<rect x="6" y="64" width="88" height="12" rx="3" fill="${C.madera}" ${T}/><rect x="10" y="48" width="84" height="12" rx="3" fill="${C.madera}" ${T}/><rect x="4" y="32" width="86" height="12" rx="3" fill="${C.madera}" ${T}/>`,
+    ladrillos: () => [[8, 70], [36, 70], [64, 70], [22, 52], [50, 52], [36, 34]].map(([x, y]) => `<rect x="${x}" y="${y}" width="28" height="16" fill="${C.coral}" ${T}/>`).join(""),
+    martillo: () => `<rect x="44" y="30" width="10" height="62" rx="4" fill="${C.madera}" ${T}/><rect x="22" y="14" width="54" height="20" rx="5" fill="${C.grisOsc}" ${T}/>`,
+    carretilla: () => `<path d="M8 40 H74 L66 66 H18Z" fill="${C.verde}" ${T}/><circle cx="34" cy="78" r="12" fill="${C.blanco}" ${T}/><path d="M74 40 L96 30 M60 66 L66 88" ${T}/>`,
+    balde: () => `<path d="M22 34 H78 L70 90 H30Z" fill="${C.gris}" ${T}/><path d="M24 34 C24 6 76 6 76 34" fill="none" ${T}/>`,
+    regadera: () => `<rect x="24" y="36" width="44" height="44" rx="8" fill="${C.verde}" ${T}/><path d="M68 48 L94 30 L96 38 L70 60" fill="${C.verde}" ${T}/><path d="M30 36 C30 16 60 16 60 36" fill="none" ${T}/>`,
+    arbol: () => `<rect x="42" y="56" width="16" height="40" fill="${C.madera}" ${T}/><circle cx="50" cy="38" r="30" fill="${C.verde}" ${T}/><circle cx="36" cy="30" r="5" fill="${C.pastoOsc}"/><circle cx="62" cy="44" r="5" fill="${C.pastoOsc}"/>`,
+    flor: (a = {}) => `<path d="M50 54 V96" stroke="${C.verde}" stroke-width="4"/><path d="M50 80 q14 -12 22 -4 q-10 10 -22 4" fill="${C.pastoOsc}" ${T}/>` + [0, 72, 144, 216, 288].map((g) => `<ellipse cx="50" cy="24" rx="10" ry="15" fill="${col(a.color, C.coral)}" ${T} transform="rotate(${g} 50 40)"/>`).join("") + `<circle cx="50" cy="40" r="9" fill="${C.sol}" ${T}/>`,
+    sol: () => `<circle cx="50" cy="50" r="24" fill="${C.sol}" ${T}/>` + [0, 45, 90, 135, 180, 225, 270, 315].map((g) => `<path d="M50 14 V4" ${T} transform="rotate(${g} 50 50)"/>`).join(""),
+    nube: (a = {}) => `<path d="M20 64 C4 64 4 42 22 42 C24 22 52 18 58 34 C70 24 92 32 86 50 C98 54 94 66 82 66Z" fill="${C.blanco}" ${T}/>` + (a.lluvia ? [24, 44, 64].map((x) => `<path d="M${x} 74 l-4 12" stroke="${C.verde}" stroke-width="4" stroke-linecap="round"/>`).join("") : ""),
+    paraguas: () => `<path d="M8 50 C8 10 92 10 92 50 C80 42 70 42 64 50 C56 42 44 42 36 50 C30 42 20 42 8 50Z" fill="${C.lila}" ${T}/><path d="M50 50 V84 q0 8 -8 8 q-6 0 -6 -6" fill="none" ${T}/>`,
+    lona: () => `<path d="M6 72 L50 22 L94 72Z" fill="${C.verde}" ${T}/><path d="M50 22 V72 M6 72 H94" ${T}/>`,
+    pala: () => `<rect x="46" y="8" width="8" height="54" rx="3" fill="${C.madera}" ${T}/><path d="M34 60 H66 V80 Q50 98 34 80Z" fill="${C.grisOsc}" ${T}/>`,
+    mariposa: () => `<path d="M50 50 C30 20 6 30 18 50 C6 70 30 80 50 50Z M50 50 C70 20 94 30 82 50 C94 70 70 80 50 50Z" fill="${C.lila}" ${T}/><path d="M50 36 V66" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>`,
+    reloj: () => `<circle cx="50" cy="52" r="36" fill="${C.blanco}" ${T}/><path d="M50 52 V28 M50 52 H68" ${T}/><rect x="42" y="8" width="16" height="10" rx="3" fill="${C.sol}" ${T}/>`
+  };
+  F.tres = () => [0, 34, 68].map((x, i) => `<g transform="translate(${x - 2} ${i === 1 ? 14 : 30}) scale(.36)">${F.cerdito({ panuelo: ["verde", "sol", "lila"][i], anteojos: i === 2 })}</g>`).join("");
+  const VB = { w: 1200, h: 800 };
+  /* Una figura en su caja de 100×100, ubicada y escalada. */
+  const ubicar = (fig, x, y, s = 1, attrs = {}) => `<g transform="translate(${x} ${y}) scale(${s})">${(F[fig] || F.flor)(attrs)}</g>`;
+  /* Fondo con detalles chicos repartidos (pájaros, pasto, piedritas) para que ninguna pieza de rompecabezas quede en blanco. */
+  const DETALLES = [[150, 110], [470, 150], [760, 95], [1060, 170], [90, 260], [640, 250], [980, 300]].map(([x, y]) => `<path d="M${x - 14} ${y} q7 -9 14 0 q7 -9 14 0" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`).join("")
+    + [[120, 700], [430, 740], [700, 690], [1010, 730], [260, 560], [880, 560], [560, 600]].map(([x, y], i) => i % 2 ? `<ellipse cx="${x}" cy="${y}" rx="16" ry="9" fill="${C.gris}" stroke="${INK}" stroke-width="2"/>` : `<path d="M${x - 14} ${y} l6 -18 l4 18 l6 -22 l4 22 l6 -16" fill="none" stroke="${C.verde}" stroke-width="3" stroke-linecap="round"/>`).join("");
+  const fondo = () => `<rect width="1200" height="800" fill="${C.cielo}"/><path d="M0 470 C300 420 600 500 1200 440 V800 H0Z" fill="${C.pasto}" ${T}/><path d="M0 600 C400 570 800 640 1200 590" fill="none" stroke="${C.pastoOsc}" stroke-width="3"/>${DETALLES}`;
+  /* Escenas del cuento (versión D2: sin peligro para los cerditos; final: el lobo se quema y sale corriendo). */
+  const ESCENAS = {
+    salen: () => fondo() + ubicar("sol", 1020, 40, 1.3) + ubicar("casa", 40, 260, 2.6, { material: "madera" }) + ubicar("cerdito", 420, 470, 1.9, { panuelo: "verde" }) + ubicar("cerdito", 650, 480, 1.9, { panuelo: "sol" }) + ubicar("cerdito", 880, 470, 1.9, { panuelo: "lila", anteojos: true }) + ubicar("arbol", 900, 160, 2.2),
+    paja: () => fondo() + ubicar("nube", 120, 40, 1.6) + ubicar("casa", 330, 200, 3.4, { material: "paja" }) + ubicar("cerdito", 760, 480, 2, { panuelo: "verde" }) + ubicar("fardo", 980, 600, 1.4),
+    madera: () => fondo() + ubicar("sol", 60, 40, 1.3) + ubicar("casa", 380, 200, 3.4, { material: "madera" }) + ubicar("cerdito", 120, 480, 2, { panuelo: "sol" }) + ubicar("tablas", 840, 600, 1.4) + ubicar("martillo", 1020, 560, 1.2),
+    ladrillos: () => fondo() + ubicar("nube", 900, 40, 1.6) + ubicar("casa", 360, 170, 3.6, { material: "ladrillos" }) + ubicar("cerdito", 860, 470, 2, { panuelo: "lila", anteojos: true }) + ubicar("ladrillos", 80, 580, 1.5) + ubicar("balde", 230, 620, 1.1),
+    "lobo-mira": () => fondo() + ubicar("casa", 40, 300, 1.9, { material: "paja" }) + ubicar("casa", 290, 290, 1.9, { material: "madera" }) + ubicar("casa", 540, 280, 2, { material: "ladrillos" }) + ubicar("lobo", 860, 420, 2.4) + ubicar("nube", 600, 40, 1.4) + ubicar("arbol", 1000, 120, 1.6),
+    "sopla-paja": () => fondo() + ubicar("lobo", 160, 420, 2.3, { soplando: true }) + ubicar("casa", 520, 250, 3, { material: "paja", volando: true }) + ubicar("cerdito", 980, 500, 1.6, { panuelo: "verde" }) + ubicar("nube", 120, 40, 1.4),
+    "sopla-madera": () => fondo() + ubicar("lobo", 120, 420, 2.3, { soplando: true }) + ubicar("casa", 460, 250, 3, { material: "madera", volando: true }) + ubicar("cerdito", 900, 520, 1.4, { panuelo: "verde" }) + ubicar("cerdito", 1040, 520, 1.4, { panuelo: "sol" }) + ubicar("nube", 900, 40, 1.4),
+    chimenea: () => fondo() + ubicar("casa", 420, 150, 3.8, { material: "ladrillos", humo: true }) + ubicar("lobo", 60, 470, 2, { corriendo: true }) + ubicar("tres", 900, 560, 2),
+    festejo: () => fondo() + ubicar("sol", 60, 40, 1.4) + ubicar("casa", 420, 170, 3.6, { material: "ladrillos" }) + ubicar("tres", 860, 520, 2.4) + ubicar("flor", 120, 560, 1.4, { color: "coral" }) + ubicar("flor", 260, 600, 1.2, { color: "lila" })
+  };
+  const figura = (fig, attrs = {}, etiqueta = "") => `<svg viewBox="-20 -20 140 140" role="img" aria-label="${etiqueta}" focusable="false">${(F[fig] || F.flor)(attrs)}</svg>`;
+  const escena = (id, etiqueta = "") => `<svg viewBox="0 0 1200 800" role="img" aria-label="${etiqueta}" focusable="false">${(ESCENAS[id] || fondo)()}</svg>`;
+  /* Parte de una escena (pieza de rompecabezas): misma escena, recortada con viewBox. */
+  const pieza = (id, col, fila, cols, filas, etiqueta = "") => {
+    const w = VB.w / cols, h = VB.h / filas;
+    return `<svg viewBox="${col * w} ${fila * h} ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="${etiqueta}" focusable="false">${(ESCENAS[id] || fondo)()}</svg>`;
+  };
+  return { C, F, ESCENAS, VB, ubicar, fondo, figura, escena, pieza };
+})();
+if (typeof module !== "undefined") module.exports = { Dibujo };
+</script>
+<script id="interfaz">
+"use strict";
+const leer = (id) => { try { return JSON.parse(document.getElementById(id).textContent); } catch (e) { return null; } };
+const BANCO = leer("datos-banco"), MODULO = leer("datos-modulo"), INICIO = leer("datos-inicio") || {};
+const T = BANCO.textos;
+const EN_MARCO = window.parent !== window;
+const CON_ADULTO = INICIO.adulto !== false;           // archivo suelto: siempre; en el portal: solo en consulta
+const VARIANTES = MODULO.estaciones.variantes;
+const GRADOS = [["facil", "Fácil"], ["intermedio", "Intermedio"], ["dificil", "Difícil"]];
+const RUTAS = [["3-5", "3 a 5 años"], ["6-8", "6 a 8 años"], ["9-12", "9 a 12 años"], ["13-18", "13 a 18 años"]];
+const NOMBRE_EST = { explorar: "Estación 1: Explorar", reconocer: "Estación 2: Reconocer", integrar: "Estación 3: Integrar", transferir: "Estación 4: Transferir" };
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = (t) => String(t == null ? "" : t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const D = Dibujo;
+const S = {
+  ruta: MODULO.rutas[INICIO.ruta] ? INICIO.ruta : "6-8",
+  actividad: Motor.ACT.includes(INICIO.actividad) ? INICIO.actividad : "detectives",
+  grado: Motor.GR.includes(INICIO.grado) ? INICIO.grado : "facil",
+  apoyoInicial: 0, apoyoActual: 0, fijo: false, voz: INICIO.voz,
+  idx: {}, hist: {}, vuelta: 0, sesion: null, item: null, R: null, registros: []
+};
+if (S.voz === undefined) S.voz = (MODULO.rutas[S.ruta] || {}).audio === "por-defecto";
+const variante = () => VARIANTES.find((v) => v.actividad === S.actividad);
+
+/* ---------- Audio (T09) ---------- */
+let VOZ = null;
+function elegirVoz() { try { const v = speechSynthesis.getVoices(); VOZ = v.find((x) => /^es[-_]AR/i.test(x.lang)) || v.find((x) => /^es[-_](419|US|MX)/i.test(x.lang)) || v.find((x) => /^es/i.test(x.lang)) || null; } catch (e) { } }
+if ("speechSynthesis" in window) { elegirVoz(); speechSynthesis.onvoiceschanged = elegirVoz; }
+function decir(t, forzar) {
+  if ((!S.voz && !forzar) || !t || !("speechSynthesis" in window)) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = VOZ ? VOZ.lang : "es-AR"; if (VOZ) u.voice = VOZ; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) { }
+}
+function anunciar(t) { const a = $("#anuncio"); a.textContent = ""; setTimeout(() => { a.textContent = t; }, 30); }
+const escuchar = (t) => `<button class="btn sec icono" data-decir="${esc(t)}" aria-label="${esc(T.escuchar)}">🔊</button>`;
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-decir]"); if (b) decir(b.dataset.decir, true); });
+function msj(t, hablar = true) { const m = $("#msj"); if (m) m.textContent = t; anunciar(t); if (hablar) decir(t); }
+
+/* ---------- Encabezado ---------- */
+function encabezado() {
+  const voz = `<button class="btn sec icono" id="voz" aria-pressed="${S.voz}" aria-label="${esc(S.voz ? T.audioSi : T.audioNo)}">${S.voz ? "🔊" : "🔇"}</button>`;
+  const completa = !EN_MARCO && (document.fullscreenEnabled || document.webkitFullscreenEnabled)
+    ? `<button class="btn sec chico" id="completa">${document.fullscreenElement ? "Salir de pantalla completa" : "Pantalla completa"}</button>` : "";
+  $("#hd").innerHTML = (EN_MARCO ? '<span style="margin-right:auto"></span>' : `<span class="marca" aria-hidden="true"></span><span class="nm">${esc(MODULO.nombre)}</span>`)
+    + `<span class="rotulo">${esc(T.rotulo)}</span>${completa}${voz}`;
+  $("#voz").onclick = () => { S.voz = !S.voz; if (!S.voz) try { speechSynthesis.cancel(); } catch (e) { } encabezado(); };
+  const c = $("#completa");
+  if (c) c.onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement); };
+}
+document.addEventListener("fullscreenchange", encabezado);
+
+/* ---------- Pantalla de la persona adulta (elige actividad, grado, ruta y apoyo inicial) ---------- */
+function pantallaAdulto() {
+  const rutaOk = (r) => !!MODULO.rutas[r];
+  $("#app").innerHTML = `<section class="panel">
+    <h1>Los tres cerditos</h1>
+    <p class="small">Para la persona adulta. Quien juega no ve la Estación ni el grado. ${esc(T.rotulo)}: lo valida PSP-SR (RT-CER-001).</p>
+    <div class="grupo"><h2>Actividad</h2><div class="opciones" style="--min:210px">${VARIANTES.map((v) =>
+      `<button class="opcion" data-act="${v.actividad}" aria-pressed="${v.actividad === S.actividad}"><span class="t">${esc(v.titulo)}</span><span class="d">${esc(NOMBRE_EST[v.estacion])}</span></button>`).join("")}</div></div>
+    <div class="grupo"><h2>Grado de dificultad</h2><div class="opciones" style="--min:150px">${GRADOS.map(([g, n]) =>
+      `<button class="opcion" data-gr="${g}" aria-pressed="${g === S.grado}"><span class="t">${n}</span></button>`).join("")}</div>
+      <p class="small" id="a-desc"></p></div>
+    <div class="grupo"><h2>Edad (cómo se presenta)</h2><div class="opciones" style="--min:150px">${RUTAS.map(([r, n]) =>
+      `<button class="opcion" data-ruta="${r}" aria-pressed="${r === S.ruta}" ${rutaOk(r) ? "" : "disabled"}><span class="t">${n}</span>${rutaOk(r) ? "" : `<span class="d">No disponible todavía</span>`}</button>`).join("")}</div>
+      <p class="small">${esc(MODULO.rutas_no_disponibles["3-5"])}</p></div>
+    <div class="grupo"><h2>Apoyo con el que empieza</h2><div class="opciones" style="--min:170px">${[0, 1, 2, 3].map((n) =>
+      `<button class="opcion" data-apoyo="${n}" aria-pressed="${n === S.apoyoInicial}"><span class="t">Nivel ${n}</span><span class="d">${esc(MODULO.apoyos_escala.niveles[n])}</span></button>`).join("")}</div>
+      <p class="small">Si un ejercicio sale sin errores, el siguiente empieza con un nivel menos de ayuda. Quien juega siempre puede pedir ayuda.</p>
+      <div class="casillas"><label><input type="checkbox" id="a-fijo" ${S.fijo ? "checked" : ""}> Mantener este grado (no se ajusta solo)</label></div></div>
+    <div class="acciones"><button class="btn" id="a-seguir">Seguir</button></div></section>`;
+  const desc = () => { $("#a-desc").textContent = variante().grados[S.grado].describe; };
+  desc();
+  $$("[data-act]").forEach((b) => b.onclick = () => { S.actividad = b.dataset.act; $$("[data-act]").forEach((x) => x.setAttribute("aria-pressed", x === b)); desc(); });
+  $$("[data-gr]").forEach((b) => b.onclick = () => { S.grado = b.dataset.gr; $$("[data-gr]").forEach((x) => x.setAttribute("aria-pressed", x === b)); desc(); });
+  $$("[data-ruta]").forEach((b) => b.onclick = () => { if (b.disabled) return; S.ruta = b.dataset.ruta; $$("[data-ruta]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
+  $$("[data-apoyo]").forEach((b) => b.onclick = () => { S.apoyoInicial = +b.dataset.apoyo; $$("[data-apoyo]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
+  $("#a-seguir").onclick = () => {
+    S.fijo = $("#a-fijo").checked; S.apoyoActual = S.apoyoInicial;
+    if (EN_MARCO) parent.postMessage({ type: "cerditos-config", actividad: S.actividad, grado: S.grado }, "*");
+    asiSeJuega();
+  };
+}
+
+/* ---------- Así se juega ---------- */
+function asiSeJuega() {
+  const t = T.asiSeJuega[S.actividad];
+  S.sesion = { items: 0, subio: false, seguidos: 0, enPiso: 0 };
+  $("#app").innerHTML = `<section class="panel cierre"><h1>${esc(variante().titulo)}</h1>
+    <div style="max-width:420px;margin:12px auto">${D.escena("festejo", "Los tres cerditos juntos")}</div>
+    <div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(t)}</p>${escuchar(t)}</div>
+    <div class="acciones"><button class="btn" id="d-empezar">Empezar</button></div></section>`;
+  decir(t);
+  $("#d-empezar").onclick = () => { $("#d-empezar").disabled = true; siguienteItem(); };
+}
+
+/* ---------- Ciclo de ítems, apoyos y registro ---------- */
+function siguienteItem() {
+  const lista = BANCO.actividades[S.actividad][S.grado];
+  const k = S.actividad + "/" + S.grado;
+  const i = S.idx[k] || 0; S.idx[k] = i + 1;
+  S.item = lista[i % lista.length];
+  S.vuelta = Math.floor(i / lista.length);
+  S.R = { t0: Date.now(), errores: 0, intentos: 0, apoyos: [], apoyo_max: 0, nivelAyuda: 0, lectura: false, autocorreccion: false, etapas: {}, seguidos: 0 };
+  const A = ACTIVIDADES[S.actividad];
+  A.render(S.item);
+  // Apoyo inicial fijado por el profesional, que se retira de a poco (propuesta T2)
+  for (let n = 1; n <= S.apoyoActual; n++) usarAyuda(n, true);
+}
+function marcoJuego(consigna, cuerpo, lado = "") {
+  $("#app").innerHTML = `<section class="panel"><div class="consigna"><p id="consigna">${esc(consigna)}</p>${escuchar(consigna)}</div>
+    <div class="juego"><div>${cuerpo}</div><div class="lado">${lado}<button class="btn suave" id="ayuda">${esc(T.ayuda)}</button><div class="msj" id="msj" aria-live="polite"></div></div></div></section>`;
+  $("#ayuda").onclick = () => usarAyuda(Math.min(3, S.R.nivelAyuda + 1));
+  decir(consigna);
+}
+function usarAyuda(nivel, inicial) {
+  const R = S.R; if (!R || nivel < 1 || nivel > 3) return;
+  R.nivelAyuda = Math.max(R.nivelAyuda, nivel); R.apoyo_max = Math.max(R.apoyo_max, nivel); R.seguidos = 0;
+  R.huboAyuda = true;
+  const nombre = ACTIVIDADES[S.actividad].ayuda(nivel, S.item);
+  R.apoyos.push((inicial ? "inicial:" : "") + nivel + ":" + (nombre || "ayuda"));
+  const b = $("#ayuda"); if (b) { b.classList.remove("ofrecida"); if (R.nivelAyuda >= 3) b.disabled = true; }
+}
+function error(t, cuantos = 1) {
+  const R = S.R; R.errores += cuantos; R.seguidos += 1;
+  msj(t);
+  if (R.seguidos >= 2 && R.nivelAyuda < 3) { const b = $("#ayuda"); if (b) b.classList.add("ofrecida"); setTimeout(() => { const m = $("#msj"); if (m) m.textContent = t + " " + T.ofrecerAyuda; }, 0); }
+}
+function finItem(extra) {
+  const R = S.R, v = variante();
+  const reg = Motor.registro({ actividad: S.actividad, estacion: v.estacion, grado: S.grado, item: S.item.id, ...extra,
+    errores: extra.errores != null ? extra.errores : R.errores, intentos: extra.intentos != null ? extra.intentos : R.intentos,
+    apoyos: R.apoyos, apoyo_max: R.apoyo_max, lectura: R.lectura, autocorreccion: extra.autocorreccion != null ? extra.autocorreccion : R.autocorreccion,
+    etapas: { ...R.etapas, ...(extra.etapas || {}) }, ms: Date.now() - R.t0 });
+  const ok = Motor.acierto(S.actividad, { ...reg, parejas: (S.item.parejas || []).length });
+  S.registros.push(reg);
+  if (EN_MARCO) parent.postMessage({ type: "cerditos-item", acierto: ok, ...reg }, "*");
+  // Retiro de apoyos y M10 (dentro de la actividad)
+  S.apoyoActual = Motor.siguienteApoyo(S.apoyoActual, reg, MODULO.apoyos_escala.retiro.baja_por_item_sin_errores);
+  const h = S.hist[S.actividad] || (S.hist[S.actividad] = []);
+  h.push({ acierto: ok, conAyuda: reg.apoyo_max > MODULO.apoyos_escala.sin_ayuda_para_m10_hasta });
+  S.sesion.seguidos = ok ? 0 : S.sesion.seguidos + 1;
+  const aj = Motor.ajusteM10(h, S.grado, { m10: MODULO.m10, fijo: S.fijo, yaSubio: S.sesion.subio, erroresSeguidos: S.sesion.seguidos });
+  let nuevo = "";
+  if (aj.grado !== S.grado) { S.grado = aj.grado; if (aj.subio) S.sesion.subio = true; nuevo = " Vamos a probar algo nuevo."; S.sesion.seguidos = 0; }
+  if (aj.masAyuda) { S.apoyoActual = Math.max(S.apoyoActual, 2); if (aj.grado === "facil") S.sesion.enPiso += 1; S.sesion.seguidos = 0; }
+  S.sesion.items += 1;
+  const piso = S.sesion.enPiso >= 2;   // M10-6: sin bucles de error, se deja la actividad por esta sesión
+  if (piso && EN_MARCO) parent.postMessage({ type: "cerditos-piso" }, "*");
+  const lado = $(".lado"); const ay = $("#ayuda"); if (ay) ay.remove();
+  const fin = S.sesion.items >= MODULO.rutas[S.ruta].items_por_ronda || piso;
+  lado.insertAdjacentHTML("beforeend", `<button class="btn" id="j-seguir">${esc(T.seguir)}</button>`);
+  msj((S.item.ok || T.cierreProceso[S.actividad]) + nuevo);
+  $("#j-seguir").focus();
+  $("#j-seguir").onclick = () => (fin ? cierre(piso) : siguienteItem());
+}
+function cierre(piso) {
+  const t = piso ? "Por hoy dejamos este juego. Podemos hacer otra cosa." : T.cierre + " " + T.cierreProceso[S.actividad];
+  $("#app").innerHTML = `<section class="panel cierre"><h1>${esc(T.cierre)}</h1>
+    <div style="max-width:380px;margin:12px auto">${D.escena("festejo", "Los tres cerditos juntos")}</div>
+    <p style="font-weight:800">${esc(t)}</p>
+    <div class="acciones">${piso ? "" : `<button class="btn" id="c-otra">${esc(T.otraVez)}</button>`}
+    ${CON_ADULTO ? `<button class="btn sec" id="c-registro">Registro (persona adulta)</button><button class="btn sec" id="c-adulto">Elegir otra actividad (persona adulta)</button>` : ""}</div></section>`;
+  decir(t);
+  const o = $("#c-otra"); if (o) o.onclick = asiSeJuega;
+  const r = $("#c-registro"); if (r) r.onclick = verRegistro;
+  const a = $("#c-adulto"); if (a) a.onclick = pantallaAdulto;
+}
+function verRegistro() {
+  const fila = (r) => `<tr><td>${esc(r.actividad)}<br><span class="small">${esc(r.estacion)}</span></td><td>${esc(r.grado)}</td><td>${esc(r.item)}</td><td>${esc(r.resultado)}</td>
+    <td>${r.intentos}</td><td>${r.errores}</td><td>${r.apoyo_max} · ${esc(r.autonomia)}${r.apoyos.length ? `<br><span class="small">${esc(r.apoyos.join(", "))}</span>` : ""}</td>
+    <td>${r.lectura ? "sí" : "no"}</td><td>${r.autocorreccion ? "sí" : "no"}</td><td>${Math.round(r.ms / 1000)} s</td>
+    <td class="small">${esc(Object.entries(r.etapas).map(([k, v]) => k + ": " + JSON.stringify(v)).join(" · "))}</td></tr>`;
+  const d = document.createElement("div"); d.className = "dialogo";
+  d.innerHTML = `<div class="panel" role="dialog" aria-modal="true" aria-labelledby="r-t"><h2 id="r-t">Registro de esta sesión</h2>
+    <p class="small">Datos de prueba de esta pantalla: no se guardan ni salen del dispositivo. Por ejercicio, calculado en código. El nivel de apoyo y la autonomía describen el ejercicio, no a la persona. El tiempo no cuenta como error.</p>
+    <div class="tabla-scroll"><table class="reg"><thead><tr><th>Actividad</th><th>Grado</th><th>Ejercicio</th><th>Resultado</th><th>Intentos</th><th>Errores</th><th>Apoyo máximo · autonomía</th><th>Lectura en voz alta</th><th>Autocorrección</th><th>Tiempo</th><th>Etapas</th></tr></thead>
+    <tbody>${S.registros.map(fila).join("") || '<tr><td colspan="11">Todavía no hay ejercicios.</td></tr>'}</tbody></table></div>
+    <div class="acciones"><button class="btn" id="r-cerrar">Cerrar</button></div></div>`;
+  document.body.appendChild(d); $("#r-cerrar").focus();
+  $("#r-cerrar").onclick = () => d.remove();
+}
+
+/* ---------- Tablero para ubicar fichas en ranuras (ordenar escenas y rompecabezas). Sin arrastre (WCAG 2.5.7):
+   se toca la ficha y después la ranura; todo con teclado. «al-poner»: la ficha solo entra donde va.
+   «al-final»: se ubica libremente y se revisa al terminar; mover una ficha mal puesta antes de revisar es autocorrección. ---------- */
+function Tablero(opt) {
+  const n = opt.total, ranuras = Array(n).fill(null);
+  let sel = null, revisada = false;
+  const malAntes = new Set();
+  const cont = $(opt.donde);
+  function pintar() {
+    const libres = opt.orden.filter((k) => !ranuras.includes(k));
+    cont.innerHTML = `<div class="tablero" style="grid-template-columns:repeat(${opt.cols},minmax(0,1fr))">${ranuras.map((f, i) =>
+      `<button class="ranura${f !== null ? " llena" : ""}" data-ran="${i}" aria-label="${esc(opt.etiquetaRanura(i, f))}" style="${opt.estiloRanura || ""}">${opt.guia ? `<span class="ref">${opt.ficha(i)}</span>` : ""}${f !== null ? `<span class="ficha${malAntes.has(i) && f !== i ? "" : ""}" data-puesta="${i}">${opt.ficha(f)}</span>` : (opt.etqRanura ? `<span class="etq">${esc(opt.etqRanura(i))}</span>` : "")}</button>`).join("")}</div>
+      <div class="bandeja" role="group" aria-label="Para ubicar">${libres.map((k) => `<button class="ficha${opt.claseFicha ? " " + opt.claseFicha : ""}" data-ficha="${k}" aria-pressed="${sel === k}" aria-label="${esc(opt.etiquetaFicha(k))}">${opt.ficha(k)}</button>`).join("")}</div>
+      ${opt.verificar === "al-final" && !libres.length && !completoOk() ? `<div class="acciones"><button class="btn" id="t-revisar">Revisar</button></div>` : ""}`;
+    $$("[data-ficha]", cont).forEach((b) => b.onclick = () => { sel = sel === +b.dataset.ficha ? null : +b.dataset.ficha; pintar(); const f = $(`[data-ficha="${sel}"]`, cont); if (f) f.focus(); });
+    $$("[data-ran]", cont).forEach((b) => b.onclick = () => tocarRanura(+b.dataset.ran));
+    const rv = $("#t-revisar"); if (rv) rv.onclick = revisar;
+  }
+  const completoOk = () => Motor.completo(ranuras);
+  function tocarRanura(i) {
+    if (sel === null) {
+      if (ranuras[i] !== null && opt.verificar === "al-final") {  // sacar una ficha para moverla
+        const f = ranuras[i];
+        if (f !== i && !S.R.huboAyuda) S.R.autocorreccion = true;   // corrige por su cuenta, antes de revisar y sin ayuda
+        ranuras[i] = null; sel = f; pintar(); return;
+      }
+      return;
+    }
+    S.R.intentos += 1;
+    if (opt.verificar === "al-poner") {
+      if (ranuras[i] !== null) return;
+      if (sel !== i) { error(opt.textoError); pintar(); return; }
+      ranuras[i] = sel; sel = null; S.R.seguidos = 0; pintar();
+    } else {
+      if (ranuras[i] !== null) { const prev = ranuras[i]; ranuras[i] = sel; sel = prev; } else { ranuras[i] = sel; sel = null; }
+      pintar();
+    }
+    if (completoOk()) opt.alTerminar();
+  }
+  function revisar() {
+    const mal = Motor.malUbicadas(ranuras);
+    revisada = true;
+    if (!mal.length) return opt.alTerminar();
+    S.R.revisiones = (S.R.revisiones || 0) + 1;
+    mal.forEach((i) => { ranuras[i] = null; });
+    error(mal.length === 1 ? "Una no estaba en su lugar. Volvió para que la ubiques de nuevo." : `${mal.length} no estaban en su lugar. Volvieron para que las ubiques de nuevo.`, mal.length);
+    pintar();
+  }
+  pintar();
+  return {
+    ranuras,
+    marcarMal() { const mal = Motor.malUbicadas(ranuras); mal.forEach((i) => { const b = $(`[data-ran="${i}"]`, cont); if (b) b.classList.add("marcada"); }); return mal.length; },
+    marcarLugar(k) { const b = $(`[data-ran="${k}"]`, cont); if (b) b.classList.add("marcada"); },
+    seleccionada: () => sel,
+    primeraLibre: () => opt.orden.find((k) => ranuras[k] !== k),
+    ubicar(k) { const j = ranuras.indexOf(k); if (j >= 0) ranuras[j] = null; const prev = ranuras[k]; ranuras[k] = k; if (prev !== null && prev !== k) { /* vuelve a la bandeja */ } sel = null; pintar(); if (completoOk()) opt.alTerminar(); }
+  };
+}
+
+/* ---------- Actividades ---------- */
+const ACTIVIDADES = {
+  /* 1. Detectives del cuento (Explorar) */
+  detectives: {
+    render(it) {
+      this.paso = 0; this.hallados = [];
+      const els = it.elementos.slice().sort((a, b) => (b.atras ? 1 : 0) - (a.atras ? 1 : 0));
+      const svg = `<div class="escena-marco"><svg id="escena" viewBox="0 0 1200 800" role="group" aria-label="Escena del cuento">${D.fondo()}${els.map((e) =>
+        `<g data-el="${e.id}" role="button" tabindex="0" aria-label="${esc(e.nombre)}">${D.ubicar(e.fig, e.x, e.y, e.s, e.attrs || {})}<rect class="marco-foco" x="${e.x - 6}" y="${e.y - 6}" width="${100 * e.s + 12}" height="${100 * e.s + 12}" rx="14"/></g>`).join("")}<g id="capa-ayuda"></g></svg></div>`;
+      marcoJuego(it.consigna, svg);
+      const toca = (g) => this.tocar(g.dataset.el);
+      $$("#escena [data-el]").forEach((g) => { g.addEventListener("click", () => toca(g)); g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toca(g); } }); });
+    },
+    tocar(id) {
+      const it = S.item, R = S.R; if (this.paso >= it.objetivos.length) return;
+      R.intentos += 1;
+      if (id === it.objetivos[this.paso]) {
+        const e = it.elementos.find((x) => x.id === id);
+        $("#capa-ayuda").insertAdjacentHTML("beforeend", `<rect x="${e.x - 8}" y="${e.y - 8}" width="${100 * e.s + 16}" height="${100 * e.s + 16}" rx="16" fill="none" stroke="#196B6A" stroke-width="8"/>`);
+        if (R.errores > 0 && !R.huboAyuda) R.autocorreccion = true;
+        this.paso += 1; R.seguidos = 0;
+        if (this.paso >= it.objetivos.length) { $("#capa-ayuda .zona") && $("#capa-ayuda .zona").remove(); finItem({ resultado: R.errores === 0 }); }
+        else msj("Encontraste " + e.nombre + ". Ahora seguí con la otra parte de la consigna.");
+      } else error(T.noEs);
+    },
+    ayuda(n, it) {
+      const capa = $("#capa-ayuda");
+      if (n === 1) { msj(it.pista1); return "pista-verbal"; }
+      if (n === 2) { const r = it.region2; capa.insertAdjacentHTML("afterbegin", `<path class="zona" d="M0 0H1200V800H0Z M${r.x} ${r.y}h${r.w}v${r.h}h-${r.w}Z" fill="#102F54" opacity=".45" fill-rule="evenodd" pointer-events="none"/>`); msj("Buscá en la parte clara."); return "resaltar-zona"; }
+      const e = it.elementos.find((x) => x.id === it.objetivos[this.paso]);
+      capa.insertAdjacentHTML("beforeend", `<rect x="${e.x - 10}" y="${e.y - 10}" width="${100 * e.s + 20}" height="${100 * e.s + 20}" rx="18" fill="none" stroke="#FFB82E" stroke-width="10" pointer-events="none"/>`);
+      msj("Mirá, está acá. Tocalo."); return "senalar-objetivo";
+    }
+  },
+
+  /* 2. Memotest: descubrimos las relaciones (Reconocer) */
+  memotest: {
+    render(it) {
+      this.cartas = Motor.cartasMemotest(it, Motor.semillaDe(it.id, S.vuelta));
+      this.halladas = new Set(); this.abiertas = []; this.mirando = true; this.leer = false; this.candidatas = new Set();
+      const consigna = it.tipo === "palabra-palabra" ? "Descubrí qué palabras se relacionan." : it.tipo === "imagen-palabra" ? "Uní cada dibujo con su palabra." : "Encontrá los dibujos iguales.";
+      const lado = it.tipo !== "imagen-imagen" ? `<div class="casillas"><label><input type="checkbox" id="m-leer"> Leer las palabras en voz alta</label></div>` : "";
+      marcoJuego(consigna, `<div id="m-tablero"></div><div class="acciones" id="m-acc"></div>`, lado);
+      const l = $("#m-leer"); if (l) l.onchange = () => { this.leer = l.checked; };
+      this.pintar();
+    },
+    cara(c) { return c.txt ? `<span class="pal">${esc(c.txt)}</span>` : D.figura(c.fig, c.attrs, c.nombre); },
+    pintar() {
+      const vis = (c) => this.mirando || this.halladas.has(c.par) || this.abiertas.includes(c.id);
+      const nc = this.cartas.length;
+      $("#m-tablero").innerHTML = `<div class="cartas" style="--cols:${nc <= 6 ? 3 : 4};--cols-movil:${nc <= 6 ? 3 : 4}">${this.cartas.map((c) => `<button class="carta${vis(c) ? " vista" : ""}${this.halladas.has(c.par) ? " hallada" : ""}${this.candidatas.has(c.id) ? " candidata" : ""}" data-carta="${c.id}"
+        aria-label="${esc(vis(c) ? (c.txt || c.nombre) : "Tarjeta dada vuelta")}" ${this.halladas.has(c.par) || this.mirando ? "aria-disabled=\"true\"" : ""}>${vis(c) ? this.cara(c) : `<svg class="dorso" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="40" fill="#FFB82E"/></svg>`}</button>`).join("")}</div>`;
+      $("#m-acc").innerHTML = this.mirando ? `<button class="btn" id="ya-mire">${esc(T.yaMire)}</button>` : "";
+      const ya = $("#ya-mire"); if (ya) ya.onclick = () => { this.mirando = false; this.pintar(); const p = $("[data-carta]"); if (p) p.focus(); };
+      $$("[data-carta]").forEach((b) => b.onclick = () => this.tocar(b.dataset.carta));
+    },
+    tocar(id) {
+      if (this.mirando) return;
+      const c = this.cartas.find((x) => x.id === id), R = S.R;
+      if (this.abiertas.length === 2) this.abiertas = [];       // las dos anteriores se dan vuelta al tocar otra (sin reloj, D4)
+      if (this.halladas.has(c.par) || this.abiertas.includes(id)) return;
+      this.abiertas.push(id); this.candidatas.clear();
+      if (c.txt && this.leer) { R.lectura = true; decir(c.txt, true); }
+      if (this.abiertas.length === 2) {
+        R.intentos += 1;
+        const [a, b] = this.abiertas.map((x) => this.cartas.find((y) => y.id === x));
+        if (Motor.esPareja(a, b)) { this.halladas.add(a.par); this.abiertas = []; R.seguidos = 0; msj(a.txt && b.txt ? `«${a.txt}» y «${b.txt}» van juntas.` : "Esas dos van juntas.", false); }
+        else error(T.noEsPareja);
+      }
+      this.pintar();
+      const f = $(`[data-carta="${id}"]`); if (f) f.focus();
+      if (this.halladas.size === S.item.parejas.length) finItem({ resultado: true });
+    },
+    ayuda(n, it) {
+      const libres = it.parejas.map((_, i) => i).filter((i) => !this.halladas.has(i));
+      if (n === 1) { this.mirando = true; this.abiertas = []; this.pintar(); const p = libres.length && it.parejas[libres[0]].pista; msj(p ? p + " Cuando estés listo o lista, tocá «Ya miré»." : "Mirá otra vez todas las tarjetas. Cuando estés listo o lista, tocá «Ya miré»."); return "volver-a-mirar"; }
+      if (!libres.length) return "";
+      const par = libres[0];
+      if (n === 2) {
+        const otra = this.cartas.find((c) => c.par !== par && !this.halladas.has(c.par));
+        this.candidatas = new Set(this.cartas.filter((c) => c.par === par).map((c) => c.id).concat(otra ? [otra.id] : []));
+        this.pintar(); msj("Entre las tarjetas marcadas hay una pareja."); return "reducir-alternativas";
+      }
+      this.halladas.add(par); this.abiertas = []; this.pintar();
+      const [a, b] = this.cartas.filter((c) => c.par === par);
+      msj(`Mirá: ${a.txt || a.nombre} y ${b.txt || b.nombre} van juntas.`);
+      if (this.halladas.size === it.parejas.length) finItem({ resultado: true });
+      return "modelado-pareja";
+    }
+  },
+
+  /* 3. Escena y frase: organizamos el cuento (Integrar). Dos etapas que se registran por separado. */
+  escena_frase: {
+    render(it) {
+      this.etapa = "asociar"; this.puestas = {}; this.sel = null; this.leer = false;
+      this.frases = Motor.mezclarDistinto(it.escenas.slice(), Motor.azar(Motor.semillaDe(it.id, S.vuelta)));
+      this.vistas = Motor.mezclarDistinto(it.escenas.slice(), Motor.azar(Motor.semillaDe(it.id + "v", S.vuelta)));
+      S.R.etapas = { asociar: { errores: 0 }, ordenar: { errores: 0 } };
+      const lado = `<div class="casillas"><label><input type="checkbox" id="f-leer"> Leer las frases en voz alta</label></div>`;
+      marcoJuego("Uní cada dibujo con su frase.", `<div id="f-cuerpo"></div>`, lado);
+      $("#f-leer").onchange = (e) => { this.leer = e.target.checked; };
+      this.pintarAsociar();
+    },
+    pintarAsociar() {
+      const it = S.item;
+      $("#f-cuerpo").innerHTML = `<div class="escenas">${this.vistas.map((e) => `<div class="esc-card" data-escena="${e}">${D.escena(e, "")}
+        <button class="destino${this.puestas[e] ? " puesta" : ""}" data-dest="${e}" ${this.puestas[e] ? "aria-disabled=\"true\"" : ""}>${this.puestas[e] ? esc(it.frases[e]) : "Poner la frase acá"}</button></div>`).join("")}</div>
+        <div class="frases" role="group" aria-label="Frases">${this.frases.filter((e) => !this.puestas[e]).map((e) => `<button class="frase" data-frase="${e}" aria-pressed="${this.sel === e}">${esc(it.frases[e])}</button>`).join("")}</div>`;
+      $$("[data-frase]").forEach((b) => b.onclick = () => { this.sel = this.sel === b.dataset.frase ? null : b.dataset.frase; if (this.sel && this.leer) { S.R.lectura = true; decir(it.frases[this.sel], true); } this.pintarAsociar(); const f = $(`[data-frase="${this.sel}"]`); if (f) f.focus(); });
+      $$("[data-dest]").forEach((b) => b.onclick = () => this.poner(b.dataset.dest));
+    },
+    poner(dest) {
+      const R = S.R; if (!this.sel || this.puestas[dest]) { if (!this.sel) msj("Primero elegí una frase.", false); return; }
+      R.intentos += 1;
+      if (this.sel === dest) { this.puestas[dest] = true; this.sel = null; R.seguidos = 0; this.pintarAsociar(); }
+      else { R.etapas.asociar.errores += 1; error("Esa frase no va con ese dibujo. Probá otra vez."); }
+      if (Object.keys(this.puestas).length === S.item.escenas.length) this.empezarOrdenar();
+    },
+    empezarOrdenar() {
+      const it = S.item, p = variante().grados[S.grado].parametros;
+      this.etapa = "ordenar"; S.R.erroresAsociar = S.R.errores;
+      $("#consigna").textContent = "Ahora ordená los dibujos: ¿qué pasó primero en el cuento?";
+      $(".consigna [data-decir]").dataset.decir = $("#consigna").textContent;
+      msj("Uniste todas las frases. " + $("#consigna").textContent);
+      $("#f-cuerpo").innerHTML = `<div id="f-tablero"></div>`;
+      const n = it.escenas.length;
+      this.tablero = Tablero({
+        donde: "#f-tablero", total: n, cols: Math.min(n, 4), orden: Motor.mezclarDistinto([...Array(n).keys()], Motor.azar(Motor.semillaDe(it.id + "o", S.vuelta))),
+        verificar: S.grado === "dificil" ? "al-final" : "al-poner", guia: false,
+        ficha: (k) => `${D.escena(it.escenas[k], "")}<span class="fr">${esc(it.frases[it.escenas[k]])}</span>`,
+        etiquetaFicha: (k) => it.frases[it.escenas[k]], etiquetaRanura: (i, f) => `Lugar ${i + 1}${f !== null ? ": " + it.frases[it.escenas[f]] : ""}`,
+        etqRanura: (i) => p.referencia_inicio_fin && i === 0 ? "🌅 Empieza" : p.referencia_inicio_fin && i === n - 1 ? "🌙 Termina" : `${i + 1}`,
+        textoError: "Ese dibujo no va en ese lugar. Pensá qué pasó antes y qué pasó después.",
+        alTerminar: () => this.terminarOrden()
+      });
+    },
+    terminarOrden() {
+      const R = S.R; R.etapas.ordenar.errores = R.errores - R.erroresAsociar;
+      const j = S.item.justificacion;
+      if (j && variante().grados[S.grado].parametros.justificar) return this.justificar(j);
+      finItem({ resultado: R.errores === 0 });
+    },
+    justificar(j) {
+      const R = S.R; this.etapa = "justificar"; R.etapas.justificacion = { coherente_primera: null, intentos: 0 };
+      $("#consigna").textContent = j.pregunta; $(".consigna [data-decir]").dataset.decir = j.pregunta;
+      msj(j.pregunta);
+      $("#f-cuerpo").innerHTML = `<div class="opciones" style="--min:240px">${j.opciones.map((o, i) => `<button class="opcion fig" data-just="${i}">${D.figura(o.fig, o.attrs, "")}<span class="t">${esc(o.txt)}</span></button>`).join("")}</div>`;
+      $$("[data-just]").forEach((b) => b.onclick = () => {
+        const o = j.opciones[+b.dataset.just], J = R.etapas.justificacion; J.intentos += 1;
+        if (J.coherente_primera === null) J.coherente_primera = !!o.ok;
+        if (o.ok) { if (J.intentos > 1 && !R.huboAyudaJust) R.autocorreccion = true; finItem({ resultado: R.errores === 0 && J.coherente_primera }); }
+        else { b.disabled = true; R.errores += 1; error("Pensá otra vez en lo que pasó en el cuento."); }
+      });
+    },
+    ayuda(n, it) {
+      if (this.etapa === "asociar") {
+        if (n === 1) { if (this.sel) { R_lectura(); decir(it.frases[this.sel], true); } msj("Buscá en cada dibujo lo que dice la frase: quién está y qué hace."); return "pista-general"; }
+        const e = this.sel || it.escenas.find((x) => !this.puestas[x]);
+        if (n === 2) { const otra = it.escenas.find((x) => x !== e && !this.puestas[x]); [e, otra].filter(Boolean).forEach((x) => $(`[data-escena="${x}"]`).classList.add("marcada")); msj("La frase va con uno de los dibujos marcados."); return "reducir-alternativas"; }
+        this.sel = e; this.poner(e); msj("Mirá cómo lo hicimos: esta frase va con este dibujo."); return "modelado-pareja";
+      }
+      if (this.etapa === "ordenar") {
+        if (n === 1) { msj("Pensá qué pasó primero en el cuento y qué pasó al final."); return "pista-temporal"; }
+        if (n === 2) { if (this.tablero.ranuras[0] !== 0) this.tablero.ubicar(0); msj("El primer dibujo ya está en su lugar."); return "ubicar-inicio"; }
+        const k = this.tablero.primeraLibre(); if (k !== undefined) this.tablero.ubicar(k); msj("Ubicamos otro dibujo juntos."); return "modelado-posicion";
+      }
+      S.R.huboAyudaJust = true;
+      if (n === 1) { msj("Pensá qué cambia de una casa a la otra."); return "pregunta-orientadora"; }
+      const malas = $$("[data-just]").filter((b) => !b.disabled && !it.justificacion.opciones[+b.dataset.just].ok);
+      if (n === 2 && malas[0]) { malas[0].disabled = true; msj("Quedan menos opciones."); return "reducir-alternativas"; }
+      const ok = $$("[data-just]").find((b) => it.justificacion.opciones[+b.dataset.just].ok); if (ok) ok.classList.add("ofrecida"); msj("Leamos juntos la opción marcada."); return "modelado";
+    }
+  },
+
+  /* 4. Construimos el cuento: rompecabezas (Integrar) */
+  rompecabezas: {
+    render(it) {
+      const p = variante().grados[S.grado].parametros;
+      this.modelo = p.modelo;
+      const nombre = BANCO.escenas_cuento[it.escena];
+      const lado = p.modelo === "visible" ? `<div class="modelo-img">${D.escena(it.escena, "Modelo: " + nombre)}</div>` : `<button class="btn sec" id="ver-modelo">${esc(T.verModelo)}</button>`;
+      marcoJuego("Armá el dibujo del cuento.", `<div class="rompe" id="r-tablero"></div><div id="r-modelo"></div>`, lado);
+      const vm = $("#ver-modelo"); if (vm) vm.onclick = () => usarAyuda(1);
+      const n = it.cols * it.filas;
+      this.tablero = Tablero({
+        donde: "#r-tablero", total: n, cols: it.cols, orden: Motor.piezas(it, Motor.semillaDe(it.id, S.vuelta)), verificar: it.verificar, guia: it.guia,
+        estiloRanura: `aspect-ratio:${(1200 / it.cols) / (800 / it.filas)}`, claseFicha: "pieza",
+        ficha: (k) => D.pieza(it.escena, k % it.cols, Math.floor(k / it.cols), it.cols, it.filas, ""),
+        etiquetaFicha: (k) => `Pieza ${String.fromCharCode(65 + (k * 7) % n)}`,
+        etiquetaRanura: (i, f) => `Lugar fila ${Math.floor(i / it.cols) + 1}, columna ${i % it.cols + 1}${f !== null ? ", ocupado" : ", vacío"}`,
+        textoError: T.noVaAhi,
+        alTerminar: () => finItem({ resultado: S.R.errores === 0, etapas: { revisiones: S.R.revisiones || 0 } })
+      });
+    },
+    ayuda(n, it) {
+      if (n === 1) {
+        if (this.modelo === "visible") { msj("Mirá el modelo y buscá una parte que reconozcas."); return "pista-general"; }
+        $("#r-modelo").innerHTML = `<div class="panel" style="margin-top:12px"><div class="modelo-img">${D.escena(it.escena, "Modelo")}</div><div class="acciones"><button class="btn" id="r-ya">${esc(T.yaMire)}</button></div></div>`;
+        $("#r-ya").onclick = () => { $("#r-modelo").innerHTML = ""; }; msj("Mirá el modelo. Cuando estés listo o lista, tocá «Ya miré»."); return "ver-modelo";
+      }
+      if (n === 2) {
+        if (it.verificar === "al-final" && this.tablero.marcarMal()) { msj("Las piezas marcadas no están en su lugar."); return "marcar-mal-ubicadas"; }
+        const k = this.tablero.seleccionada() ?? this.tablero.primeraLibre(); this.tablero.marcarLugar(k); msj("Una pieza va en el lugar marcado."); return "marcar-lugar";
+      }
+      const k = this.tablero.seleccionada() ?? this.tablero.primeraLibre(); if (k !== undefined) this.tablero.ubicar(k); msj("Ubicamos una pieza juntos."); return "modelado-pieza";
+    }
+  },
+
+  /* 5. ¡Salvemos a los cerditos! (Transferir). Cada respuesta se corrige con la clasificación del banco, nunca con un modelo. */
+  salvemos: {
+    render(it) {
+      this.paso = it.tipo === "plan" ? "materiales" : "elegir"; this.primera = null; this.elegida = null; this.quitadas = new Set();
+      S.R.etapas = it.tipo === "plan" ? { materiales: { errores: 0 }, pasos: { errores: 0 }, imprevisto: {} } : {};
+      marcoJuego("Los cerditos necesitan tu ayuda.", `<div class="situacion">${D.figura(it.fig, it.attrs, "")}<p>${esc(it.situacion)}</p>${escuchar(it.situacion)}</div><div id="s-cuerpo" class="grupo"></div>`);
+      decir(it.situacion);
+      this.pintar();
+    },
+    opcionesHtml(ops, attr) {
+      return `<div class="opciones" style="--min:240px">${ops.map((o) => `<button class="opcion fig" data-${attr}="${o.id}" ${this.quitadas.has(o.id) ? "disabled" : ""} aria-pressed="${this.elegida === o.id}">${D.figura(o.fig, o.attrs, "")}<span class="t">${esc(o.txt)}</span></button>`).join("")}</div>`;
+    },
+    pintar() {
+      const it = S.item, c = $("#s-cuerpo");
+      if (this.paso === "elegir" || this.paso === "imprevisto") {
+        const ops = this.paso === "elegir" ? it.opciones : it.imprevisto.opciones;
+        c.innerHTML = (this.paso === "imprevisto" ? `<div class="situacion">${D.figura(it.imprevisto.fig, it.imprevisto.attrs, "")}<p>${esc(it.imprevisto.consigna)}</p></div>` : "") + this.opcionesHtml(ops, "op") + `<div id="s-conse"></div>`;
+        $$("[data-op]", c).forEach((b) => b.onclick = () => this.elegir(b.dataset.op, ops));
+        if (this.paso === "imprevisto") decir(it.imprevisto.consigna);
+      } else if (this.paso === "materiales") {
+        this.marcados = this.marcados || new Set();
+        c.innerHTML = `<p style="font-weight:800">${esc(it.materiales.consigna)}</p><div class="opciones" style="--min:200px">${it.materiales.opciones.map((o) => `<button class="opcion fig" data-mat="${o.id}" aria-pressed="${this.marcados.has(o.id)}" ${this.quitadas.has(o.id) ? "disabled" : ""}>${D.figura(o.fig, o.attrs, "")}<span class="t">${esc(o.txt)}</span></button>`).join("")}</div>
+          <div class="acciones"><button class="btn" id="s-listo-mat">Listo</button></div>`;
+        $$("[data-mat]", c).forEach((b) => b.onclick = () => { const id = b.dataset.mat; this.marcados.has(id) ? this.marcados.delete(id) : this.marcados.add(id); b.setAttribute("aria-pressed", this.marcados.has(id)); });
+        $("#s-listo-mat").onclick = () => this.listoMateriales();
+      } else if (this.paso === "pasos") {
+        this.hechos = this.hechos || [];
+        const quedan = it.pasos.orden.filter((p) => !this.hechos.includes(p.id));
+        const vista = Motor.mezclarDistinto(it.pasos.orden, Motor.azar(Motor.semillaDe(it.id + "p", S.vuelta))).filter((p) => quedan.includes(p));
+        c.innerHTML = `<p style="font-weight:800">${esc(it.pasos.consigna)}</p><ol class="pasos-hechos">${this.hechos.map((id) => `<li>${esc(it.pasos.orden.find((p) => p.id === id).txt)}</li>`).join("")}</ol>
+          <div class="opciones" style="--min:220px">${vista.map((p) => `<button class="opcion fig" data-paso="${p.id}">${D.figura(p.fig, p.attrs, "")}<span class="t">${esc(p.txt)}</span></button>`).join("")}</div>`;
+        $$("[data-paso]", c).forEach((b) => b.onclick = () => this.tocarPaso(b.dataset.paso));
+      } else if (this.paso === "justificar") {
+        const j = it.justificacion;
+        c.innerHTML = `<p style="font-weight:800">${esc(j.pregunta)}</p><div class="opciones" style="--min:240px">${j.opciones.map((o, i) => `<button class="opcion fig" data-just="${i}" ${this.quitadas.has("j" + i) ? "disabled" : ""}>${D.figura(o.fig, o.attrs, "")}<span class="t">${esc(o.txt)}</span></button>`).join("")}</div>`;
+        decir(j.pregunta);
+        $$("[data-just]", c).forEach((b) => b.onclick = () => this.justificar(+b.dataset.just));
+      } else if (this.paso === "revision") {
+        const op = Motor.opcion(it.imprevisto.opciones, this.elegida);
+        c.innerHTML = `<p style="font-weight:800">Revisá el plan. ¿Querés cambiar algo?</p>
+          <ul class="pasos-hechos"><li>${esc(it.materiales.opciones.filter((o) => o.ok).map((o) => o.txt).join(" y "))}</li>${it.pasos.orden.map((p) => `<li>${esc(p.txt)}</li>`).join("")}<li>${esc(op.txt)}</li></ul>
+          <div class="consecuencia">${esc(op.consecuencia)}</div>
+          <div class="acciones"><button class="btn sec" id="s-cambiar">Cambiar qué hacen con el imprevisto</button><button class="btn" id="s-listo">Así está bien</button></div>`;
+        $("#s-cambiar").onclick = () => { S.R.etapas.imprevisto.revisado = true; this.paso = "imprevisto"; this.elegida = null; this.pintar(); };
+        $("#s-listo").onclick = () => this.terminarPlan();
+      }
+    },
+    elegir(id, ops) {
+      const R = S.R, o = Motor.opcion(ops, id); R.intentos += 1; this.elegida = id;
+      const primera = this.paso === "imprevisto" ? !R.etapas.imprevisto.primera : this.primera === null;
+      if (this.paso === "imprevisto") { if (primera) R.etapas.imprevisto.primera = o.clase; R.etapas.imprevisto.final = o.clase; }
+      else { if (primera) this.primera = o.clase; }
+      if (o.clase !== "adecuada" && primera) R.errores += 1;
+      if (o.clase === "adecuada" && !primera && !R.huboAyuda) R.autocorreccion = true;
+      $$("[data-op]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.op === id));
+      const conse = $("#s-conse");
+      if (this.paso === "imprevisto") { this.paso = "revision"; return this.pintar(); }
+      if (o.clase === "adecuada") {
+        conse.innerHTML = `<div class="consecuencia" style="margin-top:12px">${esc(o.consecuencia)}</div>`;
+        decir(o.consecuencia);
+        if (S.item.justificacion && variante().grados[S.grado].parametros.justificar) { this.paso = "justificar"; this.quitadas.clear(); setTimeout(() => this.pintar(), 0); conse.insertAdjacentHTML("beforeend", ""); return; }
+        return finItem({ resultado: this.primera });
+      }
+      const otra = o.clase === "parcial" ? `<div class="acciones"><button class="btn sec" id="s-quedo">Me quedo con esta</button></div>` : "";
+      conse.innerHTML = `<div class="consecuencia" style="margin-top:12px">${esc(o.consecuencia)} ¿Querés probar otra opción?</div>${otra}`;
+      decir(o.consecuencia + " ¿Querés probar otra opción?");
+      const q = $("#s-quedo"); if (q) q.onclick = () => (S.item.justificacion && variante().grados[S.grado].parametros.justificar ? (this.paso = "justificar", this.pintar()) : finItem({ resultado: this.primera }));
+    },
+    justificar(i) {
+      const R = S.R, j = S.item.justificacion, o = j.opciones[i];
+      R.etapas.justificacion = R.etapas.justificacion || { coherente_primera: null, intentos: 0 };
+      const J = R.etapas.justificacion; J.intentos += 1;
+      const ok = Motor.coherente(o, this.elegida);
+      if (J.coherente_primera === null) J.coherente_primera = ok;
+      if (ok) { if (J.intentos > 1 && !R.huboAyuda) R.autocorreccion = true; return finItem({ resultado: this.primera }); }
+      this.quitadas.add("j" + i); R.errores += 1; error("Pensá por qué esa opción ayuda a los cerditos."); this.pintar();
+    },
+    listoMateriales() {
+      const it = S.item, R = S.R; R.intentos += 1;
+      if (this.marcados.size !== it.materiales.elegir) { msj(`Elegí ${it.materiales.elegir} materiales.`); return; }
+      if (Motor.materialesOk(it, this.marcados)) { R.seguidos = 0; if (R.etapas.materiales.errores && !R.huboAyuda) R.autocorreccion = true; this.paso = "pasos"; this.quitadas.clear(); msj("Ya tienen los materiales. Ahora ordená las tareas."); return this.pintar(); }
+      R.etapas.materiales.errores += 1; error("Mirá otra vez: ¿con esos materiales se puede construir algo firme?");
+    },
+    tocarPaso(id) {
+      const it = S.item, R = S.R; R.intentos += 1;
+      const esperado = it.pasos.orden[this.hechos.length].id;
+      if (id === esperado) { this.hechos.push(id); R.seguidos = 0; if (this.hechos.length === it.pasos.orden.length) { this.paso = "imprevisto"; this.elegida = null; } return this.pintar(); }
+      R.etapas.pasos.errores += 1; error("Esa tarea va después. ¿Qué hay que hacer antes?");
+    },
+    terminarPlan() {
+      const E = S.R.etapas, ok = E.materiales.errores === 0 && E.pasos.errores === 0 && E.imprevisto.primera === "adecuada";
+      finItem({ resultado: ok ? "adecuada" : E.imprevisto.final === "adecuada" ? "parcial" : "no-adecuada" });
+    },
+    ayuda(n, it) {
+      const paso = this.paso;
+      if (n === 1) { msj(paso === "materiales" ? "Pensá qué pasó en el cuento con cada material." : paso === "pasos" ? "Pensá qué hay que tener antes de empezar a construir." : paso === "justificar" ? "Pensá qué cambia para los cerditos con lo que elegiste." : "Pensá qué pasaría con cada opción."); return "pregunta-orientadora"; }
+      if (n === 2) {
+        if (paso === "materiales") { const m = it.materiales.opciones.find((o) => !o.ok && !this.quitadas.has(o.id)); if (m) { this.quitadas.add(m.id); this.marcados && this.marcados.delete(m.id); } }
+        else if (paso === "justificar") { const i = it.justificacion.opciones.findIndex((o, k) => !this.quitadas.has("j" + k) && !Motor.coherente(o, this.elegida)); if (i >= 0) this.quitadas.add("j" + i); }
+        else if (paso === "elegir" || paso === "imprevisto") { const ops = paso === "elegir" ? it.opciones : it.imprevisto.opciones; const m = ops.find((o) => o.clase === "no-adecuada" && !this.quitadas.has(o.id)); if (m) this.quitadas.add(m.id); }
+        if (paso !== "pasos") { this.pintar(); msj("Quedan menos opciones."); return "reducir-alternativas"; }
+        msj("La primera tarea es: " + it.pasos.orden[this.hechos.length].txt + "."); return "senalar-paso";
+      }
+      if (paso === "materiales") { this.marcados = new Set(it.materiales.opciones.filter((o) => o.ok).map((o) => o.id)); this.pintar(); msj("Elegimos juntos los materiales. Tocá «Listo»."); return "modelado-materiales"; }
+      if (paso === "pasos") { this.tocarPaso(it.pasos.orden[this.hechos.length].id); msj("Ubicamos una tarea juntos."); return "modelado-paso"; }
+      if (paso === "justificar") { const i = it.justificacion.opciones.findIndex((o) => Motor.coherente(o, this.elegida)); const b = $(`[data-just="${i}"]`); if (b) b.classList.add("ofrecida"); msj("Leamos juntos la opción marcada."); return "modelado"; }
+      const ops = paso === "elegir" ? it.opciones : it.imprevisto.opciones; const a = ops.find((o) => o.clase === "adecuada"); const b = $(`[data-op="${a.id}"]`); if (b) b.classList.add("ofrecida"); msj("Leamos juntos la opción marcada."); return "modelado";
+    }
+  }
+};
+function R_lectura() { if (S.R) S.R.lectura = true; }
+
+/* ---------- Arranque ---------- */
+encabezado();
+if (CON_ADULTO) pantallaAdulto(); else asiSeJuega();
+</script>
+</body></html>
