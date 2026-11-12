@@ -220,6 +220,18 @@ async function loginPro(p, email) {
       await p.waitForSelector('text=Búsquedas terminadas: 1');
       await p.screenshot({ path: S + '/10c-luci.png' });
       await p.click('#luci-done');
+    } else if (id === 'cerditos') {
+      // «Los tres cerditos» (RT-CER-001): el profesional elige actividad y grado; quien juega resuelve y el portal recibe el registro.
+      const fh = await p.waitForSelector('.cerditos-frame iframe'); const fr = await fh.contentFrame();
+      await fr.waitForSelector('#a-seguir'); await fr.click('[data-act=detectives]'); await fr.click('[data-gr=facil]'); await fr.click('#a-seguir'); await fr.click('#d-empezar');
+      await fr.waitForSelector('#escena');
+      must(!/Estación|Fácil|Intermedio|Difícil|nivel \d/i.test(await fr.textContent('#app')), 'Los tres cerditos no muestra Estación ni grado a quien juega');
+      const obj = await fr.evaluate(() => S.item.objetivos[0]);
+      await fr.focus(`#escena [data-el="${obj}"]`); await fr.press(`#escena [data-el="${obj}"]`, 'Enter');
+      await fr.waitForSelector('#j-seguir');
+      await p.waitForSelector('text=Juegos terminados: 1');
+      await p.screenshot({ path: S + '/10d-cerditos.png' });
+      await p.click('#cerditos-done');
     } else if (id === 'memoria') {
       await p.click('#ch-stop');
     } else {

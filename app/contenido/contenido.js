@@ -181,6 +181,17 @@ const ACTIVITIES = [
     ok: ["La encontraste mirando por partes."], err: [], ficha: { variant: "B" }
   },
   {
+    /* «Los tres cerditos»: cinco actividades por Estaciones (reelaboración de la supervisora, RT-CER-001). Todo PRUEBA: textos, banco y grados
+       los valida PSP-SR. Sin sugerencia por diagnóstico (RT-EST-001, P6). Rutas 3–5 y 13–18 no disponibles (D2). Banco y ficha: app/herramientas/cerditos/. */
+    id: "cerditos", name: "Los tres cerditos", zone: "mirar", skill: "mirar, relacionar, ordenar y resolver con un cuento", pillar: "Pensar",
+    area: "Exploración, reconocimiento, integración y transferencia con un cuento", ageMin: 6, ageMax: 12, suggestedFor: [],
+    instruction: "Jugá con el cuento de los tres cerditos. Cuando termines, tocá «Terminé de jugar».",
+    forFamily: "Cinco juegos con el cuento de los tres cerditos: buscar en una escena, encontrar parejas, unir dibujos con frases, armar un rompecabezas y ayudar a los cerditos. Acompañá sin dar la respuesta.",
+    levels: ["Fácil", "Intermedio", "Difícil"], strategies: ["Mirar de a una parte", "Pensar qué pasó antes y después", "Probar y revisar"],
+    discover: "Miro con atención y pienso qué pasó en el cuento.",
+    ok: ["Pensaste qué pasó en el cuento."], err: [], ficha: { variant: "B" }
+  },
+  {
     id: "contar", name: "Contar y elegir", zone: "numeros", skill: "contar y comparar", pillar: "Hacer",
     area: "Cálculo inicial", ageMin: 4, ageMax: 8, suggestedFor: ["dea-calculo", "en-evaluacion", "di"],
     instruction: "Contá los puntos y tocá el número correcto.",

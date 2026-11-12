@@ -191,7 +191,7 @@ function trialBar(t) {
 }
 
 /* ---------- Íconos ilustrados de actividad y fondo del modo niño ---------- */
-const ACT_COLORS = { memoria: ["#F2B8A2", "#E07B5F"], secuencias: ["#C9D8EE", "#4F7BB0"], distinto: ["#F4E3B8", "#C99528"], contar: ["#DCE9E2", "#55867D"], clasificar: ["#E4DBF2", "#8A72B8"], isla: ["#D9EEF0", "#1B7F86"], explorapalabras: ["#FFF1D7", "#196B6A"], luci: ["#E0F2EB", "#102F54"] };
+const ACT_COLORS = { memoria: ["#F2B8A2", "#E07B5F"], secuencias: ["#C9D8EE", "#4F7BB0"], distinto: ["#F4E3B8", "#C99528"], contar: ["#DCE9E2", "#55867D"], clasificar: ["#E4DBF2", "#8A72B8"], isla: ["#D9EEF0", "#1B7F86"], explorapalabras: ["#FFF1D7", "#196B6A"], luci: ["#E0F2EB", "#102F54"], cerditos: ["#FDE3DA", "#102F54"] };
 function actIcon(id, size = 64) {
   const [bg, fg] = ACT_COLORS[id] || ["#DCE9E2", "#315F59"];
   const art = {
@@ -202,6 +202,7 @@ function actIcon(id, size = 64) {
     contar: `<circle cx="22" cy="30" r="6" fill="${fg}"/><circle cx="36" cy="30" r="6" fill="${fg}"/><circle cx="29" cy="44" r="6" fill="${fg}"/><text x="58" y="56" font-family="Manrope, sans-serif" font-weight="800" font-size="32" fill="#315F59">3</text>`,
     explorapalabras: `<rect x="14" y="14" width="64" height="64" rx="12" fill="#fff"/>${["A","S","O","L","M","A","R","E","P"].map((l, k) => `<text x="${27 + (k % 3) * 19}" y="${35 + Math.floor(k / 3) * 19}" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="15" fill="#102F54">${l}</text>`).join("")}<line x1="27" y1="30" x2="65" y2="30" stroke="${fg}" stroke-width="14" stroke-linecap="round" opacity=".35"/>`,
     luci: `<circle cx="40" cy="40" r="20" fill="#fff" stroke="${fg}" stroke-width="5"/><path d="M54 54 L74 74" stroke="${fg}" stroke-width="8" stroke-linecap="round"/><path d="M40 28 C48 38 47 50 40 50 C33 50 32 38 40 28Z" fill="#FFB82E" stroke="${fg}" stroke-width="2.5"/>`,
+    cerditos: `<path d="M22 50 L46 28 L70 50Z" fill="#C4573E" stroke="${fg}" stroke-width="2.5"/><rect x="28" y="48" width="36" height="24" fill="#F58060" stroke="${fg}" stroke-width="2.5"/><circle cx="66" cy="62" r="11" fill="#F9C6BA" stroke="${fg}" stroke-width="2.5"/><ellipse cx="66" cy="65" rx="4.5" ry="3" fill="#EE9C8C"/>`,
     clasificar: `<path d="M14 50 h28 v16 h-28z" fill="${fg}"/><path d="M50 50 h28 v16 h-28z" fill="#E8B44C"/><circle cx="28" cy="36" r="8" fill="${fg}"/><path d="M64 26 l9 16 h-18z" fill="#E8B44C"/>`
   }[id] || "";
   return `<svg viewBox="0 0 92 92" width="${size}" height="${size}" aria-hidden="true" class="act-icon"><rect width="92" height="92" rx="24" fill="${bg}"/>${art}</svg>`;

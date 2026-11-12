@@ -1,0 +1,340 @@
+{
+ "_nota": "Banco de PRUEBA de «Los tres cerditos». CONTENIDO DE PRUEBA NO VALIDADO: consignas, frases, parejas, situaciones, clasificación de respuestas, pistas y devoluciones los escribe y valida PSP-SR (RT-CER-001, T1–T9) y los aprueba la supervisora. Ilustraciones de relleno hechas con formas simples, sin IA generativa y sin imágenes de terceros (RT-CER-001 B.7, decisión D3). Versión del cuento según decisión D2: el lobo sopla las casas sin peligro para los cerditos; final: el lobo se quema y sale corriendo.",
+ "version": "0.1.0-prueba",
+ "fecha": "2026-11-12",
+ "textos": {
+  "rotulo": "Contenido de prueba no validado",
+  "escuchar": "Escuchar",
+  "audioSi": "Voz activada. Tocá para apagarla.",
+  "audioNo": "Voz apagada. Tocá para activarla.",
+  "ayuda": "Pedir ayuda",
+  "seguir": "Seguir",
+  "yaMire": "Ya miré",
+  "verModelo": "Ver el modelo",
+  "volverMirar": "Volver a mirar las tarjetas",
+  "noEs": "Ese no es. Probá otra vez.",
+  "noEsPareja": "Esas dos no van juntas. Se dan vuelta de nuevo.",
+  "noVaAhi": "Esa pieza no va ahí. Probá en otro lugar.",
+  "ofrecerAyuda": "Si querés, podés pedir ayuda.",
+  "otraVez": "Jugar otra vez",
+  "termine": "Terminé de jugar",
+  "cierre": "Terminaste la ronda.",
+  "cierreProceso": {
+   "detectives": "Miraste la escena con atención y seguiste la consigna.",
+   "memotest": "Recordaste dónde estaba cada tarjeta y descubriste qué cosas van juntas.",
+   "escena_frase": "Uniste cada dibujo con su frase y ordenaste lo que pasó en el cuento.",
+   "rompecabezas": "Miraste cada parte y buscaste dónde encajaba.",
+   "salvemos": "Pensaste qué podían hacer los cerditos y elegiste una forma de resolverlo."
+  },
+  "asiSeJuega": {
+   "detectives": "Mirá todo el dibujo, de a una parte por vez. Cuando encuentres lo que te pido, tocalo.",
+   "memotest": "Primero mirá todas las tarjetas. Cuando estés listo o lista, tocá «Ya miré». Después da vuelta dos tarjetas: si van juntas, quedan a la vista.",
+   "escena_frase": "Primero uní cada dibujo con su frase. Después ordená los dibujos para contar el cuento desde el principio.",
+   "rompecabezas": "Tocá una pieza y después el lugar donde va. Así armás el dibujo.",
+   "salvemos": "Los cerditos necesitan tu ayuda. Pensá qué pueden hacer y elegí una opción."
+  }
+ },
+ "escenas_cuento": {
+  "salen": "Los tres cerditos salen de su casa",
+  "paja": "Un cerdito arma una casa de paja",
+  "madera": "Un cerdito arma una casa de madera",
+  "ladrillos": "Un cerdito arma una casa de ladrillos",
+  "lobo-mira": "El lobo llega y mira las casas",
+  "sopla-paja": "El lobo sopla y la casa de paja se vuela",
+  "sopla-madera": "El lobo sopla y la casa de madera se vuela",
+  "chimenea": "El lobo baja por la chimenea, se quema y sale corriendo",
+  "festejo": "Los tres cerditos juntos en la casa de ladrillos"
+ },
+ "actividades": {
+  "detectives": {
+   "facil": [
+    {
+     "id": "det-f1", "consigna": "Encontrá al lobo.",
+     "elementos": [
+      { "id": "casa1", "fig": "casa", "attrs": { "material": "paja" }, "x": 90, "y": 250, "s": 2.6, "nombre": "casa de paja" },
+      { "id": "arbol1", "fig": "arbol", "x": 640, "y": 230, "s": 2.4, "nombre": "árbol" },
+      { "id": "lobo1", "fig": "lobo", "x": 900, "y": 420, "s": 2.2, "nombre": "lobo" },
+      { "id": "flor1", "fig": "flor", "attrs": { "color": "coral" }, "x": 480, "y": 590, "s": 1.4, "nombre": "flor" }
+     ],
+     "objetivos": ["lobo1"],
+     "pista1": "El lobo es gris y tiene orejas puntiagudas.",
+     "region2": { "x": 620, "y": 380, "w": 560, "h": 400 },
+     "ok": "Lo encontraste mirando cómo es el lobo."
+    },
+    {
+     "id": "det-f2", "consigna": "Encontrá al cerdito.",
+     "elementos": [
+      { "id": "arbol1", "fig": "arbol", "x": 60, "y": 220, "s": 2.4, "nombre": "árbol" },
+      { "id": "cer1", "fig": "cerdito", "attrs": { "panuelo": "verde" }, "x": 330, "y": 440, "s": 2, "nombre": "cerdito" },
+      { "id": "casa1", "fig": "casa", "attrs": { "material": "madera" }, "x": 650, "y": 250, "s": 2.6, "nombre": "casa de madera" },
+      { "id": "sol1", "fig": "sol", "x": 1010, "y": 40, "s": 1.4, "nombre": "sol" }
+     ],
+     "objetivos": ["cer1"],
+     "pista1": "El cerdito es rosado y tiene un pañuelo.",
+     "region2": { "x": 250, "y": 360, "w": 400, "h": 400 },
+     "ok": "Lo encontraste mirando su color y su forma."
+    }
+   ],
+   "intermedio": [
+    {
+     "id": "det-i1", "consigna": "Encontrá la casa de madera y después tocá al lobo.",
+     "elementos": [
+      { "id": "casaP", "fig": "casa", "attrs": { "material": "paja" }, "x": 40, "y": 260, "s": 2.1, "nombre": "casa de paja" },
+      { "id": "casaM", "fig": "casa", "attrs": { "material": "madera" }, "x": 420, "y": 250, "s": 2.1, "nombre": "casa de madera" },
+      { "id": "casaL", "fig": "casa", "attrs": { "material": "ladrillos" }, "x": 820, "y": 240, "s": 2.2, "nombre": "casa de ladrillos" },
+      { "id": "lobo1", "fig": "lobo", "x": 640, "y": 560, "s": 1.6, "nombre": "lobo" },
+      { "id": "cer1", "fig": "cerdito", "attrs": { "panuelo": "verde" }, "x": 270, "y": 560, "s": 1.4, "nombre": "cerdito de pañuelo verde" },
+      { "id": "cer2", "fig": "cerdito", "attrs": { "panuelo": "lila" }, "x": 1030, "y": 580, "s": 1.4, "nombre": "cerdito de pañuelo lila" },
+      { "id": "arbol1", "fig": "arbol", "x": 300, "y": 40, "s": 1.5, "nombre": "árbol" },
+      { "id": "flor1", "fig": "flor", "attrs": { "color": "lila" }, "x": 470, "y": 640, "s": 1, "nombre": "flor" },
+      { "id": "nube1", "fig": "nube", "x": 760, "y": 40, "s": 1.6, "nombre": "nube" },
+      { "id": "fardo1", "fig": "fardo", "x": 100, "y": 610, "s": 1.1, "nombre": "fardo de paja" }
+     ],
+     "objetivos": ["casaM", "lobo1"],
+     "pista1": "Primero buscá la casa hecha con tablas.",
+     "region2": { "x": 360, "y": 200, "w": 480, "h": 600 },
+     "ok": "Seguiste los dos pasos en orden."
+    },
+    {
+     "id": "det-i2", "consigna": "Encontrá al cerdito de pañuelo lila y después la carretilla.",
+     "elementos": [
+      { "id": "cerV", "fig": "cerdito", "attrs": { "panuelo": "verde" }, "x": 80, "y": 470, "s": 1.6, "nombre": "cerdito de pañuelo verde" },
+      { "id": "cerS", "fig": "cerdito", "attrs": { "panuelo": "sol" }, "x": 420, "y": 480, "s": 1.6, "nombre": "cerdito de pañuelo amarillo" },
+      { "id": "cerL", "fig": "cerdito", "attrs": { "panuelo": "lila", "anteojos": true }, "x": 760, "y": 470, "s": 1.6, "nombre": "cerdito de pañuelo lila" },
+      { "id": "carre", "fig": "carretilla", "x": 980, "y": 610, "s": 1.4, "nombre": "carretilla" },
+      { "id": "balde", "fig": "balde", "x": 280, "y": 640, "s": 1.1, "nombre": "balde" },
+      { "id": "tablas", "fig": "tablas", "x": 600, "y": 650, "s": 1.2, "nombre": "tablas" },
+      { "id": "arbol1", "fig": "arbol", "x": 60, "y": 90, "s": 1.9, "nombre": "árbol" },
+      { "id": "arbol2", "fig": "arbol", "x": 980, "y": 110, "s": 1.7, "nombre": "árbol" },
+      { "id": "flor1", "fig": "flor", "attrs": { "color": "lila" }, "x": 640, "y": 330, "s": 1, "nombre": "flor lila" },
+      { "id": "flor2", "fig": "flor", "attrs": { "color": "sol" }, "x": 400, "y": 330, "s": 1, "nombre": "flor amarilla" }
+     ],
+     "objetivos": ["cerL", "carre"],
+     "pista1": "Mirá el color del pañuelo de cada cerdito.",
+     "region2": { "x": 700, "y": 400, "w": 480, "h": 400 },
+     "ok": "Diferenciaste a los cerditos por el color del pañuelo."
+    }
+   ],
+   "dificil": [
+    {
+     "id": "det-d1", "consigna": "Encontrá lo que está detrás de la casa de ladrillos y sirve para construirla.",
+     "elementos": [
+      { "id": "pila", "fig": "ladrillos", "x": 760, "y": 300, "s": 1.5, "atras": true, "nombre": "pila de ladrillos" },
+      { "id": "balde", "fig": "balde", "x": 300, "y": 330, "s": 1.2, "atras": true, "nombre": "balde" },
+      { "id": "casaL", "fig": "casa", "attrs": { "material": "ladrillos" }, "x": 520, "y": 230, "s": 3, "nombre": "casa de ladrillos" },
+      { "id": "casaM", "fig": "casa", "attrs": { "material": "madera" }, "x": 70, "y": 280, "s": 2.4, "nombre": "casa de madera" },
+      { "id": "martillo", "fig": "martillo", "x": 900, "y": 620, "s": 1.1, "nombre": "martillo" },
+      { "id": "flor1", "fig": "flor", "attrs": { "color": "coral" }, "x": 640, "y": 560, "s": 0.9, "nombre": "flor" },
+      { "id": "tablas", "fig": "tablas", "x": 80, "y": 640, "s": 1.1, "nombre": "tablas" },
+      { "id": "pala", "fig": "pala", "x": 1060, "y": 420, "s": 1.2, "nombre": "pala" },
+      { "id": "mariposa", "fig": "mariposa", "x": 380, "y": 120, "s": 0.9, "nombre": "mariposa" },
+      { "id": "nube1", "fig": "nube", "x": 860, "y": 40, "s": 1.5, "nombre": "nube" },
+      { "id": "cer1", "fig": "cerdito", "attrs": { "panuelo": "sol", "silla": true }, "x": 360, "y": 560, "s": 1.4, "nombre": "cerdito" }
+     ],
+     "objetivos": ["pila"],
+     "pista1": "Pensá en dos cosas: tiene que estar detrás de la casa de ladrillos y servir para construirla.",
+     "region2": { "x": 500, "y": 200, "w": 460, "h": 420 },
+     "ok": "Juntaste dos datos: dónde está y para qué sirve."
+    },
+    {
+     "id": "det-d2", "consigna": "Encontrá lo que está al lado del árbol chico y sirve para llevar ladrillos.",
+     "elementos": [
+      { "id": "arbolG", "fig": "arbol", "x": 70, "y": 120, "s": 3.2, "nombre": "árbol grande" },
+      { "id": "regadera", "fig": "regadera", "x": 360, "y": 560, "s": 1.2, "nombre": "regadera" },
+      { "id": "arbolC", "fig": "arbol", "x": 760, "y": 300, "s": 1.7, "nombre": "árbol chico" },
+      { "id": "carre", "fig": "carretilla", "x": 930, "y": 520, "s": 1.4, "nombre": "carretilla" },
+      { "id": "flor1", "fig": "flor", "attrs": { "color": "coral" }, "x": 640, "y": 520, "s": 1, "nombre": "flor" },
+      { "id": "balde", "fig": "balde", "x": 520, "y": 650, "s": 1.1, "nombre": "balde" },
+      { "id": "pila", "fig": "ladrillos", "x": 1040, "y": 330, "s": 1.1, "nombre": "pila de ladrillos" },
+      { "id": "cer1", "fig": "cerdito", "attrs": { "panuelo": "verde" }, "x": 380, "y": 330, "s": 1.4, "nombre": "cerdito" },
+      { "id": "sol1", "fig": "sol", "x": 560, "y": 30, "s": 1.2, "nombre": "sol" }
+     ],
+     "objetivos": ["carre"],
+     "pista1": "Primero encontrá el árbol más chico. Después mirá qué hay al lado.",
+     "region2": { "x": 720, "y": 260, "w": 470, "h": 520 },
+     "ok": "Usaste el lugar y la función para encontrarlo."
+    }
+   ]
+  },
+  "memotest": {
+   "facil": [
+    { "id": "mem-f1", "tipo": "imagen-imagen", "parejas": [
+      { "a": { "fig": "cerdito", "attrs": { "panuelo": "verde" }, "nombre": "cerdito" }, "b": { "fig": "cerdito", "attrs": { "panuelo": "verde" }, "nombre": "cerdito" } },
+      { "a": { "fig": "lobo", "nombre": "lobo" }, "b": { "fig": "lobo", "nombre": "lobo" } },
+      { "a": { "fig": "casa", "attrs": { "material": "paja" }, "nombre": "casa de paja" }, "b": { "fig": "casa", "attrs": { "material": "paja" }, "nombre": "casa de paja" } }
+     ] },
+    { "id": "mem-f2", "tipo": "imagen-imagen", "parejas": [
+      { "a": { "fig": "arbol", "nombre": "árbol" }, "b": { "fig": "arbol", "nombre": "árbol" } },
+      { "a": { "fig": "carretilla", "nombre": "carretilla" }, "b": { "fig": "carretilla", "nombre": "carretilla" } },
+      { "a": { "fig": "casa", "attrs": { "material": "ladrillos" }, "nombre": "casa de ladrillos" }, "b": { "fig": "casa", "attrs": { "material": "ladrillos" }, "nombre": "casa de ladrillos" } }
+     ] }
+   ],
+   "intermedio": [
+    { "id": "mem-i1", "tipo": "imagen-palabra", "parejas": [
+      { "a": { "fig": "fardo", "nombre": "paja" }, "b": { "txt": "paja" } },
+      { "a": { "fig": "pala", "nombre": "pala" }, "b": { "txt": "pala" } },
+      { "a": { "fig": "lobo", "nombre": "lobo" }, "b": { "txt": "lobo" } },
+      { "a": { "fig": "ladrillos", "nombre": "ladrillos" }, "b": { "txt": "ladrillos" } }
+     ] },
+    { "id": "mem-i2", "tipo": "imagen-palabra", "parejas": [
+      { "a": { "fig": "tablas", "nombre": "madera" }, "b": { "txt": "madera" } },
+      { "a": { "fig": "martillo", "nombre": "martillo" }, "b": { "txt": "martillo" } },
+      { "a": { "fig": "cerdito", "attrs": { "panuelo": "lila" }, "nombre": "cerdito" }, "b": { "txt": "cerdito" } },
+      { "a": { "fig": "carretilla", "nombre": "carretilla" }, "b": { "txt": "carretilla" } }
+     ] }
+   ],
+   "dificil": [
+    { "id": "mem-d1", "tipo": "palabra-palabra", "relacion": "semantica-funcional", "parejas": [
+      { "a": { "txt": "lobo" }, "b": { "txt": "soplar" }, "pista": "Pensá qué hace el lobo en el cuento." },
+      { "a": { "txt": "ladrillos" }, "b": { "txt": "resistente" }, "pista": "Pensá cómo es una casa que el viento no mueve." },
+      { "a": { "txt": "chimenea" }, "b": { "txt": "humo" }, "pista": "Pensá qué sale por arriba de una casa." },
+      { "a": { "txt": "martillo" }, "b": { "txt": "clavar" }, "pista": "Pensá para qué sirve una herramienta." }
+     ] },
+    { "id": "mem-d2", "tipo": "palabra-palabra", "relacion": "semantica-funcional", "parejas": [
+      { "a": { "txt": "paja" }, "b": { "txt": "liviana" }, "pista": "Pensá cómo es la paja cuando la levantás." },
+      { "a": { "txt": "madera" }, "b": { "txt": "árbol" }, "pista": "Pensá de dónde sale un material." },
+      { "a": { "txt": "lluvia" }, "b": { "txt": "paraguas" }, "pista": "Pensá qué te cuida cuando llueve." },
+      { "a": { "txt": "carretilla" }, "b": { "txt": "llevar" }, "pista": "Pensá para qué sirve una herramienta." }
+     ] }
+   ]
+  },
+  "escena_frase": {
+   "facil": [
+    { "id": "ef-f1", "escenas": ["paja", "madera", "ladrillos"], "frases": {
+      "paja": "El cerdito construye una casa de paja.",
+      "madera": "El cerdito construye una casa de madera.",
+      "ladrillos": "El cerdito construye una casa de ladrillos." } },
+    { "id": "ef-f2", "escenas": ["salen", "lobo-mira", "festejo"], "frases": {
+      "salen": "Los cerditos salen de su casa.",
+      "lobo-mira": "El lobo mira las casas.",
+      "festejo": "Los cerditos están juntos y contentos." } }
+   ],
+   "intermedio": [
+    { "id": "ef-i1", "escenas": ["salen", "paja", "madera", "ladrillos", "lobo-mira"], "frases": {
+      "salen": "Los tres cerditos se despiden y salen a buscar materiales.",
+      "paja": "El primer cerdito junta paja y arma su casa muy rápido.",
+      "madera": "El segundo cerdito usa tablas y clavos para su casa.",
+      "ladrillos": "El tercer cerdito trabaja mucho con ladrillos y cemento.",
+      "lobo-mira": "El lobo llega y observa las casas." } },
+    { "id": "ef-i2", "escenas": ["lobo-mira", "sopla-paja", "sopla-madera", "chimenea", "festejo"], "frases": {
+      "lobo-mira": "El lobo llega y observa las casas.",
+      "sopla-paja": "Con un soplido, la casa de paja se vuela y el cerdito se va a la casa de madera.",
+      "sopla-madera": "Los cerditos buscan refugio en la casa más resistente.",
+      "chimenea": "El lobo baja por la chimenea, se quema y sale corriendo.",
+      "festejo": "Los tres cerditos se quedan juntos en la casa de ladrillos." } }
+   ],
+   "dificil": [
+    { "id": "ef-d1", "escenas": ["salen", "paja", "madera", "ladrillos", "lobo-mira", "sopla-paja", "sopla-madera"], "frases": {
+      "salen": "Cada cerdito decide hacer su propia casa.",
+      "paja": "Como quería terminar rápido, eligió el material más liviano.",
+      "madera": "Con tablas y clavos, la casa quedó un poco más firme.",
+      "ladrillos": "Tardó más que sus hermanos, pero su casa quedó muy resistente.",
+      "lobo-mira": "Alguien recorre el campo mirando cada casa.",
+      "sopla-paja": "Un solo soplido alcanzó para que el techo saliera volando.",
+      "sopla-madera": "Esta vez costó más, pero tampoco aguantó." },
+      "justificacion": { "pregunta": "¿Por qué la casa de madera se vuela después que la de paja?", "opciones": [
+       { "fig": "tablas", "txt": "Porque la madera es más firme que la paja: hizo falta soplar más fuerte.", "ok": true },
+       { "fig": "sol", "txt": "Porque era de día.", "ok": false },
+       { "fig": "flor", "attrs": { "color": "coral" }, "txt": "Porque tenía flores en la puerta.", "ok": false }
+      ] } },
+    { "id": "ef-d2", "escenas": ["paja", "madera", "ladrillos", "lobo-mira", "sopla-paja", "sopla-madera", "chimenea", "festejo"], "frases": {
+      "paja": "La primera casa se termina enseguida.",
+      "madera": "La segunda casa necesita martillo y clavos.",
+      "ladrillos": "La tercera casa lleva mucho trabajo.",
+      "lobo-mira": "Alguien llega con ganas de soplar.",
+      "sopla-paja": "La casa más liviana no aguanta el primer soplido.",
+      "sopla-madera": "Los cerditos se juntan en la casa que todavía queda en pie.",
+      "chimenea": "Como la casa no se mueve, el lobo prueba por arriba y termina corriendo.",
+      "festejo": "Los tres cerditos se quedan juntos en la casa más resistente." },
+      "justificacion": { "pregunta": "¿Por qué los cerditos terminan todos en la casa de ladrillos?", "opciones": [
+       { "fig": "casa", "attrs": { "material": "ladrillos" }, "txt": "Porque es la más resistente y el soplido no la mueve.", "ok": true },
+       { "fig": "flor", "attrs": { "color": "lila" }, "txt": "Porque es la más linda.", "ok": false },
+       { "fig": "fardo", "txt": "Porque fue la primera que se construyó.", "ok": false }
+      ] } }
+   ]
+  },
+  "rompecabezas": {
+   "facil": [
+    { "id": "rom-f1", "escena": "paja", "cols": 2, "filas": 2, "guia": true, "verificar": "al-poner" },
+    { "id": "rom-f2", "escena": "festejo", "cols": 2, "filas": 2, "guia": true, "verificar": "al-poner" }
+   ],
+   "intermedio": [
+    { "id": "rom-i1", "escena": "madera", "cols": 3, "filas": 2, "guia": false, "verificar": "al-poner" },
+    { "id": "rom-i2", "escena": "salen", "cols": 3, "filas": 2, "guia": false, "verificar": "al-poner" }
+   ],
+   "dificil": [
+    { "id": "rom-d1", "escena": "lobo-mira", "cols": 4, "filas": 3, "guia": false, "verificar": "al-final" },
+    { "id": "rom-d2", "escena": "sopla-madera", "cols": 4, "filas": 3, "guia": false, "verificar": "al-final" }
+   ]
+  },
+  "salvemos": {
+   "facil": [
+    { "id": "sal-f1", "tipo": "elegir", "situacion": "El cerdito necesita una casa resistente. ¿Qué material puede elegir?", "fig": "cerdito", "attrs": { "panuelo": "verde" },
+      "opciones": [
+       { "id": "a", "fig": "ladrillos", "txt": "Ladrillos", "clase": "adecuada", "consecuencia": "Con ladrillos la casa queda firme aunque sople el viento." },
+       { "id": "b", "fig": "fardo", "txt": "Paja", "clase": "no-adecuada", "consecuencia": "La paja es liviana: con un soplido fuerte se vuela." }
+      ] },
+    { "id": "sal-f2", "tipo": "elegir", "situacion": "Empieza a llover y el cerdito quiere quedarse seco. ¿Qué puede usar?", "fig": "nube", "attrs": { "lluvia": true },
+      "opciones": [
+       { "id": "a", "fig": "martillo", "txt": "Un martillo", "clase": "no-adecuada", "consecuencia": "El martillo sirve para clavar, pero no tapa la lluvia." },
+       { "id": "b", "fig": "paraguas", "txt": "Un paraguas", "clase": "adecuada", "consecuencia": "Con el paraguas, la lluvia no lo moja." }
+      ] }
+   ],
+   "intermedio": [
+    { "id": "sal-i1", "tipo": "elegir-justificar", "situacion": "El cerdito tiene madera y ladrillos, pero poco tiempo. ¿Qué podría hacer para tener un refugio seguro?", "fig": "reloj",
+      "opciones": [
+       { "id": "a", "fig": "tres", "txt": "Pedir ayuda a sus hermanos para hacerlo con ladrillos.", "clase": "adecuada", "consecuencia": "Entre los tres terminan a tiempo y el refugio queda firme." },
+       { "id": "b", "fig": "tablas", "txt": "Hacerlo rápido con madera y reforzarlo después con ladrillos.", "clase": "parcial", "consecuencia": "Tiene un refugio pronto, aunque al principio no es tan firme." },
+       { "id": "c", "fig": "fardo", "txt": "Hacer una casa de paja porque es lo más rápido.", "clase": "no-adecuada", "consecuencia": "Termina enseguida, pero la casa de paja se vuela con el viento." }
+      ],
+      "justificacion": { "pregunta": "¿Por qué elegiste esa opción?", "opciones": [
+       { "fig": "tres", "txt": "Porque entre varios se trabaja más rápido.", "coherente_con": ["a"] },
+       { "fig": "ladrillos", "txt": "Porque necesita un material resistente.", "coherente_con": ["a", "b"] },
+       { "fig": "sol", "txt": "Porque hace calor.", "coherente_con": [] }
+      ] } },
+    { "id": "sal-i2", "tipo": "elegir-justificar", "situacion": "El viento sopla fuerte y la puerta de la casa de madera se abre sola. ¿Qué pueden hacer los cerditos?", "fig": "casa", "attrs": { "material": "madera" },
+      "opciones": [
+       { "id": "a", "fig": "martillo", "txt": "Trabar la puerta con una tabla y el martillo.", "clase": "adecuada", "consecuencia": "La puerta queda cerrada y el viento no la abre." },
+       { "id": "b", "fig": "casa", "attrs": { "material": "ladrillos" }, "txt": "Ir todos juntos a la casa de ladrillos.", "clase": "adecuada", "consecuencia": "En la casa de ladrillos el viento no mueve nada." },
+       { "id": "c", "fig": "nube", "txt": "Abrir también las ventanas.", "clase": "no-adecuada", "consecuencia": "Entra todavía más viento." },
+       { "id": "d", "fig": "flor", "attrs": { "color": "sol" }, "txt": "Salir a juntar flores.", "clase": "no-adecuada", "consecuencia": "La puerta sigue abierta." }
+      ],
+      "justificacion": { "pregunta": "¿Por qué elegiste esa opción?", "opciones": [
+       { "fig": "tablas", "txt": "Porque así la puerta queda firme.", "coherente_con": ["a"] },
+       { "fig": "ladrillos", "txt": "Porque los ladrillos aguantan el viento.", "coherente_con": ["b"] },
+       { "fig": "mariposa", "txt": "Porque es divertido.", "coherente_con": [] }
+      ] } }
+   ],
+   "dificil": [
+    { "id": "sal-d1", "tipo": "plan", "situacion": "Los cerditos tienen que construir un refugio para los tres. Elegí los materiales, ordená las tareas y decidí qué hacer si empieza a llover antes de terminar.", "fig": "tres",
+      "materiales": { "consigna": "Elegí los dos materiales que necesitan.", "elegir": 2, "opciones": [
+        { "id": "ladr", "fig": "ladrillos", "txt": "Ladrillos", "ok": true },
+        { "id": "cem", "fig": "balde", "txt": "Cemento", "ok": true },
+        { "id": "paja", "fig": "fardo", "txt": "Paja", "ok": false },
+        { "id": "flor", "fig": "flor", "attrs": { "color": "coral" }, "txt": "Flores", "ok": false } ] },
+      "pasos": { "consigna": "Ordená las tareas: tocá primero la que va primero.", "orden": [
+        { "id": "p1", "fig": "carretilla", "txt": "Juntar los ladrillos" },
+        { "id": "p2", "fig": "ladrillos", "txt": "Levantar las paredes" },
+        { "id": "p3", "fig": "casa", "attrs": { "material": "ladrillos" }, "txt": "Poner el techo" } ] },
+      "imprevisto": { "consigna": "Empieza a llover y el techo no está terminado. ¿Qué hacen?", "fig": "nube", "attrs": { "lluvia": true }, "opciones": [
+        { "id": "a", "fig": "lona", "txt": "Cubrir con una lona y seguir cuando pare.", "clase": "adecuada", "consecuencia": "Las paredes no se mojan y siguen después." },
+        { "id": "b", "fig": "martillo", "txt": "Seguir trabajando bajo la lluvia sin cubrir nada.", "clase": "parcial", "consecuencia": "Avanzan, pero el cemento fresco se moja." },
+        { "id": "c", "fig": "nube", "txt": "Dejar todo y no volver.", "clase": "no-adecuada", "consecuencia": "El refugio queda sin terminar." } ] } },
+    { "id": "sal-d2", "tipo": "plan", "situacion": "Hay que llevar ladrillos hasta un lugar lejos de la casa. Elegí qué usar, ordená los pasos y decidí qué hacer si se pincha la rueda.", "fig": "carretilla",
+      "materiales": { "consigna": "Elegí las dos cosas que sirven para llevarlos.", "elegir": 2, "opciones": [
+        { "id": "carr", "fig": "carretilla", "txt": "Carretilla", "ok": true },
+        { "id": "bald", "fig": "balde", "txt": "Balde", "ok": true },
+        { "id": "para", "fig": "paraguas", "txt": "Paraguas", "ok": false },
+        { "id": "regad", "fig": "regadera", "txt": "Regadera", "ok": false } ] },
+      "pasos": { "consigna": "Ordená los pasos: tocá primero el que va primero.", "orden": [
+        { "id": "p1", "fig": "ladrillos", "txt": "Cargar los ladrillos" },
+        { "id": "p2", "fig": "carretilla", "txt": "Llevar la carretilla hasta el lugar" },
+        { "id": "p3", "fig": "tres", "txt": "Descargar y acomodar los ladrillos" } ] },
+      "imprevisto": { "consigna": "Se pincha la rueda de la carretilla. ¿Qué hacen?", "fig": "carretilla", "opciones": [
+        { "id": "a", "fig": "balde", "txt": "Llevar menos ladrillos por vez en el balde.", "clase": "adecuada", "consecuencia": "Tardan un poco más, pero llegan todos los ladrillos." },
+        { "id": "b", "fig": "tres", "txt": "Cargar todos los ladrillos en brazos de una sola vez.", "clase": "no-adecuada", "consecuencia": "Es demasiado peso: se les caen en el camino." },
+        { "id": "c", "fig": "martillo", "txt": "Pedir ayuda para arreglar la rueda y seguir.", "clase": "adecuada", "consecuencia": "Con la rueda arreglada, siguen como antes." } ] } }
+   ]
+  }
+ }
+}

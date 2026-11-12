@@ -8,3 +8,4 @@ node_modules/
 .DS_Store
 app/dist-explorapalabras/
 app/dist-luci/
+app/dist-cerditos/

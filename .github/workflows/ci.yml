@@ -27,6 +27,8 @@ jobs:
         run: node tests/explorapalabras.test.js && python3 app/build.py --explorapalabras
       - name: Aventura de Luci (FEC-013) · sección 0 (originalidad) y ficha por grado (REQ-CLI-LUC-02)
         run: python3 scripts/originalidad.py && node tests/luci.test.js && python3 app/build.py --luci
+      - name: Los tres cerditos (RT-CER-001) · ficha por grado, banco y registro
+        run: node tests/cerditos.test.js && python3 app/build.py --cerditos
       - name: Instalar navegador de prueba
         run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
       - name: Prueba de punta a punta
@@ -35,7 +37,9 @@ jobs:
           node tests/e2e.js
       - name: Aventura de Luci de punta a punta (archivo suelto)
         run: node tests/luci.e2e.js
+      - name: Los tres cerditos de punta a punta (archivo suelto)
+        run: node tests/cerditos.e2e.js
       - name: Huella del artefacto (manifiesto con la huella de cada archivo y módulo)
         run: sha256sum app/dist/manifiesto.json
       - uses: actions/upload-artifact@v4
-        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/\napp/dist-explorapalabras/\napp/dist-luci/" }
+        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/\napp/dist-explorapalabras/\napp/dist-luci/\napp/dist-cerditos/" }
