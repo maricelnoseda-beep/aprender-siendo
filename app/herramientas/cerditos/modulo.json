@@ -2,173 +2,236 @@
  "id": "cerditos",
  "nombre": "Los tres cerditos",
  "tipo": "herramienta",
- "version": "0.1.0-prueba",
- "fecha": "2026-11-12",
- "origen": "Reelaboración por Estaciones de la supervisora (2026-11-10) y sus decisiones D1–D4 (2026-11-11)",
- "fec": "pendiente: PSP-SR no emitió la FEC",
- "revision_tecnica": "RT-CER-001 v1.1",
- "estado": "borrador: sin aprobación clínica ni técnica · contenido de prueba no validado",
+ "version": "0.2.0-prueba",
+ "fecha": "2026-11-14",
+ "origen": "Reelaboración por Estaciones de la supervisora (2026-11-10), decisiones D1–D7 y FEC-014 v0.2 de PSP-SR (2026-11-12)",
+ "fec": "FEC-014 v0.2",
+ "revision_tecnica": "RT-CER-001 v1.3",
+ "estado": "borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos",
  "activo": true,
- "_nota": "Ficha técnica (modelo institucional de la supervisora, TC-§3.A). Estación, habilidades, grados, apoyos, textos y números son contenido clínico: los propone la supervisora, los valida PSP-SR (RT-CER-001, T1–T9). Los parámetros son propuesta de DEV-IA.",
+ "_nota": "Ficha técnica (modelo institucional de la supervisora, TC-§3.A; CRIT-003 propuesto). Estación, habilidades, grados, apoyos, textos y números salen de la FEC-014 (contenido clínico de PSP-SR, nivel C). DEV-IA solo traduce a parámetros de código lo que la ficha dice.",
  "ficha": {
   "proposito": "Explorar, reconocer, integrar y transferir a partir de un cuento conocido, con propuestas de complejidad graduada y apoyos ajustables.",
-  "habilidad": "Mirar con atención, relacionar dibujos y palabras, ordenar lo que pasó y pensar soluciones.",
-  "para_que_sirve": "Cinco juegos con el cuento de los tres cerditos: buscar en una escena, encontrar parejas, unir dibujos con frases y ordenarlos, armar un rompecabezas y ayudar a los cerditos a resolver situaciones.",
-  "edad": "pendiente de PSP-SR (T8). Prototipo: rutas 6–8 y 9–12; 3–5 y 13–18 no disponibles",
-  "nivel_evidencia": "pendiente de PSP-SR",
-  "rotulo_evidencia": "pendiente de PSP-SR",
-  "fuentes": [],
-  "texto_profesional": "pendiente de PSP-SR",
-  "texto_familia": "pendiente de PSP-SR",
+  "habilidad": "Mirar con atención, relacionar dibujos y palabras, ordenar lo que pasa en el cuento, armar escenas y pensar soluciones.",
+  "para_que_sirve": "Cinco juegos con el cuento de los tres cerditos: buscar en una escena, encontrar parejas, unir escenas con frases y ordenarlas, armar un rompecabezas y ayudar a los cerditos a resolver situaciones.",
+  "texto_familia": "En esta aventura se juega con el cuento de los tres cerditos. Se practica mirar con atención, relacionar dibujos y palabras, ordenar lo que pasa en el cuento, armar escenas y pensar soluciones.",
+  "texto_profesional": "Cinco actividades por Estaciones (E1 a E4) con tres grados y escala de apoyos 0–3 con retiro progresivo. Registro mínimo por ítem, sin puntajes ni comparación con la edad. Nivel C.",
+  "edad": "3 a 12 años (detalle por actividad en rutas). 13 a 18 excluida (D7)",
+  "nivel_evidencia": "C",
+  "rotulo_evidencia": "Basada en práctica clínica, con evidencia limitada",
+  "fuentes": [
+   "Pico et al. (2021). Language, Speech, and Hearing Services in Schools, 52(4), 1109–1126. DOI 10.1044/2021_LSHSS-20-00160 (A, con adulto)",
+   "Mol, Bus y de Jong (2009). Review of Educational Research, 79(2), 979–1007. DOI 10.3102/0034654309332561 (A, con adulto)",
+   "Woods et al. (2013). Acta Psychologica, 143(2), 191–199. DOI 10.1016/j.actpsy.2013.03.008 (B)",
+   "Levine, Ratliff, Huttenlocher y Cannon (2012). Early puzzle play (B; revista y DOI a verificar por PSP-SR)",
+   "Wood, Bruner y Ross (1976). Journal of Child Psychology and Psychiatry, 17(2), 89–100 (marco teórico)",
+   "Belland et al. (2017). Review of Educational Research, 87(2), 309–344 (A, STEM)",
+   "Mueller y Dweck (1998). Journal of Personality and Social Psychology, 75(1), 33–52 (B)",
+   "Melby-Lervåg y Hulme (2013). Developmental Psychology. DOI 10.1037/a0028228 (A)",
+   "Sala y Gobet (2017). Current Directions in Psychological Science, 26(6), 515–520. DOI 10.1177/0963721417712760 (A)"
+  ],
   "declaracion_transferencia": {
-   "transferir": "Transferir describe lo que pide la actividad: aplicar lo aprendido a situaciones nuevas dentro de la app. No garantiza que la persona lo use fuera de la app. (Texto de prueba; lo redacta PSP-SR, RT-EST-001 P5.)"
+   "A": "La práctica de estructura del relato con un adulto tiene evidencia A (Pico et al., 2021). Dentro de la app es nivel C: no se garantiza el mismo efecto.",
+   "B": "Se practica dentro de la app. No hay evidencia de que mejore por sí sola habilidades fuera de la app.",
+   "transferir": "Transferir describe lo que pide la actividad: aplicar una estrategia a situaciones nuevas dentro de la app. No garantiza que la persona la use fuera de la app."
   },
-  "no_es": "No es un test, no mide ni ubica a la persona en una Estación y no reemplaza la enseñanza explícita.",
-  "autor": "Supervisora (diseño) · PSP-SR (validación pendiente)",
-  "revisor_clinico": ""
+  "no_es": "No es un test de comprensión, de atención ni de motricidad; no ubica a la persona en una Estación y no reemplaza la enseñanza explícita de lectura ni la intervención en lenguaje con un profesional.",
+  "limitaciones": "Las actividades 1 y 4 no son accesibles sin visión. La 3 (en audio) y la 5 (con descripciones) pueden serlo en parte. Adaptación auditiva pendiente (P5 de la FEC-014).",
+  "autor": "Lic. M. G. Noseda, Mat. 101 (diseño pedagógico) · PSP-SR (FEC-014)",
+  "revisor_clinico": "Lic. M. G. Noseda (pendiente)"
  },
  "decisiones_supervisora": {
-  "_nota": "RT-CER-001 v1.1, Parte D (2026-11-11). Decisiones de diseño; no son el registro de aprobación de una versión.",
+  "_nota": "Decisiones de diseño (RT-CER-001 Parte D y FEC-014 §15). No son el registro de aprobación de una versión.",
   "D1": "Justificar: elegir entre opciones con dibujos. Sin texto libre ni voz (T01, A13).",
-  "D2": "El lobo sopla las casas sin peligro para los cerditos. Final: el lobo se quema y sale corriendo. Tratamiento en 3–5 pendiente de PSP-SR: hasta entonces la herramienta no se ofrece en 3–5.",
+  "D2": "El lobo sopla las casas sin peligro para los cerditos. Final 6–12: el lobo se quema la cola y sale corriendo.",
   "D3": "Ilustraciones originales del portal. Ninguna imagen de terceros.",
-  "D4": "Tarjetas y modelo se tapan al tocar «Ya miré». Sin reloj."
+  "D4": "Tarjetas y modelo se tapan al tocar «Ya miré». Sin reloj.",
+  "D5": "Final 3–5: «sintió que estaba muy caliente y se fue corriendo», sin mostrar la quemadura, la chimenea ni la olla.",
+  "D6": "La Act. 5 se titula «¡Ayudemos a los cerditos!».",
+  "D7": "La aventura se excluye de la ruta 13–18."
  },
  "vocabulario_dimensiones_propuesto": {
-  "_nota": "Dimensiones que no están en la lista cerrada de CRIT-EST-001 §4. Pregunta T3 de RT-CER-001. Ninguna es cantidad-estimulos.",
-  "sistema-representacion": "Cómo se presentan los elementos que se relacionan (imagen-imagen, imagen-palabra, palabra-palabra)",
-  "semejanza-distractores": "Cuánto se parecen los distractores al objetivo (ya propuesta en RT-LUC-001, T1)"
+  "_nota": "La lista cerrada del §4 no se edita (FEC-014 5.3, T3). sistema-representacion es solo etiqueta técnica secundaria; el cambio se declara como grado-abstraccion.",
+  "semejanza-distractores": "Cuánto se parecen los distractores al objetivo (propuesta de RT-LUC-001, T1; la FEC-014 la usa en Act. 1 y 4)"
+ },
+ "habilidades_nuevas_propuestas": {
+  "_nota": "FEC-014 5.2: provisorias hasta la tabla de anclajes EST-07 y la aprobación de la supervisora.",
+  "relaciones-espaciales": "Percepción y atención",
+  "comprension-de-enunciados": "Lenguaje oral (y lectura en rutas que leen)",
+  "secuenciacion-narrativa": "Lenguaje oral"
  },
  "apoyos_escala": {
-  "_nota": "Escala común propuesta por la supervisora (TC-§3.B). Qué apoyo va en cada nivel y la regla de retiro: pregunta T2.",
+  "_nota": "FEC-014 5.4 (propuesta clínica para el núcleo; rige solo para esta aventura hasta CRIT-003). Implementación: Motor.siguienteApoyo, Motor.sinAyuda y Motor.registro.",
   "niveles": {
-   "0": "Resolución autónoma",
-   "1": "Pista general: orientación verbal o visual breve",
-   "2": "Ayuda específica: se señala una característica relevante o se reducen las alternativas",
-   "3": "Modelado o resolución compartida: la app muestra cómo empezar o resuelve un paso"
+   "0": "Sin apoyo de aprendizaje. Los apoyos de acceso (audio, repetir, zoom, tiempo, sin arrastre) no suben el nivel",
+   "1": "Pista general: recordar la estrategia, volver a ver el modelo o la lista",
+   "2": "Ayuda específica: se reduce el campo o las opciones",
+   "3": "Demostración: la app resuelve un paso y explica por qué; después sigue la persona"
   },
   "retiro": {
-   "_nota": "Propuesta de DEV-IA (T2): el profesional puede fijar un apoyo inicial; si el ítem se resuelve sin errores, el siguiente arranca un nivel más abajo. Las ayudas se ofrecen, nunca se imponen.",
-   "baja_por_item_sin_errores": 1
+   "regla": "si el ítem terminó con apoyo_max 2 o 3, el siguiente de la misma actividad arranca con un nivel menos; si terminó con 1, arranca en 0 con el botón de ayuda destacado; nunca sube solo",
+   "texto_adulto": "Después, cada ejercicio arranca con un nivel menos que el máximo que se usó en el anterior, hasta llegar a 0. Las ayudas se ofrecen; nunca se imponen."
   },
-  "sin_ayuda_para_m10_hasta": 0,
-  "lectura_en_voz_alta": "se registra aparte y no sube el nivel de apoyo hasta que PSP-SR responda T5"
+  "sin_ayuda_para_m10": "apoyo_max 0 (REQ-CLI-CER-08)",
+  "apoyos_de_acceso": ["repetir", "audio", "por-que-van-juntas", "zoom", "tiempo", "tocar-y-ubicar"]
  },
  "registro": {
-  "_nota": "Registro mínimo (TC-§3.C). Por ítem, calculado en código, sin modelo de lenguaje. Solo datos sintéticos fuera de producción. Quien juega no lo ve; la familia en modo libre no ve grados ni apoyos (M05-2, A10).",
-  "campos": ["actividad", "estacion", "grado", "item", "resultado", "etapas", "intentos", "errores", "apoyos", "apoyo_max", "lectura", "autocorreccion", "autonomia", "ms"],
-  "autonomia": ["autonomo", "con-pista", "con-ayuda-especifica", "con-demostracion"]
+  "_nota": "FEC-014 §8. Por ítem, calculado en código, sin modelo de lenguaje. Solo datos sintéticos fuera de producción. Quien juega no lo ve; la familia no ve grados, aciertos, apoyos, autonomía ni tiempo de resolución (REQ-CLI-CER-13).",
+  "campos": ["actividad", "estacion", "grado", "item", "habilidad", "resultado", "etapas", "intentos", "errores", "apoyos", "apoyo_inicial", "apoyo_max", "audio_objetivo", "modalidad", "autocorreccion", "autonomia", "ms"],
+  "autonomia": ["autonomo", "con-pista", "con-ayuda-especifica", "con-demostracion"],
+  "leyenda_autonomia": "Referencia orientativa sobre los apoyos usados en esta actividad. No describe a la persona ni es una evaluación diagnóstica.",
+  "leyenda_tiempo": "El tiempo se registra como contexto. No cuenta como error ni indica por sí solo una dificultad.",
+  "vista_tiempo": "mediana por actividad y grado; detalle por ítem solo a pedido; sin colores (REQ-CLI-CER-14)"
  },
  "criterio_acierto": {
-  "_nota": "Qué cuenta como acierto para M10. Propuesta de DEV-IA, REVISAR PSP-SR.",
+  "_nota": "Qué cuenta como acierto para M10. Propuesta de DEV-IA; la FEC-014 no lo define: REVISAR PSP-SR.",
   "detectives": "sin errores",
   "memotest": "errores no mayores que la cantidad de parejas",
-  "escena_frase": "sin errores en las dos etapas (y justificación coherente en Difícil)",
-  "rompecabezas": "sin piezas mal ubicadas al verificar",
-  "salvemos": "primera respuesta adecuada (y justificación coherente cuando corresponde)"
+  "escena_frase": "cada etapa por separado: asociar sin errores; ordenar sin errores (y justificación adecuada al primer intento en Difícil)",
+  "rompecabezas": "sin piezas mal ubicadas",
+  "ayudemos": "primera elección adecuada en cada decisión, pasos sin errores y justificación adecuada al primer intento"
  },
- "m10": { "_nota": "Reglas M10 de la beta 2 (6.10), dentro de cada actividad. Nunca cambia de actividad ni de Estación sola.", "ventana": 10, "minimo": 5, "subir_aciertos": 0.85, "subir_sin_ayuda": 0.7, "mantener_desde": 0.6, "errores_seguidos": 3, "pasos_por_sesion": 1 },
+ "m10": { "_nota": "Reglas M10 de la beta 2 (6.10), dentro de cada actividad y por habilidad (FEC-014 5.9). Nunca cambia de actividad ni de Estación sola. El tiempo no interviene (M10-7).", "ventana": 10, "minimo": 5, "subir_aciertos": 0.85, "subir_sin_ayuda": 0.7, "mantener_desde": 0.6, "errores_seguidos": 3, "pasos_por_sesion": 1 },
  "rutas": {
-  "6-8": { "estilo": "infantil", "audio": "por-defecto", "items_por_ronda": 3 },
-  "9-12": { "estilo": "infantil", "audio": "opcional", "items_por_ronda": 3 }
+  "3-5": { "estilo": "infantil", "lee": false, "audio": "por-defecto", "con_adulto": true, "items_por_ronda": 3, "sesion_min": 12, "sesion_rango": "10 a 15 min, con una persona adulta", "tolerancia_px": 90, "final_cuento": "3-5",
+   "relaciones": ["arriba", "abajo", "al-lado"],
+   "actividades": { "detectives": ["facil", "intermedio", "dificil"], "memotest": ["facil", "intermedio", "dificil"], "escena_frase": ["facil"], "rompecabezas": ["facil", "intermedio"], "ayudemos": [] } },
+  "6-8": { "estilo": "infantil", "lee": true, "audio": "por-defecto", "items_por_ronda": 3, "sesion_min": 20, "sesion_rango": "20 min", "tolerancia_px": 30, "final_cuento": "6-12",
+   "relaciones": ["arriba", "abajo", "al-lado", "detras"],
+   "actividades": { "detectives": ["facil", "intermedio", "dificil"], "memotest": ["facil", "intermedio", "dificil"], "escena_frase": ["facil", "intermedio", "dificil"], "rompecabezas": ["facil", "intermedio", "dificil"], "ayudemos": ["facil", "intermedio", "dificil"] } },
+  "9-12": { "estilo": "infantil", "lee": true, "audio": "opcional", "items_por_ronda": 3, "sesion_min": 28, "sesion_rango": "25 a 30 min", "tolerancia_px": 30, "final_cuento": "6-12",
+   "relaciones": ["arriba", "abajo", "al-lado", "detras"],
+   "actividades": { "detectives": ["facil", "intermedio", "dificil"], "memotest": ["facil", "intermedio", "dificil"], "escena_frase": ["facil", "intermedio", "dificil"], "rompecabezas": ["facil", "intermedio", "dificil"], "ayudemos": ["facil", "intermedio", "dificil"] } }
  },
- "rutas_no_disponibles": {
-  "3-5": "D2 y M03-4: falta que PSP-SR defina el tratamiento del lobo y del final (T8). Rige lo más restrictivo.",
-  "13-18": "Falta definir con PSP-SR si el cuento es adecuado y con qué estética (A15)."
+ "rutas_excluidas": {
+  "13-18": "13 a 18 años: excluida por decisión de la supervisora (D7). Un cuento infantil tradicional infantiliza a un adolescente aunque cambie la estética."
  },
  "estaciones": {
   "criterio": "CRIT-EST-001 v1.0",
-  "estado_clinico": "propuesto por la supervisora · pendiente de validación de PSP-SR",
+  "estado_clinico": "FEC-014 v0.2 de PSP-SR · pendiente de registro de aprobación",
   "variantes": [
    {
     "actividad": "detectives", "titulo": "Detectives del cuento", "estacion": "explorar",
     "proposito": "Explorar escenas del cuento, reconocer elementos y descubrir información visual relevante.",
-    "habilidades": ["atencion-focalizada", "atencion-sostenida", "exploracion-visual", "reconocimiento-visual", "discriminacion-visual", "seguimiento-de-consignas"],
-    "habilidades_secundarias": ["complejidad-de-relaciones"],
+    "habilidad_referencia": "reconocimiento-visual",
+    "habilidades": ["reconocimiento-visual"],
+    "habilidades_secundarias": ["seguimiento-de-consignas", "discriminacion-visual", "relaciones-espaciales", "atencion-sostenida"],
+    "estrategia": "Primero miro cómo es lo que busco. Después recorro la escena de a una parte.",
     "grados": {
-     "facil": { "describe": "Escena con pocos elementos; encontrar un personaje conocido; consigna breve.", "cambia_respecto_al_anterior": [], "parametros": { "elementos": 4, "pasos": 1 } },
-     "intermedio": { "describe": "Más elementos; dos objetivos en orden; diferenciar por color o material.", "cambia_respecto_al_anterior": ["cantidad-estimulos", "cantidad-pasos", "semejanza-distractores"], "parametros": { "elementos": 10, "pasos": 2 } },
-     "dificil": { "describe": "Buscar por relación espacial y por función, con distractores.", "cambia_respecto_al_anterior": ["complejidad-relaciones", "grado-abstraccion"], "parametros": { "elementos": 11, "pasos": 1, "relacion": true } }
+     "facil": { "describe": "8 a 12 elementos; distractores distintos en forma y color; modelo visible todo el ítem; consigna de 1 paso.", "cambia_respecto_al_anterior": [], "parametros": { "elementos": [8, 12], "pasos": 1, "modelo": "permanente" } },
+     "intermedio": { "describe": "15 a 20 elementos; distractores que comparten un rasgo; dos pasos; modelo hasta «Ya miré» (D4).", "cambia_respecto_al_anterior": ["cantidad-estimulos", "semejanza-distractores", "cantidad-pasos"], "parametros": { "elementos": [15, 20], "pasos": 2, "modelo": "hasta-ya-mire" } },
+     "dificil": { "describe": "20 a 30 elementos; relación espacial (en 3–5 solo arriba, abajo, al lado) o función evidente; objetivo en parte tapado.", "cambia_respecto_al_anterior": ["complejidad-relaciones", "grado-abstraccion"], "parametros": { "elementos": [20, 30], "pasos": 1, "modelo": "sin-modelo" } }
     },
-    "dimensiones_que_cambian": ["cantidad-estimulos", "cantidad-pasos", "semejanza-distractores", "complejidad-relaciones", "grado-abstraccion"],
-    "apoyos": { "1": "repetir la consigna y pista verbal", "2": "resaltar la zona y reducir estímulos", "3": "señalar el objetivo (modelado)" },
+    "dimensiones_que_cambian": ["cantidad-estimulos", "semejanza-distractores", "cantidad-pasos", "complejidad-relaciones", "grado-abstraccion"],
+    "apoyos": { "1": "«Mirá otra vez cómo es»: pista o volver a ver el modelo", "2": "resaltar la parte de la escena donde está", "3": "demostración: se marca el objetivo y se explica por qué" },
     "modalidad_respuesta": ["tocar", "teclado"],
     "adaptaciones": ["voz", "pantalla-completa", "tiempo-sin-limite"],
-    "progresion": "De la identificación directa a la búsqueda selectiva y a la exploración guiada por características y relaciones.",
-    "indicadores": ["errores", "apoyo_max", "autocorreccion", "ms"]
+    "progresion": "De la identificación directa a la búsqueda selectiva y a la exploración guiada por relaciones y funciones.",
+    "indicadores": ["errores", "apoyo_max", "autocorreccion", "ms"],
+    "transferencia": "B",
+    "idea_fuera": "Uno esconde una cuchara a la vista y le da una pista de lugar: arriba, abajo, al lado. El otro la encuentra.",
+    "limitaciones": "No accesible sin visión.",
+    "nota": "Difícil por función solo con objetos de función muy evidente (FEC-014 5.2); si la supervisora prefiere, pasa a E2."
    },
    {
     "actividad": "memotest", "titulo": "Memotest: descubrimos las relaciones", "estacion": "reconocer",
     "proposito": "Reconocer, discriminar y establecer relaciones entre imágenes, palabras y conceptos del cuento.",
-    "habilidades": ["memoria-visual", "atencion-sostenida", "discriminacion-visual", "reconocimiento-de-palabras", "asociacion-imagen-palabra", "relaciones-semanticas"],
-    "habilidades_secundarias": ["memoria-de-trabajo"],
+    "habilidad_referencia": { "3-5": "asociacion-visual-auditiva", "*": "asociacion-imagen-palabra" },
+    "habilidades": ["asociacion-imagen-palabra", "asociacion-visual-auditiva"],
+    "habilidades_secundarias": ["reconocimiento-visual", "reconocimiento-de-palabras", "memoria-de-trabajo"],
+    "lectura": { "grados": ["intermedio", "dificil"], "escrita": "reconocimiento-de-palabras", "oral": "asociacion-visual-auditiva" },
+    "estrategia": "Antes de dar vuelta, me pregunto con qué va esta tarjeta.",
+    "etiqueta_tecnica": "sistema-representacion",
     "grados": {
-     "facil": { "describe": "Imagen-imagen, 3 parejas, todas visibles hasta «Ya miré».", "cambia_respecto_al_anterior": [], "parametros": { "parejas": 3, "tipo": "imagen-imagen", "vista_inicial": true } },
-     "intermedio": { "describe": "Imagen-palabra, 4 parejas, palabras parecidas como distractores (paja, pala).", "cambia_respecto_al_anterior": ["cantidad-estimulos", "sistema-representacion", "semejanza-distractores"], "parametros": { "parejas": 4, "tipo": "imagen-palabra", "vista_inicial": true } },
-     "dificil": { "describe": "Palabra-palabra con relaciones semánticas o funcionales (lobo-soplar).", "cambia_respecto_al_anterior": ["sistema-representacion", "complejidad-relaciones", "grado-abstraccion"], "parametros": { "parejas": 4, "tipo": "palabra-palabra", "vista_inicial": true } }
+     "facil": { "describe": "Imagen e imagen idéntica; 3 a 4 pares; todas visibles hasta «Ya miré»; las encontradas quedan boca arriba.", "cambia_respecto_al_anterior": [], "parametros": { "parejas": [3, 4], "tipo": "imagen-imagen" } },
+     "intermedio": { "describe": "Imagen y palabra (en 3–5: imagen y silueta); 4 a 5 pares; palabras de 1 a 3 sílabas con audio.", "cambia_respecto_al_anterior": ["grado-abstraccion", "complejidad-relaciones"], "parametros": { "parejas": [4, 5], "tipo": { "3-5": "imagen-silueta", "*": "imagen-palabra" }, "silabas_max": 3 } },
+     "dificil": { "describe": "Palabra y palabra con relación semántica o funcional (en 3–5: imagen e imagen funcional); 5 a 6 pares; «¿Por qué van juntas?».", "cambia_respecto_al_anterior": ["complejidad-relaciones", "grado-abstraccion"], "parametros": { "parejas": [5, 6], "tipo": { "3-5": "imagen-funcional", "*": "palabra-palabra" }, "porque": true } }
     },
-    "dimensiones_que_cambian": ["cantidad-estimulos", "sistema-representacion", "semejanza-distractores", "complejidad-relaciones", "grado-abstraccion"],
-    "apoyos": { "1": "volver a mirar todas las tarjetas (hasta «Ya miré») y pista semántica en Difícil", "2": "marcar tres tarjetas entre las que hay una pareja", "3": "dar vuelta una pareja juntos (modelado)" },
+    "dimensiones_que_cambian": ["grado-abstraccion", "complejidad-relaciones"],
+    "apoyos": { "1": "«¿Con qué va esta tarjeta?» y volver a ver todas hasta «Ya miré»", "2": "se marcan tres tarjetas entre las que hay una pareja", "3": "demostración: se da vuelta una pareja y se explica por qué van juntas" },
     "modalidad_respuesta": ["tocar", "teclado"],
     "adaptaciones": ["voz", "lectura-en-voz-alta", "tiempo-sin-limite"],
     "progresion": "Del reconocimiento de estímulos idénticos a la asociación entre sistemas de representación y relaciones conceptuales.",
-    "indicadores": ["intentos", "errores", "apoyo_max", "lectura", "ms"]
+    "indicadores": ["intentos", "errores", "apoyo_max", "audio_objetivo", "ms"],
+    "transferencia": "B",
+    "idea_fuera": "Busquen en la cocina dos cosas que van juntas (taza y plato, olla y tapa) y digan por qué.",
+    "limitaciones": "No accesible sin visión en esta versión."
    },
    {
     "actividad": "escena_frase", "titulo": "Escena y frase: organizamos el cuento", "estacion": "integrar",
     "proposito": "Relacionar información visual y lingüística, comprender acontecimientos y organizar una secuencia narrativa.",
-    "habilidades": ["comprension-de-frases", "memoria-de-trabajo", "organizacion-temporal", "secuenciacion", "planificacion", "causa-consecuencia"],
-    "habilidades_secundarias": ["asociacion-imagen-palabra"],
+    "habilidad_referencia": "secuenciacion-narrativa",
+    "habilidades": ["secuenciacion-narrativa", "comprension-de-enunciados"],
+    "habilidades_secundarias": ["comprension-de-enunciados", "comprension-de-consignas-escritas", "organizacion-y-planificacion"],
     "etapas": ["asociar", "ordenar"],
+    "etapas_habilidad": { "asociar": "comprension-de-enunciados", "ordenar": "secuenciacion-narrativa" },
+    "lectura": { "etapa": "asociar", "escrita": "comprension-de-consignas-escritas", "oral": "comprension-de-enunciados" },
+    "estrategia": "Leo o escucho la frase, busco la escena que dice eso, y después pienso qué pasó primero y qué pasó por eso.",
     "grados": {
-     "facil": { "describe": "3 escenas y 3 frases literales; ordenar con referencia de inicio y final.", "cambia_respecto_al_anterior": [], "parametros": { "escenas": 3, "referencia_inicio_fin": true, "justificar": false } },
-     "intermedio": { "describe": "5 escenas con frases con información adicional; ordenar sin referencia.", "cambia_respecto_al_anterior": ["cantidad-estimulos", "complejidad-consignas", "disponibilidad-apoyos"], "parametros": { "escenas": 5, "referencia_inicio_fin": false, "justificar": false } },
-     "dificil": { "describe": "7 u 8 escenas con frases no literales y de causa-consecuencia; justificar con opciones con dibujos (D1).", "cambia_respecto_al_anterior": ["complejidad-consignas", "complejidad-relaciones", "grado-abstraccion"], "parametros": { "escenas": 8, "referencia_inicio_fin": false, "justificar": true } }
+     "facil": { "describe": "4 escenas con pista temporal visible; inicio y final ya ubicados; frases literales de hasta 6 palabras.", "cambia_respecto_al_anterior": [], "parametros": { "escenas": 4, "fijas": "inicio-y-final", "palabras_max": 6, "pista_temporal": true, "verificar": "al-poner" } },
+     "intermedio": { "describe": "5 escenas; solo el inicio ubicado; frases de hasta 10 palabras con información adicional y una frase distractora parecida.", "cambia_respecto_al_anterior": ["cantidad-estimulos", "complejidad-consignas", "disponibilidad-apoyos"], "parametros": { "escenas": 5, "fijas": "inicio", "palabras_max": 10, "distractor": true, "verificar": "al-poner" } },
+     "dificil": { "describe": "6 escenas sin referencia; frases de causa y consecuencia; una justificación con 3 opciones con dibujos (D1).", "cambia_respecto_al_anterior": ["complejidad-relaciones", "grado-abstraccion", "disponibilidad-apoyos"], "parametros": { "escenas": 6, "fijas": "ninguna", "justificar": true, "verificar": "al-final" } }
     },
     "dimensiones_que_cambian": ["cantidad-estimulos", "complejidad-consignas", "disponibilidad-apoyos", "complejidad-relaciones", "grado-abstraccion"],
-    "apoyos": { "1": "leer la frase en voz alta y pista temporal", "2": "resaltar la palabra clave o ubicar la primera escena", "3": "resolver una pareja o una posición juntos (modelado)" },
-    "modalidad_respuesta": ["tocar", "teclado"],
-    "adaptaciones": ["voz", "lectura-en-voz-alta", "tiempo-sin-limite"],
+    "apoyos": { "1": "recordar la estrategia (volver a escuchar la frase es acceso: no sube el nivel, REQ-CLI-CER-12)", "2": "quedan dos escenas posibles o se marca el lugar de una", "3": "demostración: se ubica una frase o una escena y se explica" },
+    "modalidad_respuesta": ["tocar", "tocar-y-ubicar", "teclado"],
+    "adaptaciones": ["voz", "lectura-en-voz-alta", "frases-en-audio-3-5", "tiempo-sin-limite"],
     "progresion": "De la asociación directa a la comprensión de frases y a la organización narrativa con razonamiento temporal y causal.",
-    "indicadores": ["etapas.asociar", "etapas.ordenar", "etapas.justificacion", "apoyo_max", "lectura", "ms"]
+    "indicadores": ["etapas.asociar", "etapas.ordenar", "etapas.justificacion", "apoyo_max", "audio_objetivo", "ms"],
+    "transferencia": "A",
+    "transferencia_nota": "Variante A para la parte narrativa (práctica con adulto, Pico et al., 2021); dentro de la app es C.",
+    "idea_fuera": "Cuenten entre todos el cuento con tres dibujos o tres objetos, y pregunten qué pasó primero.",
+    "limitaciones": "En 3–5 las frases van en audio; puede ser accesible en parte sin visión (adaptación pendiente, P5)."
    },
    {
     "actividad": "rompecabezas", "titulo": "Construimos el cuento", "estacion": "integrar",
     "proposito": "Reconstruir una escena del cuento a partir de sus partes, integrando percepción, organización espacial y planificación.",
-    "habilidades": ["analisis-visual", "organizacion-espacial", "atencion", "memoria-de-trabajo", "planificacion", "resolucion-de-problemas", "flexibilidad-cognitiva"],
-    "habilidades_secundarias": ["coordinacion-visomotora"],
+    "habilidad_referencia": "organizacion-y-planificacion",
+    "habilidades": ["organizacion-y-planificacion"],
+    "habilidades_secundarias": ["relaciones-espaciales", "discriminacion-visual", "memoria-de-trabajo", "autocorreccion"],
+    "estrategia": "Miro el modelo, elijo por dónde empiezo (los bordes, los personajes) y reviso si cada pieza encaja con la de al lado.",
     "grados": {
-     "facil": { "describe": "4 piezas, modelo visible y lugar marcado; la pieza solo entra donde va.", "cambia_respecto_al_anterior": [], "parametros": { "piezas": 4, "modelo": "visible", "guia": true, "verificar": "al-poner" } },
-     "intermedio": { "describe": "6 piezas, modelo a demanda, sin lugar marcado.", "cambia_respecto_al_anterior": ["cantidad-estimulos", "disponibilidad-apoyos", "necesidad-planificacion"], "parametros": { "piezas": 6, "modelo": "a-demanda", "guia": false, "verificar": "al-poner" } },
-     "dificil": { "describe": "12 piezas parecidas; se arma todo y se revisa al final, con posibilidad de corregir.", "cambia_respecto_al_anterior": ["cantidad-estimulos", "semejanza-distractores", "necesidad-planificacion"], "parametros": { "piezas": 12, "modelo": "a-demanda", "guia": false, "verificar": "al-final" } }
+     "facil": { "describe": "4 a 6 piezas en grilla regular; modelo permanente al costado; la pieza solo entra donde va.", "cambia_respecto_al_anterior": [], "parametros": { "piezas": [4, 6], "modelo": "permanente", "verificar": "al-poner" } },
+     "intermedio": { "describe": "9 piezas (en 3–5, hasta 6) con partes parecidas; modelo al inicio hasta «Ya miré» y después a demanda (nivel 1).", "cambia_respecto_al_anterior": ["semejanza-distractores", "disponibilidad-apoyos"], "parametros": { "piezas": { "3-5": [4, 6], "*": [9, 9] }, "modelo": "inicio-y-a-demanda", "verificar": "al-final" } },
+     "dificil": { "describe": "12 piezas (16 en 9–12); sin modelo (verlo es nivel 2); antes de empezar se elige un plan.", "cambia_respecto_al_anterior": ["necesidad-planificacion", "disponibilidad-apoyos"], "parametros": { "piezas": { "6-8": [12, 12], "9-12": [16, 16] }, "modelo": "sin-modelo", "verificar": "al-final", "plan": true } }
     },
-    "dimensiones_que_cambian": ["cantidad-estimulos", "disponibilidad-apoyos", "necesidad-planificacion", "semejanza-distractores"],
-    "apoyos": { "1": "ver el modelo (hasta «Ya miré»)", "2": "marcar las piezas mal ubicadas o el lugar de una pieza", "3": "ubicar una pieza juntos (modelado)" },
-    "modalidad_respuesta": ["tocar-pieza-y-lugar", "teclado"],
-    "adaptaciones": ["voz", "tiempo-sin-limite"],
+    "dimensiones_que_cambian": ["semejanza-distractores", "disponibilidad-apoyos", "necesidad-planificacion"],
+    "apoyos": { "1": "ver el modelo (Intermedio) o recordar el plan", "2": "marcar el lugar de una pieza o las mal ubicadas; en Difícil, ver el modelo", "3": "demostración: se ubica una pieza" },
+    "modalidad_respuesta": ["tocar-y-ubicar", "arrastre", "teclado"],
+    "_nota_t7": "No se declara coordinación visomotora en ninguna modalidad (FEC-014 5.2, REQ-CLI-CER-10). La modalidad se registra como contexto.",
+    "adaptaciones": ["voz", "tiempo-sin-limite", "tolerancia-amplia-3-5"],
     "progresion": "De la colocación guiada a la organización autónoma, con búsqueda, comparación y autocorrección.",
-    "indicadores": ["errores", "autocorreccion", "apoyo_max", "ms"],
-    "_nota_t7": "Sin arrastre en el prototipo (WCAG 2.5.7). Si se usa la alternativa sin arrastre, ¿se declara coordinación visomotora? Pregunta T7."
+    "indicadores": ["errores", "autocorreccion", "apoyo_max", "modalidad", "ms"],
+    "transferencia": "B",
+    "idea_fuera": "Armen un rompecabezas de cartón o una torre con cajas y vean cuál queda más firme.",
+    "limitaciones": "No accesible sin visión."
    },
    {
-    "actividad": "salvemos", "titulo": "¡Salvemos a los cerditos!", "estacion": "transferir",
+    "actividad": "ayudemos", "titulo": "¡Ayudemos a los cerditos!", "estacion": "transferir",
     "proposito": "Resolver situaciones nuevas usando lo aprendido en el cuento.",
-    "habilidades": ["razonamiento-logico", "resolucion-de-problemas", "planificacion", "flexibilidad-cognitiva", "generalizacion", "anticipacion-de-consecuencias", "toma-de-decisiones", "autocorreccion"],
-    "habilidades_secundarias": ["comprension-de-frases"],
+    "habilidad_referencia": "resolucion-de-problemas",
+    "habilidades": ["resolucion-de-problemas"],
+    "habilidades_secundarias": ["organizacion-y-planificacion", "flexibilidad-cognitiva", "autocorreccion", "transferencia-a-situaciones-nuevas"],
+    "estrategia": "Pienso qué necesito, comparo las opciones, pruebo, miro qué pasó y, si hace falta, cambio.",
     "grados": {
-     "facil": { "describe": "Situación parecida al cuento, dos alternativas con dibujo, consecuencia visible.", "cambia_respecto_al_anterior": [], "parametros": { "alternativas": 2, "justificar": false, "plan": false } },
-     "intermedio": { "describe": "Situación nueva que combina conocimientos, 3 o 4 alternativas y justificación con dibujos (D1).", "cambia_respecto_al_anterior": ["cantidad-estimulos", "complejidad-relaciones", "grado-abstraccion"], "parametros": { "alternativas": 4, "justificar": true, "plan": false } },
-     "dificil": { "describe": "Plan de varios pasos: elegir materiales, ordenar tareas, resolver un imprevisto y revisar el plan.", "cambia_respecto_al_anterior": ["cantidad-pasos", "necesidad-planificacion", "complejidad-relaciones"], "parametros": { "pasos_del_plan": 3, "imprevisto": true, "revision": true } }
+     "facil": { "describe": "Situación del cuento; 1 condición; 3 alternativas con consecuencia; ordenar 2 pasos.", "cambia_respecto_al_anterior": [], "parametros": { "condiciones": [1, 1], "alternativas": [3, 3], "pasos": [2, 2] } },
+     "intermedio": { "describe": "Situación nueva fuera del cuento; 2 condiciones; 3 o 4 alternativas; ordenar 3 a 4 pasos.", "cambia_respecto_al_anterior": ["cantidad-estimulos", "cantidad-pasos", "grado-abstraccion"], "parametros": { "condiciones": [2, 2], "alternativas": [3, 4], "pasos": [3, 4] } },
+     "dificil": { "describe": "Situación nueva con imprevisto que reabre la decisión; plan previo entre 2 o 3; justificación con dibujos (D1).", "cambia_respecto_al_anterior": ["necesidad-planificacion", "complejidad-relaciones", "grado-abstraccion"], "parametros": { "condiciones": [2, 3], "plan": [2, 3], "justificar": true } }
     },
-    "dimensiones_que_cambian": ["cantidad-estimulos", "complejidad-relaciones", "grado-abstraccion", "cantidad-pasos", "necesidad-planificacion"],
-    "apoyos": { "1": "pregunta orientadora", "2": "reducir alternativas (se quita una no adecuada)", "3": "resolver un paso juntos (modelado)" },
+    "dimensiones_que_cambian": ["cantidad-estimulos", "cantidad-pasos", "grado-abstraccion", "necesidad-planificacion", "complejidad-relaciones"],
+    "nota_dimensiones": "La flexibilidad (cambio de condiciones) se declara como complejidad-relaciones: no está en la lista cerrada.",
+    "apoyos": { "1": "volver a ver las condiciones", "2": "se descarta una alternativa no adecuada", "3": "demostración: se marca la alternativa adecuada o el paso que sigue y se explica" },
     "modalidad_respuesta": ["tocar", "teclado"],
     "adaptaciones": ["voz", "lectura-en-voz-alta", "tiempo-sin-limite"],
-    "progresion": "De problemas familiares con alternativas visibles a planificar soluciones en situaciones nuevas y autocorregirse.",
+    "progresion": "De problemas familiares con alternativas visibles a planificar soluciones en situaciones nuevas y revisar la elección.",
     "indicadores": ["resultado", "etapas", "autocorreccion", "apoyo_max", "ms"],
-    "transferencia": "ver ficha.declaracion_transferencia.transferir"
+    "transferencia": "B",
+    "texto_transferir": "Transferir describe lo que pide la actividad: aplicar una estrategia a situaciones nuevas dentro de la app. No garantiza que la persona la use fuera de la app.",
+    "idea_fuera": "Con almohadones o cajas, armen un refugio para un muñeco. ¿Qué pasa si lo empujan suave? ¿Cómo lo hacen más firme?",
+    "limitaciones": "Con descripciones puede ser accesible en parte sin visión (adaptación pendiente, P5).",
+    "no_se_publica_en": ["3-5"]
    }
   ]
  },
- "originalidad": "Ilustraciones de relleno hechas con formas simples en código (D3). No se usan imágenes de terceros ni se imita ninguna versión ilustrada o animada del cuento (RT-CER-001 B.7). Las definitivas las dibuja el equipo de marca, con revisión humana de parecido."
+ "originalidad": "Ilustraciones de relleno hechas con formas simples en código (D3, REQ-CLI-CER-00a). Sin imágenes de terceros ni IA generativa; el registro de láminas está en banco.laminas. Las definitivas las dibuja el equipo de marca, con revisión humana de parecido por una persona distinta de quien dibujó."
 }

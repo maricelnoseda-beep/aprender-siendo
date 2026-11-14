@@ -181,12 +181,13 @@ const ACTIVITIES = [
     ok: ["La encontraste mirando por partes."], err: [], ficha: { variant: "B" }
   },
   {
-    /* «Los tres cerditos»: cinco actividades por Estaciones (reelaboración de la supervisora, RT-CER-001). Todo PRUEBA: textos, banco y grados
-       los valida PSP-SR. Sin sugerencia por diagnóstico (RT-EST-001, P6). Rutas 3–5 y 13–18 no disponibles (D2). Banco y ficha: app/herramientas/cerditos/. */
+    /* «Los tres cerditos»: cinco actividades por Estaciones (FEC-014 v0.2 de PSP-SR, RT-CER-001 v1.3). Todo PRUEBA hasta el registro de aprobación.
+       Sin sugerencia por diagnóstico (RT-EST-001, P6). 3 a 12 años; la ruta 13–18 queda excluida (D7) y en 3–5 no se ofrece la Act. 5.
+       Banco y ficha: app/herramientas/cerditos/. */
     id: "cerditos", name: "Los tres cerditos", zone: "mirar", skill: "mirar, relacionar, ordenar y resolver con un cuento", pillar: "Pensar",
-    area: "Exploración, reconocimiento, integración y transferencia con un cuento", ageMin: 6, ageMax: 12, suggestedFor: [],
+    area: "Exploración, reconocimiento, integración y transferencia con un cuento", ageMin: 3, ageMax: 12, suggestedFor: [],
     instruction: "Jugá con el cuento de los tres cerditos. Cuando termines, tocá «Terminé de jugar».",
-    forFamily: "Cinco juegos con el cuento de los tres cerditos: buscar en una escena, encontrar parejas, unir dibujos con frases, armar un rompecabezas y ayudar a los cerditos. Acompañá sin dar la respuesta.",
+    forFamily: "En esta aventura se juega con el cuento de los tres cerditos. Se practica mirar con atención, relacionar dibujos y palabras, ordenar lo que pasa en el cuento, armar escenas y pensar soluciones.",
     levels: ["Fácil", "Intermedio", "Difícil"], strategies: ["Mirar de a una parte", "Pensar qué pasó antes y después", "Probar y revisar"],
     discover: "Miro con atención y pienso qué pasó en el cuento.",
     ok: ["Pensaste qué pasó en el cuento."], err: [], ficha: { variant: "B" }

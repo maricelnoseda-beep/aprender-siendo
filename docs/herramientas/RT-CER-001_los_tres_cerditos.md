@@ -1,8 +1,8 @@
 # RT-CER-001 — «Los tres cerditos»: revisión técnica de la reelaboración por Estaciones
 
-- **Versión:** 1.2 · **Fecha:** 2026-11-12 (v1.0: 2026-11-10; v1.1: decisiones de la supervisora, Parte D; v1.2: prototipo en entorno de prueba, Parte E) · **Autor:** DEV-IA
-- **Refiere a:** reelaboración del juego «Los tres cerditos» escrita por la supervisora (2026-11-10), que incluye además una propuesta de modelo institucional (ficha técnica, escala de apoyos 0–3, registro de desempeño y plantilla de 14 puntos); CRIT-EST-001 v1.0 y RT-EST-001 v1.0 (Estaciones); INSTRUCCIONES_DEV-IA_Beta2 v1.0 (REQ-CLI-T01 a T11, M03, M04, M05, M07, M10, M17, M18, A10 a A16); ADR-009 (estructura modular); identidad visual del portal (index de referencia y Manual de marca); RT-LUC-001 y RT-EXP-001 (motores ya construidos que se reutilizan).
-- **Estado:** revisión técnica y **prototipo en entorno de prueba con contenido de prueba no validado** (autorizado por la supervisora el 2026-11-12). Sin FEC de PSP-SR. Sin aprobación clínica ni técnica. No se publica.
+- **Versión:** 1.3 · **Fecha:** 2026-11-14 (v1.0: 2026-11-10; v1.1: decisiones de la supervisora, Parte D; v1.2: prototipo en entorno de prueba, Parte E; v1.3: respuesta a la FEC-014 v0.2 y prototipo actualizado, Parte F) · **Autor:** DEV-IA
+- **Refiere a:** reelaboración del juego «Los tres cerditos» escrita por la supervisora (2026-11-10), que incluye además una propuesta de modelo institucional (ficha técnica, escala de apoyos 0–3, registro de desempeño y plantilla de 14 puntos); CRIT-EST-001 v1.0 y RT-EST-001 v1.0 (Estaciones); INSTRUCCIONES_DEV-IA_Beta2 v1.0 (REQ-CLI-T01 a T11, M03, M04, M05, M07, M10, M17, M18, A10 a A16); ADR-009 (estructura modular); identidad visual del portal (index de referencia y Manual de marca); RT-LUC-001 y RT-EXP-001 (motores ya construidos que se reutilizan). **FEC-014 v0.2 de PSP-SR (2026-11-12) y decisiones D5 a D7.**
+- **Estado:** revisión técnica y **prototipo actualizado según la FEC-014 v0.2, en entorno de prueba con datos sintéticos**. Sin registro de aprobación: nada sale del entorno de prueba. **Sobre el número de versión:** la FEC pide «RT-CER-001 v1.2», pero la v1.2 ya existía (prototipo del 2026-11-12, Parte E); esta respuesta es la **v1.3** para no pisar un documento ya entregado. Las Partes A a E quedan como historia; lo vigente está en la **Parte F**.
 - **Alcance:** si se puede construir, cómo, qué choca con reglas vigentes y qué falta. Qué Estación corresponde a cada actividad, qué habilidades trabaja, qué cambia en cada grado, los textos, la versión del cuento y los umbrales son contenido clínico: los valida PSP-SR y los aprueba la supervisora. Esta revisión no los valida.
 
 ---
@@ -215,7 +215,7 @@ Ilustraciones: 120 a 180 horas de dibujo y revisión. Sin costo de infraestructu
 
 ---
 
-## Parte C. Mensaje tipificado para PSP-SR
+## Parte C. Mensaje tipificado para PSP-SR (v1.2, histórico: el vigente está en F.9)
 
 (Para copiar y llevar al Proyecto de PSP-SR. Adjuntar este archivo y el texto de la supervisora.)
 
@@ -290,3 +290,168 @@ Autorizado por la supervisora el 2026-11-12 («si, armalo»). **Contenido de pru
 **Cómo se probó.** [Seguro] 345 comprobaciones sin navegador (ficha, banco, regla de §4, registro, M10, retiro de apoyos, detección de parejas ambiguas, de textos con elogios o amenaza) y una prueba de punta a punta que juega las 15 combinaciones, la escalera de ayudas, el retiro, la autocorrección, «Ya miré» sin reloj, el registro y la vista en celular de 375 px. La batería completa del portal sigue pasando.
 
 **Limitaciones del prototipo.** [Seguro] No tiene «Hacer» ni «Contar» (M06–M07): falta que PSP-SR los defina para este juego. Los dibujos son de relleno. El criterio de acierto para M10 por actividad es propuesta de DEV-IA (`modulo.json`, `criterio_acierto`) y lo valida PSP-SR.
+
+---
+
+## Parte F. Respuesta a la FEC-014 v0.2 y prototipo actualizado (2026-11-14)
+
+La supervisora pasó la FEC-014 v0.2 de PSP-SR («adjunto para que puedas construir el juego», 2026-11-14). Construí el prototipo actualizado según la ficha, **solo en el entorno de prueba y con datos sintéticos**. Esta parte reemplaza a la E como descripción vigente.
+
+### F.1 Resumen para la supervisora (sin jerga)
+
+- [Seguro] **El juego ya sigue la ficha de PSP-SR.** Tiene el cuento narrado antes de cada actividad (con el final suave para 3 a 5 años que aprobaste, D5), las cinco actividades con «¡Ayudemos a los cerditos!» como título (D6), y no se ofrece en 13 a 18 años (D7).
+- [Seguro] **La ruta de 3 a 5 años ya está abierta**, como pide la ficha: Detectives y Memotest en sus tres grados (sin palabras escritas), Escena y frase solo en Fácil y con frases en audio, el rompecabezas en Fácil e Intermedio, y sin la Actividad 5.
+- [Seguro] **Las ayudas se retiran de a poco:** si un ejercicio necesitó mucha ayuda, el siguiente ya arranca con un poco menos, hasta no necesitar ninguna. La persona siempre puede pedir más.
+- [Seguro] **El profesional ve el tiempo como mediana por actividad y grado**, sin colores y con la leyenda de la ficha; la familia no ve grados, aciertos ni apoyos.
+- [Seguro] **Todo se probó con datos inventados:** 663 comprobaciones automáticas del motor y del banco, y una prueba en navegador que juega las 39 combinaciones de ruta, actividad y grado publicadas, más los casos de la ficha.
+- [Probable] **Hay cuatro puntos chicos que PSP-SR tiene que aclarar** (F.8). Ninguno frena el entorno de prueba.
+
+### F.2 Qué cambió en el prototipo (v0.1.0 → v0.2.0-prueba)
+
+| Tema | Antes (v0.1.0, Parte E) | Ahora (v0.2.0, FEC-014) |
+| --- | --- | --- |
+| Cuento | No había | Narración lámina por lámina antes del primer ítem de cada actividad y a pedido; versión 6–12 y versión 3–5 (D5) |
+| Rutas | 6–8 y 9–12 | 3–5, 6–8 y 9–12 con catálogo por ruta (5.6); 13–18 excluida (D7) |
+| Act. 5 | «¡Salvemos…!», dos tipos de ítem | «¡Ayudemos a los cerditos!» (D6): Fácil con 1 condición, 3 alternativas y 2 pasos; Intermedio con situaciones nuevas, 2 condiciones y 3–4 pasos; Difícil con plan previo, imprevisto y justificación |
+| Parámetros | Propuesta de DEV-IA | Los de 5.3 (rangos de elementos, parejas, escenas, palabras y piezas por ruta) |
+| Apoyos | Retiro si no hubo errores | Retiro de 5.4: un nivel menos que el máximo del ítem anterior; desde 1, arranca en 0 con el botón destacado |
+| Lectura en voz alta | Campo `lectura` aparte | `audio_objetivo` e imputación a la habilidad oral (5.7) |
+| Registro | 14 campos | 17 campos de la sección 8, con `habilidad`, `apoyo_inicial`, `modalidad` y `audio_objetivo` |
+| Rompecabezas | Solo tocar y ubicar | Tocar y ubicar **o** arrastrar (misma habilidad, la modalidad es contexto); tolerancia amplia en 3–5; plan previo en Difícil |
+| Act. 3 | Sin pista temporal | Pista temporal visible en Fácil (sol de mañana, mediodía y tarde, luna a la noche); distractor en Intermedio; si la asociación tiene errores, «Así van juntas. Ahora las ordenamos.» |
+| Cierre | Sin Contar | Idea fuera de la pantalla (5.5), Contar con opciones cerradas, cierre suave por tiempo de la ruta |
+| Láminas | Sin registro | Registro de autoría y revisión de parecido por lámina y figura (REQ-CLI-CER-00) |
+
+### F.3 Trazabilidad a REQ-CLI-CER-00 a 16
+
+Archivos: `app/herramientas/cerditos/` (`cerditos.html`, `banco.json`, `modulo.json`, `herramienta.js`), `app/areas/profesional/profesional.js`, `tests/cerditos.test.js` (unitaria), `tests/cerditos.e2e.js` (navegador, archivo suelto), `tests/e2e.js` (portal).
+
+| Requisito | Cómo se cumple | Prueba |
+| --- | --- | --- |
+| **00a** Ilustraciones originales | Relleno con formas simples en código; ninguna imagen ni recurso externo. `banco.laminas` registra autor, origen propio, sin terceros, sin IA generativa y revisión de parecido (pendiente) por cada escena y figura | Unitaria: cada escena y figura dibujada está en el registro; sin `<img>` ni URLs |
+| **00b** Sin comparación comercial | El validador busca «al estilo de», «como en la película» y marcas | Unitaria: banco, ficha y código; detecta un texto plantado |
+| **00c** IA generativa con revisión | No se usa IA generativa; el campo queda en el registro para las láminas definitivas | Unitaria: `ia_generativa` y `revision_parecido` presentes |
+| **01** Dimensión distinta de la cantidad | Cada paso de grado declara al menos una dimensión distinta de `cantidad-estimulos` | Unitaria, por actividad y grado |
+| **02** Una sola respuesta | Detectives: una sola zona correcta por paso, calculada por apariencia, relación espacial (detrás, arriba, abajo, al lado) o función. Memotest: cada tarjeta con una sola pareja. Escena y frase: frases distintas, una sola justificación adecuada. Act. 5: cada alternativa con clase y consecuencia | Unitaria: banco válido y 5 bancos rotos detectados (dos zonas, dos baldes detrás, dos parejas, frases repetidas, situación sin adecuada) |
+| **03** Cuento antes del primer ítem | La primera vez en cada actividad se narra el cuento; en el portal se recuerda por actividad; botón «Escuchar el cuento otra vez» | Navegador: cuento antes de jugar en las 39 combinaciones, no se repite en el ítem siguiente, a pedido desde el cierre; portal |
+| **04** 3–5 sin amenaza; 13–18 excluida | Final 3–5 de D5 con lámina sin casa, chimenea, olla ni cola; Act. 5 sin publicar en 3–5 (catálogo y validador); 13–18 sin ruta y fuera del catálogo del portal (3 a 12 años) | Unitaria: cuento 3–5 sin olla, cola, fuego ni lesión; láminas sin cerditos cuando sopla; catálogo 3–5 y 13–18. Navegador: casos 1, 2 y 2b |
+| **05** «Ya miré» sin reloj | Memotest y rompecabezas Intermedio: se tapa solo con «Ya miré»; verlo de nuevo se registra como apoyo 1 | Navegador: caso 3 (2 s sin tocar, siguen visibles) y «Ver el modelo» registrado |
+| **06** Asociar con errores | Se muestran las parejas correctas con la frase neutra y ordenar arranca con ellas; `etapas.asociar` y `etapas.ordenar` con resultado y habilidad propios | Navegador: caso 4 |
+| **07** Justificación por dibujos | 3 opciones con dibujo, corregidas por tabla (`ok` en Act. 3; `clase` por elección en Act. 5); sin texto libre, dictado ni audio | Unitaria y navegador: caso 11 |
+| **08** Sin ayuda = `apoyo_max` 0 | `Motor.sinAyuda`; los apoyos de acceso se registran como `0:repetir`, `0:por-que-van-juntas` y nunca suben el nivel | Unitaria: caso 8 (90 % con «Ver el modelo» no sube) |
+| **09** Retiro progresivo | `Motor.siguienteApoyo`: 3 → 2 → 1 → 0; desde 1, arranca en 0 con el botón destacado; el nivel de entrada se aplica y entra en `apoyo_max` | Unitaria y navegador: caso 7 |
+| **10** Arrastre o tocar, mismas habilidades | Habilidad de la variante, sin coordinación visomotora; `modalidad` (tocar, tocar-y-ubicar, arrastre, mixta) como contexto | Navegador: caso 9 |
+| **11** Consecuencias sin daño | Consecuencias del banco sobre la construcción; el validador rechaza daño a un personaje; las opciones quedan habilitadas para volver a elegir | Unitaria y navegador: caso 10 |
+| **12** Audio objetivo | Escuchar la palabra o la frase objetivo marca `audio_objetivo`, no cambia `apoyo_max` e imputa el ítem a la habilidad oral | Unitaria y navegador: caso 6 |
+| **13** Vista de la familia | La familia ve fecha, aventura y si la completó; nunca grados, aciertos, apoyos, autonomía ni tiempo de resolución | Revisión del código de `familia.js` (sin cambios) |
+| **14** Mediana del tiempo | Archivo suelto y portal: mediana por actividad y grado, sin colores, con las dos leyendas; detalle por ítem solo a pedido | Navegador (archivo suelto y portal) |
+| **15** Palabras prohibidas | El validador rechaza «misión», «salvemos», «vago», «tonto», «nivel», elogios y categorías diagnósticas en todo texto para quien juega; la prueba en navegador revisa cada pantalla | Unitaria y navegador |
+| **16** Ficha completa | Por variante: Estación, habilidad de referencia, secundarias, estrategia, transferencia (A en Act. 3 con la aclaración; B en las demás), idea fuera de la pantalla, limitaciones, apoyos y grados; en la Act. 5, el texto de Transferir | Unitaria |
+
+Casos de la sección 10: 1 a 12 y 14 a 16 tienen prueba automática; el 13 se cubre por revisión del código de la vista de la familia; el 17 (señal de riesgo) es del protocolo 9.2 del portal y no pasa por la herramienta.
+
+### F.4 Escala 0–3 y retiro progresivo en el núcleo
+
+[Seguro] Hoy vive como funciones puras en el bloque `Motor` de la herramienta, sin estado ni modelo de lenguaje:
+
+- `siguienteApoyo(apoyoMax)` → nivel de entrada del ítem siguiente (y si el botón va destacado).
+- `sinAyuda(registro)` → `apoyo_max === 0` (M10-3).
+- `registro(...)` → normaliza los 17 campos; `autonomia` se deriva de `apoyo_max`; el apoyo de entrada nunca supera el máximo.
+- `ajusteM10(historial, grado, { grados })` → M10 dentro de los grados que la ruta publica; `combinarAjustes` para las dos etapas de la Act. 3.
+- `habilidadDe(...)` → habilidad a la que se imputa el ítem (lectura u oral).
+
+Cada actividad aporta solo su escalera (qué hace cada nivel). La interfaz común aplica el nivel de entrada llamando a la misma escalera con la marca `inicial:`, así queda registrado como apoyo y no como pedido.
+
+**Cuando se apruebe CRIT-003** [Probable]: esas funciones pasan a `app/nucleo/apoyos.js` y cada herramienta las importa. Es mover código sin cambiar reglas (2 a 3 jornadas, con pruebas compartidas).
+
+### F.5 Validación en CI
+
+`node tests/cerditos.test.js` corre en CI antes de armar el archivo y bloquea si falla. `Motor.validarBanco` comprueba:
+
+- **Una sola respuesta:** zonas correctas de Detectives (con el relleno determinista incluido), parejas únicas del Memotest, frases distintas, una sola justificación adecuada y clases de la Act. 5.
+- **Ausencia de la Act. 5 en 3–5:** en el catálogo de la ruta (`modulo.rutas["3-5"]`) y en cada ítem (`rutas`). También que la Act. 3 esté solo en Fácil y el rompecabezas sin Difícil en 3–5, y que no exista la ruta 13–18.
+- **Parámetros de 5.3:** cantidad de elementos, pasos, parejas, tipo de pareja por ruta, sílabas, palabras por frase, pista temporal en orden, piezas por ruta, condiciones, alternativas, pasos y planes.
+- **Cuento y láminas:** que existan; que en 3–5 no haya láminas solo de 6–12, ni olla, cola, fuego o lesión en los textos.
+- **Textos:** palabras prohibidas para quien juega (REQ-15) y comparaciones comerciales (REQ-00b).
+
+La prueba también confirma que el validador detecta bancos rotos a propósito.
+
+### F.6 Costo y plazo (B.10 actualizado)
+
+[Suposición] Con la FEC cambia el alcance: cuento narrado con dos finales, ruta 3–5, arrastre accesible con tolerancia, Contar y vista de medianas.
+
+| Parte | Jornadas DEV-IA |
+| --- | --- |
+| Total estimado del juego con la FEC-014 (antes 15–20) | **18–24** |
+| Ya hecho en el prototipo v0.2.0 | ≈ 14–16 |
+| Pasar la escala y el registro al núcleo (CRIT-003) | 2–3 |
+| Retiro progresivo en Luci y Explorapalabras (P6) | 2–3 |
+| Narración grabada, láminas definitivas y paquete de revisión | 2–3 |
+
+- **Ilustración:** 140–200 h (antes 120–180): 11 láminas del cuento (dos finales), unas 40 figuras y siluetas, con revisión de parecido por una persona distinta de quien dibuja.
+- **Voz:** [Suposición] grabación con voz humana del cuento (dos versiones, 2 a 3 min cada una), consignas y frases: 6 a 10 h de estudio y edición. Mientras tanto, voz del sistema.
+- **Infraestructura:** sin costo.
+
+### F.7 Respuesta a P6: retiro progresivo en Luci y Explorapalabras
+
+- **Luci: viable.** [Seguro] Ya arranca un ítem con apoyo de entrada (`S.item.ayuda`, hoy 2 después de 3 errores, M10-5). Hay que fijarlo con `siguienteApoyo(apoyo_max del ítem anterior)` y registrarlo como `inicial:`. Alrededor de 1 jornada.
+- **Explorapalabras: viable después de una decisión clínica.** [Probable] Tiene dos pistas (primera letra) y apoyos de acceso por variante, pero no una escalera 0–3. PSP-SR tiene que decir a qué nivel corresponde cada pista (por ejemplo, 1 = recordar la estrategia; 2 = primera letra; 3 = mostrar la palabra). Con eso, 1–2 jornadas.
+
+### F.8 Diferencias con la FEC y preguntas para PSP-SR
+
+1. **Texto del cuento.** [Seguro] Dice «Los dos cerditos ya estaban de visita en la casa de ladrillos» justo antes de que el lobo sople esa casa. El criterio de 5.1 pide que ningún cerdito esté adentro cuando sopla. Las láminas no muestran cerditos. ¿Cambiás el texto (por ejemplo, «estaban de paseo en la plaza»)? Hasta tu respuesta, uso el texto tal cual.
+2. **5.4 contra 5.7.** [Seguro] 5.4 pone «volver a escuchar la frase objetivo» como nivel 1 de la Act. 3; 5.7 y REQ-CLI-CER-12 dicen que no cambia `apoyo_max`. Apliqué REQ-12: es nivel 0 y se imputa a la habilidad oral. ¿Confirmás?
+3. **Imputación oral en 6–8.** [Probable] 5.7 la define para 9–12, pero 6–8 también lee, con audio por defecto. La apliqué en toda ruta que lee; en 6–8 casi todos los ítems con palabras van a la habilidad oral. ¿Es lo que querés?
+4. **Memotest, nivel 2.** [Seguro] 5.4 propone «destapar por un momento la pareja». Un tapado por tiempo choca con D4 y M10-7. Dejé «se marcan tres tarjetas entre las que hay una pareja», sin reloj. ¿Te sirve?
+5. **Criterio de acierto para M10.** [Seguro] La FEC no lo define. Uso el de `modulo.criterio_acierto`. En la Act. 5, acierto es la primera elección adecuada, sin errores en los pasos y con la justificación adecuada al primer intento; en la Act. 3, cada etapa por separado.
+6. **Retiro «de la misma habilidad».** [Probable] Lo apliqué por actividad, porque cada una tiene una sola habilidad de referencia (la Act. 3 también, aunque sus etapas alimenten M10 por separado). ¿Correcto?
+7. **Habilidad escrita de la etapa asociar.** [Suposición] En rutas que leen, sin audio, usé `comprension-de-consignas-escritas`, la secundaria de 5.2. ¿Es esa o proponés otra?
+8. **Rompecabezas Intermedio.** [Suposición] Lo dejé con revisión al final, como Difícil, para que haya autocorrección. Fácil revisa al poner cada pieza.
+9. **Ítems del banco.** [Seguro] Los ejemplos de la FEC están tal cual (casa de paja, cerdito de la casa de madera y su martillo, balde detrás de la casa, algo para construir, parejas de 5.3, frases y justificación de la Act. 3, viento, refugio de bicicletas y carpa con lluvia). El resto del banco (39 ítems en total) lo escribí como relleno para probar. Van por el circuito de 5.3.1: los escribís o validás vos, con la segunda clasificación.
+10. **Identificador del modelo institucional.** Coincido con **CRIT-003** (sección 13). Dejo de usar «CRIT-EST-001 v1.1».
+
+### F.9 Mensaje tipificado para PSP-SR (vigente)
+
+```
+TIPO: Revisión técnica
+DE: DEV-IA
+PARA: PSP-SR
+ID: RT-CER-001 v1.3
+FECHA: 2026-11-14
+REFIERE A: FEC-014 v0.2 «Los tres cerditos» (2026-11-12); decisiones D1 a D7 de la supervisora; RT-CER-001 v1.2
+```
+
+PSP-SR: construí el prototipo según la FEC-014 v0.2, solo en el entorno de prueba y con datos sintéticos. Te respondo con la **v1.3** porque la v1.2 ya existía (prototipo del 2026-11-12).
+
+**Trazabilidad:** [Seguro] REQ-CLI-CER-00 a 16, cada uno con su implementación y su prueba (F.3). Casos 1 a 12 y 14 a 16 con prueba automática; el 13, por revisión de código; el 17 es del protocolo 9.2 del portal.
+
+**Escala 0–3 y retiro:** [Seguro] funciones puras del motor (F.4). «Sin ayuda» = `apoyo_max` 0; el retiro baja un nivel por ítem; los apoyos de acceso son nivel 0. Pasan al núcleo cuando se apruebe CRIT-003, nombre con el que coincido.
+
+**CI:** [Seguro] el validador del banco comprueba respuestas únicas, ausencia de la Act. 5 en 3–5 (catálogo e ítems), parámetros de 5.3, cuento 3–5 y palabras prohibidas. La prueba confirma que detecta bancos rotos a propósito (F.5).
+
+**Costo y plazo:** [Suposición] 18–24 jornadas en total (antes 15–20), de las que el prototipo cubre unas 14–16; ilustración 140–200 h; voz grabada 6–10 h (F.6).
+
+**P6:** [Seguro] viable en Luci (1 jornada). [Probable] Viable en Explorapalabras cuando definas a qué nivel va cada pista (F.7).
+
+**Preguntas:**
+1. El texto del cuento pone a dos cerditos adentro de la casa de ladrillos cuando el lobo sopla.
+2. 5.4 contra 5.7 sobre escuchar la frase objetivo.
+3. La imputación oral en 6–8.
+4. El nivel 2 del Memotest sin reloj.
+5. El criterio de acierto para M10 por actividad.
+6. El retiro por actividad.
+7. La habilidad escrita de la etapa asociar.
+
+El banco fuera de tus ejemplos es relleno de DEV-IA y va por el circuito de 5.3.1 (detalle en F.8).
+
+**Estado:** [Seguro] nada sale del entorno de prueba sin registro de aprobación y las dos aprobaciones.
+
+### F.10 Dónde está y cómo se probó
+
+- **Archivo para probar con doble clic:** `descargas/AprenderSiendo_Los_tres_cerditos_prueba.html` (v0.2.0-prueba). La versión anterior está en `descargas/Históricos/AprenderSiendo_Los_tres_cerditos_v0.1.0-prueba_2026-11-12.html`, y la actual también queda con versión y fecha en `Históricos/`.
+- **Código:** rama `claude/project-thread-fv68pm`, PR #8 (borrador).
+- **Pruebas:** [Seguro]
+  - `node tests/cerditos.test.js`: 663 comprobaciones.
+  - `node tests/cerditos.e2e.js`: juega las 39 combinaciones de ruta, actividad y grado publicadas y los casos de la sección 10, con capturas y la vista de 375 px.
+  - Batería completa del portal: reglas, Explorapalabras, originalidad, Luci y portal de punta a punta, que ahora incluye la vista de medianas.
+  - Todo en verde.

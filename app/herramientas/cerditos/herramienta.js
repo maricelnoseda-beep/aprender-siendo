@@ -1,6 +1,6 @@
 "use strict";
 Object.assign(Engines, {
-  /* «Los tres cerditos» (RT-CER-001): cinco actividades por Estaciones. Corre aislada como la Isla de Juegos (iframe sin acceso
+  /* «Los tres cerditos» (FEC-014 v0.2, RT-CER-001 v1.3): cinco actividades por Estaciones. Corre aislada como la Isla de Juegos (iframe sin acceso
      a la app ni a sus datos) y devuelve por postMessage solo el registro mínimo de cada ejercicio (TC-§3.C). M10 se aplica adentro,
      dentro de cada actividad; la actividad y la Estación nunca cambian solas. Quien juega no ve Estación ni grado. */
   cerditos(root, { onDone, ctx }) {
@@ -10,7 +10,7 @@ Object.assign(Engines, {
     const memoria = Engines.cerditos.ultima || (Engines.cerditos.ultima = {});
     const guardada = memoria[quien] || {};
     const inicio = { ruta: c.route || "6-8", actividad: guardada.actividad || "detectives", grado: guardada.grado || GR[(ctx.getLevel ? ctx.getLevel() : 1) - 1] || "facil",
-      voz: Voice.on !== false, adulto: consulta };
+      voz: Voice.on !== false, adulto: consulta, cuento: (guardada.cuento || []).slice(0, 5) };
     root.innerHTML = `<div class="isla-frame cerditos-frame"><iframe title="Los tres cerditos" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></div>
       <p class="isla-count" aria-live="polite">Todavía no terminaste ningún juego.</p>
       <div class="child-actions"><button class="btn btn-primary big" id="cerditos-done">Terminé de jugar</button></div>`;
@@ -27,7 +27,9 @@ Object.assign(Engines, {
     const onMsg = (e) => {
       if (e.source !== fr.contentWindow || !e.data) return;
       const d = e.data;
-      if (d.type === "cerditos-config") { if (consulta) memoria[quien] = { actividad: corto(d.actividad, 14), grado: corto(d.grado, 12) }; return; }
+      if (d.type === "cerditos-config") { if (consulta) memoria[quien] = { ...(memoria[quien] || {}), actividad: corto(d.actividad, 14), grado: corto(d.grado, 12) }; return; }
+      // REQ-CLI-CER-03: el cuento se narra la primera vez que se entra a cada actividad; se recuerda solo qué actividades ya lo tuvieron.
+      if (d.type === "cerditos-cuento") { const g = memoria[quien] || (memoria[quien] = {}), vistos = new Set(g.cuento || []); vistos.add(corto(d.actividad, 14)); g.cuento = [...vistos].slice(0, 5); return; }
       if (d.type === "cerditos-piso") { m.floorExit = true; return; }
       if (d.type !== "cerditos-item") return;
       const ayuda = num(d.apoyo_max, 3);
@@ -36,8 +38,8 @@ Object.assign(Engines, {
       if (d.acierto && ayuda === 0) m.firstTry += 1;
       if (ayuda > 0) m.hints += 1;
       m.rounds.push({ actividad: corto(d.actividad, 14), estacion: corto(d.estacion, 12), grado: corto(d.grado, 12), item: corto(d.item, 20), resultado: corto(d.resultado, 12),
-        intentos: num(d.intentos, 999), errores: num(d.errores, 999), apoyo_max: ayuda, autonomia: corto(d.autonomia, 24), lectura: !!d.lectura,
-        autocorreccion: !!d.autocorreccion, ms: num(d.ms, 3600000) });
+        habilidad: corto(d.habilidad, 40), intentos: num(d.intentos, 999), errores: num(d.errores, 999), apoyo_inicial: num(d.apoyo_inicial, 3), apoyo_max: ayuda,
+        autonomia: corto(d.autonomia, 24), audio_objetivo: !!d.audio_objetivo, modalidad: corto(d.modalidad, 16), autocorreccion: !!d.autocorreccion, ms: num(d.ms, 3600000) });
       root.querySelector(".isla-count").textContent = `Juegos terminados: ${m.attempts}.`;
     };
     window.addEventListener("message", onMsg);
