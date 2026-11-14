@@ -1,0 +1,3225 @@
+{
+ "_nota": "Banco de prueba de «Los tres cerditos» (FEC-014 v0.2). Textos, ejemplos y reglas de la FEC; el resto de los ítems los completa DEV-IA como relleno para probar, y los revisa PSP-SR. Contenido de prueba no validado.",
+ "version": "0.2.0-prueba",
+ "fecha": "2026-11-14",
+ "textos": {
+  "rotulo": "Contenido de prueba no validado",
+  "escuchar": "Escuchar",
+  "audioSi": "Voz activada. Tocá para apagarla.",
+  "audioNo": "Voz apagada. Tocá para activarla.",
+  "ayuda": "Pedir ayuda",
+  "seguir": "Seguir",
+  "empezar": "Empezar",
+  "yaMire": "Ya miré",
+  "verModelo": "Ver el modelo",
+  "modelo": "Modelo",
+  "revisar": "Revisar",
+  "otraVez": "Jugar otra vez",
+  "ofrecerAyuda": "Si querés, podés pedir ayuda.",
+  "algoNuevo": "Ahora probamos algo nuevo.",
+  "noDisponibleEdad": "Esta aventura no está disponible para esta edad.",
+  "cuentoTitulo": "El cuento",
+  "cuentoSiguiente": "Seguir",
+  "cuentoAnterior": "Volver",
+  "cuentoTermina": "Ya escuché el cuento",
+  "cuentoOtraVez": "Escuchar el cuento otra vez",
+  "estrategia": {
+   "detectives": "Primero miro cómo es lo que busco. Después recorro la escena de a una parte.",
+   "memotest": "Antes de dar vuelta, me pregunto con qué va esta tarjeta.",
+   "escena_frase": "Leo o escucho la frase, busco la escena que dice eso, y después pienso qué pasó primero y qué pasó por eso.",
+   "rompecabezas": "Miro el modelo, elijo por dónde empiezo, los bordes o los personajes, y reviso si cada pieza encaja con la de al lado.",
+   "ayudemos": "Pienso qué necesito, comparo las opciones, pruebo, miro qué pasó y, si hace falta, cambio."
+  },
+  "estrategia_3_5": {
+   "escena_frase": "Escucho la frase, busco la escena que dice eso, y después pienso qué pasó primero."
+  },
+  "asiSeJuega": {
+   "detectives": "Cuando encuentres lo que te pido, tocalo.",
+   "memotest": "Primero mirá todas las tarjetas. Cuando quieras, tocá «Ya miré». Después da vuelta dos: si van juntas, quedan a la vista.",
+   "escena_frase": "Primero uní cada escena con su frase. Después ordená las escenas para contar el cuento.",
+   "rompecabezas": "Tocá una pieza y después el lugar donde va. También la podés arrastrar.",
+   "ayudemos": "Mirá qué necesitan los cerditos y elegí una opción. Siempre podés cambiar."
+  },
+  "cierre": "Terminaste la ronda.",
+  "cierreProceso": {
+   "detectives": "Miraste cómo era lo que buscabas y recorriste la escena.",
+   "memotest": "Pensaste con qué iba cada tarjeta y encontraste las parejas.",
+   "escena_frase": "Uniste cada escena con su frase y ordenaste lo que pasó por eso.",
+   "rompecabezas": "Miraste cada parte y revisaste dónde encajaba.",
+   "ayudemos": "Pensaste qué hacía falta, probaste y miraste qué pasaba."
+  },
+  "cierrePisoTitulo": "Por hoy, dejamos acá",
+  "cierrePiso": "Hoy probaste muchas veces. Otro día seguimos con este juego.",
+  "cierreTiempoTitulo": "Es un buen momento para parar",
+  "cierreTiempo": "Jugaste un buen rato. Otro día seguimos.",
+  "ideaTitulo": "Para hacer fuera de la pantalla",
+  "ideaNota": "Es una idea para jugar en casa, si quieren. No se registra.",
+  "idea_fuera": {
+   "detectives": "Uno esconde una cuchara a la vista y le da una pista de lugar: arriba, abajo, al lado. El otro la encuentra.",
+   "memotest": "Busquen en la cocina dos cosas que van juntas, como taza y plato u olla y tapa, y digan por qué.",
+   "escena_frase": "Cuenten entre todos el cuento con tres dibujos o tres objetos, y pregunten qué pasó primero.",
+   "rompecabezas": "Armen un rompecabezas de cartón o una torre con cajas y vean cuál queda más firme.",
+   "ayudemos": "Con almohadones o cajas, armen un refugio para un muñeco. ¿Qué pasa si lo empujan suave? ¿Cómo lo hacen más firme?"
+  },
+  "contar": {
+   "titulo": "Contar",
+   "conAdulto": "Para responder con la persona adulta.",
+   "ayudo": "¿Qué te ayudó?",
+   "resulto": "¿Cómo te resultó?",
+   "sugerencia": "Contale a alguien por qué elegiste esa.",
+   "opciones_ayudo": {
+    "detectives": [
+     {
+      "id": "mirar-modelo",
+      "fig": "lupa",
+      "txt": "Mirar cómo era"
+     },
+     {
+      "id": "por-partes",
+      "fig": "marco",
+      "txt": "Recorrer de a una parte"
+     },
+     {
+      "id": "pedir-ayuda",
+      "fig": "mano",
+      "txt": "Pedir ayuda"
+     }
+    ],
+    "memotest": [
+     {
+      "id": "pensar-con-que",
+      "fig": "globo",
+      "txt": "Pensar con qué va"
+     },
+     {
+      "id": "mirar-todas",
+      "fig": "lupa",
+      "txt": "Mirar todas antes"
+     },
+     {
+      "id": "pedir-ayuda",
+      "fig": "mano",
+      "txt": "Pedir ayuda"
+     }
+    ],
+    "escena_frase": [
+     {
+      "id": "escuchar",
+      "fig": "globo",
+      "txt": "Escuchar la frase"
+     },
+     {
+      "id": "que-primero",
+      "fig": "flechas",
+      "txt": "Pensar qué pasó primero"
+     },
+     {
+      "id": "pedir-ayuda",
+      "fig": "mano",
+      "txt": "Pedir ayuda"
+     }
+    ],
+    "rompecabezas": [
+     {
+      "id": "mirar-modelo",
+      "fig": "lupa",
+      "txt": "Mirar el modelo"
+     },
+     {
+      "id": "bordes",
+      "fig": "marco",
+      "txt": "Empezar por los bordes"
+     },
+     {
+      "id": "revisar",
+      "fig": "probar",
+      "txt": "Revisar cada pieza"
+     }
+    ],
+    "ayudemos": [
+     {
+      "id": "que-necesito",
+      "fig": "globo",
+      "txt": "Pensar qué hacía falta"
+     },
+     {
+      "id": "probar",
+      "fig": "probar",
+      "txt": "Probar y mirar qué pasó"
+     },
+     {
+      "id": "cambiar",
+      "fig": "flechas",
+      "txt": "Cambiar de idea"
+     }
+    ]
+   },
+   "opciones_resulto": [
+    {
+     "id": "me-gusto",
+     "cara": "😊",
+     "txt": "Me gustó"
+    },
+    {
+     "id": "mas-o-menos",
+     "cara": "😐",
+     "txt": "Más o menos"
+    },
+    {
+     "id": "me-costo",
+     "cara": "😕",
+     "txt": "Me costó"
+    }
+   ]
+  },
+  "devolucion_ok": {
+   "detectives": "Te fijaste en la forma y la encontraste.",
+   "memotest": "Pensaste con qué iba y la encontraste.",
+   "escena_frase": "Ordenaste mirando qué pasó por eso.",
+   "rompecabezas": "Miraste cada parte y la pusiste donde encaja.",
+   "ayudemos": "Pensaste qué hacía falta y elegiste."
+  },
+  "devolucion_autocorreccion": "Revisaste la pieza y la cambiaste: así encaja.",
+  "devolucion_cambio": "Probaste, miraste qué pasó y cambiaste.",
+  "devolucion_error": {
+   "detectives": "Esa se parece. Mirá el detalle.",
+   "memotest": "Esa va con otra. ¿Con qué se usa?",
+   "escena_frase": "Escuchá otra vez la frase.",
+   "rompecabezas": "Esa pieza va en otro lugar. Mirá qué tiene al lado.",
+   "ayudemos": "Esa consecuencia nos da una pista. ¿Probamos otra?"
+  },
+  "escenaAria": "Escena del cuento. Tocá lo que buscás.",
+  "loQueBuscas": "Lo que buscás",
+  "primeroMira": "Mirá cómo es y, cuando quieras, tocá «Ya miré».",
+  "encontraste": "Encontraste: {nombre}. Ahora, lo que sigue.",
+  "buscaEnLaClara": "Buscá en la parte clara.",
+  "estaAca": "Está acá. {pista}",
+  "consignaMemotest": {
+   "imagen-imagen": "Encontrá las tarjetas iguales.",
+   "imagen-silueta": "Encontrá cada dibujo con su sombra.",
+   "imagen-palabra": "Encontrá cada dibujo con su palabra.",
+   "palabra-palabra": "Encontrá las palabras que van juntas.",
+   "imagen-funcional": "Encontrá las cosas que van juntas."
+  },
+  "leerPalabras": "Escuchar las palabras al darlas vuelta",
+  "tarjetaDadaVuelta": "Tarjeta boca abajo",
+  "vanJuntas": "Van juntas.",
+  "vanJuntasPalabras": "«{a}» y «{b}» van juntas.",
+  "porQue": "¿Por qué van juntas?",
+  "pistaMemotest": "¿Con qué va esta tarjeta? Mirá otra vez todas.",
+  "cuandoListo": "Cuando quieras, tocá «Ya miré».",
+  "candidatas": "Entre estas tres tarjetas hay una pareja.",
+  "demoPareja": "Mirá: «{a}» y «{b}» van juntas.",
+  "consignaFrases": "Uní cada escena con su frase.",
+  "consignaFrasesAudio": "Escuchá cada frase y llevala a su escena.",
+  "leerFrases": "Escuchar la frase al elegirla",
+  "oirFrase": "Escuchar la frase elegida",
+  "frase": "Frase",
+  "frasePuesta": "Frase puesta",
+  "ponerFrase": "Poner acá la frase",
+  "frasesAria": "Frases para ubicar",
+  "primeroFrase": "Primero elegí una frase.",
+  "asiVanJuntas": "Así van juntas. Ahora las ordenamos.",
+  "consignaOrdenar": "Ahora ordená las escenas: ¿qué pasó primero?",
+  "errorOrden": "Esa escena va en otro lugar. ¿Qué pasó antes?",
+  "unaNoEstaba": "Una no estaba en su lugar. Volvió para que la ubiques.",
+  "variasNoEstaban": "{n} no estaban en su lugar. Volvieron para que las ubiques.",
+  "errorJust": "Esa no explica por qué pasó. Probá otra.",
+  "pistaAsociar": "Escuchá la frase y buscá la escena que muestra eso.",
+  "marcadasDos": "La frase va con una de estas dos escenas.",
+  "demoAsociar": "Mirá: esta frase dice lo que muestra esta escena.",
+  "pistaOrden": "Pensá qué pasó primero en el cuento y qué pasó por eso.",
+  "lugarMarcado": "Ese es el lugar de la escena elegida.",
+  "demoOrden": "Mirá: esta escena va acá porque pasa antes de la que sigue.",
+  "pistaJustificar": "Pensá qué hizo que pasara eso.",
+  "quedanMenos": "Quedan menos opciones.",
+  "demoJust": "Esta opción explica por qué pasó.",
+  "lugar": "Lugar",
+  "paraUbicar": "Para ubicar",
+  "pieza": "Pieza",
+  "consignaRompe": "Armá la escena.",
+  "consignaPlan": "Antes de empezar, ¿por dónde empezás?",
+  "primeroMiraModelo": "Mirá el modelo y, cuando quieras, tocá «Ya miré».",
+  "pistaModeloVisible": "Mirá el modelo y buscá qué parte tiene la pieza.",
+  "mirarModelo": "Mirá el modelo otra vez.",
+  "recordarPlan": "Tu plan era: {plan}.",
+  "marcadasMal": "Las piezas marcadas van en otro lugar.",
+  "lugarMarcadoPieza": "Ese es el lugar de una pieza.",
+  "demoPieza": "Mirá: esta pieza va acá porque sigue el dibujo de al lado.",
+  "planes_rompecabezas": [
+   {
+    "id": "bordes",
+    "fig": "marco",
+    "txt": "Primero los bordes"
+   },
+   {
+    "id": "personajes",
+    "fig": "cerdito",
+    "attrs": {
+     "acc": "gorra"
+    },
+    "txt": "Primero los personajes"
+   },
+   {
+    "id": "arriba",
+    "fig": "nube",
+    "txt": "De arriba hacia abajo"
+   }
+  ],
+  "consignaAyudemos": "Ayudemos a los cerditos.",
+  "loQueHaceFalta": "Lo que hace falta",
+  "seguirConEsta": "Seguir con esta",
+  "meQuedo": "Me quedo con esta",
+  "podesCambiar": "Podés elegir otra opción si querés.",
+  "errorPaso": "Ese paso va después. ¿Qué se hace antes?",
+  "pistaPasos": "Pensá qué tiene que estar antes para hacer lo que sigue.",
+  "pasoMarcado": "Ese es el paso que sigue.",
+  "demoPaso": "Primero va «{paso}», porque lo demás se apoya ahí.",
+  "errorJustAyudemos": "Esa no explica por qué sirve. Probá otra.",
+  "pistaJustAyudemos": "Pensá qué necesitaban los cerditos.",
+  "mirarCondiciones": "Mirá otra vez lo que hace falta:",
+  "demoOpcion": "Esta opción sirve porque cumple con esto: {condiciones}."
+ },
+ "cuento": {
+  "6-12": [
+   {
+    "escena": "salen",
+    "texto": "Había una vez tres cerditos que querían tener cada uno su casa."
+   },
+   {
+    "escena": "paja",
+    "texto": "El primero juntó paja. Era liviana y la casa quedó lista enseguida."
+   },
+   {
+    "escena": "madera",
+    "texto": "El segundo juntó madera. Usó su martillo y la casa quedó lista a la tarde."
+   },
+   {
+    "escena": "ladrillos",
+    "texto": "El tercero juntó ladrillos. Tardó varios días, pero la casa quedó muy firme."
+   },
+   {
+    "escena": "sopla-paja",
+    "texto": "Un día llegó un lobo que quería entrar sin permiso. El primer cerdito ya se había ido a visitar a su hermano. El lobo sopló y sopló, y la casa de paja se voló."
+   },
+   {
+    "escena": "sopla-madera",
+    "texto": "Después fue a la casa de madera. Los dos cerditos ya estaban de visita en la casa de ladrillos. El lobo sopló y sopló, y la casa de madera se cayó."
+   },
+   {
+    "escena": "sopla-ladrillos",
+    "texto": "Entonces fue a la casa de ladrillos. Sopló y sopló, pero la casa no se movió."
+   },
+   {
+    "escena": "chimenea",
+    "texto": "El lobo trepó al techo y bajó por la chimenea. Abajo había una olla con agua caliente. El lobo se quemó la cola, gritó «¡Ay, quema!» y salió corriendo. No volvió nunca más."
+   },
+   {
+    "escena": "festejo",
+    "texto": "Los tres cerditos se quedaron juntos en la casa firme. Y pensaron cómo construir, entre todos, dos casas nuevas."
+   }
+  ],
+  "3-5": [
+   {
+    "escena": "salen",
+    "texto": "Había una vez tres cerditos que querían tener cada uno su casa."
+   },
+   {
+    "escena": "paja",
+    "texto": "El primero juntó paja. Era liviana y la casa quedó lista enseguida."
+   },
+   {
+    "escena": "madera",
+    "texto": "El segundo juntó madera. Usó su martillo y la casa quedó lista a la tarde."
+   },
+   {
+    "escena": "ladrillos",
+    "texto": "El tercero juntó ladrillos. Tardó varios días, pero la casa quedó muy firme."
+   },
+   {
+    "escena": "sopla-paja",
+    "texto": "Un día llegó un lobo que quería entrar sin permiso. El primer cerdito ya se había ido a visitar a su hermano. El lobo sopló y sopló, y la casa de paja se voló."
+   },
+   {
+    "escena": "sopla-madera",
+    "texto": "Después fue a la casa de madera. Los dos cerditos ya estaban de visita en la casa de ladrillos. El lobo sopló y sopló, y la casa de madera se cayó."
+   },
+   {
+    "escena": "sopla-ladrillos",
+    "texto": "Entonces fue a la casa de ladrillos. Sopló y sopló, pero la casa no se movió."
+   },
+   {
+    "escena": "lobo-lejos",
+    "texto": "El lobo se acercó a la chimenea y sintió que estaba muy caliente. Dijo «¡Uy, quema!» y se fue corriendo. No volvió nunca más."
+   },
+   {
+    "escena": "festejo",
+    "texto": "Los tres cerditos se quedaron juntos en la casa firme. Y pensaron cómo construir, entre todos, dos casas nuevas."
+   }
+  ],
+  "guia_adulto_3_5": "Pregúntenle qué pasó primero y qué pasó después. Esperen su respuesta."
+ },
+ "escenas": {
+  "salen": {
+   "nombre": "Los tres cerditos salen con paja, madera y ladrillos"
+  },
+  "paja": {
+   "nombre": "La casa de paja y el cerdito de gorra verde"
+  },
+  "madera": {
+   "nombre": "La casa de madera y el cerdito de bufanda coral"
+  },
+  "ladrillos": {
+   "nombre": "La casa de ladrillos con rampa y el cerdito de mochila lila"
+  },
+  "lobo-mira": {
+   "nombre": "El lobo mira las tres casas"
+  },
+  "sopla-paja": {
+   "nombre": "El lobo sopla y la casa de paja se vuela"
+  },
+  "sopla-madera": {
+   "nombre": "El lobo sopla y la casa de madera se cae"
+  },
+  "sopla-ladrillos": {
+   "nombre": "El lobo sopla y la casa de ladrillos no se mueve"
+  },
+  "chimenea": {
+   "nombre": "El lobo corre lejos de la casa con un hilito de vapor",
+   "rutas": [
+    "6-8",
+    "9-12"
+   ]
+  },
+  "lobo-lejos": {
+   "nombre": "El lobo se va corriendo lejos",
+   "rutas": [
+    "3-5"
+   ]
+  },
+  "festejo": {
+   "nombre": "Los tres cerditos y un amigo en silla de ruedas en la casa firme"
+  }
+ },
+ "laminas": {
+  "_nota": "REQ-CLI-CER-00 (bloqueante): registro de autoría y revisión de parecido por lámina y por figura. Relleno de prueba: las definitivas las dibuja el equipo de marca y las revisa una persona distinta de quien dibujó.",
+  "escenas": {
+   "salen": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "paja": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "madera": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "ladrillos": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "lobo-mira": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "sopla-paja": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "sopla-madera": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "sopla-ladrillos": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "chimenea": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "lobo-lejos": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "festejo": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   }
+  },
+  "figuras": {
+   "cerdito": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "lobo": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "casa": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "fardo": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "tablas": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "ladrillos": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "martillo": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "clavo": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "carretilla": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "balde": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "regadera": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "arbol": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "flor": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "sol": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "luna": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "nube": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "gotas": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "viento": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "paraguas": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "lona": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "tela": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "chapa": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "cajas": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "cuerda": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "piedra": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "pasto": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "cometa": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "pala": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "mariposa": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "obra": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "bicicleta": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "carpa": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "mesa": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "marco": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "lupa": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "globo": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "flechas": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "mano": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "probar": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   },
+   "tres": {
+    "autor": "DEV-IA (relleno hecho en código con formas simples)",
+    "origen": "propio",
+    "terceros": false,
+    "ia_generativa": false,
+    "revision_parecido": {
+     "estado": "pendiente",
+     "revisor": null,
+     "fecha": null
+    }
+   }
+  }
+ },
+ "actividades": {
+  "detectives": {
+   "facil": [
+    {
+     "id": "det-f1",
+     "consigna": "Encontrá la casa de paja.",
+     "pista1": "Es amarilla y tiene el techo en punta.",
+     "ok": "Te fijaste en la forma y la encontraste.",
+     "objetivos": [
+      "casa"
+     ],
+     "region2": {
+      "x": 0,
+      "y": 160,
+      "w": 600,
+      "h": 480
+     },
+     "relleno": 5,
+     "elementos": [
+      {
+       "id": "casa",
+       "fig": "casa",
+       "x": 120,
+       "y": 240,
+       "s": 2.4,
+       "nombre": "casa de paja",
+       "attrs": {
+        "material": "paja"
+       }
+      },
+      {
+       "id": "arbol",
+       "fig": "arbol",
+       "x": 820,
+       "y": 180,
+       "s": 2.2,
+       "nombre": "árbol"
+      },
+      {
+       "id": "nube",
+       "fig": "nube",
+       "x": 560,
+       "y": 30,
+       "s": 1.4,
+       "nombre": "nube"
+      },
+      {
+       "id": "carretilla",
+       "fig": "carretilla",
+       "x": 640,
+       "y": 560,
+       "s": 1.4,
+       "nombre": "carretilla"
+      },
+      {
+       "id": "balde",
+       "fig": "balde",
+       "x": 1000,
+       "y": 600,
+       "s": 1.1,
+       "nombre": "balde"
+      }
+     ]
+    },
+    {
+     "id": "det-f2",
+     "consigna": "Encontrá al lobo.",
+     "pista1": "Es gris y tiene orejas en punta.",
+     "ok": "Te fijaste en la forma y lo encontraste.",
+     "objetivos": [
+      "lobo"
+     ],
+     "region2": {
+      "x": 600,
+      "y": 340,
+      "w": 600,
+      "h": 460
+     },
+     "relleno": 4,
+     "elementos": [
+      {
+       "id": "lobo",
+       "fig": "lobo",
+       "x": 860,
+       "y": 420,
+       "s": 2.2,
+       "nombre": "lobo"
+      },
+      {
+       "id": "casa",
+       "fig": "casa",
+       "x": 90,
+       "y": 230,
+       "s": 2.6,
+       "nombre": "casa de madera",
+       "attrs": {
+        "material": "madera"
+       }
+      },
+      {
+       "id": "arbol",
+       "fig": "arbol",
+       "x": 540,
+       "y": 160,
+       "s": 2.2,
+       "nombre": "árbol"
+      },
+      {
+       "id": "nube",
+       "fig": "nube",
+       "x": 900,
+       "y": 40,
+       "s": 1.4,
+       "nombre": "nube"
+      },
+      {
+       "id": "pala",
+       "fig": "pala",
+       "x": 420,
+       "y": 600,
+       "s": 1.2,
+       "nombre": "pala"
+      }
+     ]
+    }
+   ],
+   "intermedio": [
+    {
+     "id": "det-i1",
+     "consigna": "Tocá al cerdito de la casa de madera y después su martillo.",
+     "pista1": "El cerdito de la casa de madera tiene bufanda.",
+     "ok": "Te fijaste en el detalle y los encontraste en orden.",
+     "objetivos": [
+      "c-buf",
+      "martillo"
+     ],
+     "region2": {
+      "x": 300,
+      "y": 360,
+      "w": 600,
+      "h": 440
+     },
+     "relleno": 3,
+     "elementos": [
+      {
+       "id": "c-gor",
+       "fig": "cerdito",
+       "x": 60,
+       "y": 470,
+       "s": 1.4,
+       "nombre": "cerdito de gorra",
+       "attrs": {
+        "acc": "gorra"
+       }
+      },
+      {
+       "id": "c-buf",
+       "fig": "cerdito",
+       "x": 440,
+       "y": 480,
+       "s": 1.4,
+       "nombre": "cerdito de bufanda",
+       "attrs": {
+        "acc": "bufanda"
+       }
+      },
+      {
+       "id": "c-moc",
+       "fig": "cerdito",
+       "x": 980,
+       "y": 470,
+       "s": 1.4,
+       "nombre": "cerdito de mochila",
+       "attrs": {
+        "acc": "mochila"
+       }
+      },
+      {
+       "id": "martillo",
+       "fig": "martillo",
+       "x": 640,
+       "y": 600,
+       "s": 1.1,
+       "nombre": "martillo"
+      },
+      {
+       "id": "pala",
+       "fig": "pala",
+       "x": 220,
+       "y": 640,
+       "s": 1.1,
+       "nombre": "pala"
+      },
+      {
+       "id": "casa-p",
+       "fig": "casa",
+       "x": 40,
+       "y": 180,
+       "s": 2.0,
+       "nombre": "casa de paja",
+       "attrs": {
+        "material": "paja"
+       }
+      },
+      {
+       "id": "casa-m",
+       "fig": "casa",
+       "x": 420,
+       "y": 170,
+       "s": 2.0,
+       "nombre": "casa de madera",
+       "attrs": {
+        "material": "madera"
+       }
+      },
+      {
+       "id": "casa-l",
+       "fig": "casa",
+       "x": 800,
+       "y": 160,
+       "s": 2.1,
+       "nombre": "casa de ladrillos",
+       "attrs": {
+        "material": "ladrillos"
+       }
+      },
+      {
+       "id": "tablas",
+       "fig": "tablas",
+       "x": 780,
+       "y": 600,
+       "s": 1.1,
+       "nombre": "tablas"
+      },
+      {
+       "id": "fardo",
+       "fig": "fardo",
+       "x": 260,
+       "y": 480,
+       "s": 1.0,
+       "nombre": "fardo de paja"
+      },
+      {
+       "id": "arbol",
+       "fig": "arbol",
+       "x": 1040,
+       "y": 160,
+       "s": 1.4,
+       "nombre": "árbol"
+      },
+      {
+       "id": "balde",
+       "fig": "balde",
+       "x": 1080,
+       "y": 650,
+       "s": 0.9,
+       "nombre": "balde"
+      },
+      {
+       "id": "nube",
+       "fig": "nube",
+       "x": 600,
+       "y": 20,
+       "s": 1.2,
+       "nombre": "nube"
+      },
+      {
+       "id": "ladr",
+       "fig": "ladrillos",
+       "x": 640,
+       "y": 440,
+       "s": 1.0,
+       "nombre": "ladrillos"
+      }
+     ]
+    },
+    {
+     "id": "det-i2",
+     "consigna": "Tocá la casa de ladrillos y después la carretilla.",
+     "pista1": "La casa de ladrillos es coral y tiene rampa.",
+     "ok": "Te fijaste en el material y las encontraste en orden.",
+     "objetivos": [
+      "casa-l",
+      "carretilla"
+     ],
+     "region2": {
+      "x": 560,
+      "y": 120,
+      "w": 640,
+      "h": 680
+     },
+     "relleno": 4,
+     "elementos": [
+      {
+       "id": "casa-p",
+       "fig": "casa",
+       "x": 40,
+       "y": 200,
+       "s": 2.0,
+       "nombre": "casa de paja",
+       "attrs": {
+        "material": "paja"
+       }
+      },
+      {
+       "id": "casa-m",
+       "fig": "casa",
+       "x": 360,
+       "y": 190,
+       "s": 2.0,
+       "nombre": "casa de madera",
+       "attrs": {
+        "material": "madera"
+       }
+      },
+      {
+       "id": "casa-l",
+       "fig": "casa",
+       "x": 740,
+       "y": 170,
+       "s": 2.2,
+       "nombre": "casa de ladrillos",
+       "attrs": {
+        "material": "ladrillos",
+        "rampa": true
+       }
+      },
+      {
+       "id": "carretilla",
+       "fig": "carretilla",
+       "x": 900,
+       "y": 600,
+       "s": 1.2,
+       "nombre": "carretilla"
+      },
+      {
+       "id": "ladr",
+       "fig": "ladrillos",
+       "x": 600,
+       "y": 620,
+       "s": 1.0,
+       "nombre": "ladrillos"
+      },
+      {
+       "id": "c-gor",
+       "fig": "cerdito",
+       "x": 120,
+       "y": 520,
+       "s": 1.2,
+       "nombre": "cerdito de gorra",
+       "attrs": {
+        "acc": "gorra"
+       }
+      },
+      {
+       "id": "c-buf",
+       "fig": "cerdito",
+       "x": 300,
+       "y": 560,
+       "s": 1.2,
+       "nombre": "cerdito de bufanda",
+       "attrs": {
+        "acc": "bufanda"
+       }
+      },
+      {
+       "id": "c-moc",
+       "fig": "cerdito",
+       "x": 460,
+       "y": 500,
+       "s": 1.2,
+       "nombre": "cerdito de mochila",
+       "attrs": {
+        "acc": "mochila"
+       }
+      },
+      {
+       "id": "balde",
+       "fig": "balde",
+       "x": 1080,
+       "y": 520,
+       "s": 0.9,
+       "nombre": "balde"
+      },
+      {
+       "id": "pala",
+       "fig": "pala",
+       "x": 760,
+       "y": 560,
+       "s": 0.9,
+       "nombre": "pala"
+      },
+      {
+       "id": "arbol",
+       "fig": "arbol",
+       "x": 1040,
+       "y": 120,
+       "s": 1.4,
+       "nombre": "árbol"
+      },
+      {
+       "id": "fardo",
+       "fig": "fardo",
+       "x": 20,
+       "y": 660,
+       "s": 1.0,
+       "nombre": "fardo de paja"
+      },
+      {
+       "id": "tablas",
+       "fig": "tablas",
+       "x": 220,
+       "y": 690,
+       "s": 1.0,
+       "nombre": "tablas"
+      }
+     ]
+    }
+   ],
+   "dificil": [
+    {
+     "id": "det-d1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "consigna": "Encontrá el balde que está detrás de la casa de ladrillos.",
+     "pista1": "Mirá el costado de la casa de ladrillos.",
+     "ok": "Miraste dónde estaba y lo encontraste.",
+     "objetivos": [
+      "balde-a"
+     ],
+     "relacion": {
+      "tipo": "detras",
+      "de": "casa-l"
+     },
+     "region2": {
+      "x": 440,
+      "y": 160,
+      "w": 360,
+      "h": 380
+     },
+     "relleno": 6,
+     "elementos": [
+      {
+       "id": "balde-a",
+       "fig": "balde",
+       "x": 660,
+       "y": 380,
+       "s": 1.0,
+       "nombre": "balde",
+       "atras": true
+      },
+      {
+       "id": "casa-l",
+       "fig": "casa",
+       "x": 450,
+       "y": 200,
+       "s": 3.0,
+       "nombre": "casa de ladrillos",
+       "attrs": {
+        "material": "ladrillos"
+       }
+      },
+      {
+       "id": "balde-b",
+       "fig": "balde",
+       "x": 140,
+       "y": 600,
+       "s": 1.0,
+       "nombre": "balde"
+      },
+      {
+       "id": "casa-p",
+       "fig": "casa",
+       "x": 40,
+       "y": 260,
+       "s": 1.6,
+       "nombre": "casa de paja",
+       "attrs": {
+        "material": "paja"
+       }
+      },
+      {
+       "id": "casa-m",
+       "fig": "casa",
+       "x": 880,
+       "y": 260,
+       "s": 1.6,
+       "nombre": "casa de madera",
+       "attrs": {
+        "material": "madera"
+       }
+      },
+      {
+       "id": "c-gor",
+       "fig": "cerdito",
+       "x": 260,
+       "y": 560,
+       "s": 1.1,
+       "nombre": "cerdito de gorra",
+       "attrs": {
+        "acc": "gorra"
+       }
+      },
+      {
+       "id": "c-moc",
+       "fig": "cerdito",
+       "x": 860,
+       "y": 560,
+       "s": 1.1,
+       "nombre": "cerdito de mochila",
+       "attrs": {
+        "acc": "mochila"
+       }
+      },
+      {
+       "id": "pala",
+       "fig": "pala",
+       "x": 380,
+       "y": 620,
+       "s": 0.9,
+       "nombre": "pala"
+      },
+      {
+       "id": "martillo",
+       "fig": "martillo",
+       "x": 1060,
+       "y": 620,
+       "s": 0.9,
+       "nombre": "martillo"
+      },
+      {
+       "id": "carretilla",
+       "fig": "carretilla",
+       "x": 600,
+       "y": 600,
+       "s": 1.1,
+       "nombre": "carretilla"
+      },
+      {
+       "id": "arbol",
+       "fig": "arbol",
+       "x": 1060,
+       "y": 80,
+       "s": 1.3,
+       "nombre": "árbol"
+      },
+      {
+       "id": "nube",
+       "fig": "nube",
+       "x": 300,
+       "y": 20,
+       "s": 1.2,
+       "nombre": "nube"
+      },
+      {
+       "id": "tablas",
+       "fig": "tablas",
+       "x": 760,
+       "y": 660,
+       "s": 0.9,
+       "nombre": "tablas"
+      },
+      {
+       "id": "fardo",
+       "fig": "fardo",
+       "x": 20,
+       "y": 660,
+       "s": 0.9,
+       "nombre": "fardo de paja"
+      },
+      {
+       "id": "regadera",
+       "fig": "regadera",
+       "x": 980,
+       "y": 480,
+       "s": 0.8,
+       "nombre": "regadera"
+      },
+      {
+       "id": "ladr",
+       "fig": "ladrillos",
+       "x": 480,
+       "y": 690,
+       "s": 0.8,
+       "nombre": "ladrillos"
+      }
+     ]
+    },
+    {
+     "id": "det-d2",
+     "consigna": "Encontrá algo que sirve para construir una casa.",
+     "pista1": "Pensá qué se usa para clavar.",
+     "ok": "Pensaste para qué sirve y lo encontraste.",
+     "objetivos": [
+      "martillo"
+     ],
+     "funcion": "construir",
+     "region2": {
+      "x": 560,
+      "y": 480,
+      "w": 420,
+      "h": 320
+     },
+     "relleno": 12,
+     "relleno_evitar": [
+      "piedra"
+     ],
+     "elementos": [
+      {
+       "id": "martillo",
+       "fig": "martillo",
+       "x": 700,
+       "y": 600,
+       "s": 1.0,
+       "nombre": "martillo",
+       "funcion": "construir"
+      },
+      {
+       "id": "paraguas",
+       "fig": "paraguas",
+       "x": 160,
+       "y": 560,
+       "s": 1.1,
+       "nombre": "paraguas"
+      },
+      {
+       "id": "regadera",
+       "fig": "regadera",
+       "x": 420,
+       "y": 620,
+       "s": 1.0,
+       "nombre": "regadera"
+      },
+      {
+       "id": "c-gor",
+       "fig": "cerdito",
+       "x": 260,
+       "y": 400,
+       "s": 1.3,
+       "nombre": "cerdito de gorra",
+       "attrs": {
+        "acc": "gorra"
+       }
+      },
+      {
+       "id": "c-moc",
+       "fig": "cerdito",
+       "x": 900,
+       "y": 430,
+       "s": 1.3,
+       "nombre": "cerdito de mochila",
+       "attrs": {
+        "acc": "mochila"
+       }
+      },
+      {
+       "id": "lobo",
+       "fig": "lobo",
+       "x": 560,
+       "y": 330,
+       "s": 1.4,
+       "nombre": "lobo"
+      },
+      {
+       "id": "nube",
+       "fig": "nube",
+       "x": 700,
+       "y": 30,
+       "s": 1.3,
+       "nombre": "nube"
+      },
+      {
+       "id": "arbol",
+       "fig": "arbol",
+       "x": 1020,
+       "y": 140,
+       "s": 1.5,
+       "nombre": "árbol"
+      },
+      {
+       "id": "sol",
+       "fig": "sol",
+       "x": 60,
+       "y": 30,
+       "s": 1.2,
+       "nombre": "sol"
+      },
+      {
+       "id": "lupa",
+       "fig": "lupa",
+       "x": 1060,
+       "y": 640,
+       "s": 0.9,
+       "nombre": "lupa"
+      }
+     ]
+    },
+    {
+     "id": "det-d3",
+     "consigna": "Encontrá la mariposa que está arriba de la casa de paja.",
+     "pista1": "Mirá arriba del techo amarillo.",
+     "ok": "Miraste dónde estaba y la encontraste.",
+     "objetivos": [
+      "mar-a"
+     ],
+     "relacion": {
+      "tipo": "arriba",
+      "de": "casa-p"
+     },
+     "region2": {
+      "x": 160,
+      "y": 120,
+      "w": 320,
+      "h": 460
+     },
+     "relleno": 8,
+     "elementos": [
+      {
+       "id": "mar-a",
+       "fig": "mariposa",
+       "x": 280,
+       "y": 190,
+       "s": 0.7,
+       "nombre": "mariposa"
+      },
+      {
+       "id": "casa-p",
+       "fig": "casa",
+       "x": 200,
+       "y": 300,
+       "s": 2.4,
+       "nombre": "casa de paja",
+       "attrs": {
+        "material": "paja"
+       }
+      },
+      {
+       "id": "mar-b",
+       "fig": "mariposa",
+       "x": 820,
+       "y": 520,
+       "s": 0.7,
+       "nombre": "mariposa"
+      },
+      {
+       "id": "flor-b",
+       "fig": "flor",
+       "x": 820,
+       "y": 600,
+       "s": 1.0,
+       "nombre": "flor",
+       "attrs": {
+        "color": "coral"
+       }
+      },
+      {
+       "id": "casa-m",
+       "fig": "casa",
+       "x": 560,
+       "y": 290,
+       "s": 2.0,
+       "nombre": "casa de madera",
+       "attrs": {
+        "material": "madera"
+       }
+      },
+      {
+       "id": "arbol",
+       "fig": "arbol",
+       "x": 980,
+       "y": 160,
+       "s": 1.8,
+       "nombre": "árbol"
+      },
+      {
+       "id": "c-buf",
+       "fig": "cerdito",
+       "x": 60,
+       "y": 580,
+       "s": 1.1,
+       "nombre": "cerdito de bufanda",
+       "attrs": {
+        "acc": "bufanda"
+       }
+      },
+      {
+       "id": "lobo",
+       "fig": "lobo",
+       "x": 600,
+       "y": 560,
+       "s": 1.3,
+       "nombre": "lobo"
+      },
+      {
+       "id": "nube",
+       "fig": "nube",
+       "x": 560,
+       "y": 20,
+       "s": 1.3,
+       "nombre": "nube"
+      },
+      {
+       "id": "balde",
+       "fig": "balde",
+       "x": 1060,
+       "y": 640,
+       "s": 0.9,
+       "nombre": "balde"
+      },
+      {
+       "id": "fardo",
+       "fig": "fardo",
+       "x": 380,
+       "y": 640,
+       "s": 0.9,
+       "nombre": "fardo de paja"
+      },
+      {
+       "id": "pala",
+       "fig": "pala",
+       "x": 940,
+       "y": 560,
+       "s": 0.9,
+       "nombre": "pala"
+      },
+      {
+       "id": "regadera",
+       "fig": "regadera",
+       "x": 220,
+       "y": 660,
+       "s": 0.9,
+       "nombre": "regadera"
+      },
+      {
+       "id": "cometa",
+       "fig": "cometa",
+       "x": 760,
+       "y": 40,
+       "s": 1.0,
+       "nombre": "barrilete"
+      }
+     ]
+    }
+   ]
+  },
+  "memotest": {
+   "facil": [
+    {
+     "id": "mem-f1",
+     "tipo": "imagen-imagen",
+     "parejas": [
+      {
+       "a": {
+        "fig": "cerdito",
+        "nombre": "cerdito de gorra",
+        "attrs": {
+         "acc": "gorra"
+        }
+       },
+       "b": {
+        "fig": "cerdito",
+        "nombre": "cerdito de gorra",
+        "attrs": {
+         "acc": "gorra"
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "casa",
+        "nombre": "casa de paja",
+        "attrs": {
+         "material": "paja"
+        }
+       },
+       "b": {
+        "fig": "casa",
+        "nombre": "casa de paja",
+        "attrs": {
+         "material": "paja"
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "lobo",
+        "nombre": "lobo"
+       },
+       "b": {
+        "fig": "lobo",
+        "nombre": "lobo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "mem-f2",
+     "tipo": "imagen-imagen",
+     "parejas": [
+      {
+       "a": {
+        "fig": "martillo",
+        "nombre": "martillo"
+       },
+       "b": {
+        "fig": "martillo",
+        "nombre": "martillo"
+       }
+      },
+      {
+       "a": {
+        "fig": "balde",
+        "nombre": "balde"
+       },
+       "b": {
+        "fig": "balde",
+        "nombre": "balde"
+       }
+      },
+      {
+       "a": {
+        "fig": "arbol",
+        "nombre": "árbol"
+       },
+       "b": {
+        "fig": "arbol",
+        "nombre": "árbol"
+       }
+      },
+      {
+       "a": {
+        "fig": "casa",
+        "nombre": "casa de ladrillos",
+        "attrs": {
+         "material": "ladrillos"
+        }
+       },
+       "b": {
+        "fig": "casa",
+        "nombre": "casa de ladrillos",
+        "attrs": {
+         "material": "ladrillos"
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "intermedio": [
+    {
+     "id": "mem-i1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "tipo": "imagen-palabra",
+     "parejas": [
+      {
+       "a": {
+        "fig": "fardo",
+        "nombre": "paja"
+       },
+       "b": {
+        "txt": "paja"
+       }
+      },
+      {
+       "a": {
+        "fig": "pala",
+        "nombre": "pala"
+       },
+       "b": {
+        "txt": "pala"
+       }
+      },
+      {
+       "a": {
+        "fig": "lobo",
+        "nombre": "lobo"
+       },
+       "b": {
+        "txt": "lobo"
+       }
+      },
+      {
+       "a": {
+        "fig": "ladrillos",
+        "nombre": "ladrillos"
+       },
+       "b": {
+        "txt": "ladrillo"
+       }
+      }
+     ]
+    },
+    {
+     "id": "mem-i2",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "tipo": "imagen-palabra",
+     "parejas": [
+      {
+       "a": {
+        "fig": "tablas",
+        "nombre": "madera"
+       },
+       "b": {
+        "txt": "madera"
+       }
+      },
+      {
+       "a": {
+        "fig": "martillo",
+        "nombre": "martillo"
+       },
+       "b": {
+        "txt": "martillo"
+       }
+      },
+      {
+       "a": {
+        "fig": "cerdito",
+        "nombre": "cerdito",
+        "attrs": {
+         "acc": "bufanda"
+        }
+       },
+       "b": {
+        "txt": "cerdito"
+       }
+      },
+      {
+       "a": {
+        "fig": "balde",
+        "nombre": "balde"
+       },
+       "b": {
+        "txt": "balde"
+       }
+      },
+      {
+       "a": {
+        "fig": "sol",
+        "nombre": "sol"
+       },
+       "b": {
+        "txt": "sol"
+       }
+      }
+     ]
+    },
+    {
+     "id": "mem-i3",
+     "rutas": [
+      "3-5"
+     ],
+     "tipo": "imagen-silueta",
+     "parejas": [
+      {
+       "a": {
+        "fig": "cerdito",
+        "nombre": "cerdito",
+        "attrs": {
+         "acc": "gorra"
+        }
+       },
+       "b": {
+        "fig": "cerdito",
+        "nombre": "silueta de cerdito",
+        "attrs": {
+         "silueta": true,
+         "acc": "gorra"
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "casa",
+        "nombre": "casa",
+        "attrs": {
+         "material": "paja"
+        }
+       },
+       "b": {
+        "fig": "casa",
+        "nombre": "silueta de casa",
+        "attrs": {
+         "silueta": true,
+         "material": "paja"
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "lobo",
+        "nombre": "lobo"
+       },
+       "b": {
+        "fig": "lobo",
+        "nombre": "silueta de lobo",
+        "attrs": {
+         "silueta": true
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "arbol",
+        "nombre": "árbol"
+       },
+       "b": {
+        "fig": "arbol",
+        "nombre": "silueta de árbol",
+        "attrs": {
+         "silueta": true
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "mem-i4",
+     "rutas": [
+      "3-5"
+     ],
+     "tipo": "imagen-silueta",
+     "parejas": [
+      {
+       "a": {
+        "fig": "martillo",
+        "nombre": "martillo"
+       },
+       "b": {
+        "fig": "martillo",
+        "nombre": "silueta de martillo",
+        "attrs": {
+         "silueta": true
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "balde",
+        "nombre": "balde"
+       },
+       "b": {
+        "fig": "balde",
+        "nombre": "silueta de balde",
+        "attrs": {
+         "silueta": true
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "carretilla",
+        "nombre": "carretilla"
+       },
+       "b": {
+        "fig": "carretilla",
+        "nombre": "silueta de carretilla",
+        "attrs": {
+         "silueta": true
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "sol",
+        "nombre": "sol"
+       },
+       "b": {
+        "fig": "sol",
+        "nombre": "silueta de sol",
+        "attrs": {
+         "silueta": true
+        }
+       }
+      },
+      {
+       "a": {
+        "fig": "paraguas",
+        "nombre": "paraguas"
+       },
+       "b": {
+        "fig": "paraguas",
+        "nombre": "silueta de paraguas",
+        "attrs": {
+         "silueta": true
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "dificil": [
+    {
+     "id": "mem-d1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "tipo": "palabra-palabra",
+     "parejas": [
+      {
+       "a": {
+        "txt": "martillo"
+       },
+       "b": {
+        "txt": "clavo"
+       },
+       "porque": "Con el martillo se clava el clavo."
+      },
+      {
+       "a": {
+        "txt": "chimenea"
+       },
+       "b": {
+        "txt": "humo"
+       },
+       "porque": "Por la chimenea sale el humo."
+      },
+      {
+       "a": {
+        "txt": "viento"
+       },
+       "b": {
+        "txt": "soplar"
+       },
+       "porque": "El viento sopla."
+      },
+      {
+       "a": {
+        "txt": "ladrillo"
+       },
+       "b": {
+        "txt": "pared"
+       },
+       "porque": "Con ladrillos se hace una pared."
+      },
+      {
+       "a": {
+        "txt": "lluvia"
+       },
+       "b": {
+        "txt": "paraguas"
+       },
+       "porque": "El paraguas sirve cuando hay lluvia."
+      }
+     ]
+    },
+    {
+     "id": "mem-d2",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "tipo": "palabra-palabra",
+     "parejas": [
+      {
+       "a": {
+        "txt": "paja"
+       },
+       "b": {
+        "txt": "liviana"
+       },
+       "porque": "La paja es liviana."
+      },
+      {
+       "a": {
+        "txt": "madera"
+       },
+       "b": {
+        "txt": "árbol"
+       },
+       "porque": "La madera sale del árbol."
+      },
+      {
+       "a": {
+        "txt": "carretilla"
+       },
+       "b": {
+        "txt": "llevar"
+       },
+       "porque": "La carretilla sirve para llevar cosas."
+      },
+      {
+       "a": {
+        "txt": "pala"
+       },
+       "b": {
+        "txt": "cavar"
+       },
+       "porque": "Con la pala se cava."
+      },
+      {
+       "a": {
+        "txt": "balde"
+       },
+       "b": {
+        "txt": "agua"
+       },
+       "porque": "En el balde se lleva agua."
+      },
+      {
+       "a": {
+        "txt": "sol"
+       },
+       "b": {
+        "txt": "calor"
+       },
+       "porque": "El sol da calor."
+      }
+     ]
+    },
+    {
+     "id": "mem-d3",
+     "rutas": [
+      "3-5"
+     ],
+     "tipo": "imagen-funcional",
+     "parejas": [
+      {
+       "a": {
+        "fig": "martillo",
+        "nombre": "martillo"
+       },
+       "b": {
+        "fig": "clavo",
+        "nombre": "clavo"
+       },
+       "porque": "Con el martillo se clava el clavo."
+      },
+      {
+       "a": {
+        "fig": "nube",
+        "nombre": "nube con lluvia",
+        "attrs": {
+         "lluvia": true
+        }
+       },
+       "b": {
+        "fig": "paraguas",
+        "nombre": "paraguas"
+       },
+       "porque": "El paraguas sirve cuando llueve."
+      },
+      {
+       "a": {
+        "fig": "viento",
+        "nombre": "viento"
+       },
+       "b": {
+        "fig": "cometa",
+        "nombre": "barrilete"
+       },
+       "porque": "El viento hace volar el barrilete."
+      },
+      {
+       "a": {
+        "fig": "ladrillos",
+        "nombre": "ladrillos"
+       },
+       "b": {
+        "fig": "casa",
+        "nombre": "casa de ladrillos",
+        "attrs": {
+         "material": "ladrillos"
+        }
+       },
+       "porque": "Con ladrillos se hace la casa de ladrillos."
+      },
+      {
+       "a": {
+        "fig": "fardo",
+        "nombre": "paja"
+       },
+       "b": {
+        "fig": "casa",
+        "nombre": "casa de paja",
+        "attrs": {
+         "material": "paja"
+        }
+       },
+       "porque": "Con paja se hace la casa de paja."
+      }
+     ]
+    },
+    {
+     "id": "mem-d4",
+     "rutas": [
+      "3-5"
+     ],
+     "tipo": "imagen-funcional",
+     "parejas": [
+      {
+       "a": {
+        "fig": "tablas",
+        "nombre": "madera"
+       },
+       "b": {
+        "fig": "casa",
+        "nombre": "casa de madera",
+        "attrs": {
+         "material": "madera"
+        }
+       },
+       "porque": "Con madera se hace la casa de madera."
+      },
+      {
+       "a": {
+        "fig": "regadera",
+        "nombre": "regadera"
+       },
+       "b": {
+        "fig": "flor",
+        "nombre": "flor",
+        "attrs": {
+         "color": "coral"
+        }
+       },
+       "porque": "Con la regadera se riega la flor."
+      },
+      {
+       "a": {
+        "fig": "carretilla",
+        "nombre": "carretilla"
+       },
+       "b": {
+        "fig": "ladrillos",
+        "nombre": "ladrillos"
+       },
+       "porque": "En la carretilla se llevan los ladrillos."
+      },
+      {
+       "a": {
+        "fig": "martillo",
+        "nombre": "martillo"
+       },
+       "b": {
+        "fig": "clavo",
+        "nombre": "clavo"
+       },
+       "porque": "Con el martillo se clava el clavo."
+      },
+      {
+       "a": {
+        "fig": "paraguas",
+        "nombre": "paraguas"
+       },
+       "b": {
+        "fig": "gotas",
+        "nombre": "gotas de lluvia"
+       },
+       "porque": "El paraguas sirve cuando caen gotas."
+      },
+      {
+       "a": {
+        "fig": "lupa",
+        "nombre": "lupa"
+       },
+       "b": {
+        "fig": "mariposa",
+        "nombre": "mariposa"
+       },
+       "porque": "Con la lupa se mira de cerca la mariposa."
+      }
+     ]
+    }
+   ]
+  },
+  "escena_frase": {
+   "facil": [
+    {
+     "id": "ef-f1",
+     "escenas": [
+      "paja",
+      "madera",
+      "ladrillos",
+      "festejo"
+     ],
+     "frases": {
+      "paja": "La casa de paja está lista.",
+      "madera": "La casa de madera está lista.",
+      "ladrillos": "La casa de ladrillos está lista.",
+      "festejo": "Los tres cerditos están juntos."
+     },
+     "pistas": {
+      "paja": "manana",
+      "madera": "mediodia",
+      "ladrillos": "tarde",
+      "festejo": "noche"
+     }
+    },
+    {
+     "id": "ef-f2",
+     "escenas": [
+      "lobo-mira",
+      "sopla-paja",
+      "sopla-madera",
+      "sopla-ladrillos"
+     ],
+     "frases": {
+      "lobo-mira": "El lobo mira las tres casas.",
+      "sopla-paja": "La casa de paja se vuela.",
+      "sopla-madera": "La casa de madera se cae.",
+      "sopla-ladrillos": "La casa de ladrillos queda firme."
+     },
+     "pistas": {
+      "lobo-mira": "manana",
+      "sopla-paja": "mediodia",
+      "sopla-madera": "tarde",
+      "sopla-ladrillos": "noche"
+     }
+    }
+   ],
+   "intermedio": [
+    {
+     "id": "ef-i1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "escenas": [
+      "salen",
+      "paja",
+      "madera",
+      "ladrillos",
+      "festejo"
+     ],
+     "frases": {
+      "salen": "Los tres cerditos salen a buscar materiales.",
+      "paja": "El primer cerdito arma la casa con paja liviana.",
+      "madera": "El segundo cerdito arma su casa de madera con martillo.",
+      "ladrillos": "El tercer cerdito arma una casa firme de ladrillos.",
+      "festejo": "Los tres cerditos y un amigo festejan en la casa."
+     },
+     "distractor": "El segundo cerdito arma una casa de paja."
+    },
+    {
+     "id": "ef-i2",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "escenas": [
+      "lobo-mira",
+      "sopla-paja",
+      "sopla-madera",
+      "sopla-ladrillos",
+      "chimenea"
+     ],
+     "frases": {
+      "lobo-mira": "El lobo llega y mira las tres casas.",
+      "sopla-paja": "El lobo sopla y la casa de paja se vuela.",
+      "sopla-madera": "El lobo sopla y la casa de madera se cae.",
+      "sopla-ladrillos": "La casa de ladrillos no se mueve con el soplido.",
+      "chimenea": "El lobo sale corriendo lejos de la casa firme."
+     },
+     "distractor": "El lobo sopla y la casa de ladrillos se cae."
+    }
+   ],
+   "dificil": [
+    {
+     "id": "ef-d1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "escenas": [
+      "salen",
+      "paja",
+      "madera",
+      "ladrillos",
+      "sopla-paja",
+      "sopla-ladrillos"
+     ],
+     "frases": {
+      "salen": "Cada cerdito eligió un material distinto para su casa.",
+      "paja": "Como la paja pesa poco, esa casa se hizo enseguida.",
+      "madera": "Con el martillo, la casa de madera quedó lista a la tarde.",
+      "ladrillos": "Tardó varios días porque los ladrillos se ponen de a uno.",
+      "sopla-paja": "El soplido del lobo se llevó la casa liviana.",
+      "sopla-ladrillos": "Como la casa era firme, el lobo no pudo entrar soplando."
+     },
+     "justificacion": {
+      "pregunta": "¿Por qué la casa de ladrillos no se movió?",
+      "opciones": [
+       {
+        "fig": "ladrillos",
+        "txt": "Porque los ladrillos son pesados y firmes.",
+        "ok": true
+       },
+       {
+        "fig": "flor",
+        "attrs": {
+         "color": "lila"
+        },
+        "txt": "Porque era la casa más linda."
+       },
+       {
+        "fig": "cerdito",
+        "attrs": {
+         "acc": "mochila"
+        },
+        "txt": "Porque el cerdito tenía mochila."
+       }
+      ]
+     }
+    },
+    {
+     "id": "ef-d2",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "escenas": [
+      "lobo-mira",
+      "sopla-paja",
+      "sopla-madera",
+      "sopla-ladrillos",
+      "chimenea",
+      "festejo"
+     ],
+     "frases": {
+      "lobo-mira": "El lobo quería entrar sin permiso a las casas.",
+      "sopla-paja": "La paja es liviana y el soplido se llevó la casa.",
+      "sopla-madera": "Después probó con la de madera, y se cayó.",
+      "sopla-ladrillos": "Como la casa era firme, el lobo no pudo entrar soplando.",
+      "chimenea": "Se quemó la cola y por eso salió corriendo.",
+      "festejo": "Como el lobo no volvió, festejaron juntos en la casa firme."
+     },
+     "justificacion": {
+      "pregunta": "¿Por qué la casa de madera se cayó antes que la de ladrillos?",
+      "opciones": [
+       {
+        "fig": "lobo",
+        "txt": "Porque el lobo llegó primero a la de madera.",
+        "ok": true
+       },
+       {
+        "fig": "casa",
+        "attrs": {
+         "material": "madera"
+        },
+        "txt": "Porque la casa de madera era más linda."
+       },
+       {
+        "fig": "cerdito",
+        "attrs": {
+         "acc": "bufanda"
+        },
+        "txt": "Porque el cerdito tenía bufanda."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  "rompecabezas": {
+   "facil": [
+    {
+     "id": "rom-f1",
+     "escena": "paja",
+     "cols": 2,
+     "filas": 2
+    },
+    {
+     "id": "rom-f2",
+     "escena": "festejo",
+     "cols": 3,
+     "filas": 2
+    }
+   ],
+   "intermedio": [
+    {
+     "id": "rom-i1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "escena": "ladrillos",
+     "cols": 3,
+     "filas": 3
+    },
+    {
+     "id": "rom-i2",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "escena": "salen",
+     "cols": 3,
+     "filas": 3
+    },
+    {
+     "id": "rom-i3",
+     "rutas": [
+      "3-5"
+     ],
+     "escena": "madera",
+     "cols": 3,
+     "filas": 2
+    },
+    {
+     "id": "rom-i4",
+     "rutas": [
+      "3-5"
+     ],
+     "escena": "lobo-mira",
+     "cols": 3,
+     "filas": 2
+    }
+   ],
+   "dificil": [
+    {
+     "id": "rom-d1",
+     "rutas": [
+      "6-8"
+     ],
+     "escena": "festejo",
+     "cols": 4,
+     "filas": 3
+    },
+    {
+     "id": "rom-d2",
+     "rutas": [
+      "6-8"
+     ],
+     "escena": "sopla-ladrillos",
+     "cols": 4,
+     "filas": 3
+    },
+    {
+     "id": "rom-d3",
+     "rutas": [
+      "9-12"
+     ],
+     "escena": "salen",
+     "cols": 4,
+     "filas": 4
+    },
+    {
+     "id": "rom-d4",
+     "rutas": [
+      "9-12"
+     ],
+     "escena": "chimenea",
+     "cols": 4,
+     "filas": 4
+    }
+   ]
+  },
+  "ayudemos": {
+   "facil": [
+    {
+     "id": "ayu-f1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "fig": "viento",
+     "situacion": "El cerdito quiere una casa que el viento no vuele. ¿Con qué la hace?",
+     "condiciones": [
+      {
+       "txt": "Que el viento no la vuele",
+       "fig": "viento"
+      }
+     ],
+     "opciones": [
+      {
+       "id": "paja",
+       "clase": "no-adecuada",
+       "fig": "fardo",
+       "txt": "Con paja",
+       "consecuencia": "El viento mueve la paja. ¿Probamos con otra cosa?"
+      },
+      {
+       "id": "madera",
+       "clase": "parcial",
+       "fig": "tablas",
+       "txt": "Con madera",
+       "consecuencia": "Aguanta un poco de viento. Con viento muy fuerte, se mueve."
+      },
+      {
+       "id": "ladrillos",
+       "clase": "adecuada",
+       "fig": "ladrillos",
+       "txt": "Con ladrillos",
+       "consecuencia": "La casa queda firme."
+      }
+     ],
+     "pasos": {
+      "consigna": "¿Qué se hace primero?",
+      "orden": [
+       {
+        "id": "paredes",
+        "txt": "Levantar las paredes",
+        "fig": "obra",
+        "attrs": {
+         "etapa": 2
+        }
+       },
+       {
+        "id": "techo",
+        "txt": "Poner el techo",
+        "fig": "obra",
+        "attrs": {
+         "etapa": 3
+        }
+       }
+      ]
+     }
+    },
+    {
+     "id": "ayu-f2",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "fig": "nube",
+     "attrs": {
+      "lluvia": true
+     },
+     "situacion": "Llueve y el cerdito quiere un techo para el patio. ¿Con qué lo hace?",
+     "condiciones": [
+      {
+       "txt": "Que no pase el agua",
+       "fig": "gotas"
+      }
+     ],
+     "opciones": [
+      {
+       "id": "flores",
+       "clase": "no-adecuada",
+       "fig": "flor",
+       "attrs": {
+        "color": "lila"
+       },
+       "txt": "Con flores",
+       "consecuencia": "Las flores dejan pasar el agua. ¿Probamos con otra cosa?"
+      },
+      {
+       "id": "tela",
+       "clase": "parcial",
+       "fig": "tela",
+       "txt": "Con tela",
+       "consecuencia": "Con poca lluvia, sirve. Con mucha lluvia, el agua pasa."
+      },
+      {
+       "id": "chapa",
+       "clase": "adecuada",
+       "fig": "chapa",
+       "txt": "Con chapa",
+       "consecuencia": "El agua cae por la chapa y abajo queda seco."
+      }
+     ],
+     "pasos": {
+      "consigna": "¿Qué se hace primero?",
+      "orden": [
+       {
+        "id": "palos",
+        "txt": "Poner los palos",
+        "fig": "marco"
+       },
+       {
+        "id": "techo",
+        "txt": "Poner el techo",
+        "fig": "chapa"
+       }
+      ]
+     }
+    }
+   ],
+   "intermedio": [
+    {
+     "id": "ayu-i1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "fig": "bicicleta",
+     "situacion": "Los cerditos quieren un refugio en la plaza para guardar las bicicletas cuando llueve. Tiene que ser firme y tener techo.",
+     "condiciones": [
+      {
+       "txt": "Que sea firme",
+       "fig": "ladrillos"
+      },
+      {
+       "txt": "Que tenga techo",
+       "fig": "obra",
+       "attrs": {
+        "etapa": 3
+       }
+      }
+     ],
+     "opciones": [
+      {
+       "id": "ladr-chapa",
+       "clase": "adecuada",
+       "fig": "obra",
+       "attrs": {
+        "etapa": 3
+       },
+       "txt": "Paredes de ladrillos y techo de chapa",
+       "consecuencia": "Queda firme y las bicicletas quedan secas."
+      },
+      {
+       "id": "ladr-sin",
+       "clase": "parcial",
+       "fig": "obra",
+       "attrs": {
+        "etapa": 2
+       },
+       "txt": "Paredes de ladrillos sin techo",
+       "consecuencia": "Queda firme, pero la lluvia entra por arriba."
+      },
+      {
+       "id": "paja",
+       "clase": "no-adecuada",
+       "fig": "fardo",
+       "txt": "Paredes de paja",
+       "consecuencia": "Es liviano: el viento lo mueve y no queda firme."
+      },
+      {
+       "id": "lona",
+       "clase": "parcial",
+       "fig": "lona",
+       "txt": "Una lona sobre palos",
+       "consecuencia": "Tiene techo, pero con el viento se mueve."
+      }
+     ],
+     "pasos": {
+      "consigna": "Ordená los pasos para armar el refugio.",
+      "orden": [
+       {
+        "id": "base",
+        "txt": "Hacer la base",
+        "fig": "obra",
+        "attrs": {
+         "etapa": 1
+        }
+       },
+       {
+        "id": "paredes",
+        "txt": "Levantar las paredes",
+        "fig": "obra",
+        "attrs": {
+         "etapa": 2
+        }
+       },
+       {
+        "id": "techo",
+        "txt": "Poner el techo",
+        "fig": "obra",
+        "attrs": {
+         "etapa": 3
+        }
+       },
+       {
+        "id": "puerta",
+        "txt": "Poner la puerta",
+        "fig": "obra",
+        "attrs": {
+         "etapa": 4
+        }
+       }
+      ]
+     }
+    },
+    {
+     "id": "ayu-i2",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "fig": "cajas",
+     "situacion": "En la escuela quieren guardar las pelotas en un lugar que no se moje y que se pueda cerrar.",
+     "condiciones": [
+      {
+       "txt": "Que no se moje",
+       "fig": "gotas"
+      },
+      {
+       "txt": "Que se pueda cerrar",
+       "fig": "obra",
+       "attrs": {
+        "etapa": 4
+       }
+      }
+     ],
+     "opciones": [
+      {
+       "id": "armario",
+       "clase": "adecuada",
+       "fig": "tablas",
+       "txt": "Un armario de madera bajo techo",
+       "consecuencia": "Queda seco y se puede cerrar."
+      },
+      {
+       "id": "caja",
+       "clase": "parcial",
+       "fig": "cajas",
+       "txt": "Una caja de cartón con tapa en el patio",
+       "consecuencia": "Se puede cerrar, pero con la lluvia el cartón se moja."
+      },
+      {
+       "id": "red",
+       "clase": "no-adecuada",
+       "fig": "cuerda",
+       "txt": "Una red colgada del árbol",
+       "consecuencia": "Las pelotas quedan al aire y la lluvia las moja."
+      }
+     ],
+     "pasos": {
+      "consigna": "Ordená los pasos.",
+      "orden": [
+       {
+        "id": "lugar",
+        "txt": "Elegir un lugar con techo",
+        "fig": "lona"
+       },
+       {
+        "id": "armar",
+        "txt": "Armar el armario",
+        "fig": "tablas"
+       },
+       {
+        "id": "guardar",
+        "txt": "Guardar las pelotas",
+        "fig": "cajas"
+       }
+      ]
+     }
+    }
+   ],
+   "dificil": [
+    {
+     "id": "ayu-d1",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "fig": "carpa",
+     "situacion": "Los cerditos arman una carpa en el patio para dormir la siesta.",
+     "condiciones": [
+      {
+       "txt": "Que no pase el agua",
+       "fig": "gotas"
+      },
+      {
+       "txt": "Que quede firme",
+       "fig": "ladrillos"
+      },
+      {
+       "txt": "Que entren los tres",
+       "fig": "tres"
+      }
+     ],
+     "plan": {
+      "consigna": "Antes de empezar, ¿qué plan eligen?",
+      "opciones": [
+       {
+        "id": "mirar",
+        "clase": "adecuada",
+        "fig": "nube",
+        "txt": "Mirar el cielo y después elegir el techo",
+        "consecuencia": "Ven nubes y piensan en un techo que no deje pasar el agua."
+       },
+       {
+        "id": "rapido",
+        "clase": "parcial",
+        "fig": "carpa",
+        "txt": "Armar la carpa rápido",
+        "consecuencia": "La carpa queda armada. Todavía no saben si va a llover."
+       },
+       {
+        "id": "sueltas",
+        "clase": "no-adecuada",
+        "fig": "viento",
+        "txt": "Armarla sin atarla al piso",
+        "consecuencia": "Con el viento, la carpa se mueve de lugar."
+       }
+      ]
+     },
+     "imprevisto": {
+      "fig": "nube",
+      "attrs": {
+       "lluvia": true
+      },
+      "consigna": "De repente empieza a llover y el techo de tela deja pasar el agua. ¿Qué hacen ahora?",
+      "opciones": [
+       {
+        "id": "lona",
+        "clase": "adecuada",
+        "fig": "lona",
+        "txt": "Poner una lona arriba de la carpa",
+        "consecuencia": "El agua cae por los costados de la lona. Adentro queda seco."
+       },
+       {
+        "id": "arbol",
+        "clase": "parcial",
+        "fig": "arbol",
+        "txt": "Mover la carpa abajo del árbol",
+        "consecuencia": "El árbol frena un poco el agua, pero todavía gotea."
+       },
+       {
+        "id": "igual",
+        "clase": "no-adecuada",
+        "fig": "tela",
+        "txt": "Seguir igual",
+        "consecuencia": "El agua sigue pasando por la tela. ¿Probamos otra idea?"
+       }
+      ]
+     },
+     "justificacion": {
+      "pregunta": "¿Por qué eligieron eso?",
+      "opciones": [
+       {
+        "fig": "gotas",
+        "txt": "Porque así no pasa el agua.",
+        "clase": {
+         "lona": "adecuada",
+         "arbol": "parcial"
+        }
+       },
+       {
+        "fig": "arbol",
+        "txt": "Porque las hojas tapan un poco la lluvia.",
+        "clase": {
+         "lona": "parcial",
+         "arbol": "adecuada"
+        }
+       },
+       {
+        "fig": "flor",
+        "attrs": {
+         "color": "coral"
+        },
+        "txt": "Porque es del color que más nos gusta.",
+        "clase": {}
+       }
+      ]
+     }
+    },
+    {
+     "id": "ayu-d2",
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "fig": "mesa",
+     "situacion": "Los cerditos arman un puesto en la feria de la escuela para mostrar sus dibujos.",
+     "condiciones": [
+      {
+       "txt": "Que los dibujos no se vuelen",
+       "fig": "viento"
+      },
+      {
+       "txt": "Que se vean bien",
+       "fig": "lupa"
+      }
+     ],
+     "plan": {
+      "consigna": "Antes de empezar, ¿qué plan eligen?",
+      "opciones": [
+       {
+        "id": "marco",
+        "clase": "adecuada",
+        "fig": "marco",
+        "txt": "Pegar los dibujos en un marco",
+        "consecuencia": "Los dibujos quedan quietos y se ven derechos."
+       },
+       {
+        "id": "sueltos",
+        "clase": "parcial",
+        "fig": "mesa",
+        "txt": "Ponerlos sueltos sobre la mesa",
+        "consecuencia": "Se ven, pero cualquier soplido los mueve."
+       },
+       {
+        "id": "caja",
+        "clase": "no-adecuada",
+        "fig": "cajas",
+        "txt": "Guardarlos en una caja",
+        "consecuencia": "Quedan guardados, pero nadie los puede ver."
+       }
+      ]
+     },
+     "imprevisto": {
+      "fig": "viento",
+      "consigna": "Empieza a soplar mucho viento y el marco se mueve sobre la mesa. ¿Qué hacen ahora?",
+      "opciones": [
+       {
+        "id": "cuerda",
+        "clase": "adecuada",
+        "fig": "cuerda",
+        "txt": "Atar el marco a la mesa con una cuerda",
+        "consecuencia": "El marco queda firme y los dibujos se siguen viendo."
+       },
+       {
+        "id": "piedra",
+        "clase": "parcial",
+        "fig": "piedra",
+        "txt": "Poner una piedra en cada punta",
+        "consecuencia": "Queda más quieto, pero las piedras tapan una parte de los dibujos."
+       },
+       {
+        "id": "mano",
+        "clase": "no-adecuada",
+        "fig": "mano",
+        "txt": "Sostenerlo con la mano todo el tiempo",
+        "consecuencia": "Queda quieto mientras lo sostienen, pero así no pueden atender el puesto."
+       }
+      ]
+     },
+     "justificacion": {
+      "pregunta": "¿Por qué eligieron eso?",
+      "opciones": [
+       {
+        "fig": "cuerda",
+        "txt": "Porque así el viento no lo mueve y se sigue viendo.",
+        "clase": {
+         "cuerda": "adecuada",
+         "piedra": "parcial"
+        }
+       },
+       {
+        "fig": "piedra",
+        "txt": "Porque el peso lo deja quieto.",
+        "clase": {
+         "cuerda": "parcial",
+         "piedra": "adecuada"
+        }
+       },
+       {
+        "fig": "flor",
+        "attrs": {
+         "color": "lila"
+        },
+        "txt": "Porque la mesa es linda.",
+        "clase": {}
+       }
+      ]
+     }
+    }
+   ]
+  }
+ }
+}

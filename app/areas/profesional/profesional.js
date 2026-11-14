@@ -250,8 +250,31 @@ function planView(user, p, plans) {
     </form>`; }).join("")}</div>`;
 }
 
+/* «Los tres cerditos» (FEC-014 §8, REQ-CLI-CER-14): el tiempo de resolución va por defecto como mediana por actividad y grado, sin colores ni
+   semáforos y con la leyenda; el detalle por ejercicio solo si se abre a propósito. La familia no ve nada de esto (REQ-CLI-CER-13). */
+const CERDITOS_ACT = { detectives: "Detectives del cuento", memotest: "Memotest", escena_frase: "Escena y frase", rompecabezas: "Construimos el cuento", ayudemos: "¡Ayudemos a los cerditos!" };
+const CERDITOS_GR = { facil: "Fácil", intermedio: "Intermedio", dificil: "Difícil" };
+const LEYENDA_TIEMPO = "El tiempo se registra como contexto. No cuenta como error ni indica por sí solo una dificultad.";
+const LEYENDA_AUTONOMIA = "Referencia orientativa sobre los apoyos usados en esta actividad. No describe a la persona ni es una evaluación diagnóstica.";
+function cerditosView(ses) {
+  const rounds = ses.filter((s) => s.activityId === "cerditos").flatMap((s) => (s.metrics && s.metrics.rounds) || []);
+  if (!rounds.length) return "";
+  const g = new Map();
+  for (const r of rounds) { const k = r.actividad + "|" + r.grado; if (!g.has(k)) g.set(k, []); g.get(k).push(r.ms); }
+  const med = (xs) => { const a = xs.slice().sort((x, y) => x - y), n = a.length; return n % 2 ? a[(n - 1) / 2] : (a[n / 2 - 1] + a[n / 2]) / 2; };
+  const orden = Object.keys(CERDITOS_ACT), og = Object.keys(CERDITOS_GR);
+  const filas = [...g].map(([k, ms]) => ({ a: k.split("|")[0], gr: k.split("|")[1], n: ms.length, m: med(ms) })).sort((x, y) => orden.indexOf(x.a) - orden.indexOf(y.a) || og.indexOf(x.gr) - og.indexOf(y.gr));
+  return `<h3>Los tres cerditos: tiempo de resolución</h3>
+  <div class="table-wrap"><table class="tbl" id="cerditos-medianas"><thead><tr><th>Actividad</th><th>Grado</th><th>Ejercicios</th><th>Mediana</th></tr></thead>
+  <tbody>${filas.map((f) => `<tr><td>${esc(CERDITOS_ACT[f.a] || f.a)}</td><td>${esc(CERDITOS_GR[f.gr] || f.gr)}</td><td class="num">${f.n}</td><td class="num">${Math.round(f.m / 1000)} s</td></tr>`).join("")}</tbody></table></div>
+  <p class="small" id="cerditos-ley-tiempo">${LEYENDA_TIEMPO}</p><p class="small" id="cerditos-ley-autonomia">${LEYENDA_AUTONOMIA}</p>
+  <details><summary>Ver el detalle por ejercicio</summary><div class="table-wrap"><table class="tbl"><thead><tr><th>Actividad</th><th>Grado</th><th>Ejercicio</th><th>Habilidad</th><th>Resultado</th><th>Apoyo de entrada → máximo</th><th>Autonomía</th><th>Escuchó lo objetivo</th><th>Modalidad</th><th>Autocorrección</th><th>Tiempo</th></tr></thead>
+  <tbody>${rounds.map((r) => `<tr><td>${esc(CERDITOS_ACT[r.actividad] || r.actividad)}</td><td>${esc(CERDITOS_GR[r.grado] || r.grado)}</td><td>${esc(r.item)}</td><td>${esc(r.habilidad || "—")}</td><td>${esc(r.resultado)}</td>
+    <td class="num">${r.apoyo_inicial ?? 0} → ${r.apoyo_max}</td><td>${esc(r.autonomia)}</td><td>${r.audio_objetivo ? "sí" : "no"}</td><td>${esc(r.modalidad || "—")}</td><td>${r.autocorreccion ? "sí" : "no"}</td><td class="num">${Math.round(r.ms / 1000)} s</td></tr>`).join("")}</tbody></table></div></details>`;
+}
+
 function recordsView(ses) {
-  return `<div class="table-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Aventura</th><th>Dónde</th><th>Nivel inicio → fin</th><th>Completó</th><th>1.er intento</th><th>Pistas</th><th>Salida en el piso</th><th>Ánimo (autorreporte)</th><th>Le ayudó</th><th>Le resultó</th><th>Desafío</th></tr></thead>
+  return cerditosView(ses) + `<div class="table-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Aventura</th><th>Dónde</th><th>Nivel inicio → fin</th><th>Completó</th><th>1.er intento</th><th>Pistas</th><th>Salida en el piso</th><th>Ánimo (autorreporte)</th><th>Le ayudó</th><th>Le resultó</th><th>Desafío</th></tr></thead>
   <tbody>${ses.map((s) => `<tr><td>${fmtDateTime(s.startAt)}</td><td>${esc(actById(s.activityId)?.name)}</td><td>${s.context}</td><td class="num">${s.metrics.level} → ${s.metrics.endLevel ?? s.metrics.level}</td>
     <td class="num">${s.metrics.completed}/${s.metrics.items}${s.metrics.abandoned ? " (dejó)" : ""}</td><td class="num">${s.metrics.firstTry}</td><td class="num">${s.metrics.hints}</td><td>${s.metrics.floorExit ? "sí" : "—"}</td>
     <td>${esc(s.moodStart ? moodLabel(s.moodStart) : "—")}</td><td>${esc(s.helped || "—")}</td><td>${esc((CHILD_TEXT.how.find((d) => d.id === s.how) || {}).label || "—")}</td><td>${s.desafioHecho ? "sí" : "—"}</td></tr>`).join("") || `<tr><td colspan="12">Sin registros.</td></tr>`}</tbody></table></div>`;

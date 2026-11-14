@@ -220,6 +220,21 @@ async function loginPro(p, email) {
       await p.waitForSelector('text=Búsquedas terminadas: 1');
       await p.screenshot({ path: S + '/10c-luci.png' });
       await p.click('#luci-done');
+    } else if (id === 'cerditos') {
+      // «Los tres cerditos» (FEC-014, RT-CER-001 v1.3): el profesional elige actividad y grado; quien juega resuelve y el portal recibe el registro.
+      const fh = await p.waitForSelector('.cerditos-frame iframe'); const fr = await fh.contentFrame();
+      await fr.waitForSelector('#a-seguir'); await fr.click('[data-act=detectives]'); await fr.click('[data-gr=facil]'); await fr.click('#a-seguir');
+      // REQ-CLI-CER-03: la primera vez se narra el cuento, lámina por lámina, antes del primer ítem.
+      await fr.waitForSelector('[data-lamina]'); while (await fr.$('#cu-siguiente')) await fr.click('#cu-siguiente');
+      await fr.click('#cu-fin'); await fr.click('#d-empezar');
+      await fr.waitForSelector('#escena');
+      must(!/Estación|Fácil|Intermedio|Difícil|nivel \d/i.test(await fr.textContent('#app')), 'Los tres cerditos no muestra Estación ni grado a quien juega');
+      const obj = await fr.evaluate(() => S.item.objetivos[0]);
+      await fr.focus(`#escena [data-el="${obj}"]`); await fr.press(`#escena [data-el="${obj}"]`, 'Enter');
+      await fr.waitForSelector('#j-seguir');
+      await p.waitForSelector('text=Juegos terminados: 1');
+      await p.screenshot({ path: S + '/10d-cerditos.png' });
+      await p.click('#cerditos-done');
     } else if (id === 'memoria') {
       await p.click('#ch-stop');
     } else {
@@ -238,6 +253,9 @@ async function loginPro(p, email) {
     log('consulta ok', id);
   }
   await p.click('[data-tab=registros]');
+  // REQ-CLI-CER-14: «Los tres cerditos» muestra al profesional la mediana del tiempo por actividad y grado, sin colores y con la leyenda.
+  await p.waitForSelector('#cerditos-medianas');
+  must(/Mediana/.test(await p.textContent('#cerditos-medianas')) && /No cuenta como error/.test(await p.textContent('#cerditos-ley-tiempo')) && !/color|background/i.test(await p.$eval('#cerditos-medianas', (x) => x.outerHTML)), 'cerditos: medianas del tiempo con leyenda y sin colores');
   await p.screenshot({ path: S + '/11-registros.png', fullPage: true });
   await p.click('[data-act=report]'); await p.fill('#rep-desc', 'Prueba de reporte'); await p.click('#rep-form button[type=submit]');
   log('reporte:', await p.textContent('.modal strong.mono')); await p.click('.modal [data-close]');

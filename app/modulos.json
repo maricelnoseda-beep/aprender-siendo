@@ -32,6 +32,7 @@
     "herramientas/memoria/herramienta.js",
     "herramientas/explorapalabras/herramienta.js",
     "herramientas/luci/herramienta.js",
+    "herramientas/cerditos/herramienta.js",
     "areas/ninos/aventura.js",
     "nucleo/utilidades.js",
     "nucleo/interfaz-comun.js",
