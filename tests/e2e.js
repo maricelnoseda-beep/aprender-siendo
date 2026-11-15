@@ -235,6 +235,20 @@ async function loginPro(p, email) {
       await p.waitForSelector('text=Juegos terminados: 1');
       await p.screenshot({ path: S + '/10d-cerditos.png' });
       await p.click('#cerditos-done');
+    } else if (id === 'exploradores') {
+      // «Los cuatro exploradores» (FEC-015, RT-CEX-001): la persona adulta va al mapa; quien juega elige un lugar y resuelve; el portal recibe el registro.
+      const fh = await p.waitForSelector('.cerditos-frame iframe[title="Los cuatro exploradores"]'); const fr = await fh.contentFrame();
+      await fr.waitForSelector('#a-seguir'); await fr.click('#a-seguir');
+      while (await fr.$('#h-sig')) await fr.click('#h-sig');
+      await fr.click('#h-fin');
+      must(!/Estación|Fácil|Intermedio|Difícil|nivel \d/i.test(await fr.textContent('#app')), 'Los cuatro exploradores no muestra Estación ni grado a quien juega');
+      await fr.click('[data-juego="4"]'); await fr.click('#e-empezar');
+      const objs = await fr.evaluate(() => S.item.elementos.map((e, i) => (e.objetivo ? i : -1)).filter((i) => i >= 0));
+      for (const o of objs) { await fr.focus(`#esc [data-el="${o}"]`); await fr.press(`#esc [data-el="${o}"]`, 'Enter'); }
+      await fr.waitForSelector('#j-seguir');
+      await p.waitForSelector('text=Juegos terminados: 1');
+      await p.screenshot({ path: S + '/10e-exploradores.png' });
+      await p.click('#exploradores-done');
     } else if (id === 'memoria') {
       await p.click('#ch-stop');
     } else {
