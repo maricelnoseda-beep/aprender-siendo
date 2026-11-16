@@ -33,6 +33,7 @@
     "herramientas/explorapalabras/herramienta.js",
     "herramientas/luci/herramienta.js",
     "herramientas/cerditos/herramienta.js",
+    "herramientas/exploradores/herramienta.js",
     "areas/ninos/aventura.js",
     "nucleo/utilidades.js",
     "nucleo/interfaz-comun.js",

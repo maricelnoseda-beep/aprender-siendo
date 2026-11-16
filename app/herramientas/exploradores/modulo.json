@@ -1,0 +1,1253 @@
+{
+ "id": "exploradores",
+ "nombre": "Los cuatro exploradores",
+ "tipo": "herramienta",
+ "version": "0.2.0-prueba",
+ "fecha": "2026-11-15",
+ "origen": "Documento rector «La gran aventura de los cuatro exploradores» de la supervisora (2026-11-15), decisiones D1–D8, FEC-015 v0.3 y RT-CEX-001-R v1.0 de PSP-SR",
+ "fec": "FEC-015 v0.3",
+ "respuesta_psp_sr": "RT-CEX-001-R v1.0",
+ "revision_tecnica": "RT-CEX-001 v1.1",
+ "estado": "borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos",
+ "activo": true,
+ "_nota": "Ficha técnica. Estación, habilidades, grados, apoyos y números salen de la FEC-015 (contenido clínico de PSP-SR, nivel C). DEV-IA solo traduce a parámetros de código. Generada por scripts/exploradores_generar.py.",
+ "ficha": {
+  "proposito": "Practicar percepción y procesamiento visual en ocho retos de una aventura, con tres grados, apoyos graduados y recorrido libre.",
+  "habilidad": "Mirar con atención, comparar, reconocer formas que cambian, completar imágenes, encontrar cosas escondidas, ubicarse en un camino, trazar recorridos y recordar lo que se vio.",
+  "para_que_sirve": "En esta aventura, Luna, Tomás, Roco y Michi buscan un tesoro en un bosque. Para avanzar hay que mirar con atención, comparar, encontrar cosas escondidas, ubicarse en un camino, trazar recorridos y recordar lo que se vio.",
+  "texto_familia": "En esta aventura se practica mirar con atención, comparar, encontrar cosas escondidas, ubicarse en un camino, trazar recorridos y recordar lo que se vio. No es un tratamiento ni una evaluación.",
+  "texto_profesional": "Estimulación de la percepción visual en ocho juegos (diez variantes) por Estaciones, tres grados y escala de apoyos 0–3 con retiro progresivo. Registro por habilidad, sin puntajes ni comparación con la edad. Nivel C.",
+  "texto_profesional_7_1": "Esta aventura no es un test de percepción visual, de visión ni de motricidad, y no tiene baremos. El registro describe el desempeño en estas tareas y los apoyos usados; no describe a la persona ni es una evaluación diagnóstica. Si observa en la vida diaria señales visuales persistentes (acercarse mucho a las imágenes, entrecerrar los ojos, cansancio visual, dolor de cabeza al leer), considere la derivación a oftalmología. Si observa torpeza motora significativa, a terapia ocupacional o psicomotricidad.",
+  "nota_juego_5": "La práctica de tareas espaciales mejora el desempeño en otras tareas espaciales (Uttal et al., 2013, nivel A). No hay evidencia de que esta aventura, por sí sola, mejore la matemática o la lectura.",
+  "edad": "3 a 12 años (detalle por reto en rutas). 13 a 18 excluida (D6)",
+  "nivel_evidencia": "C",
+  "rotulo_evidencia": "Basada en práctica clínica, con evidencia limitada",
+  "dosis_sugerida": "1 o 2 retos por sesión, 2 o 3 veces por semana, dentro del tiempo de sesión de su edad.",
+  "dosis_nota_profesional": "Dosis orientativa, sin estudios que la respalden.",
+  "fuentes": [
+   "Kavale y Mattson (1983). Journal of Learning Disabilities, 16(3), 165–173. DOI 10.1177/002221948301600307 (A)",
+   "AAP y sociedades de oftalmología (2009). Joint statement: Learning disabilities, dyslexia, and vision. Pediatrics. PMID 19651597 (consenso)",
+   "Uttal et al. (2013). Psychological Bulletin, 139(2), 352–402. DOI 10.1037/a0028446 (A, tareas espaciales)",
+   "Santangelo y Graham (2016). Educational Psychology Review, 28(2), 225–265. DOI 10.1007/s10648-015-9335-1 (A)",
+   "Woods et al. (2013). Acta Psychologica, 143(2), 191–199. DOI 10.1016/j.actpsy.2013.03.008 (B)",
+   "Fisher, Godwin y Seltman (2014). Psychological Science, 25(7), 1362–1370. DOI 10.1177/0956797614533801 (B)",
+   "Melby-Lervåg y Hulme (2013). Developmental Psychology. DOI 10.1037/a0028228 (A)",
+   "Sala y Gobet (2017). Current Directions in Psychological Science, 26(6), 515–520. DOI 10.1177/0963721417712760 (A)",
+   "Wood, Bruner y Ross (1976). Journal of Child Psychology and Psychiatry, 17(2), 89–100 (marco teórico)",
+   "Belland et al. (2017). Review of Educational Research, 87(2), 309–344 (A, STEM)",
+   "Mueller y Dweck (1998). Journal of Personality and Social Psychology, 75(1), 33–52 (B)"
+  ],
+  "declaracion_transferencia": {
+   "B": "Se practica dentro de la app. No hay evidencia de que mejore por sí sola habilidades fuera de la app.",
+   "transferir": "Transferir describe lo que pide la actividad: aplicar una estrategia a situaciones nuevas dentro de la app. No garantiza que la persona la use fuera de la app."
+  },
+  "no_es": "No es un test de percepción visual, de visión, de atención ni de motricidad; no da un perfil perceptivo; no ubica a nadie en una Estación; no reemplaza la enseñanza explícita de lectura y escritura ni la evaluación de oftalmología, terapia ocupacional o psicomotricidad.",
+  "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015). Baja visión: zoom, objetivos grandes y contraste.",
+  "autor": "Lic. M. G. Noseda, Mat. 101 (diseño pedagógico) · PSP-SR (FEC-015)",
+  "revisor_clinico": "Lic. M. G. Noseda (pendiente)"
+ },
+ "decisiones_supervisora": {
+  "_nota": "Decisiones de diseño (FEC-015 §17) y pedidos del 2026-11-15. No son el registro de aprobación de una versión.",
+  "D1": "Actividades e imágenes rediseñadas (0.4) e ilustraciones originales (0.5).",
+  "D2": "Evidencia aceptada.",
+  "D3": "Piezas del mapa en lugar de estrellas y medallas; sin voz grabada; sin reloj visible en 8A; trazo no guardado.",
+  "D4": "Cada juego se llama «reto».",
+  "D5": "Juego 1 y 8A en E2 Reconocer; 8B en E4 Transferir. El orden del mapa sigue el documento rector.",
+  "D6": "Ruta 13–18 excluida.",
+  "D7": "Ningún texto suena solo: se escucha al tocar su parlante (REQ-CLI-EXP-21). Reemplaza, para esta aventura, el audio activado por defecto de M11 en 3–8.",
+  "D8": "Letra mayúscula o minúscula de imprenta elegible por la persona adulta; mayúscula por defecto en 3–8 y minúscula en 9–12 (REQ-CLI-EXP-22)."
+ },
+ "letra": {
+  "opciones": [
+   "mayuscula",
+   "minuscula"
+  ],
+  "por_defecto": {
+   "3-5": "mayuscula",
+   "6-8": "mayuscula",
+   "9-12": "minuscula"
+  },
+  "rige_desde": "item-siguiente",
+  "_estado": "D8 y RT-CEX-001-R 3.3. Cambiar la letra es apoyo de acceso (R11); con un ítem en curso, rige desde el siguiente. Se registra tipo_letra por ítem."
+ },
+ "audio": {
+  "automatico": false,
+  "parlante_min_px": 44,
+  "escuchar_historia": true,
+  "regla": "D7: nada suena solo; cada texto tiene su parlante al lado y se escucha al tocarlo (REQ-CLI-EXP-21)."
+ },
+ "consigna_breve_max": 60,
+ "habilidades_nuevas_propuestas": {
+  "_nota": "FEC-015 5.2: provisorias hasta la tabla de anclajes EST-07 y la aprobación de la supervisora.",
+  "constancia-de-forma": "Juego 2",
+  "cierre-visual": "Juego 3",
+  "figura-fondo": "Juego 4",
+  "posicion-en-el-espacio": "Juego 5",
+  "integracion-visomotora": "Juego 6 (solo con la nota de 5.9)",
+  "memoria-visual": "Juego 7A",
+  "memoria-visual-secuencial": "Juego 7B",
+  "velocidad-de-procesamiento-visual": "Juego 8A"
+ },
+ "vocabulario_dimensiones_propuesto": {
+  "_nota": "Dimensiones que la FEC-015 usa y no están en la lista cerrada del §4 de CRIT-001 (pendiente PSP-SR).",
+  "semejanza-distractores": "propuesta de RT-LUC-001",
+  "cantidad-informacion-visual": "Juego 3",
+  "superposicion": "Juego 4",
+  "complejidad-forma": "Juego 6",
+  "precision-requerida": "Juego 6",
+  "demora": "Juego 7A",
+  "interferencia": "Juego 7A",
+  "tipo-operacion": "Juego 7B",
+  "exigencia-temporal-individual": "Juego 8A",
+  "situacion-nueva": "Juego 8B",
+  "cantidad-estrategias": "Juego 8B"
+ },
+ "apoyos_escala": {
+  "_nota": "FEC-015 5.3 = FEC-014 5.4.",
+  "niveles": {
+   "0": "Sin apoyo de aprendizaje. Los apoyos de acceso (parlante, letra, zoom, contraste, sin arrastre) no suben el nivel",
+   "1": "Pista general: orienta la atención sin reducir la tarea",
+   "2": "Ayuda específica: destaca una característica o reduce el campo o las opciones",
+   "3": "Demostración: se muestra cómo se resuelve un paso, se explica y se propone un nuevo intento"
+  },
+  "retiro": {
+   "regla": "si el ítem terminó con apoyo_max 2 o 3, el siguiente arranca con un nivel menos, hasta 0",
+   "texto_adulto": "Después, cada ejercicio arranca con un nivel menos que el máximo que se usó en el anterior, hasta llegar a 0. Las ayudas se ofrecen; nunca se imponen."
+  },
+  "sin_ayuda_para_m10": "apoyo_max 0 (REQ-CLI-CER-08)",
+  "apoyos_de_acceso": [
+   "escuchar",
+   "letra",
+   "zoom",
+   "tocar-y-ubicar",
+   "sin-trazo-fino",
+   "sin-exposicion-breve"
+  ],
+  "por_juego": "Juego 3: «Mostrame un poco más» cuenta como nivel 2. Juego 8A: «Mirala otra vez» cuenta como nivel 1 (alargar la exposición cambia la variable medida)."
+ },
+ "registro": {
+  "_nota": "FEC-015 §8. Por ítem, en código, sin modelo de lenguaje. Nunca se guardan trazos, dibujos, voz, texto, imagen, cámara, ubicación ni mirada.",
+  "campos": [
+   "variante",
+   "juego",
+   "estacion",
+   "grado",
+   "item",
+   "habilidad",
+   "resultado",
+   "intentos",
+   "errores",
+   "tipos_error",
+   "apoyos",
+   "apoyo_inicial",
+   "apoyo_max",
+   "autonomia",
+   "modalidad",
+   "autocorreccion",
+   "ms",
+   "extra"
+  ],
+  "extra": [
+   "paso_revelado (3)",
+   "precision_trazo, salidas, entrada, pantalla, sin_trazo_fino (6)",
+   "audio_objetivo, omisiones, falsas_alarmas (7A)",
+   "exposicion_ms, sin_exposicion_breve, precision, tiempo_respuesta_mediana_ms (8A)",
+   "estrategia (8B)"
+  ],
+  "leyenda_tiempo": "El tiempo se registra como contexto. No cuenta como error ni indica por sí solo una dificultad (salvo en 8A, donde precisión y tiempo van en columnas separadas)."
+ },
+ "criterio_acierto": {
+  "_estado": "RT-CEX-001-R 5 (PSP-SR): de acuerdo para arrancar; en 3–5, 0,6 en el Juego 6",
+  "general": "sin errores en el ítem",
+  "fabrica_precision_minima": 0.7,
+  "fabrica_precision_minima_por_ruta": {
+   "3-5": 0.6
+  },
+  "pistas_precision_minima": 0.85
+ },
+ "m10": {
+  "_nota": "Beta 2, 6.10, dentro de cada variante y por habilidad (FEC-015 5.17). Nunca cambia de reto ni de Estación solo. El tiempo no interviene salvo 8A (M10-7).",
+  "ventana": 10,
+  "minimo": 5,
+  "subir_aciertos": 0.85,
+  "subir_sin_ayuda": 0.7,
+  "mantener_desde": 0.6,
+  "errores_seguidos": 3,
+  "pasos_por_sesion": 1
+ },
+ "error_repetido_umbral": 3,
+ "trazo": {
+  "_estado": "[Suposición] valores de DEV-IA, a calibrar en el entorno de prueba (FEC-015 5.9 punto 3)",
+  "factor_entrada": {
+   "touch": 1.6,
+   "pen": 1.0,
+   "mouse": 1.0
+  },
+  "pantalla_chica_px": 600,
+  "factor_pantalla_chica": 1.25,
+  "tolerancia_segmento": 26,
+  "radio_punto": 40
+ },
+ "exposicion_8a": {
+  "_estado": "RT-CEX-001-R 5 [Suposición, nivel C]: valores de arranque para calibrar; mínimo de 1000 ms en 6–8; nunca más de un acortamiento por sesión",
+  "inicial_ms": 2000,
+  "min_ms": 700,
+  "min_ms_por_ruta": {
+   "6-8": 1000,
+   "9-12": 700
+  },
+  "factor": 0.85,
+  "umbral_precision": 0.85,
+  "pausa_ms": 500,
+  "acortamientos_por_sesion": 1
+ },
+ "colores_daltonismo": {
+  "_nota": "Pares de la paleta con diferencia de color CIE76 de 20 o más en simulación de deuteranopía, protanopía y tritanopía (matrices de Machado, Oliveira y Fernandes, 2009, severidad 1). Cálculo de DEV-IA del 2026-11-15; falta la revisión manual con un simulador (RT-CEX-001).",
+  "pares_validados": [
+   "azul|sol",
+   "celeste|coral",
+   "lila|sol",
+   "azul|coral"
+  ],
+  "solo_en_grados": {
+   "lila|sol": [
+    "intermedio",
+    "dificil"
+   ]
+  },
+  "_psp_sr": "RT-CEX-001-R 5: de acuerdo, con revisión humana con simulador antes del paquete de revisión; lila|sol solo en Intermedio y Difícil"
+ },
+ "items_minimos_prueba": 4,
+ "rutas": {
+  "3-5": {
+   "lee": false,
+   "items_por_ronda": 3,
+   "sesion_min": 12,
+   "sesion_rango": "10 a 15 min, con una persona adulta",
+   "variantes": {
+    "objetos": [
+     "facil",
+     "intermedio"
+    ],
+    "sombras": [
+     "facil",
+     "intermedio"
+    ],
+    "niebla": [
+     "facil",
+     "intermedio"
+    ],
+    "jardin": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "laberinto": [
+     "facil",
+     "intermedio"
+    ],
+    "fabrica": [
+     "facil",
+     "intermedio"
+    ],
+    "cofre_cuales": [
+     "facil",
+     "intermedio"
+    ],
+    "cofre_orden": [
+     "facil"
+    ],
+    "pistas_relampago": [],
+    "pistas_nuevas": []
+   }
+  },
+  "6-8": {
+   "lee": true,
+   "items_por_ronda": 4,
+   "sesion_min": 20,
+   "sesion_rango": "20 min",
+   "variantes": {
+    "objetos": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "sombras": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "niebla": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "jardin": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "laberinto": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "fabrica": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "cofre_cuales": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "cofre_orden": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "pistas_nuevas": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "pistas_relampago": [
+     "facil",
+     "intermedio"
+    ]
+   }
+  },
+  "9-12": {
+   "lee": true,
+   "items_por_ronda": 4,
+   "sesion_min": 28,
+   "sesion_rango": "25 a 30 min",
+   "variantes": {
+    "objetos": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "sombras": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "niebla": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "jardin": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "laberinto": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "fabrica": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "cofre_cuales": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "cofre_orden": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "pistas_relampago": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ],
+    "pistas_nuevas": [
+     "facil",
+     "intermedio",
+     "dificil"
+    ]
+   }
+  }
+ },
+ "rutas_excluidas": {
+  "13-18": "Esta aventura no se ofrece de 13 a 18 años (decisión de la supervisora D6): los protagonistas infantiles infantilizarían a un adolescente."
+ },
+ "estaciones": {
+  "criterio": "CRIT-EST-001 v1.0 (CRIT-001 v1.1)",
+  "estado_clinico": "FEC-015 v0.3 de PSP-SR · pendiente de registro de aprobación",
+  "variantes": [
+   {
+    "variante": "objetos",
+    "juego": 1,
+    "lugar": "El claro de los objetos",
+    "lamina": "claro",
+    "personaje": "luna",
+    "titulo": "1. Los objetos misteriosos · Las cajas de Luna",
+    "titulo_nino": "Las cajas de Luna",
+    "estacion": "reconocer",
+    "habilidad_referencia": "discriminacion-visual",
+    "habilidades": [
+     "discriminacion-visual"
+    ],
+    "habilidades_secundarias": [
+     "atencion-sostenida",
+     "identificacion-de-letras"
+    ],
+    "dimensiones_que_cambian": [
+     "semejanza-distractores",
+     "disponibilidad-apoyos",
+     "complejidad-consignas"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "Modelo pegado en la caja y 3 o 4 objetos; los distintos difieren en la forma. Modelo visible todo el ítem.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "objetos": [
+        3,
+        4
+       ],
+       "rasgo": "forma"
+      }
+     },
+     "intermedio": {
+      "describe": "El intruso del grupo, qué cambió entre dos escenas o tamaño menos evidente (4 a 6 objetos o 2 escenas).",
+      "cambia_respecto_al_anterior": [
+       "semejanza-distractores",
+       "disponibilidad-apoyos"
+      ],
+      "parametros": {
+       "objetos": [
+        4,
+        6
+       ],
+       "rasgos": [
+        "detalle",
+        "orientacion",
+        "tamano"
+       ]
+      }
+     },
+     "dificil": {
+      "describe": "Dos criterios a la vez (forma y marca), elegir el criterio y, en rutas que leen, letras parecidas en la forma de letra elegida.",
+      "cambia_respecto_al_anterior": [
+       "complejidad-consignas",
+       "grado-abstraccion"
+      ],
+      "parametros": {
+       "criterios": 2
+      }
+     }
+    },
+    "lugar_id": 1,
+    "estrategia": "Miro una parte por vez y comparo: la forma, el tamaño, el color, los detalles.",
+    "apoyos": {
+     "1": "Mirá otra vez el modelo.",
+     "2": "Esta tiene algo distinto. ¿Qué es?",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "tocar-y-ubicar",
+     "arrastre opcional",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)",
+     "evitar diferencias solo de color"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Pongan en la mesa tres cucharas y una distinta. Uno cierra los ojos, el otro cambia algo. ¿Qué cambió?",
+    "tipos_error": [
+     "forma",
+     "tamano",
+     "orientacion",
+     "color",
+     "detalle",
+     "omision"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "sombras",
+    "juego": 2,
+    "lugar": "El bosque de las sombras",
+    "lamina": "bosque",
+    "personaje": "michi",
+    "titulo": "2. El bosque de las formas cambiantes · Las sombras del bosque",
+    "titulo_nino": "Las sombras del bosque",
+    "estacion": "explorar",
+    "habilidad_referencia": "constancia-de-forma",
+    "habilidades": [
+     "constancia-de-forma"
+    ],
+    "habilidades_secundarias": [
+     "reconocimiento-visual"
+    ],
+    "dimensiones_que_cambian": [
+     "semejanza-distractores",
+     "grado-abstraccion"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "Una transformación (tamaño); objetos familiares; 2 o 3 sombras.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "transformaciones": 1,
+       "sombras": [
+        2,
+        3
+       ]
+      }
+     },
+     "intermedio": {
+      "describe": "Una transformación de otro tipo (giro o color); sombras de forma parecida.",
+      "cambia_respecto_al_anterior": [
+       "grado-abstraccion",
+       "semejanza-distractores"
+      ],
+      "parametros": {
+       "transformaciones": 1,
+       "sombras": 3
+      }
+     },
+     "dificil": {
+      "describe": "Dos o tres transformaciones a la vez (tamaño, giro, espejo, color) o la misma letra en otra tipografía (rutas que leen).",
+      "cambia_respecto_al_anterior": [
+       "complejidad-relaciones",
+       "grado-abstraccion"
+      ],
+      "parametros": {
+       "transformaciones": [
+        2,
+        3
+       ],
+       "sombras": 4
+      }
+     }
+    },
+    "lugar_id": 2,
+    "estrategia": "Me fijo en la forma, no en el color ni en el tamaño. Si está girada, la giro en mi cabeza.",
+    "apoyos": {
+     "1": "Mirá la forma, no el color.",
+     "2": "Esa sombra no es. Quedan menos.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "tocar-y-ubicar",
+     "arrastre opcional",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Busquen en la casa la misma forma en cosas de distinto tamaño: un círculo en un plato, en una moneda, en una tapa.",
+    "tipos_error": [
+     "forma",
+     "se-guio-por-tamano",
+     "girada"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "niebla",
+    "juego": 3,
+    "lugar": "El puente de la niebla",
+    "lamina": "puente",
+    "personaje": "luna",
+    "titulo": "3. El puente de las imágenes incompletas · La niebla del puente",
+    "titulo_nino": "La niebla del puente",
+    "estacion": "reconocer",
+    "habilidad_referencia": "cierre-visual",
+    "habilidades": [
+     "cierre-visual"
+    ],
+    "habilidades_secundarias": [
+     "reconocimiento-visual"
+    ],
+    "dimensiones_que_cambian": [
+     "cantidad-informacion-visual",
+     "grado-abstraccion",
+     "semejanza-distractores"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "Objeto muy familiar con una hoja que tapa cerca del 20 %; 3 opciones con dibujo completo.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "tapado_pct": 20,
+       "opciones": 3
+      }
+     },
+     "intermedio": {
+      "describe": "Varias partes tapadas por ramas; objetos girados; 4 opciones.",
+      "cambia_respecto_al_anterior": [
+       "cantidad-informacion-visual",
+       "grado-abstraccion"
+      ],
+      "parametros": {
+       "manchas": 5,
+       "opciones": 4
+      }
+     },
+     "dificil": {
+      "describe": "Pocos indicios; 4 opciones de la misma categoría; en rutas que leen, palabra con la mitad de abajo tapada.",
+      "cambia_respecto_al_anterior": [
+       "grado-abstraccion",
+       "semejanza-distractores"
+      ],
+      "parametros": {
+       "manchas": 8,
+       "opciones": 4
+      }
+     }
+    },
+    "lugar_id": 3,
+    "estrategia": "Miro las partes que se ven y pienso qué cosa tiene esas partes.",
+    "apoyos": {
+     "1": "Mirá las partes que se ven: ¿qué forma tienen?",
+     "2": "Ahora se ve un poco más.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "tocar-y-ubicar",
+     "arrastre opcional",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Tapen con un repasador una parte de un objeto y adivinen qué es.",
+    "tipos_error": [
+     "otro-objeto",
+     "misma-categoria"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "jardin",
+    "juego": 4,
+    "lugar": "El jardín de Michi",
+    "lamina": "jardin",
+    "personaje": "michi",
+    "titulo": "4. El jardín escondido de Michi",
+    "titulo_nino": "El jardín de Michi",
+    "estacion": "reconocer",
+    "habilidad_referencia": "figura-fondo",
+    "habilidades": [
+     "figura-fondo"
+    ],
+    "habilidades_secundarias": [
+     "atencion-sostenida",
+     "seguimiento-de-consignas"
+    ],
+    "dimensiones_que_cambian": [
+     "semejanza-distractores",
+     "superposicion",
+     "complejidad-consignas"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "Escena simple (10 a 15 elementos); objetivo destacado; modelo visible.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "elementos": [
+        10,
+        15
+       ]
+      }
+     },
+     "intermedio": {
+      "describe": "20 a 30 elementos; superposición parcial; distractores que comparten un rasgo; 2 o 3 objetivos.",
+      "cambia_respecto_al_anterior": [
+       "semejanza-distractores",
+       "superposicion"
+      ],
+      "parametros": {
+       "elementos": [
+        20,
+        30
+       ],
+       "objetivos": [
+        2,
+        3
+       ]
+      }
+     },
+     "dificil": {
+      "describe": "Escena compleja; consigna combinada (dos rasgos). En 3–5, Difícil con un solo rasgo.",
+      "cambia_respecto_al_anterior": [
+       "complejidad-consignas",
+       "semejanza-distractores"
+      ],
+      "parametros": {
+       "elementos": 28,
+       "rasgos": 2
+      }
+     }
+    },
+    "lugar_id": 4,
+    "estrategia": "Primero miro bien qué busco. Después recorro el jardín de a una parte, sin saltar.",
+    "apoyos": {
+     "1": "Mirá otra vez qué buscamos.",
+     "2": "Está en esta parte del jardín.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "tocar-y-ubicar",
+     "arrastre opcional",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "En el cajón de los cubiertos, o entre los juguetes, encuentren todas las cucharitas.",
+    "tipos_error": [
+     "un-solo-rasgo",
+     "otro-objeto"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "laberinto",
+    "juego": 5,
+    "lugar": "El laberinto de Roco",
+    "lamina": "laberinto",
+    "personaje": "roco",
+    "titulo": "5. El laberinto de las direcciones · Los carteles de Roco",
+    "titulo_nino": "Los carteles de Roco",
+    "estacion": "integrar",
+    "habilidad_referencia": "relaciones-espaciales",
+    "habilidades": [
+     "relaciones-espaciales",
+     "posicion-en-el-espacio"
+    ],
+    "habilidades_secundarias": [
+     "seguimiento-de-consignas",
+     "organizacion-y-planificacion"
+    ],
+    "dimensiones_que_cambian": [
+     "cantidad-pasos",
+     "complejidad-relaciones",
+     "necesidad-planificacion"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "Una relación entre dos alternativas o una indicación (arriba, abajo, adentro, al lado).",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "indicaciones": 1
+      }
+     },
+     "intermedio": {
+      "describe": "Girar el cartel (posición en el espacio) o 2 o 3 indicaciones seguidas.",
+      "cambia_respecto_al_anterior": [
+       "cantidad-pasos",
+       "complejidad-relaciones"
+      ],
+      "parametros": {
+       "indicaciones": [
+        2,
+        3
+       ]
+      }
+     },
+     "dificil": {
+      "describe": "Planear el recorrido pasando por un lugar; en 9–12, derecha e izquierda desde el punto de vista de Roco.",
+      "cambia_respecto_al_anterior": [
+       "necesidad-planificacion",
+       "complejidad-relaciones"
+      ],
+      "parametros": {
+       "planificar": true
+      }
+     }
+    },
+    "lugar_id": 5,
+    "estrategia": "Me pongo en el lugar de Roco: ¿para dónde mira? Después sigo una indicación por vez.",
+    "apoyos": {
+     "1": "Escuchá de nuevo la indicación.",
+     "2": "Seguí la flecha del camino.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "flechas",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Uno esconde un juguete y da indicaciones: dos pasos adelante, uno a la derecha.",
+    "tipos_error": [
+     "confusion-vertical",
+     "confusion-derecha-izquierda",
+     "omision",
+     "relacion",
+     "orientacion"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "fabrica",
+    "juego": 6,
+    "lugar": "La fábrica de caminos",
+    "lamina": "fabrica",
+    "personaje": "tomas",
+    "titulo": "6. La fábrica de los caminos mágicos · El tablero de la fábrica",
+    "titulo_nino": "El tablero de la fábrica",
+    "estacion": "integrar",
+    "estacion_provisoria": true,
+    "habilidad_referencia": "integracion-visomotora",
+    "habilidades": [
+     "integracion-visomotora",
+     "organizacion-y-planificacion"
+    ],
+    "habilidades_secundarias": [
+     "organizacion-y-planificacion"
+    ],
+    "dimensiones_que_cambian": [
+     "complejidad-forma",
+     "precision-requerida",
+     "necesidad-planificacion"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "Caminos anchos y delimitados, rectos o con una curva suave; unir 4 puntos numerados.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "ancho": 90
+      }
+     },
+     "intermedio": {
+      "describe": "Piezas en la grilla de puntos con varios segmentos; caminos más angostos; modelo al lado.",
+      "cambia_respecto_al_anterior": [
+       "complejidad-forma",
+       "precision-requerida"
+      ],
+      "parametros": {
+       "ancho": 60,
+       "segmentos": [
+        4,
+        7
+       ]
+      }
+     },
+     "dificil": {
+      "describe": "Pieza compuesta en la grilla o camino con varios tramos; planificar el orden de los trazos.",
+      "cambia_respecto_al_anterior": [
+       "necesidad-planificacion",
+       "complejidad-forma"
+      ],
+      "parametros": {
+       "ancho": 45,
+       "segmentos": [
+        10,
+        12
+       ]
+      }
+     }
+    },
+    "nota_clinica": "Trazar en una pantalla no es una intervención para la escritura ni para la motricidad. La escritura mejora con enseñanza explícita de la letra (Santangelo y Graham, 2016, nivel A). El entrenamiento perceptivo-motor no mejoró resultados académicos (Kavale y Mattson, 1983, nivel A). Si observa torpeza motora significativa, considere la derivación a terapia ocupacional o psicomotricidad.",
+    "lugar_id": 6,
+    "estrategia": "Miro dónde empieza, voy despacio y miro el modelo cada tanto.",
+    "apoyos": {
+     "1": "Mirá dónde empieza.",
+     "2": "Ahora el camino es más ancho.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "trazo",
+     "tocar-en-orden (sin trazo fino)"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)",
+     "sin trazo fino"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Con papel y lápiz, dibujen un camino y que otro lo siga con el dedo; después cambien.",
+    "tipos_error": [
+     "segmento-de-mas",
+     "orden",
+     "salida"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "cofre_cuales",
+    "juego": 7,
+    "lugar": "El cofre de los recuerdos",
+    "lamina": "cofre",
+    "personaje": "michi",
+    "titulo": "7A. El cofre de los recuerdos: ¿cuáles viste?",
+    "titulo_nino": "¿Cuáles viste?",
+    "estacion": "integrar",
+    "habilidad_referencia": "memoria-visual",
+    "habilidades": [
+     "memoria-visual"
+    ],
+    "habilidades_secundarias": [
+     "atencion-sostenida"
+    ],
+    "dimensiones_que_cambian": [
+     "demora",
+     "semejanza-distractores",
+     "interferencia"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "2 o 3 cosas muy distintas; después aparecen de a una (4 o 5) y se responde «Estaba» o «No estaba»; sin demora.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "mostrar": [
+        2,
+        3
+       ],
+       "demora_ms": 0
+      }
+     },
+     "intermedio": {
+      "describe": "4 o 5 cosas; demora breve; las nuevas son de la misma categoría.",
+      "cambia_respecto_al_anterior": [
+       "demora",
+       "semejanza-distractores"
+      ],
+      "parametros": {
+       "mostrar": [
+        4,
+        5
+       ],
+       "demora_ms": 2500
+      }
+     },
+     "dificil": {
+      "describe": "6 cosas; demora mayor; tocar las hojas entre mirar y responder (interferencia).",
+      "cambia_respecto_al_anterior": [
+       "interferencia"
+      ],
+      "parametros": {
+       "mostrar": 6,
+       "demora_ms": 4000,
+       "interferencia": 5
+      }
+     }
+    },
+    "lugar_id": 7,
+    "estrategia": "Miro cada imagen y le pongo un nombre en mi cabeza.",
+    "apoyos": {
+     "1": "¿Le pusiste nombre?",
+     "2": "Miralas otra vez.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "tocar-y-ubicar",
+     "arrastre opcional",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)",
+     "nombre de la imagen en audio (se registra)"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Pongan cuatro objetos en fila, mírenlos, tápenlos con una tela y digan el orden.",
+    "tipos_error": [
+     "omision",
+     "falsa-alarma"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "cofre_orden",
+    "juego": 7,
+    "lugar": "El cofre de los recuerdos",
+    "lamina": "cofre",
+    "personaje": "michi",
+    "titulo": "7B. El cofre de los recuerdos: ¿en qué orden?",
+    "titulo_nino": "¿En qué orden?",
+    "estacion": "integrar",
+    "habilidad_referencia": "memoria-visual-secuencial",
+    "habilidades": [
+     "memoria-visual-secuencial"
+    ],
+    "habilidades_secundarias": [
+     "memoria-de-trabajo"
+    ],
+    "dimensiones_que_cambian": [
+     "cantidad-pasos",
+     "disponibilidad-apoyos",
+     "tipo-operacion"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "2 o 3 cosas en fila; casilleros numerados y la primera ya ubicada.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "secuencia": [
+        2,
+        3
+       ],
+       "primero_ubicado": true
+      }
+     },
+     "intermedio": {
+      "describe": "4 o 5 cosas sin ayuda de ubicación, o «¿cuál falta?».",
+      "cambia_respecto_al_anterior": [
+       "cantidad-pasos",
+       "disponibilidad-apoyos"
+      ],
+      "parametros": {
+       "secuencia": [
+        4,
+        5
+       ]
+      }
+     },
+     "dificil": {
+      "describe": "6 cosas: «¿cuáles dos cambiaron de lugar?».",
+      "cambia_respecto_al_anterior": [
+       "tipo-operacion"
+      ],
+      "parametros": {
+       "secuencia": 6,
+       "cambiados": 2
+      }
+     }
+    },
+    "lugar_id": 7,
+    "estrategia": "Digo el orden bajito: primero, después, al final.",
+    "apoyos": {
+     "1": "Pensá cuál viste primero.",
+     "2": "Una ya está en su lugar.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "tocar-y-ubicar",
+     "arrastre opcional",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Pongan cuatro objetos en fila, mírenlos, tápenlos con una tela y digan el orden.",
+    "tipos_error": [
+     "transposicion",
+     "intrusion",
+     "cambio"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "pistas_relampago",
+    "juego": 8,
+    "lugar": "La carrera de pistas",
+    "lamina": "sendero",
+    "personaje": "roco",
+    "titulo": "8A. Pistas relámpago · La carrera de pistas",
+    "titulo_nino": "Pistas relámpago",
+    "estacion": "reconocer",
+    "habilidad_referencia": "velocidad-de-procesamiento-visual",
+    "habilidades": [
+     "velocidad-de-procesamiento-visual"
+    ],
+    "habilidades_secundarias": [
+     "discriminacion-visual"
+    ],
+    "disenado_para_tiempo": true,
+    "dimensiones_que_cambian": [
+     "semejanza-distractores",
+     "cantidad-estimulos",
+     "exigencia-temporal-individual"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "Las pistas aparecen de a una; «Es igual» o «No es igual»; sin límite; pistas muy distintas.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "pistas": 8,
+       "limite": null
+      }
+     },
+     "intermedio": {
+      "describe": "2 o 3 pistas juntas para tocar la igual; más parecidas; el tiempo se registra y no se muestra.",
+      "cambia_respecto_al_anterior": [
+       "semejanza-distractores",
+       "cantidad-estimulos"
+      ],
+      "parametros": {
+       "pistas": 6,
+       "alternativas": [
+        2,
+        3
+       ]
+      }
+     },
+     "dificil": {
+      "describe": "Pistas muy parecidas; exposición breve ajustada al desempeño de la propia persona; guardar cada pista en una de dos mochilas.",
+      "cambia_respecto_al_anterior": [
+       "semejanza-distractores",
+       "exigencia-temporal-individual"
+      ],
+      "parametros": {
+       "pistas": 8,
+       "exposicion": "individual"
+      }
+     }
+    },
+    "lugar_id": 8,
+    "estrategia": "Miro bien la pista del collar y comparo con cuidado.",
+    "apoyos": {
+     "1": "Mirá bien. No hay apuro.",
+     "2": "Fijate en un detalle.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "tocar-y-ubicar",
+     "arrastre opcional",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)",
+     "sin exposición breve"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Jueguen a encontrar en la cocina algo que sea igual a lo que el otro muestra.",
+    "tipos_error": [
+     "falsa-alarma",
+     "omision",
+     "rasgo"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   },
+   {
+    "variante": "pistas_nuevas",
+    "juego": 8,
+    "lugar": "El campamento nuevo",
+    "lugar_id": 9,
+    "lamina": "campamento",
+    "personaje": "tomas",
+    "titulo": "8B. Pistas nuevas",
+    "titulo_nino": "Pistas nuevas",
+    "estacion": "transferir",
+    "habilidad_referencia": "transferencia-a-situaciones-nuevas",
+    "habilidades": [
+     "transferencia-a-situaciones-nuevas"
+    ],
+    "habilidades_secundarias": [
+     "generalizacion",
+     "autocorreccion"
+    ],
+    "dimensiones_que_cambian": [
+     "situacion-nueva",
+     "cantidad-estrategias",
+     "necesidad-planificacion"
+    ],
+    "grados": {
+     "facil": {
+      "describe": "Escena nueva con un objeto de otro reto, ahora girado.",
+      "cambia_respecto_al_anterior": [],
+      "parametros": {
+       "estrategias": 1
+      }
+     },
+     "intermedio": {
+      "describe": "Dos estrategias combinadas: bandera igual y al lado del árbol.",
+      "cambia_respecto_al_anterior": [
+       "cantidad-estrategias",
+       "complejidad-consignas"
+      ],
+      "parametros": {
+       "estrategias": 2
+      }
+     },
+     "dificil": {
+      "describe": "Plan previo, recordar el orden de las pistas, llevar a Roco y revisar («¿Cumple todas las pistas?»).",
+      "cambia_respecto_al_anterior": [
+       "necesidad-planificacion",
+       "cantidad-estrategias"
+      ],
+      "parametros": {
+       "estrategias": 3,
+       "plan_previo": true
+      }
+     }
+    },
+    "estrategia": "Pienso qué me sirvió antes y lo uso en este lugar nuevo.",
+    "apoyos": {
+     "1": "Esto es como en otro reto. ¿En cuál?",
+     "2": "Está en esta parte.",
+     "3": "Así se resuelve este paso. Ahora probá vos."
+    },
+    "modalidad_respuesta": [
+     "tocar",
+     "tocar-y-ubicar",
+     "arrastre opcional",
+     "teclado"
+    ],
+    "adaptaciones": [
+     "letra mayúscula o minúscula",
+     "parlante en cada texto",
+     "pantalla completa",
+     "zoom (Juego 4 y 8B)"
+    ],
+    "transferencia": "B",
+    "idea_fuera": "Jueguen a encontrar en la cocina algo que sea igual a lo que el otro muestra.",
+    "tipos_error": [
+     "un-solo-rasgo",
+     "omision",
+     "transposicion"
+    ],
+    "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
+   }
+  ]
+ },
+ "originalidad": {
+  "_nota": "FEC-015 sección 0 (bloqueante). Ningún ítem, lámina, orden ni formato de tests con derechos de autor; los nombres de esos instrumentos no figuran en el código: scripts/originalidad.py los busca por huella.",
+  "formatos": "rediseñados según 0.4 (cajas, sombras, despejar la niebla, girar el cartel, tablero de puntos, Estaba/No estaba, casilleros, pistas de a una)"
+ }
+}

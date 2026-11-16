@@ -10,6 +10,8 @@
                                        (la aventura de búsqueda de Luci sola, para probar con doble clic)
   python3 app/build.py --cerditos    → app/dist-cerditos/Los_tres_cerditos.html
                                        (las cinco actividades de «Los tres cerditos», para probar con doble clic)
+  python3 app/build.py --exploradores → app/dist-exploradores/Los_cuatro_exploradores.html
+                                       (los ocho retos de «Los cuatro exploradores», para probar con doble clic)
 
 Las imágenes, la fuente y los recursos se escriben en las fuentes como @@asset:<ruta>@@.
 La versión modular los sirve como archivos (se descargan solo cuando aparecen en pantalla);
@@ -30,7 +32,10 @@ RECURSOS = ["herramientas/isla-de-juegos/isla.html",
             "herramientas/luci/modulo.json",
             "herramientas/cerditos/cerditos.html",
             "herramientas/cerditos/banco.json",
-            "herramientas/cerditos/modulo.json"]
+            "herramientas/cerditos/modulo.json",
+            "herramientas/exploradores/exploradores.html",
+            "herramientas/exploradores/banco.json",
+            "herramientas/exploradores/modulo.json"]
 MIME = {".webp": "image/webp", ".png": "image/png", ".ttf": "font/ttf", ".woff2": "font/woff2"}
 TOKEN = re.compile(r"@@asset:([^@]+)@@")
 read = lambda rel: (root / rel).read_text()
@@ -93,6 +98,20 @@ if "--cerditos" in sys.argv:
     out = root / "dist-cerditos"; out.mkdir(exist_ok=True)
     (out / "Los_tres_cerditos.html").write_text(html)
     print("ok cerditos", (out / "Los_tres_cerditos.html").stat().st_size, "bytes")
+    sys.exit()
+
+if "--exploradores" in sys.argv:
+    # «Los cuatro exploradores» solo, en un archivo: identidad, banco y ficha adentro (RT-CEX-001).
+    datauri = lambda rel: "data:%s;base64,%s" % (MIME[pathlib.Path(rel).suffix], base64.b64encode((root / rel).read_bytes()).decode())
+    js = lambda t: t.replace("<", "\\u003c")
+    html = read("herramientas/exploradores/exploradores.html")
+    html = html.replace("__BRAND_FONT__", TOKEN.sub(lambda m: datauri(m.group(1)), read("nucleo/estilos/identidad.css")), 1)
+    html = (html.replace("__BANCO__", js(json.dumps(json.loads(read("herramientas/exploradores/banco.json")), ensure_ascii=False)), 1)
+                .replace("__MODULO__", js(json.dumps(json.loads(read("herramientas/exploradores/modulo.json")), ensure_ascii=False)), 1)
+                .replace("__INICIO__", "{}", 1))
+    out = root / "dist-exploradores"; out.mkdir(exist_ok=True)
+    (out / "Los_cuatro_exploradores.html").write_text(html)
+    print("ok exploradores", (out / "Los_cuatro_exploradores.html").stat().st_size, "bytes")
     sys.exit()
 
 if UN_ARCHIVO:

@@ -104,11 +104,12 @@ const ok = (cond, name) => { n++; if (!cond) { fails++; console.log("FALLA:", na
 }
 /* Caso 9: "misión" no aparece en la interfaz ni en los textos. */
 {
+  // «omisión» (campo de registro de la FEC-015 §8) no es «misión»: la palabra tiene que empezar ahí.
   // Recorre todos los módulos del portal (núcleo, contenido, áreas y herramientas), no solo algunos archivos.
   const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
   const src = ["contenido", "nucleo", "areas", "herramientas"].flatMap((d) => walk(app(d))).filter((f) => /\.(js|html)$/.test(f))
     .map((f) => fs.readFileSync(f, "utf8")).join("\n");
-  const hits = (src.replace(/"Misiones"/g, "").match(/misi[oó]n(es)?\b/gi) || []);
+  const hits = (src.replace(/"Misiones"/g, "").match(/(?<![a-záéíóúñ])misi[oó]n(es)?\b/gi) || []);
   ok(hits.length === 0, "caso 9: cero apariciones de «misión» (" + hits.length + ")");
 }
 console.log(`\n${n - fails} de ${n} pruebas OK`);
