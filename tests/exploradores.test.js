@@ -1,4 +1,4 @@
-// «Los cuatro exploradores» (FEC-015 v0.2, RT-CEX-001): prueba del motor, de la ficha y del banco, sin navegador.
+// «Los cuatro exploradores» (FEC-015 v0.3, RT-CEX-001-R v1.0 y RT-CEX-001 v1.1): prueba del motor, de la ficha y del banco, sin navegador.
 // Cada bloque cita el requisito de la FEC que cubre (REQ-CLI-EXP-00a a 20) o el pedido de la supervisora del 2026-11-15.
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const dir = path.join(__dirname, '..', 'app', 'herramientas', 'exploradores');
@@ -36,10 +36,37 @@ must(errores(largo).some((x) => /consigna más larga/.test(x)), 'el validador re
 must(JSON.stringify(modulo.letra.opciones) === '["mayuscula","minuscula"]', 'dos formas de letra');
 for (const r of Object.keys(modulo.rutas)) must(modulo.letra.por_defecto[r], `letra por defecto para ${r}`);
 must(/body\.classList\.toggle\("mayus"/.test(html) && /\.mayus \.nino/.test(html), 'la letra cambia en todo lo que ve quien juega');
-let conLetra = 0;
 const recorrer = (x, f) => { if (Array.isArray(x)) x.forEach((y) => recorrer(y, f)); else if (x && typeof x === 'object') { f(x); Object.values(x).forEach((y) => recorrer(y, f)); } };
-recorrer(banco.variantes, (o) => { if ('mayuscula' in o || 'minuscula' in o) { conLetra++; must('mayuscula' in o && 'minuscula' in o, 'cada conjunto de letras tiene las dos formas'); } });
-must(conLetra > 0, 'hay ítems con letras en las dos formas');
+// REQ-CLI-EXP-22 y RT-CEX-001-R 3: un ítem por forma de letra, con rasgo; en mayúscula no hay orientación con letras.
+const conLetras = [];
+for (const [id, gs] of Object.entries(banco.variantes)) for (const [g, its] of Object.entries(gs)) for (const it of its) if (it.lee) conLetras.push({ id, g, it });
+must(conLetras.some((x) => x.it.letra_forma === 'mayuscula') && conLetras.some((x) => x.it.letra_forma === 'minuscula'), 'hay ítems con letras en cada forma');
+must(!conLetras.some((x) => x.it.letra_forma === 'mayuscula' && x.it.rasgo === 'orientacion'), 'en mayúscula no hay ítems de orientación con letras');
+must(conLetras.every((x) => x.g === 'dificil'), 'los ítems con letras van solo en Difícil');
+const Lsol = M.itemsDe(banco, 'objetos', 'dificil', '9-12', { lee: true, letra: 'mayuscula' });
+must(Lsol.every((it) => !it.letra_forma || it.letra_forma === 'mayuscula') && Lsol.some((it) => it.letra_forma), 'con mayúscula solo se ofrecen los ítems de mayúscula');
+let malaLetra = copia(); malaLetra.variantes.objetos.dificil.find((it) => it.letra_forma === 'mayuscula').rasgo = 'orientacion';
+must(errores(malaLetra).some((x) => /orientación con letras/.test(x)), 'el validador rechaza orientación con letras en mayúscula');
+let espejo = copia(); espejo.variantes.objetos.dificil.find((it) => it.letra_forma === 'mayuscula').letras[1] = 'Ǝ';
+must(errores(espejo).some((x) => /no está en el conjunto validado/.test(x)), 'el validador rechaza letras fuera del conjunto validado (letras espejadas)');
+must(/aplicarLetraPendiente/.test(html) && /S\.letraPendiente = /.test(html), 'con un ítem en curso, la letra rige desde el siguiente');
+const reg0 = M.registro({ variante: 'objetos', juego: 1, tipo_letra: 'minuscula', con_letras: true, habilidad: 'discriminacion-visual', apoyos: [], tipos_error: [] });
+const reg1 = M.registro({ variante: 'objetos', juego: 1, tipo_letra: 'mayuscula', con_letras: true, habilidad: 'discriminacion-visual', apoyos: [], tipos_error: [] });
+must(reg0.tipo_letra === 'minuscula' && M.vistaPorHabilidad([reg0, reg1]).length === 2, 'tipo_letra registrado y resultado aparte por tipo de letra');
+
+// ---------- RT-CEX-001-R: textos validados, historia y lugares ----------
+for (const t of M.textosBreves(banco)) must(t.length <= 60, `texto de más de 60 caracteres: ${t}`);
+must(banco.historia.laminas.length === 5 && banco.historia.laminas.every((l) => l.frases.length === 2), 'historia de cinco láminas con dos frases');
+must(banco.historia.laminas[0].frases[0] === 'Luna, Tomás, Roco y Michi encuentran un mapa viejo.', 'texto de la historia de PSP-SR');
+must(/escucharHistoria/.test(html) && banco.textos.nino.escucharHistoria === 'Escuchar la historia', '«Escuchar la historia»');
+const lugares = Object.fromEntries(modulo.estaciones.variantes.map((v) => [v.variante, v.lugar]));
+must(lugares.niebla === 'El puente de la niebla' && lugares.laberinto === 'El laberinto de Roco' && lugares.pistas_nuevas === 'El campamento nuevo' && lugares.sombras === 'El bosque de las sombras', 'nombres de los lugares (2.2)');
+must(M.lugaresDe(modulo, '6-8').length === 9 && M.lugaresDe(modulo, '3-5').length === 7, '8B tiene lugar propio: 9 lugares en 6–8 y 7 en 3–5');
+must(banco.estrategias.objetos.asi_se_juega === 'Guardá en la caja las cosas iguales al modelo.', '«Así se juega» de PSP-SR');
+must(banco.ayudas.cofre_cuales['1'] === '¿Le pusiste nombre?' && banco.textos.nino.demostracion === 'Así se resuelve este paso. Ahora probá vos.', 'ayudas de nivel 1 y frase de la demostración');
+let sinValidar = 0; recorrer(banco.variantes, (o) => { if (o.consigna && o.estado_clinico !== 'validado por PSP-SR') sinValidar++; });
+must(sinValidar === 0, 'cada ítem con estado_clinico «validado por PSP-SR»');
+must(!/pendiente de PSP-SR \(RT-CEX-001\)"/.test(JSON.stringify(banco.variantes)), 'ningún ítem queda con la marca «propuesta de DEV-IA»');
 
 // ---------- REQ-CLI-EXP-17 y D6: rutas ----------
 must(!modulo.rutas['13-18'] && modulo.rutas_excluidas['13-18'], 'ruta 13–18 excluida');
@@ -86,6 +113,9 @@ let est = { ms: x.min_ms };
 must(M.exposicionSiguiente(est, 1, x).ms === x.min_ms, 'nunca baja del mínimo');
 must(M.exposicionSiguiente({ ms: 2000 }, 0.9, x).ms < 2000 && M.exposicionSiguiente({ ms: 1700, anterior: 2000 }, 0.5, x).ms === 2000, 'se acorta solo con 85 % y vuelve si baja');
 must(M.cambiosPorSegundo(x.min_ms, x.pausa_ms) < 3, 'menos de 3 cambios por segundo');
+must(M.exposicionSiguiente({ ms: 1050 }, 1, x, { ruta: '6-8' }).ms === 1000, 'en 6–8 la exposición no baja de 1000 ms');
+must(M.exposicionSiguiente({ ms: 2000 }, 1, x, { ruta: '9-12', yaAcorto: true }).ms === 2000, 'nunca más de un acortamiento por sesión');
+must(M.acierto('fabrica', { errores: 0, extra: { precision_trazo: 0.65 } }, modulo, '3-5') && !M.acierto('fabrica', { errores: 0, extra: { precision_trazo: 0.65 } }, modulo, '6-8'), 'Juego 6: 0,6 en 3–5 y 0,7 en las demás');
 
 // ---------- Acierto y registro mínimo (§8) ----------
 must(M.acierto('fabrica', { errores: 0, extra: { precision_trazo: 0.5 } }, modulo) === false && M.acierto('objetos', { errores: 0, extra: {} }, modulo), 'criterio de acierto');

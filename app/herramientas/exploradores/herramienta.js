@@ -9,7 +9,7 @@ Object.assign(Engines, {
     const c = State.child || {}, quien = c.patientId || "-", consulta = c.context === "consulta";
     const memoria = Engines.exploradores.ultima || (Engines.exploradores.ultima = {});
     const g = memoria[quien] || (memoria[quien] = {});
-    const inicio = { ruta: c.route || "6-8", adulto: consulta, letra: g.letra || null, grados: g.grados || {}, piezas: (g.piezas || []).slice(0, 8), historia: !!g.historia, estrategias: (g.estrategias || []).slice(0, 10) };
+    const inicio = { ruta: c.route || "6-8", adulto: consulta, letra: g.letra || null, grados: g.grados || {}, piezas: (g.piezas || []).slice(0, 9), historia: !!g.historia, estrategias: (g.estrategias || []).slice(0, 10) };
     root.innerHTML = `<div class="isla-frame cerditos-frame"><iframe title="Los cuatro exploradores" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></div>
       <p class="isla-count" aria-live="polite">Todavía no terminaste ningún juego.</p>
       <div class="child-actions"><button class="btn btn-primary big" id="exploradores-done">Terminé de jugar</button></div>`;
@@ -31,7 +31,7 @@ Object.assign(Engines, {
       if (d.type === "exploradores-letra") { if (d.letra === "mayuscula" || d.letra === "minuscula") g.letra = d.letra; return; }
       if (d.type === "exploradores-historia") { g.historia = true; return; }
       if (d.type === "exploradores-estrategia") { if (VARS.includes(d.variante)) g.estrategias = [...new Set([...(g.estrategias || []), d.variante])]; return; }
-      if (d.type === "exploradores-pieza") { const j = num(d.juego, 8); if (j) g.piezas = [...new Set([...(g.piezas || []), j])]; return; }
+      if (d.type === "exploradores-pieza") { const j = num(d.juego, 9); if (j) g.piezas = [...new Set([...(g.piezas || []), j])]; return; }
       if (d.type === "exploradores-piso") { m.floorExit = true; return; }
       if (d.type !== "exploradores-item") return;
       const ayuda = num(d.apoyo_max, 3);

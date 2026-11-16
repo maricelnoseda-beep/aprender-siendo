@@ -1,24 +1,56 @@
 {
- "_nota": "Banco de PRUEBA de «Los cuatro exploradores» (FEC-015 v0.2). Contenido de prueba no validado: ítems de relleno generados por scripts/exploradores_generar.py con semilla fija. Estímulos del mundo de la aventura (0.4), ninguno tomado de un test. La FEC pide al menos 12 por variante y grado en 6–8 para el entorno de prueba: este banco tiene entre 4 y 8 (ver RT-CEX-001).",
+ "_nota": "Banco de PRUEBA de «Los cuatro exploradores» (FEC-015 v0.3). Ítems generados por scripts/exploradores_generar.py con semilla fija, con las consignas, letras y palabras de RT-CEX-001-R v1.0 (estado_clinico: validado por PSP-SR, pendiente de aprobación de la supervisora). La validación ítem por ítem la hace PSP-SR con este archivo. Estímulos del mundo de la aventura (0.4), ninguno tomado de un test. La FEC pide al menos 12 por variante y grado en 6–8: este banco tiene entre 4 y 9 por variante, grado, ruta y forma de letra (ver RT-CEX-001 v1.1).",
  "textos": {
-  "rotulo": "Contenido de prueba no validado",
+  "rotulo": "Contenido de prueba",
   "letraGrupo": "Forma de la letra",
   "letraMayuscula": "Letra mayúscula imprenta",
   "letraMinuscula": "Letra minúscula imprenta",
   "ideaNota": "Opcional. Sin registro, sin fotos y sin evaluar a nadie. Con cosas que ya hay en casa.",
   "adulto": {
    "intro": "Para la persona adulta. Quien juega ve un mapa con lugares; no ve la Estación, el grado ni los aciertos.",
-   "letra": "Cambia la forma de la letra en todo lo que ve quien juega. También se cambia con ABC / abc arriba, en cualquier momento; es un apoyo de acceso y no cuenta como ayuda. Los retos con letras usan las letras de la forma elegida.",
-   "libre": "Los ocho retos están abiertos desde el inicio, sin orden obligatorio ni desbloqueos. El grado se ajusta solo dentro de cada reto y por habilidad; nunca cambia de reto ni de Estación solo.",
+   "parlante": "Tocá el parlante para escuchar cualquier texto.",
+   "letra": "Cambia la forma de la letra en lo que ve quien juega. También se cambia con ABC / abc arriba; si hay un ejercicio en curso, el cambio rige desde el siguiente. Es un apoyo de acceso y no cuenta como ayuda. Los retos con letras usan letras pensadas para cada forma.",
+   "letraSiguiente": "La letra cambia desde el próximo ejercicio.",
+   "libre": "Los retos están abiertos desde el inicio, sin orden obligatorio ni desbloqueos. El grado se ajusta solo dentro de cada reto y por habilidad; nunca cambia de reto ni de Estación solo.",
    "sinTrazoFino": "Sin trazo fino (Juego 6): se une tocando los puntos en orden. Así ya no se practica integración visomotora y el registro va a organización y planificación.",
    "sinExposicionBreve": "Sin exposición breve (Juego 8A): las pistas no se tapan. Los tiempos quedan marcados como «sin exposición breve».",
    "evitarColor": "Evitar diferencias solo de color (Juego 1).",
    "audioNombres": "Permitir escuchar el nombre de cada imagen en el cofre (Juego 7A). Si se usa, el registro lo indica.",
-   "audio": "Nada suena solo: cada texto tiene un parlante y se escucha solo al tocarlo (pedido de la supervisora). En 3 a 5 años, la persona adulta puede tocar el parlante o leer en voz alta."
+   "audio": "Nada suena solo (D7): cada texto tiene un parlante al lado y se escucha solo al tocarlo. En 3 a 5 años, una persona adulta acompaña siempre: toca el parlante o lee en voz alta."
   },
   "nino": {
-   "_estado": "propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001). Textos breves por pedido de la supervisora (2026-11-15). Se escuchan solo al tocar el parlante.",
+   "_estado": "Textos fijos de pantalla. Los que vienen de RT-CEX-001-R v1.0 (sección 2) están listados en _validados; el resto es propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001 v1.1). Nada suena solo: se escucha al tocar el parlante (D7).",
+   "_validados": [
+    "cajaLuna",
+    "cajaOtras",
+    "mostrarMas",
+    "girar",
+    "listo",
+    "empezarAMover",
+    "verModelo",
+    "miraElCofre",
+    "tocaLasHojas",
+    "yaMire",
+    "estaba",
+    "noEstaba",
+    "esIgual",
+    "noEsIgual",
+    "elegiComo",
+    "cumple",
+    "si",
+    "revisar",
+    "yaEncontraste",
+    "escucharHistoria",
+    "demostracion",
+    "relaciones.arriba",
+    "relaciones.abajo",
+    "criterios.forma",
+    "criterios.color",
+    "criterios.marca",
+    "tesoroTexto"
+   ],
    "escuchar": "Escuchar",
+   "escucharHistoria": "Escuchar la historia",
    "historiaTitulo": "La gran aventura",
    "anterior": "Antes",
    "siguiente": "Seguir",
@@ -41,28 +73,28 @@
    "ideaTitulo": "Para jugar fuera de la pantalla",
    "otraVez": "Jugar otra vez",
    "tesoroTitulo": "¡El tesoro!",
-   "tesoroTexto": "Juntaron todas las piezas. ¡Lo encontraron entre todos!",
+   "tesoroTexto": [
+    "¡Juntamos todas las piezas! Encontramos el tesoro.",
+    "Es una lupa de explorador para seguir mirando afuera."
+   ],
    "letra": "letra",
-   "cajaLuna": "Caja de Luna",
-   "cajaOtras": "Las otras",
+   "cajaLuna": "Caja de iguales",
+   "cajaOtras": "Caja de distintos",
    "antes": "Antes",
    "ahora": "Ahora",
-   "encontradas": "Encontradas:",
+   "yaEncontraste": "Ya encontraste {k} de {n}.",
    "sombra": "Sombra",
    "imagenTapada": "Imagen tapada",
-   "mostrarMas": "Mostrame un poco más",
+   "mostrarMas": "Despejar un poco",
    "buscamos": "Buscamos esto",
    "escena": "Escena",
    "acercar": "Acercar",
    "alejar": "Alejar",
    "laberinto": "Laberinto",
-   "girarSuIzq": "Girar a su izquierda",
-   "adelante": "Adelante",
-   "girarSuDer": "Girar a su derecha",
    "hayArbusto": "Ahí hay un arbusto. Probá por otro lado.",
-   "girarUno": "Girar el cartel para un lado",
-   "girarOtro": "Girar el cartel para el otro lado",
+   "girar": "Girar",
    "listo": "Listo",
+   "empezarAMover": "Empezar a mover",
    "cartelApunta": "El cartel apunta a",
    "caminoDe": "Camino de la fábrica",
    "empezaEnLaChispa": "Empezá en la chispa.",
@@ -70,12 +102,13 @@
    "punto": "Punto",
    "tocaEnOrden": "Tocá los puntos en orden.",
    "modelo": "Modelo",
+   "verModelo": "Ver el modelo",
    "tablero": "Tablero de puntos",
-   "miraElCofre": "Mirá lo que guarda Michi.",
+   "miraElCofre": "Mirá lo que Michi guarda en el cofre.",
    "yaMire": "Ya miré",
    "cofreCerrado": "Cofre cerrado",
    "cofreCierra": "Michi cierra el cofre…",
-   "tocaLasHojas": "Tocá todas las hojas.",
+   "tocaLasHojas": "Ahora tocá las hojas que caen.",
    "hoja": "Hoja",
    "estaba": "Estaba",
    "noEstaba": "No estaba",
@@ -84,15 +117,17 @@
    "collarDeRoco": "El collar de Roco",
    "esIgual": "Es igual",
    "noEsIgual": "No es igual",
-   "guardarEn": "Guardar en",
+   "guardarEn": "Guardar",
    "mirala": "Mirala otra vez",
    "pausaBosque": "Bosque tranquilo",
-   "elegiComo": "¿Cómo vas a buscar?",
+   "elegiComo": "¿Cómo vas a buscar? Elegí una forma.",
    "juntaste": "Juntaste:",
    "empezarDeNuevo": "Empezar de nuevo",
    "cumple": "¿Cumple todas las pistas?",
-   "si": "Sí, terminé",
-   "revisar": "Quiero revisar",
+   "si": "Sí, listo",
+   "revisar": "Reviso",
+   "su": "Roco mira para este lado",
+   "demostracion": "Así se resuelve este paso. Ahora probá vos.",
    "mover": {
     "arriba": "Mover para arriba",
     "abajo": "Mover para abajo",
@@ -109,10 +144,10 @@
     "atras": "Atrás"
    },
    "criterios": {
-    "forma": "La misma forma",
-    "color": "El mismo color",
-    "marca": "La misma marca",
-    "tamano": "El mismo tamaño"
+    "forma": "Por la forma",
+    "color": "Por el color",
+    "marca": "Por la marca",
+    "tamano": "Por el tamaño"
    },
    "contar": {
     "titulo": "Contar",
@@ -137,110 +172,114 @@
      }
     ],
     "sugerencia_niebla": "Contale a alguien qué era la imagen escondida."
-   },
-   "consignas_generales": {
-    "objetos": "¿Cuáles son iguales? Mirá los detalles.",
-    "sombras": "¿Cuál es su sombra?",
-    "niebla": "¿Qué hay detrás de la niebla?",
-    "jardin": "Buscá solo lo que te dice Michi.",
-    "laberinto": "Ayudá a Roco a encontrar el camino.",
-    "fabrica": "Hacelo igual al modelo.",
-    "cofre_cuales": "¿Estaba en el cofre?",
-    "cofre_orden": "¿En qué orden estaban?",
-    "pistas_relampago": "¿Es igual a la del collar?",
-    "pistas_nuevas": "Usá lo que aprendiste."
    }
   }
  },
  "historia": {
-  "_estado": "propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001). La FEC-015 describe la historia (DR-§1) pero no trae su texto: estas cinco láminas son relleno breve.",
+  "estado_clinico": "validado por PSP-SR",
   "laminas": [
    {
-    "lamina": "historia_bosque",
-    "descripcion": "Luna, Tomás, Roco y Michi en el bosque",
-    "texto": "Luna, Tomás, Roco y Michi son exploradores."
-   },
-   {
     "lamina": "historia_mapa",
-    "descripcion": "Un mapa roto en pedazos",
-    "texto": "Un día encontraron un mapa roto en pedazos."
+    "descripcion": "Los cuatro encuentran un mapa viejo; Roco lo olfatea",
+    "frases": [
+     "Luna, Tomás, Roco y Michi encuentran un mapa viejo.",
+     "¡Tiene dibujado un tesoro!"
+    ]
    },
    {
     "lamina": "bosque",
-    "descripcion": "El Bosque de los Mil Secretos",
-    "texto": "El mapa lleva al Bosque de los Mil Secretos."
+    "descripcion": "La entrada luminosa del Bosque de los Mil Secretos",
+    "frases": [
+     "El mapa los lleva al Bosque de los Mil Secretos.",
+     "Para llegar al tesoro hay ocho retos."
+    ]
+   },
+   {
+    "lamina": "historia_lugares",
+    "descripcion": "El mapa con los lugares de los retos",
+    "frases": [
+     "En cada reto hay que mirar con mucha atención.",
+     "Comparar, buscar, recordar y encontrar caminos."
+    ]
    },
    {
     "lamina": "historia_bosque",
-    "descripcion": "Los cuatro exploradores te esperan",
-    "texto": "Vos sos el quinto explorador. ¡Vamos juntos!"
+    "descripcion": "Los cuatro miran hacia quien juega",
+    "frases": [
+     "Vos sos el quinto explorador del equipo.",
+     "¡Vamos a resolverlos juntos!"
+    ]
    },
    {
-    "lamina": "historia_tesoro",
-    "descripcion": "Un cofre con el tesoro",
-    "texto": "En cada lugar hay una pieza del mapa. Con todas, hay un tesoro."
+    "lamina": "historia_piezas",
+    "descripcion": "El mapa con un hueco para cada pieza",
+    "frases": [
+     "Cada reto que juguemos nos da una pieza del mapa.",
+     "Podés empezar por el lugar que quieras."
+    ]
    }
   ],
-  "guia_adulto_3_5": "Acompañe sin dar las respuestas. Puede tocar el parlante o leer cada texto en voz alta.",
-  "tesoro_descripcion": "Los cuatro exploradores juntos frente al tesoro"
+  "guia_adulto_3_5": "Acompañe sin dar las respuestas. Puede tocar el parlante, tocar «Escuchar la historia» o leer cada texto en voz alta.",
+  "tesoro_descripcion": "Una lupa de explorador dibujada junto al cofre abierto"
  },
  "estrategias": {
   "objetos": {
-   "estrategia": "Miro una parte por vez y comparo: la forma, el tamaño, el color, los detalles.",
-   "asi_se_juega": "Tocá una cosa y después la caja donde va.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Guardá en la caja las cosas iguales al modelo.",
+   "estrategia": "Mirá una parte por vez: forma, tamaño y detalles.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "sombras": {
-   "estrategia": "Me fijo en la forma, no en el color ni en el tamaño. Si está girada, la giro en mi cabeza.",
-   "asi_se_juega": "Tocá la sombra que es de esa cosa.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Las cosas cambiaron por magia. Llevalas a su sombra.",
+   "estrategia": "Fijate en la forma, no en el color ni el tamaño.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "niebla": {
-   "estrategia": "Miro las partes que se ven y pienso qué cosa tiene esas partes.",
-   "asi_se_juega": "Si querés, tocá «Mostrame un poco más». Después elegí qué es.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Hay algo escondido en la niebla. ¿Qué es?",
+   "estrategia": "Mirá las partes que se ven y pensá qué las tiene.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "jardin": {
-   "estrategia": "Primero miro bien qué busco. Después recorro el jardín de a una parte, sin saltar.",
-   "asi_se_juega": "Tocá en el jardín lo que buscamos.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Buscá en el jardín solo lo que te pide Michi.",
+   "estrategia": "Primero mirá qué buscás. Después, de a una parte.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "laberinto": {
-   "estrategia": "Me pongo en el lugar de Roco: ¿para dónde mira? Después sigo una indicación por vez.",
-   "asi_se_juega": "Usá las flechas para mover a Roco.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Ayudá a Roco a encontrar el camino.",
+   "estrategia": "Pensá hacia dónde mira Roco y seguí de a un paso.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "fabrica": {
-   "estrategia": "Miro dónde empieza, voy despacio y miro el modelo cada tanto.",
-   "asi_se_juega": "Seguí el camino con el dedo, sin levantarlo.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Hacé el camino o la pieza igual al modelo.",
+   "estrategia": "Mirá dónde empieza y andá despacio.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "cofre_cuales": {
-   "estrategia": "Miro cada imagen y le pongo un nombre en mi cabeza.",
-   "asi_se_juega": "Mirá, tocá «Ya miré» y después contestá.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Mirá lo que Michi guarda. Después, ¿estaba o no?",
+   "estrategia": "A cada cosa ponele un nombre en tu cabeza.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "cofre_orden": {
-   "estrategia": "Digo el orden bajito: primero, después, al final.",
-   "asi_se_juega": "Mirá, tocá «Ya miré» y ponelas en orden.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Mirá el orden de las cosas y después armalo.",
+   "estrategia": "Decí el orden bajito: primero, después, al final.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "pistas_relampago": {
-   "estrategia": "Miro bien la pista del collar y comparo con cuidado.",
-   "asi_se_juega": "Mirá cada pista y elegí.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Las pistas pasan de a una. ¿Es igual a la de Roco?",
+   "estrategia": "Mirá bien antes de tocar. No hay apuro.",
+   "estado_clinico": "validado por PSP-SR"
   },
   "pistas_nuevas": {
-   "estrategia": "Pienso qué me sirvió antes y lo uso en este lugar nuevo.",
-   "asi_se_juega": "Buscá en este lugar nuevo.",
-   "_estado": "estrategia: FEC-015; así se juega: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001)"
+   "asi_se_juega": "Este lugar es nuevo. Usá lo que ya sabés.",
+   "estrategia": "Elegí cómo buscar y revisá si cumple todo.",
+   "estado_clinico": "validado por PSP-SR"
   }
  },
  "ayudas": {
+  "_estado": "Nivel 1 y frase del nivel 3: validado por PSP-SR. Nivel 2 y textos auxiliares: propuesta de DEV-IA · pendiente de PSP-SR (RT-CEX-001 v1.1).",
   "objetos": {
    "1": "Mirá otra vez el modelo.",
    "2": "Esta tiene algo distinto. ¿Qué es?",
-   "3": "Comparemos parte por parte: forma, tamaño, color y detalles.",
+   "3": "Así se resuelve este paso. Ahora probá vos.",
    "quedan_dos": "Quedan dos. ¿Cuál es distinta?",
    "zona": "Mirá en esta parte.",
    "mostrada": "Acá había una diferencia. ¡Buscá las otras!"
@@ -248,58 +287,57 @@
   "sombras": {
    "1": "Mirá la forma, no el color.",
    "2": "Esa sombra no es. Quedan menos.",
-   "3": "Mirá cómo gira hasta quedar igual a su sombra."
+   "3": "Así se resuelve este paso. Ahora probá vos."
   },
   "niebla": {
    "1": "Mirá las partes que se ven: ¿qué forma tienen?",
    "2": "Ahora se ve un poco más.",
-   "3": "¡Mirá! Estas partes nos ayudaban a saber qué era.",
+   "3": "Así se resuelve este paso. Ahora probá vos.",
    "quedan_dos": "Quedan dos. ¿Cuál es?"
   },
   "jardin": {
    "1": "Mirá otra vez qué buscamos.",
    "2": "Está en esta parte del jardín.",
-   "3": "Michi lo encontró mirando de a una parte."
+   "3": "Así se resuelve este paso. Ahora probá vos."
   },
   "laberinto": {
-   "1": "Escuchá otra vez la indicación.",
+   "1": "Escuchá de nuevo la indicación.",
    "2": "Seguí la flecha del camino.",
-   "3": "Mirá: Roco hace un paso. Seguí vos.",
+   "3": "Así se resuelve este paso. Ahora probá vos.",
    "relacion2": "Mirá dónde está la cosa grande.",
-   "cartel2": "Mirá dónde está lo que buscamos."
+   "cartel2": "Mirá dónde está lo que buscamos.",
+   "su2": "Mirá hacia dónde mira Roco."
   },
   "fabrica": {
    "1": "Mirá dónde empieza.",
    "2": "Ahora el camino es más ancho.",
-   "3": "Mirá: Tomás une este tramo. Seguí vos.",
-   "camino3": "Tomás va despacio, mirando el camino. Probá igual que él."
+   "3": "Así se resuelve este paso. Ahora probá vos."
   },
   "cofre_cuales": {
-   "1": "Pensá: ¿Michi la guardó?",
+   "1": "¿Le pusiste nombre?",
    "2": "Miralas otra vez.",
-   "3": "Ponele un nombre a cada una: así te acordás."
+   "3": "Así se resuelve este paso. Ahora probá vos."
   },
   "cofre_orden": {
    "1": "Pensá cuál viste primero.",
    "2": "Una ya está en su lugar.",
-   "3": "Decí el orden bajito: primero, después, al final.",
+   "3": "Así se resuelve este paso. Ahora probá vos.",
    "segunda": "Miralas otra vez."
   },
   "pistas_relampago": {
-   "1": "Mirá otra vez la pista del collar.",
+   "1": "Mirá bien. No hay apuro.",
    "2": "Fijate en un detalle.",
-   "3": "Comparemos: mirá la forma y la marca."
+   "3": "Así se resuelve este paso. Ahora probá vos."
   },
   "pistas_nuevas": {
-   "1": "Esto es como en el jardín de Michi.",
+   "1": "Esto es como en otro reto. ¿En cuál?",
    "2": "Está en esta parte.",
-   "3": "Mirá cómo lo encontramos.",
-   "recorrido2": "Acá están las pistas otra vez.",
-   "recorrido3": "Roco da un paso. Seguí vos."
+   "3": "Así se resuelve este paso. Ahora probá vos.",
+   "recorrido2": "Acá están las pistas otra vez."
   }
  },
  "devoluciones": {
-  "_estado": "Frases de acierto y esfuerzo: FEC-015 5.14 (PSP-SR). Frases de error y parciales: propuesta breve de DEV-IA, pendiente.",
+  "estado_clinico": "validado por PSP-SR",
   "acierto": {
    "objetos": "Comparaste parte por parte y la encontraste.",
    "sombras": "Te fijaste en la forma aunque cambió.",
@@ -325,75 +363,113 @@
    "pistas_nuevas": "Revisaste y lo cambiaste: así queda bien."
   },
   "parcial": {
-   "objetos": "Encontraste una. Seguí mirando.",
-   "jardin": "Encontraste una. Faltan más.",
-   "pistas_nuevas": "Encontraste una. Faltan más.",
-   "fabrica_lento": "Llegaste a la puerta. La próxima, probá ir más despacio."
+   "objetos": "Encontraste {k}. Falta {n}: mirá la parte de {zona}.",
+   "objetos_plural": "Encontraste {k}. Faltan {n}: mirá la parte de {zona}.",
+   "jardin": "Ya encontraste {k}. Falta {n}.",
+   "jardin_plural": "Ya encontraste {k}. Faltan {n}.",
+   "laberinto": "El primer paso está bien. Escuchá el segundo.",
+   "fabrica": "Llegaste a la puerta. Probá ir más por el centro.",
+   "cofre_orden": "Las primeras están bien. Revisá las últimas.",
+   "pistas_nuevas": "Cumple una pista. Revisá la otra."
   },
   "error": {
-   "*": "Casi. Mirá otra vez.",
+   "*": "Mirá otra vez.",
    "objetos": {
-    "*": "Esa se parece. Mirá el detalle.",
-    "tamano": "Esa es más grande, pero ¿tiene la misma forma?",
-    "forma": "Mirá la forma. ¿Es la misma?",
-    "orientacion": "Mirá hacia dónde apunta.",
-    "color": "Mirá el color.",
-    "detalle": "Esa se parece. Mirá el detalle de arriba.",
-    "omision": "Esa es igual al modelo. Mirala otra vez.",
-    "intruso": "Esa es igual a las otras. Buscá la distinta.",
-    "diferencia": "Ahí está igual que antes. Mirá otra parte.",
-    "criterio": "Mirá otra vez las dos."
+    "*": "Se parece. Mirá el detalle de arriba.",
+    "tamano": "Mirá otra vez el tamaño.",
+    "orientacion": "Fijate hacia dónde apunta."
    },
    "sombras": {
-    "*": "Esa sombra tiene otra forma.",
-    "forma": "Esa sombra tiene otra forma.",
-    "se-guio-por-tamano": "Esa tiene el mismo tamaño, pero ¿la misma forma?"
+    "*": "Tiene el mismo color, pero ¿tiene la misma forma?",
+    "girada": "Girala en tu cabeza y compará."
    },
    "niebla": {
     "*": "Mirá otra vez las partes que se ven.",
-    "misma-categoria": "Se parece. Mirá bien las partes.",
-    "otro-objeto": "Mirá otra vez las partes que se ven."
+    "puede-despejar": "Podés despejar un poco más."
    },
    "jardin": {
-    "*": "Esa no es. Mirá otra vez qué buscamos.",
-    "un-solo-rasgo": "Se parece. ¿Cumple todo lo que buscamos?"
+    "*": "Ese se parece. Mirá qué buscamos.",
+    "otro-objeto": "Seguí recorriendo de a una parte."
    },
    "laberinto": {
     "*": "Probá mirando hacia dónde mira Roco.",
-    "confusion-vertical": "Mirá: ¿arriba o abajo?",
-    "confusion-derecha-izquierda": "Mirá para qué lado.",
-    "omision": "Falta pasar por un lugar.",
-    "relacion": "Mirá dónde está.",
-    "orientacion": "Mirá hacia dónde apunta el cartel."
+    "omision": "Escuchá de nuevo el primer paso."
    },
    "fabrica": {
-    "*": "Mirá el modelo.",
-    "segmento-de-mas": "Ese palito no está en el modelo.",
-    "orden": "Mirá qué número sigue."
+    "*": "Mirá el modelo: ¿qué punto sigue?",
+    "salida": "Volvé al camino y seguí despacio."
    },
    "cofre_cuales": {
-    "*": "Pensá otra vez.",
-    "omision": "Pensá otra vez: ¿la guardó Michi?",
-    "falsa-alarma": "Se parece. ¿Era esa misma?"
+    "*": "Esa no estaba. Mirá la próxima con calma.",
+    "omision": "Esa sí estaba. ¿Te acordás dónde?"
    },
    "cofre_orden": {
-    "*": "Casi: ¿cuál viste primero?",
-    "transposicion": "Casi: ¿cuál viste primero?",
-    "intrusion": "Esa no estaba en el camino.",
-    "cambio": "Mirá otra vez."
+    "*": "Casi. ¿Cuál viste primero?",
+    "cambio": "Revisá el orden del final."
    },
    "pistas_relampago": {
-    "*": "Mirá otra vez la pista.",
-    "falsa-alarma": "Se parece. Mirá el detalle.",
-    "omision": "Mirá otra vez: ¿es igual?",
-    "rasgo": "Mirá la marca."
+    "*": "Mirá bien el detalle de la pista.",
+    "falsa-alarma": "Esa no era igual. Va otra."
    },
    "pistas_nuevas": {
-    "*": "Esa no es. Mirá otra vez qué buscamos.",
-    "un-solo-rasgo": "Se parece. ¿Cumple todo lo que buscamos?",
-    "omision": "Falta una pista.",
-    "transposicion": "Las pistas iban en otro orden."
+    "*": "Revisá si cumple todas las pistas.",
+    "omision": "Probá otra forma de buscar.",
+    "transposicion": "Probá otra forma de buscar."
    }
+  },
+  "tipos": {
+   "objetos": [
+    "forma",
+    "tamano",
+    "orientacion",
+    "color",
+    "detalle",
+    "omision"
+   ],
+   "sombras": [
+    "forma",
+    "se-guio-por-tamano",
+    "girada"
+   ],
+   "niebla": [
+    "otro-objeto",
+    "misma-categoria"
+   ],
+   "jardin": [
+    "un-solo-rasgo",
+    "otro-objeto"
+   ],
+   "laberinto": [
+    "confusion-vertical",
+    "confusion-derecha-izquierda",
+    "omision",
+    "relacion",
+    "orientacion"
+   ],
+   "fabrica": [
+    "segmento-de-mas",
+    "orden",
+    "salida"
+   ],
+   "cofre_cuales": [
+    "omision",
+    "falsa-alarma"
+   ],
+   "cofre_orden": [
+    "transposicion",
+    "intrusion",
+    "cambio"
+   ],
+   "pistas_relampago": [
+    "falsa-alarma",
+    "omision",
+    "rasgo"
+   ],
+   "pistas_nuevas": [
+    "un-solo-rasgo",
+    "omision",
+    "transposicion"
+   ]
   }
  },
  "ideas_fuera": {
@@ -522,12 +598,12 @@
    "txt": "Por partes"
   },
   {
-   "id": "por-el-color",
-   "txt": "Por el color"
-  },
-  {
    "id": "por-la-forma",
    "txt": "Por la forma"
+  },
+  {
+   "id": "por-el-color",
+   "txt": "Por el color"
   }
  ],
  "nombres": {
@@ -593,7 +669,8 @@
    "facil": [
     {
      "id": "obj-f1",
-     "consigna": "Guardá las huellas iguales a esta.",
+     "consigna": "Guardá en la caja las huellas iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "huella",
@@ -623,7 +700,8 @@
     },
     {
      "id": "obj-f2",
-     "consigna": "Guardá las hojas iguales a esta.",
+     "consigna": "Guardá en la caja las hojas iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "hoja",
@@ -653,7 +731,8 @@
     },
     {
      "id": "obj-f3",
-     "consigna": "Guardá las piedras iguales a esta.",
+     "consigna": "Guardá en la caja las piedras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "piedra",
@@ -683,7 +762,8 @@
     },
     {
      "id": "obj-f4",
-     "consigna": "Guardá las huellas iguales a esta.",
+     "consigna": "Guardá en la caja las huellas iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "huella",
@@ -717,7 +797,8 @@
     },
     {
      "id": "obj-f5",
-     "consigna": "Guardá las hojas iguales a esta.",
+     "consigna": "Guardá en la caja las hojas iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "hoja",
@@ -751,7 +832,8 @@
     },
     {
      "id": "obj-f6",
-     "consigna": "Guardá las piedras iguales a esta.",
+     "consigna": "Guardá en la caja las piedras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "piedra",
@@ -787,7 +869,8 @@
    "intermedio": [
     {
      "id": "obj-i1",
-     "consigna": "¿Cuál es la hoja distinta?",
+     "consigna": "Tocá el intruso: el que es distinto.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "intruso",
      "objetos": [
       {
@@ -817,7 +900,8 @@
     },
     {
      "id": "obj-i2",
-     "consigna": "¿Cuál es la llave distinta?",
+     "consigna": "Tocá el intruso: el que es distinto.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "intruso",
      "objetos": [
       {
@@ -847,7 +931,8 @@
     },
     {
      "id": "obj-i3",
-     "consigna": "¿Cuál es la pluma distinta?",
+     "consigna": "Tocá el intruso: el que es distinto.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "intruso",
      "objetos": [
       {
@@ -881,7 +966,8 @@
     },
     {
      "id": "obj-i4",
-     "consigna": "¿Cuál es la taza distinta?",
+     "consigna": "Tocá el intruso: el que es distinto.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "intruso",
      "objetos": [
       {
@@ -914,7 +1000,8 @@
     },
     {
      "id": "obj-i5",
-     "consigna": "¿Qué cambió? Encontrá las 3 diferencias.",
+     "consigna": "¿Qué cambió en el claro? Buscá 3 diferencias.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "diferencias",
      "escena": "claro",
      "a": [
@@ -1028,7 +1115,8 @@
     },
     {
      "id": "obj-i6",
-     "consigna": "¿Qué cambió? Encontrá las 3 diferencias.",
+     "consigna": "¿Qué cambió en el claro? Buscá 3 diferencias.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "diferencias",
      "escena": "claro",
      "a": [
@@ -1142,7 +1230,9 @@
     },
     {
      "id": "obj-i7",
-     "consigna": "Guardá las piedras iguales a esta.",
+     "consigna": "Guardá en la caja las piedras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil: es la única de cajas en Intermedio (tamaño menos evidente)",
      "tipo": "cajas",
      "modelo": {
       "f": "piedra",
@@ -1186,7 +1276,8 @@
    "dificil": [
     {
      "id": "obj-d1",
-     "consigna": "Guardá las que tienen la misma forma y la misma marca.",
+     "consigna": "Guardá las piedras de igual forma y marca.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "piedra",
@@ -1237,7 +1328,8 @@
     },
     {
      "id": "obj-d2",
-     "consigna": "Guardá las que tienen la misma forma y la misma marca.",
+     "consigna": "Guardá las mochilas de igual forma y marca.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "mochila",
@@ -1288,7 +1380,8 @@
     },
     {
      "id": "obj-d3",
-     "consigna": "Guardá las que tienen la misma forma y la misma marca.",
+     "consigna": "Guardá las tazas de igual forma y marca.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cajas",
      "modelo": {
       "f": "taza",
@@ -1339,31 +1432,34 @@
     },
     {
      "id": "obj-d4",
-     "consigna": "¿En qué se parecen?",
+     "consigna": "¿En qué se parecen? Elegí cómo separarlas.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "criterio",
      "par": [
       {
        "f": "hoja",
-       "c": "verde"
+       "c": "verde",
+       "m": "punto"
       },
       {
        "f": "hoja",
        "c": "sol",
-       "s": 0.7
+       "m": "raya"
       }
      ],
      "opciones": [
       "forma",
       "color",
-      "tamano"
+      "marca"
      ],
      "correcta": "forma",
-     "explica": "Las dos tienen la misma forma de hoja. El color y el tamaño cambian.",
+     "explica": "Las dos tienen la misma forma de hoja.",
      "rasgo": "forma"
     },
     {
      "id": "obj-d5",
-     "consigna": "¿En qué se parecen?",
+     "consigna": "¿En qué se parecen? Elegí cómo separarlas.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "criterio",
      "par": [
       {
@@ -1389,104 +1485,178 @@
     {
      "id": "obj-d6",
      "consigna": "Guardá las letras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "letras",
      "lee": true,
      "rutas": [
       "6-8",
       "9-12"
      ],
-     "modelo": {
-      "minuscula": "b",
-      "mayuscula": "E"
-     },
-     "letras": {
-      "minuscula": [
-       "b",
-       "d",
-       "b",
-       "p",
-       "q",
-       "b"
-      ],
-      "mayuscula": [
-       "E",
-       "F",
-       "E",
-       "B",
-       "F",
-       "E"
-      ]
-     },
-     "rasgo": "orientacion",
-     "_estado": "letras parecidas propuestas por DEV-IA para cada forma de letra: pendiente de PSP-SR"
+     "letra_forma": "minuscula",
+     "modelo": "b",
+     "letras": [
+      "b",
+      "d",
+      "b",
+      "p",
+      "q",
+      "b"
+     ],
+     "rasgo": "orientacion"
     },
     {
      "id": "obj-d7",
      "consigna": "Guardá las letras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "letras",
      "lee": true,
      "rutas": [
       "6-8",
       "9-12"
      ],
-     "modelo": {
-      "minuscula": "d",
-      "mayuscula": "P"
-     },
-     "letras": {
-      "minuscula": [
-       "d",
-       "b",
-       "d",
-       "q",
-       "d",
-       "p"
-      ],
-      "mayuscula": [
-       "P",
-       "R",
-       "P",
-       "B",
-       "P",
-       "R"
-      ]
-     },
-     "rasgo": "orientacion",
-     "_estado": "letras parecidas propuestas por DEV-IA para cada forma de letra: pendiente de PSP-SR"
+     "letra_forma": "minuscula",
+     "modelo": "d",
+     "letras": [
+      "d",
+      "b",
+      "d",
+      "q",
+      "d",
+      "p"
+     ],
+     "rasgo": "orientacion"
     },
     {
      "id": "obj-d8",
      "consigna": "Guardá las letras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "letras",
      "lee": true,
      "rutas": [
       "6-8",
       "9-12"
      ],
-     "modelo": {
-      "minuscula": "n",
-      "mayuscula": "M"
-     },
-     "letras": {
-      "minuscula": [
-       "n",
-       "u",
-       "n",
-       "m",
-       "n",
-       "h"
-      ],
-      "mayuscula": [
-       "M",
-       "N",
-       "M",
-       "W",
-       "M",
-       "N"
-      ]
-     },
-     "rasgo": "orientacion",
-     "_estado": "letras parecidas propuestas por DEV-IA para cada forma de letra: pendiente de PSP-SR"
+     "letra_forma": "minuscula",
+     "modelo": "n",
+     "letras": [
+      "n",
+      "m",
+      "n",
+      "h",
+      "n",
+      "u"
+     ],
+     "rasgo": "detalle"
+    },
+    {
+     "id": "obj-d9",
+     "consigna": "Guardá las letras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "letras",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "minuscula",
+     "modelo": "c",
+     "letras": [
+      "c",
+      "e",
+      "c",
+      "e",
+      "c",
+      "e"
+     ],
+     "rasgo": "detalle"
+    },
+    {
+     "id": "obj-d10",
+     "consigna": "Guardá las letras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "letras",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "mayuscula",
+     "modelo": "E",
+     "letras": [
+      "E",
+      "F",
+      "E",
+      "F",
+      "E",
+      "F"
+     ],
+     "rasgo": "detalle"
+    },
+    {
+     "id": "obj-d11",
+     "consigna": "Guardá las letras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "letras",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "mayuscula",
+     "modelo": "R",
+     "letras": [
+      "R",
+      "P",
+      "R",
+      "B",
+      "R",
+      "P"
+     ],
+     "rasgo": "detalle"
+    },
+    {
+     "id": "obj-d12",
+     "consigna": "Guardá las letras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "letras",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "mayuscula",
+     "modelo": "O",
+     "letras": [
+      "O",
+      "Q",
+      "O",
+      "Q",
+      "O",
+      "Q"
+     ],
+     "rasgo": "detalle"
+    },
+    {
+     "id": "obj-d13",
+     "consigna": "Guardá las letras iguales a esta.",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "letras",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "mayuscula",
+     "modelo": "M",
+     "letras": [
+      "M",
+      "N",
+      "M",
+      "N",
+      "M",
+      "N"
+     ],
+     "rasgo": "forma"
     }
    ]
   },
@@ -1494,7 +1664,8 @@
    "facil": [
     {
      "id": "som-f1",
-     "consigna": "Esta llave cambió de tamaño. ¿Cuál es su sombra?",
+     "consigna": "Esta llave creció. Llevala a su sombra.",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "llave",
       "s": 1.35
@@ -1520,10 +1691,11 @@
     },
     {
      "id": "som-f2",
-     "consigna": "Este hueso cambió de tamaño. ¿Cuál es su sombra?",
+     "consigna": "Este hueso creció. Llevalo a su sombra.",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "hueso",
-      "s": 0.7
+      "s": 1.25
      },
      "sombras": [
       {
@@ -1542,7 +1714,8 @@
     },
     {
      "id": "som-f3",
-     "consigna": "Esta zapato cambió de tamaño. ¿Cuál es su sombra?",
+     "consigna": "Este zapato creció. Llevalo a su sombra.",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "zapato",
       "s": 1.35
@@ -1568,10 +1741,11 @@
     },
     {
      "id": "som-f4",
-     "consigna": "Esta regadera cambió de tamaño. ¿Cuál es su sombra?",
+     "consigna": "Esta regadera creció. Llevala a su sombra.",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "regadera",
-      "s": 0.7
+      "s": 1.25
      },
      "sombras": [
       {
@@ -1590,7 +1764,8 @@
     },
     {
      "id": "som-f5",
-     "consigna": "Este hongo cambió de tamaño. ¿Cuál es su sombra?",
+     "consigna": "Este hongo creció. Llevalo a su sombra.",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "hongo",
       "s": 1.35
@@ -1616,10 +1791,11 @@
     },
     {
      "id": "som-f6",
-     "consigna": "Esta linterna cambió de tamaño. ¿Cuál es su sombra?",
+     "consigna": "Esta linterna creció. Llevala a su sombra.",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "linterna",
-      "s": 0.7
+      "s": 1.25
      },
      "sombras": [
       {
@@ -1640,7 +1816,9 @@
    "intermedio": [
     {
      "id": "som-i1",
-     "consigna": "Se dio vuelta o cambió de color. ¿Cuál es su sombra?",
+     "consigna": "La hoja giró. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "«La [llave] giró y cambió de color. ¿Y su sombra?» partida en dos: la FEC 5.5 pide una sola transformación en Intermedio",
      "objeto": {
       "f": "hoja",
       "r": 90
@@ -1666,7 +1844,9 @@
     },
     {
      "id": "som-i2",
-     "consigna": "Se dio vuelta o cambió de color. ¿Cuál es su sombra?",
+     "consigna": "La piedra giró. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "«La [llave] giró y cambió de color. ¿Y su sombra?» partida en dos: la FEC 5.5 pide una sola transformación en Intermedio",
      "objeto": {
       "f": "piedra_triangular",
       "r": 180
@@ -1692,7 +1872,9 @@
     },
     {
      "id": "som-i3",
-     "consigna": "Se dio vuelta o cambió de color. ¿Cuál es su sombra?",
+     "consigna": "La huella giró. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "«La [llave] giró y cambió de color. ¿Y su sombra?» partida en dos: la FEC 5.5 pide una sola transformación en Intermedio",
      "objeto": {
       "f": "huella_conejo",
       "r": -90
@@ -1718,7 +1900,9 @@
     },
     {
      "id": "som-i4",
-     "consigna": "Se dio vuelta o cambió de color. ¿Cuál es su sombra?",
+     "consigna": "La llave cambió de color. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "«La [llave] giró y cambió de color. ¿Y su sombra?» partida en dos: la FEC 5.5 pide una sola transformación en Intermedio",
      "objeto": {
       "f": "llave",
       "c": "coral"
@@ -1744,7 +1928,9 @@
     },
     {
      "id": "som-i5",
-     "consigna": "Se dio vuelta o cambió de color. ¿Cuál es su sombra?",
+     "consigna": "El zapato giró. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "«La [llave] giró y cambió de color. ¿Y su sombra?» partida en dos: la FEC 5.5 pide una sola transformación en Intermedio",
      "objeto": {
       "f": "zapato",
       "r": 90
@@ -1770,7 +1956,9 @@
     },
     {
      "id": "som-i6",
-     "consigna": "Se dio vuelta o cambió de color. ¿Cuál es su sombra?",
+     "consigna": "El hongo cambió de color. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "«La [llave] giró y cambió de color. ¿Y su sombra?» partida en dos: la FEC 5.5 pide una sola transformación en Intermedio",
      "objeto": {
       "f": "hongo",
       "c": "lila"
@@ -1798,7 +1986,9 @@
    "dificil": [
     {
      "id": "som-d1",
-     "consigna": "Cambió mucho. ¿Cuál es su sombra?",
+     "consigna": "La hoja giró y cambió de color. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio de 2.4: estos ítems giran, cambian de color y de tamaño; «desde arriba» necesita dibujos vistos desde arriba que todavía no hay",
      "objeto": {
       "f": "hoja_roble",
       "r": 135,
@@ -1832,7 +2022,9 @@
     },
     {
      "id": "som-d2",
-     "consigna": "Cambió mucho. ¿Cuál es su sombra?",
+     "consigna": "La huella giró y cambió de color. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio de 2.4: estos ítems giran, cambian de color y de tamaño; «desde arriba» necesita dibujos vistos desde arriba que todavía no hay",
      "objeto": {
       "f": "huella",
       "r": 160,
@@ -1866,7 +2058,9 @@
     },
     {
      "id": "som-d3",
-     "consigna": "Cambió mucho. ¿Cuál es su sombra?",
+     "consigna": "La piedra giró y cambió de color. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio de 2.4: estos ítems giran, cambian de color y de tamaño; «desde arriba» necesita dibujos vistos desde arriba que todavía no hay",
      "objeto": {
       "f": "piedra_cuadrada",
       "r": 45,
@@ -1900,12 +2094,15 @@
     },
     {
      "id": "som-d4",
-     "consigna": "Cambió mucho. ¿Cuál es su sombra?",
+     "consigna": "El zapato giró y cambió de color. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio de 2.4: estos ítems giran, cambian de color y de tamaño; «desde arriba» necesita dibujos vistos desde arriba que todavía no hay",
      "objeto": {
       "f": "zapato",
       "e": true,
       "r": 30,
-      "s": 1.25
+      "s": 1.25,
+      "c": "coral"
      },
      "sombras": [
       {
@@ -1928,13 +2125,16 @@
      "transformaciones": [
       "tamano",
       "orientacion",
+      "color",
       "espejado"
      ],
      "rasgo": "orientacion"
     },
     {
      "id": "som-d5",
-     "consigna": "Cambió mucho. ¿Cuál es su sombra?",
+     "consigna": "El caracol giró y cambió de color. ¿Y su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio de 2.4: estos ítems giran, cambian de color y de tamaño; «desde arriba» necesita dibujos vistos desde arriba que todavía no hay",
      "objeto": {
       "f": "caracol",
       "e": true,
@@ -1970,42 +2170,32 @@
     },
     {
      "id": "som-d6",
-     "consigna": "Es la misma letra con otra forma. ¿Cuál es?",
+     "consigna": "Esta letra cambió de forma. ¿Cuál es su sombra?",
+     "estado_clinico": "validado por PSP-SR",
      "lee": true,
      "rutas": [
       "6-8",
       "9-12"
      ],
+     "letra_forma": "mayuscula",
      "objeto": {
       "f": "letra",
-      "letra": {
-       "minuscula": "g",
-       "mayuscula": "G"
-      },
+      "letra": "A",
       "fuente": "serif"
      },
      "sombras": [
       {
        "f": "letra",
-       "letra": {
-        "minuscula": "g",
-        "mayuscula": "G"
-       }
+       "letra": "A"
       },
       {
        "f": "letra",
-       "letra": {
-        "minuscula": "q",
-        "mayuscula": "C"
-       },
+       "letra": "M",
        "error": "forma"
       },
       {
        "f": "letra",
-       "letra": {
-        "minuscula": "p",
-        "mayuscula": "O"
-       },
+       "letra": "R",
        "error": "forma"
       }
      ],
@@ -2013,47 +2203,36 @@
      "transformaciones": [
       "tipografia"
      ],
-     "rasgo": "forma",
-     "_estado": "tipografías comunes y legibles; letras propuestas por DEV-IA, pendiente de PSP-SR"
+     "rasgo": "forma"
     },
     {
      "id": "som-d7",
-     "consigna": "Es la misma letra con otra forma. ¿Cuál es?",
+     "consigna": "Esta letra cambió de forma. ¿Cuál es su sombra?",
+     "estado_clinico": "validado por PSP-SR",
      "lee": true,
      "rutas": [
       "6-8",
       "9-12"
      ],
+     "letra_forma": "mayuscula",
      "objeto": {
       "f": "letra",
-      "letra": {
-       "minuscula": "a",
-       "mayuscula": "R"
-      },
+      "letra": "G",
       "fuente": "serif"
      },
      "sombras": [
       {
        "f": "letra",
-       "letra": {
-        "minuscula": "a",
-        "mayuscula": "R"
-       }
+       "letra": "G"
       },
       {
        "f": "letra",
-       "letra": {
-        "minuscula": "o",
-        "mayuscula": "P"
-       },
+       "letra": "S",
        "error": "forma"
       },
       {
        "f": "letra",
-       "letra": {
-        "minuscula": "e",
-        "mayuscula": "B"
-       },
+       "letra": "E",
        "error": "forma"
       }
      ],
@@ -2061,8 +2240,81 @@
      "transformaciones": [
       "tipografia"
      ],
-     "rasgo": "forma",
-     "_estado": "tipografías comunes y legibles; letras propuestas por DEV-IA, pendiente de PSP-SR"
+     "rasgo": "forma"
+    },
+    {
+     "id": "som-d8",
+     "consigna": "Esta letra cambió de forma. ¿Cuál es su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "minuscula",
+     "objeto": {
+      "f": "letra",
+      "letra": "e",
+      "fuente": "serif"
+     },
+     "sombras": [
+      {
+       "f": "letra",
+       "letra": "e"
+      },
+      {
+       "f": "letra",
+       "letra": "r",
+       "error": "forma"
+      },
+      {
+       "f": "letra",
+       "letra": "s",
+       "error": "forma"
+      }
+     ],
+     "correcta": 0,
+     "transformaciones": [
+      "tipografia"
+     ],
+     "rasgo": "forma"
+    },
+    {
+     "id": "som-d9",
+     "consigna": "Esta letra cambió de forma. ¿Cuál es su sombra?",
+     "estado_clinico": "validado por PSP-SR",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "minuscula",
+     "objeto": {
+      "f": "letra",
+      "letra": "r",
+      "fuente": "serif"
+     },
+     "sombras": [
+      {
+       "f": "letra",
+       "letra": "r"
+      },
+      {
+       "f": "letra",
+       "letra": "t",
+       "error": "forma"
+      },
+      {
+       "f": "letra",
+       "letra": "s",
+       "error": "forma"
+      }
+     ],
+     "correcta": 0,
+     "transformaciones": [
+      "tipografia"
+     ],
+     "rasgo": "forma"
     }
    ]
   },
@@ -2070,7 +2322,8 @@
    "facil": [
     {
      "id": "nie-f1",
-     "consigna": "¿Qué es?",
+     "consigna": "¿Qué hay detrás de la niebla?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "linterna"
      },
@@ -2098,7 +2351,8 @@
     },
     {
      "id": "nie-f2",
-     "consigna": "¿Qué es?",
+     "consigna": "¿Qué hay detrás de la niebla?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "pelota"
      },
@@ -2126,7 +2380,8 @@
     },
     {
      "id": "nie-f3",
-     "consigna": "¿Qué es?",
+     "consigna": "¿Qué hay detrás de la niebla?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "zapato"
      },
@@ -2154,7 +2409,8 @@
     },
     {
      "id": "nie-f4",
-     "consigna": "¿Qué es?",
+     "consigna": "¿Qué hay detrás de la niebla?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "taza"
      },
@@ -2182,7 +2438,8 @@
     },
     {
      "id": "nie-f5",
-     "consigna": "¿Qué es?",
+     "consigna": "¿Qué hay detrás de la niebla?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "mochila"
      },
@@ -2210,7 +2467,8 @@
     },
     {
      "id": "nie-f6",
-     "consigna": "¿Qué es?",
+     "consigna": "¿Qué hay detrás de la niebla?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "gorro"
      },
@@ -2240,7 +2498,8 @@
    "intermedio": [
     {
      "id": "nie-i1",
-     "consigna": "¿Qué hay detrás de las ramas?",
+     "consigna": "¿Qué se esconde detrás de las ramas?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "regadera",
       "r": 0
@@ -2289,7 +2548,8 @@
     },
     {
      "id": "nie-i2",
-     "consigna": "¿Qué hay detrás de las ramas?",
+     "consigna": "¿Qué se esconde detrás de las ramas?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "caracol",
       "r": 20
@@ -2338,7 +2598,8 @@
     },
     {
      "id": "nie-i3",
-     "consigna": "¿Qué hay detrás de las ramas?",
+     "consigna": "¿Qué se esconde detrás de las ramas?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "llave",
       "r": -30
@@ -2387,7 +2648,8 @@
     },
     {
      "id": "nie-i4",
-     "consigna": "¿Qué hay detrás de las ramas?",
+     "consigna": "¿Qué se esconde detrás de las ramas?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "hongo",
       "r": 0
@@ -2436,7 +2698,8 @@
     },
     {
      "id": "nie-i5",
-     "consigna": "¿Qué hay detrás de las ramas?",
+     "consigna": "¿Qué se esconde detrás de las ramas?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "engranaje",
       "r": 45
@@ -2485,7 +2748,8 @@
     },
     {
      "id": "nie-i6",
-     "consigna": "¿Qué hay detrás de las ramas?",
+     "consigna": "¿Qué se esconde detrás de las ramas?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "puerta",
       "r": 0
@@ -2536,7 +2800,8 @@
    "dificil": [
     {
      "id": "nie-d1",
-     "consigna": "Con estas pocas partes, ¿qué es?",
+     "consigna": "Se ven pocas partes. ¿Qué es?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "hoja_roble"
      },
@@ -2599,7 +2864,8 @@
     },
     {
      "id": "nie-d2",
-     "consigna": "Con estas pocas partes, ¿qué es?",
+     "consigna": "Se ven pocas partes. ¿Qué es?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "huella_conejo"
      },
@@ -2662,7 +2928,8 @@
     },
     {
      "id": "nie-d3",
-     "consigna": "Con estas pocas partes, ¿qué es?",
+     "consigna": "Se ven pocas partes. ¿Qué es?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "piedra_triangular"
      },
@@ -2725,7 +2992,8 @@
     },
     {
      "id": "nie-d4",
-     "consigna": "Con estas pocas partes, ¿qué es?",
+     "consigna": "Se ven pocas partes. ¿Qué es?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "pluma"
      },
@@ -2788,7 +3056,8 @@
     },
     {
      "id": "nie-d5",
-     "consigna": "Con estas pocas partes, ¿qué es?",
+     "consigna": "Se ven pocas partes. ¿Qué es?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "carpa"
      },
@@ -2851,7 +3120,8 @@
     },
     {
      "id": "nie-d6",
-     "consigna": "Con estas pocas partes, ¿qué es?",
+     "consigna": "Se ven pocas partes. ¿Qué es?",
+     "estado_clinico": "validado por PSP-SR",
      "objeto": {
       "f": "pina"
      },
@@ -2914,55 +3184,115 @@
     },
     {
      "id": "nie-d7",
-     "consigna": "¿Qué palabra es?",
+     "consigna": "Las hojas tapan una palabra. ¿Cuál es?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "palabra",
      "lee": true,
      "rutas": [
       "6-8",
       "9-12"
      ],
-     "palabra": "luna",
+     "letra_forma": "mayuscula",
+     "palabra": "CASA",
      "tapa_pct": 55,
+     "tapa": "abajo",
      "opciones": [
-      "luna",
-      "lana",
-      "lona",
-      "lupa"
+      "CASA",
+      "MESA",
+      "MAPA",
+      "TAZA"
      ],
-     "correcta": "luna",
+     "correcta": "CASA",
      "errores": {
-      "lana": "misma-categoria",
-      "lona": "misma-categoria",
-      "lupa": "misma-categoria"
+      "MESA": "misma-categoria",
+      "MAPA": "misma-categoria",
+      "TAZA": "misma-categoria"
      },
-     "rasgo": "forma",
-     "_estado": "palabras propuestas por DEV-IA, pendiente de PSP-SR"
+     "rasgo": "forma"
     },
     {
      "id": "nie-d8",
-     "consigna": "¿Qué palabra es?",
+     "consigna": "Las hojas tapan una palabra. ¿Cuál es?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "palabra",
      "lee": true,
      "rutas": [
       "6-8",
       "9-12"
      ],
+     "letra_forma": "mayuscula",
+     "palabra": "PATO",
+     "tapa_pct": 55,
+     "tapa": "abajo",
+     "opciones": [
+      "PATO",
+      "GATO",
+      "PALA",
+      "BOTA"
+     ],
+     "correcta": "PATO",
+     "errores": {
+      "GATO": "misma-categoria",
+      "PALA": "misma-categoria",
+      "BOTA": "misma-categoria"
+     },
+     "rasgo": "forma"
+    },
+    {
+     "id": "nie-d9",
+     "consigna": "Las hojas tapan una palabra. ¿Cuál es?",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "palabra",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "minuscula",
      "palabra": "mesa",
      "tapa_pct": 55,
+     "tapa": "arriba",
      "opciones": [
       "mesa",
-      "masa",
-      "pesa",
-      "musa"
+      "casa",
+      "mapa",
+      "taza"
      ],
      "correcta": "mesa",
      "errores": {
-      "masa": "misma-categoria",
-      "pesa": "misma-categoria",
-      "musa": "misma-categoria"
+      "casa": "misma-categoria",
+      "mapa": "misma-categoria",
+      "taza": "misma-categoria"
      },
-     "rasgo": "forma",
-     "_estado": "palabras propuestas por DEV-IA, pendiente de PSP-SR"
+     "rasgo": "forma"
+    },
+    {
+     "id": "nie-d10",
+     "consigna": "Las hojas tapan una palabra. ¿Cuál es?",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "palabra",
+     "lee": true,
+     "rutas": [
+      "6-8",
+      "9-12"
+     ],
+     "letra_forma": "minuscula",
+     "palabra": "gato",
+     "tapa_pct": 55,
+     "tapa": "arriba",
+     "opciones": [
+      "gato",
+      "pato",
+      "bota",
+      "pala"
+     ],
+     "correcta": "gato",
+     "errores": {
+      "pato": "misma-categoria",
+      "bota": "misma-categoria",
+      "pala": "misma-categoria"
+     },
+     "rasgo": "forma"
     }
    ]
   },
@@ -2970,7 +3300,8 @@
    "facil": [
     {
      "id": "jar-f1",
-     "consigna": "Encontrá la regadera.",
+     "consigna": "Michi busca la regadera. ¿Dónde está?",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "regadera",
@@ -3062,7 +3393,8 @@
     },
     {
      "id": "jar-f2",
-     "consigna": "Encontrá el caracol.",
+     "consigna": "Michi busca el caracol. ¿Dónde está?",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "caracol",
@@ -3162,7 +3494,8 @@
     },
     {
      "id": "jar-f3",
-     "consigna": "Encontrá el gorro.",
+     "consigna": "Michi busca el gorro. ¿Dónde está?",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "gorro",
@@ -3272,7 +3605,8 @@
     },
     {
      "id": "jar-f4",
-     "consigna": "Encontrá la taza.",
+     "consigna": "Michi busca la taza. ¿Dónde está?",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "taza",
@@ -3389,7 +3723,8 @@
     },
     {
      "id": "jar-f5",
-     "consigna": "Encontrá la linterna.",
+     "consigna": "Michi busca la linterna. ¿Dónde está?",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "linterna",
@@ -3513,7 +3848,8 @@
     },
     {
      "id": "jar-f6",
-     "consigna": "Encontrá la pelota.",
+     "consigna": "Michi busca la pelota. ¿Dónde está?",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "pelota",
@@ -3646,7 +3982,8 @@
    "intermedio": [
     {
      "id": "jar-i1",
-     "consigna": "Encontrá las 3 llaves.",
+     "consigna": "Encontrá las 3 llaves del jardín.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "llave",
@@ -3827,7 +4164,8 @@
     },
     {
      "id": "jar-i2",
-     "consigna": "Encontrá las 2 hojas.",
+     "consigna": "Encontrá las 2 hojas del jardín.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "hoja_roble",
@@ -4020,7 +4358,8 @@
     },
     {
      "id": "jar-i3",
-     "consigna": "Encontrá los 3 caracols.",
+     "consigna": "Encontrá los 3 caracoles del jardín.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "caracol",
@@ -4216,7 +4555,8 @@
     },
     {
      "id": "jar-i4",
-     "consigna": "Encontrá las 2 huellas.",
+     "consigna": "Encontrá las 2 huellas del jardín.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "huella",
@@ -4423,7 +4763,8 @@
     },
     {
      "id": "jar-i5",
-     "consigna": "Encontrá las 3 plumas.",
+     "consigna": "Encontrá las 3 plumas del jardín.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "pluma",
@@ -4640,7 +4981,8 @@
     },
     {
      "id": "jar-i6",
-     "consigna": "Encontrá los 2 hongos.",
+     "consigna": "Encontrá los 2 hongos del jardín.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "hongo",
@@ -4867,7 +5209,8 @@
    "dificil": [
     {
      "id": "jar-d1",
-     "consigna": "Encontrá las llaves doradas con agujero redondo.",
+     "consigna": "Buscá las llaves doradas con agujero redondo.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "llave",
@@ -5123,7 +5466,8 @@
     },
     {
      "id": "jar-d2",
-     "consigna": "Encontrá las llaves doradas con agujero redondo.",
+     "consigna": "Buscá las llaves doradas con agujero redondo.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "llave",
@@ -5376,7 +5720,8 @@
     },
     {
      "id": "jar-d3",
-     "consigna": "Encontrá las llaves doradas con agujero redondo.",
+     "consigna": "Buscá las llaves doradas con agujero redondo.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "llave",
@@ -5626,7 +5971,8 @@
     },
     {
      "id": "jar-d4",
-     "consigna": "Encontrá las llaves doradas con agujero redondo.",
+     "consigna": "Buscá las llaves doradas con agujero redondo.",
+     "estado_clinico": "validado por PSP-SR",
      "fondo": "jardin",
      "modelo": {
       "f": "llave",
@@ -5877,7 +6223,9 @@
     },
     {
      "id": "jar-d5",
-     "consigna": "Encontrá las 2 llaves.",
+     "consigna": "Encontrá las 2 llaves del jardín.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio: en 3–5 Difícil tiene un solo rasgo (5.12)",
      "fondo": "jardin",
      "modelo": {
       "f": "llave",
@@ -6082,7 +6430,9 @@
     },
     {
      "id": "jar-d6",
-     "consigna": "Encontrá los 2 caracoles.",
+     "consigna": "Encontrá los 2 caracoles del jardín.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio: en 3–5 Difícil tiene un solo rasgo (5.12)",
      "fondo": "jardin",
      "modelo": {
       "f": "caracol",
@@ -6287,7 +6637,9 @@
     },
     {
      "id": "jar-d7",
-     "consigna": "Encontrá las 2 regaderas.",
+     "consigna": "Encontrá las 2 regaderas del jardín.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio: en 3–5 Difícil tiene un solo rasgo (5.12)",
      "fondo": "jardin",
      "modelo": {
       "f": "regadera",
@@ -6493,7 +6845,9 @@
     },
     {
      "id": "jar-d8",
-     "consigna": "Encontrá las 2 pelotas.",
+     "consigna": "Encontrá las 2 pelotas del jardín.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Intermedio: en 3–5 Difícil tiene un solo rasgo (5.12)",
      "fondo": "jardin",
      "modelo": {
       "f": "pelota",
@@ -6700,8 +7054,10 @@
    "facil": [
     {
      "id": "lab-f1",
-     "consigna": "¿Dónde está el hueso?",
+     "consigna": "¿El hueso está arriba o abajo del tronco?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "relacion",
+     "plantilla": "«¿El [hueso] está arriba o abajo del [tronco]?»: las dos alternativas son las del ítem",
      "ref": {
       "f": "tronco",
       "x": 600,
@@ -6724,8 +7080,10 @@
     },
     {
      "id": "lab-f2",
-     "consigna": "¿Dónde está la pelota?",
+     "consigna": "¿La pelota está arriba o abajo del tronco?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "relacion",
+     "plantilla": "«¿El [hueso] está arriba o abajo del [tronco]?»: las dos alternativas son las del ítem",
      "ref": {
       "f": "tronco",
       "x": 600,
@@ -6748,8 +7106,10 @@
     },
     {
      "id": "lab-f3",
-     "consigna": "¿Dónde está el hueso?",
+     "consigna": "¿El hueso está adentro o afuera del cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "relacion",
+     "plantilla": "«¿El [hueso] está arriba o abajo del [tronco]?»: las dos alternativas son las del ítem",
      "ref": {
       "f": "cofre",
       "x": 600,
@@ -6772,8 +7132,10 @@
     },
     {
      "id": "lab-f4",
-     "consigna": "¿Dónde está el caracol?",
+     "consigna": "¿El caracol está al lado o arriba de la piedra?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "relacion",
+     "plantilla": "«¿El [hueso] está arriba o abajo del [tronco]?»: las dos alternativas son las del ítem",
      "ref": {
       "f": "piedra_cuadrada",
       "x": 600,
@@ -6796,7 +7158,8 @@
     },
     {
      "id": "lab-f5",
-     "consigna": "Llevá a Roco hasta el hueso.",
+     "consigna": "Mové a Roco un paso para adelante.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
      "cols": 3,
      "filas": 3,
@@ -6814,12 +7177,16 @@
       "arriba",
       "abajo"
      ],
+     "secuencia": [
+      "arriba"
+     ],
      "habilidad": "relaciones-espaciales",
      "rasgo": "vertical"
     },
     {
      "id": "lab-f6",
-     "consigna": "Llevá a Roco hasta la fuente.",
+     "consigna": "Mové a Roco un paso para adelante.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
      "cols": 3,
      "filas": 3,
@@ -6834,17 +7201,20 @@
       ]
      ],
      "roco": {
-      "x": 1,
-      "y": 0
+      "x": 0,
+      "y": 2
      },
      "meta": {
-      "x": 1,
+      "x": 0,
       "y": 1,
       "f": "fuente"
      },
      "botones": [
       "arriba",
       "abajo"
+     ],
+     "secuencia": [
+      "arriba"
      ],
      "habilidad": "relaciones-espaciales",
      "rasgo": "vertical"
@@ -6854,6 +7224,7 @@
     {
      "id": "lab-i1",
      "consigna": "Girá el cartel para que apunte a la fuente.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cartel",
      "dir_inicial": 3,
      "objetivo": 1,
@@ -6868,7 +7239,8 @@
     },
     {
      "id": "lab-i2",
-     "consigna": "Girá el cartel para que apunte a el árbol.",
+     "consigna": "Girá el cartel para que apunte al árbol.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cartel",
      "dir_inicial": 1,
      "objetivo": 3,
@@ -6883,7 +7255,8 @@
     },
     {
      "id": "lab-i3",
-     "consigna": "Girá el cartel para que apunte a el cofre.",
+     "consigna": "Girá el cartel para que apunte al cofre.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cartel",
      "dir_inicial": 0,
      "objetivo": 2,
@@ -6898,7 +7271,8 @@
     },
     {
      "id": "lab-i4",
-     "consigna": "Roco va dos pasos para arriba y un paso a la derecha.",
+     "consigna": "Dos pasos adelante y uno a la derecha.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
      "cols": 5,
      "filas": 4,
@@ -6926,7 +7300,8 @@
     },
     {
      "id": "lab-i5",
-     "consigna": "Roco va dos pasos a la derecha y un paso para arriba.",
+     "consigna": "Dos pasos a la derecha y uno adelante.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
      "cols": 5,
      "filas": 4,
@@ -6954,7 +7329,8 @@
     },
     {
      "id": "lab-i6",
-     "consigna": "Roco va un paso para arriba y dos pasos a la izquierda.",
+     "consigna": "Un paso adelante y dos a la izquierda.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
      "cols": 5,
      "filas": 4,
@@ -6982,7 +7358,9 @@
     },
     {
      "id": "lab-i7",
-     "consigna": "Roco va dos pasos para arriba.",
+     "consigna": "Dos pasos adelante.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "«Dos pasos adelante y uno a la derecha.» sin derecha ni izquierda (3–5, 5.8)",
      "tipo": "mover",
      "cols": 3,
      "filas": 3,
@@ -7011,22 +7389,24 @@
     },
     {
      "id": "lab-i8",
-     "consigna": "Roco va dos pasos para abajo.",
+     "consigna": "Dos pasos adelante.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "«Dos pasos adelante y uno a la derecha.» sin derecha ni izquierda (3–5, 5.8)",
      "tipo": "mover",
      "cols": 3,
      "filas": 3,
      "roco": {
-      "x": 1,
-      "y": 0
+      "x": 2,
+      "y": 2
      },
      "meta": {
-      "x": 1,
-      "y": 2,
+      "x": 2,
+      "y": 0,
       "f": "hueso"
      },
      "secuencia": [
-      "abajo",
-      "abajo"
+      "arriba",
+      "arriba"
      ],
      "botones": [
       "arriba",
@@ -7040,7 +7420,9 @@
     },
     {
      "id": "lab-i9",
-     "consigna": "¿Dónde está el caracol?",
+     "consigna": "¿El caracol está arriba, abajo o al lado del tronco?",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil con tres alternativas",
      "tipo": "relacion",
      "ref": {
       "f": "tronco",
@@ -7070,8 +7452,10 @@
    "dificil": [
     {
      "id": "lab-d1",
-     "consigna": "Planeá el camino hasta el hueso pasando por la fuente.",
+     "consigna": "Pensá el camino a la salida, pasando por la fuente.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
+     "plan_previo": true,
      "cols": 5,
      "filas": 4,
      "paredes": [
@@ -7103,7 +7487,7 @@
      "meta": {
       "x": 4,
       "y": 0,
-      "f": "hueso"
+      "f": "puerta"
      },
      "pasa_por": {
       "x": 2,
@@ -7120,8 +7504,10 @@
     },
     {
      "id": "lab-d2",
-     "consigna": "Planeá el camino hasta el hueso pasando por la fuente.",
+     "consigna": "Pensá el camino a la salida, pasando por la fuente.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
+     "plan_previo": true,
      "cols": 5,
      "filas": 4,
      "paredes": [
@@ -7149,7 +7535,7 @@
      "meta": {
       "x": 4,
       "y": 0,
-      "f": "hueso"
+      "f": "puerta"
      },
      "pasa_por": {
       "x": 2,
@@ -7166,8 +7552,10 @@
     },
     {
      "id": "lab-d3",
-     "consigna": "Planeá el camino hasta el hueso pasando por la fuente.",
+     "consigna": "Pensá el camino a la salida, pasando por la fuente.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
+     "plan_previo": true,
      "cols": 5,
      "filas": 4,
      "paredes": [
@@ -7195,7 +7583,7 @@
      "meta": {
       "x": 4,
       "y": 3,
-      "f": "hueso"
+      "f": "puerta"
      },
      "pasa_por": {
       "x": 1,
@@ -7212,8 +7600,10 @@
     },
     {
      "id": "lab-d4",
-     "consigna": "Planeá el camino hasta el hueso pasando por la fuente.",
+     "consigna": "Pensá el camino a la salida, pasando por la fuente.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "mover",
+     "plan_previo": true,
      "cols": 5,
      "filas": 4,
      "paredes": [
@@ -7241,7 +7631,7 @@
      "meta": {
       "x": 4,
       "y": 1,
-      "f": "hueso"
+      "f": "puerta"
      },
      "pasa_por": {
       "x": 2,
@@ -7258,35 +7648,17 @@
     },
     {
      "id": "lab-d5",
-     "consigna": "Guiá a Roco desde donde él mira.",
-     "tipo": "mover",
-     "modo": "perspectiva",
-     "dir": "arriba",
-     "cols": 5,
-     "filas": 4,
-     "paredes": [
-      [
-       1,
-       1
-      ],
-      [
-       2,
-       1
-      ],
-      [
-       3,
-       3
-      ]
-     ],
-     "roco": {
-      "x": 0,
-      "y": 3
+     "consigna": "Desde donde mira Roco, ¿dónde está su derecha?",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "su_lado",
+     "dir": "abajo",
+     "alrededor": {
+      "arriba": "arbol",
+      "derecha": "fuente",
+      "abajo": "carpa",
+      "izquierda": "cofre"
      },
-     "meta": {
-      "x": 4,
-      "y": 0,
-      "f": "hueso"
-     },
+     "correcta": "izquierda",
      "derecha_izquierda": true,
      "perspectiva": true,
      "rutas": [
@@ -7297,35 +7669,59 @@
     },
     {
      "id": "lab-d6",
-     "consigna": "Guiá a Roco desde donde él mira.",
-     "tipo": "mover",
-     "modo": "perspectiva",
-     "dir": "derecha",
-     "cols": 5,
-     "filas": 4,
-     "paredes": [
-      [
-       2,
-       0
-      ],
-      [
-       2,
-       1
-      ],
-      [
-       0,
-       2
-      ]
+     "consigna": "Desde donde mira Roco, ¿dónde está su derecha?",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "su_lado",
+     "dir": "izquierda",
+     "alrededor": {
+      "arriba": "cofre",
+      "derecha": "carpa",
+      "abajo": "fuente",
+      "izquierda": "arbol"
+     },
+     "correcta": "arriba",
+     "derecha_izquierda": true,
+     "perspectiva": true,
+     "rutas": [
+      "9-12"
      ],
-     "roco": {
-      "x": 0,
-      "y": 0
+     "habilidad": "posicion-en-el-espacio",
+     "rasgo": "derecha-izquierda"
+    },
+    {
+     "id": "lab-d7",
+     "consigna": "Desde donde mira Roco, ¿dónde está su derecha?",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "su_lado",
+     "dir": "abajo",
+     "alrededor": {
+      "arriba": "carpa",
+      "derecha": "arbol",
+      "abajo": "cofre",
+      "izquierda": "fuente"
      },
-     "meta": {
-      "x": 4,
-      "y": 3,
-      "f": "hueso"
+     "correcta": "izquierda",
+     "derecha_izquierda": true,
+     "perspectiva": true,
+     "rutas": [
+      "9-12"
+     ],
+     "habilidad": "posicion-en-el-espacio",
+     "rasgo": "derecha-izquierda"
+    },
+    {
+     "id": "lab-d8",
+     "consigna": "Desde donde mira Roco, ¿dónde está su derecha?",
+     "estado_clinico": "validado por PSP-SR",
+     "tipo": "su_lado",
+     "dir": "derecha",
+     "alrededor": {
+      "arriba": "fuente",
+      "derecha": "cofre",
+      "abajo": "arbol",
+      "izquierda": "carpa"
      },
+     "correcta": "abajo",
      "derecha_izquierda": true,
      "perspectiva": true,
      "rutas": [
@@ -7341,6 +7737,7 @@
     {
      "id": "fab-f1",
      "consigna": "Llevá la chispa por el camino hasta la puerta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "camino",
      "puntos": [
       {
@@ -7402,6 +7799,7 @@
     {
      "id": "fab-f2",
      "consigna": "Llevá la chispa por el camino hasta la puerta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "camino",
      "puntos": [
       {
@@ -7439,6 +7837,7 @@
     {
      "id": "fab-f3",
      "consigna": "Llevá la chispa por el camino hasta la puerta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "camino",
      "puntos": [
       {
@@ -7476,6 +7875,7 @@
     {
      "id": "fab-f4",
      "consigna": "Llevá la chispa por el camino hasta la puerta.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "camino",
      "puntos": [
       {
@@ -7512,7 +7912,8 @@
     },
     {
      "id": "fab-f5",
-     "consigna": "Uní los 4 puntos en orden.",
+     "consigna": "Uní los puntos en orden.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "puntos",
      "puntos": [
       {
@@ -7536,7 +7937,8 @@
     },
     {
      "id": "fab-f6",
-     "consigna": "Uní los 4 puntos en orden.",
+     "consigna": "Uní los puntos en orden.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "puntos",
      "puntos": [
       {
@@ -7562,7 +7964,9 @@
    "intermedio": [
     {
      "id": "fab-i1",
-     "consigna": "Armá esta llave: uní los puntos como en el modelo.",
+     "consigna": "Armá esta llave en el tablero, igual al modelo.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar la llave.",
      "tipo": "tablero",
      "pieza": "llave",
      "cols": 4,
@@ -7597,7 +8001,9 @@
     },
     {
      "id": "fab-i2",
-     "consigna": "Armá esta puerta: uní los puntos como en el modelo.",
+     "consigna": "Armá esta puerta en el tablero, igual al modelo.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar la puerta.",
      "tipo": "tablero",
      "pieza": "puerta",
      "cols": 4,
@@ -7636,7 +8042,9 @@
     },
     {
      "id": "fab-i3",
-     "consigna": "Armá este engranaje: uní los puntos como en el modelo.",
+     "consigna": "Armá este engranaje en el tablero, igual al modelo.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar el engranaje.",
      "tipo": "tablero",
      "pieza": "engranaje",
      "cols": 4,
@@ -7671,7 +8079,9 @@
     },
     {
      "id": "fab-i4",
-     "consigna": "Armá este cartel: uní los puntos como en el modelo.",
+     "consigna": "Armá este cartel en el tablero, igual al modelo.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar el cartel.",
      "tipo": "tablero",
      "pieza": "cartel",
      "cols": 4,
@@ -7714,7 +8124,9 @@
     },
     {
      "id": "fab-i5",
-     "consigna": "Uní los puntos como en el modelo.",
+     "consigna": "Armá esta chispa en el tablero, igual al modelo.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar la chispa.",
      "tipo": "tablero",
      "pieza": "chispa",
      "cols": 3,
@@ -7736,7 +8148,9 @@
     },
     {
      "id": "fab-i6",
-     "consigna": "Uní los puntos como en el modelo.",
+     "consigna": "Armá esta llave en el tablero, igual al modelo.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar la llave.",
      "tipo": "tablero",
      "pieza": "llave",
      "cols": 3,
@@ -7762,7 +8176,9 @@
     },
     {
      "id": "fab-i7",
-     "consigna": "Uní los puntos como en el modelo.",
+     "consigna": "Armá esta puerta en el tablero, igual al modelo.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar la puerta.",
      "tipo": "tablero",
      "pieza": "puerta",
      "cols": 3,
@@ -7784,7 +8200,9 @@
     },
     {
      "id": "fab-i8",
-     "consigna": "Llevá la chispa por el camino.",
+     "consigna": "Llevá la chispa por el camino hasta la puerta.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil",
      "tipo": "camino",
      "puntos": [
       {
@@ -7845,7 +8263,9 @@
     },
     {
      "id": "fab-i9",
-     "consigna": "Llevá la chispa por el camino.",
+     "consigna": "Llevá la chispa por el camino hasta la puerta.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil",
      "tipo": "camino",
      "puntos": [
       {
@@ -7908,7 +8328,9 @@
    "dificil": [
     {
      "id": "fab-d1",
-     "consigna": "Armá la pieza. Primero pensá por dónde empezás.",
+     "consigna": "Pensá por dónde empezás y armá la puerta.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar la puerta.",
      "tipo": "tablero",
      "pieza": "puerta",
      "cols": 5,
@@ -7971,7 +8393,9 @@
     },
     {
      "id": "fab-d2",
-     "consigna": "Armá la pieza. Primero pensá por dónde empezás.",
+     "consigna": "Pensá por dónde empezás y armá el engranaje.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar el engranaje.",
      "tipo": "tablero",
      "pieza": "engranaje",
      "cols": 5,
@@ -8030,7 +8454,9 @@
     },
     {
      "id": "fab-d3",
-     "consigna": "Armá la pieza. Primero pensá por dónde empezás.",
+     "consigna": "Pensá por dónde empezás y armá la llave.",
+     "estado_clinico": "validado por PSP-SR",
+     "consigna_tocar": "Tocá los puntos en orden para armar la llave.",
      "tipo": "tablero",
      "pieza": "llave",
      "cols": 5,
@@ -8085,7 +8511,9 @@
     },
     {
      "id": "fab-d4",
-     "consigna": "Llevá la chispa por el río, con cuidado.",
+     "consigna": "Llevá la chispa por el camino hasta la puerta.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil",
      "tipo": "camino",
      "puntos": [
       {
@@ -8174,7 +8602,9 @@
     },
     {
      "id": "fab-d5",
-     "consigna": "Llevá la chispa por el río, con cuidado.",
+     "consigna": "Llevá la chispa por el camino hasta la puerta.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil",
      "tipo": "camino",
      "puntos": [
       {
@@ -8267,7 +8697,8 @@
    "facil": [
     {
      "id": "c7a-f1",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "cofre"
@@ -8313,7 +8744,8 @@
     },
     {
      "id": "c7a-f2",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "pelota",
@@ -8360,7 +8792,8 @@
     },
     {
      "id": "c7a-f3",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "regadera",
@@ -8405,7 +8838,8 @@
     },
     {
      "id": "c7a-f4",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "flor",
@@ -8453,7 +8887,8 @@
     },
     {
      "id": "c7a-f5",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "hueso"
@@ -8501,7 +8936,8 @@
    "intermedio": [
     {
      "id": "c7a-i1",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "hueso"
@@ -8556,7 +8992,8 @@
     },
     {
      "id": "c7a-i2",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "hoja"
@@ -8614,7 +9051,8 @@
     },
     {
      "id": "c7a-i3",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "arbol"
@@ -8672,7 +9110,8 @@
     },
     {
      "id": "c7a-i4",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "chispa"
@@ -8731,7 +9170,8 @@
     },
     {
      "id": "c7a-i5",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "taza",
@@ -8791,7 +9231,8 @@
    "dificil": [
     {
      "id": "c7a-d1",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "hoja_larga"
@@ -8861,7 +9302,8 @@
     },
     {
      "id": "c7a-d2",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "taza",
@@ -8935,7 +9377,8 @@
     },
     {
      "id": "c7a-d3",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "hoja_roble"
@@ -9006,7 +9449,8 @@
     },
     {
      "id": "c7a-d4",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "arbusto"
@@ -9077,7 +9521,8 @@
     },
     {
      "id": "c7a-d5",
-     "consigna": "¿Estaba en el cofre?",
+     "consigna": "¿Esto estaba en el cofre?",
+     "estado_clinico": "validado por PSP-SR",
      "mostrar": [
       {
        "f": "flor",
@@ -9152,7 +9597,8 @@
    "facil": [
     {
      "id": "c7b-f1",
-     "consigna": "Poné las cosas en el orden en que estaban.",
+     "consigna": "Poné las cosas en el orden en que las viste.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "ordenar",
      "secuencia": [
       {
@@ -9169,7 +9615,8 @@
     },
     {
      "id": "c7b-f2",
-     "consigna": "Poné las cosas en el orden en que estaban.",
+     "consigna": "Poné las cosas en el orden en que las viste.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "ordenar",
      "secuencia": [
       {
@@ -9189,7 +9636,8 @@
     },
     {
      "id": "c7b-f3",
-     "consigna": "Poné las cosas en el orden en que estaban.",
+     "consigna": "Poné las cosas en el orden en que las viste.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "ordenar",
      "secuencia": [
       {
@@ -9206,7 +9654,8 @@
     },
     {
      "id": "c7b-f4",
-     "consigna": "Poné las cosas en el orden en que estaban.",
+     "consigna": "Poné las cosas en el orden en que las viste.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "ordenar",
      "secuencia": [
       {
@@ -9226,7 +9675,8 @@
     },
     {
      "id": "c7b-f5",
-     "consigna": "Poné las cosas en el orden en que estaban.",
+     "consigna": "Poné las cosas en el orden en que las viste.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "ordenar",
      "secuencia": [
       {
@@ -9245,7 +9695,9 @@
    "intermedio": [
     {
      "id": "c7b-i1",
-     "consigna": "Poné las cosas en el orden en que estaban.",
+     "consigna": "Poné las cosas en el orden en que las viste.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil, sin la primera ubicada",
      "tipo": "ordenar",
      "secuencia": [
       {
@@ -9273,7 +9725,9 @@
     },
     {
      "id": "c7b-i2",
-     "consigna": "Poné las cosas en el orden en que estaban.",
+     "consigna": "Poné las cosas en el orden en que las viste.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil, sin la primera ubicada",
      "tipo": "ordenar",
      "secuencia": [
       {
@@ -9305,7 +9759,9 @@
     },
     {
      "id": "c7b-i3",
-     "consigna": "Poné las cosas en el orden en que estaban.",
+     "consigna": "Poné las cosas en el orden en que las viste.",
+     "estado_clinico": "validado por PSP-SR",
+     "plantilla": "la de Fácil, sin la primera ubicada",
      "tipo": "ordenar",
      "secuencia": [
       {
@@ -9333,7 +9789,8 @@
     },
     {
      "id": "c7b-i4",
-     "consigna": "¿Cuál falta en el camino?",
+     "consigna": "¿Qué cosa falta en el camino de vuelta?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "falta",
      "secuencia": [
       {
@@ -9371,7 +9828,8 @@
     },
     {
      "id": "c7b-i5",
-     "consigna": "¿Cuál falta en el camino?",
+     "consigna": "¿Qué cosa falta en el camino de vuelta?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "falta",
      "secuencia": [
       {
@@ -9409,7 +9867,8 @@
    "dificil": [
     {
      "id": "c7b-d1",
-     "consigna": "¿Cuáles dos cambiaron de lugar?",
+     "consigna": "Dos cosas cambiaron de lugar. ¿Cuáles?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cambiaron",
      "secuencia": [
       {
@@ -9448,7 +9907,8 @@
     },
     {
      "id": "c7b-d2",
-     "consigna": "¿Cuáles dos cambiaron de lugar?",
+     "consigna": "Dos cosas cambiaron de lugar. ¿Cuáles?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cambiaron",
      "secuencia": [
       {
@@ -9487,7 +9947,8 @@
     },
     {
      "id": "c7b-d3",
-     "consigna": "¿Cuáles dos cambiaron de lugar?",
+     "consigna": "Dos cosas cambiaron de lugar. ¿Cuáles?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cambiaron",
      "secuencia": [
       {
@@ -9525,7 +9986,8 @@
     },
     {
      "id": "c7b-d4",
-     "consigna": "¿Cuáles dos cambiaron de lugar?",
+     "consigna": "Dos cosas cambiaron de lugar. ¿Cuáles?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cambiaron",
      "secuencia": [
       {
@@ -9564,7 +10026,8 @@
     },
     {
      "id": "c7b-d5",
-     "consigna": "¿Cuáles dos cambiaron de lugar?",
+     "consigna": "Dos cosas cambiaron de lugar. ¿Cuáles?",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "cambiaron",
      "secuencia": [
       {
@@ -9606,7 +10069,8 @@
    "facil": [
     {
      "id": "8a-f1",
-     "consigna": "¿Es igual a la del collar?",
+     "consigna": "¿Es igual a la pista del collar de Roco?",
+     "estado_clinico": "validado por PSP-SR",
      "modo": "una",
      "objetivo": {
       "f": "huella"
@@ -9671,7 +10135,8 @@
     },
     {
      "id": "8a-f2",
-     "consigna": "¿Es igual a la del collar?",
+     "consigna": "¿Es igual a la pista del collar de Roco?",
+     "estado_clinico": "validado por PSP-SR",
      "modo": "una",
      "objetivo": {
       "f": "hoja_roble"
@@ -9735,7 +10200,8 @@
     },
     {
      "id": "8a-f3",
-     "consigna": "¿Es igual a la del collar?",
+     "consigna": "¿Es igual a la pista del collar de Roco?",
+     "estado_clinico": "validado por PSP-SR",
      "modo": "una",
      "objetivo": {
       "f": "llave",
@@ -9807,7 +10273,8 @@
     },
     {
      "id": "8a-f4",
-     "consigna": "¿Es igual a la del collar?",
+     "consigna": "¿Es igual a la pista del collar de Roco?",
+     "estado_clinico": "validado por PSP-SR",
      "modo": "una",
      "objetivo": {
       "f": "caracol",
@@ -9881,6 +10348,7 @@
     {
      "id": "8a-i1",
      "consigna": "Tocá la pista igual a la del collar.",
+     "estado_clinico": "validado por PSP-SR",
      "modo": "grupo",
      "objetivo": {
       "f": "hoja"
@@ -9971,6 +10439,7 @@
     {
      "id": "8a-i2",
      "consigna": "Tocá la pista igual a la del collar.",
+     "estado_clinico": "validado por PSP-SR",
      "modo": "grupo",
      "objetivo": {
       "f": "huella"
@@ -10061,6 +10530,7 @@
     {
      "id": "8a-i3",
      "consigna": "Tocá la pista igual a la del collar.",
+     "estado_clinico": "validado por PSP-SR",
      "modo": "grupo",
      "objetivo": {
       "f": "piedra"
@@ -10151,6 +10621,7 @@
     {
      "id": "8a-i4",
      "consigna": "Tocá la pista igual a la del collar.",
+     "estado_clinico": "validado por PSP-SR",
      "modo": "grupo",
      "objetivo": {
       "f": "llave",
@@ -10254,34 +10725,34 @@
    "dificil": [
     {
      "id": "8a-d1",
-     "consigna": "Guardá cada pista según su marca.",
+     "consigna": "Guardá cada pista en su mochila.",
+     "estado_clinico": "validado por PSP-SR",
+     "regla": "Las de punta, acá. Las redondas, allá.",
      "modo": "mochilas",
      "mochilas": {
       "a": {
-       "txt": "con punto",
+       "txt": "acá",
        "o": {
-        "f": "piedra",
-        "c": "gris",
-        "m": "punto"
+        "f": "piedra_triangular",
+        "c": "gris"
        }
       },
       "b": {
-       "txt": "con raya",
+       "txt": "allá",
        "o": {
         "f": "piedra",
-        "c": "gris",
-        "m": "raya"
+        "c": "gris"
        }
       }
      },
      "pistas": [
       {
        "o": {
-        "f": "piedra_cuadrada",
+        "f": "piedra_triangular",
         "c": "gris",
         "m": "raya"
        },
-       "mochila": "b"
+       "mochila": "a"
       },
       {
        "o": {
@@ -10293,15 +10764,15 @@
       },
       {
        "o": {
-        "f": "piedra_cuadrada",
+        "f": "piedra_triangular",
         "c": "gris",
         "m": "raya"
        },
-       "mochila": "b"
+       "mochila": "a"
       },
       {
        "o": {
-        "f": "piedra_cuadrada",
+        "f": "piedra",
         "c": "gris",
         "m": "raya"
        },
@@ -10311,15 +10782,23 @@
        "o": {
         "f": "piedra",
         "c": "gris",
-        "m": "punto"
+        "m": ""
        },
-       "mochila": "a"
+       "mochila": "b"
+      },
+      {
+       "o": {
+        "f": "piedra",
+        "c": "gris",
+        "m": "raya"
+       },
+       "mochila": "b"
       },
       {
        "o": {
         "f": "piedra_triangular",
         "c": "gris",
-        "m": "punto"
+        "m": "raya"
        },
        "mochila": "a"
       },
@@ -10327,15 +10806,7 @@
        "o": {
         "f": "piedra",
         "c": "gris",
-        "m": "punto"
-       },
-       "mochila": "a"
-      },
-      {
-       "o": {
-        "f": "piedra_triangular",
-        "c": "gris",
-        "m": "raya"
+        "m": ""
        },
        "mochila": "b"
       }
@@ -10343,92 +10814,92 @@
      "rutas": [
       "9-12"
      ],
-     "rasgo": "detalle"
+     "rasgo": "forma"
     },
     {
      "id": "8a-d2",
-     "consigna": "Guardá cada pista según su marca.",
+     "consigna": "Guardá cada pista en su mochila.",
+     "estado_clinico": "validado por PSP-SR",
+     "regla": "Las de punta, acá. Las redondas, allá.",
      "modo": "mochilas",
      "mochilas": {
       "a": {
-       "txt": "con punto",
+       "txt": "acá",
        "o": {
-        "f": "piedra",
-        "c": "gris",
-        "m": "punto"
+        "f": "hoja_roble",
+        "c": "verde"
        }
       },
       "b": {
-       "txt": "con raya",
+       "txt": "allá",
        "o": {
-        "f": "piedra",
-        "c": "gris",
-        "m": "raya"
+        "f": "pelota",
+        "c": "coral"
        }
       }
      },
      "pistas": [
       {
        "o": {
-        "f": "mochila",
-        "c": "coral",
+        "f": "hoja_roble",
+        "c": "verde",
         "m": "raya"
        },
-       "mochila": "b"
+       "mochila": "a"
       },
       {
        "o": {
-        "f": "piedra",
-        "c": "coral",
-        "m": "raya"
-       },
-       "mochila": "b"
-      },
-      {
-       "o": {
-        "f": "mochila",
-        "c": "coral",
-        "m": "raya"
-       },
-       "mochila": "b"
-      },
-      {
-       "o": {
-        "f": "taza",
-        "c": "celeste",
-        "m": "raya"
-       },
-       "mochila": "b"
-      },
-      {
-       "o": {
-        "f": "piedra",
-        "c": "coral",
+        "f": "hoja_roble",
+        "c": "verde",
         "m": "punto"
        },
        "mochila": "a"
       },
       {
        "o": {
-        "f": "taza",
-        "c": "celeste",
+        "f": "hoja_roble",
+        "c": "verde",
         "m": "punto"
        },
        "mochila": "a"
       },
       {
        "o": {
-        "f": "mochila",
-        "c": "coral",
-        "m": "punto"
+        "f": "hoja_roble",
+        "c": "verde",
+        "m": ""
        },
        "mochila": "a"
       },
       {
        "o": {
-        "f": "mochila",
+        "f": "hoja_roble",
+        "c": "verde",
+        "m": "raya"
+       },
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "pelota",
         "c": "coral",
-        "m": "punto"
+        "m": "raya"
+       },
+       "mochila": "b"
+      },
+      {
+       "o": {
+        "f": "hoja_roble",
+        "c": "verde",
+        "m": ""
+       },
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "hoja_roble",
+        "c": "verde",
+        "m": ""
        },
        "mochila": "a"
       }
@@ -10436,60 +10907,36 @@
      "rutas": [
       "9-12"
      ],
-     "rasgo": "detalle"
+     "rasgo": "forma"
     },
     {
      "id": "8a-d3",
-     "consigna": "Guardá cada pista según su marca.",
+     "consigna": "Guardá cada pista en su mochila.",
+     "estado_clinico": "validado por PSP-SR",
+     "regla": "Las de punta, acá. Las redondas, allá.",
      "modo": "mochilas",
      "mochilas": {
       "a": {
-       "txt": "con punto",
+       "txt": "acá",
        "o": {
-        "f": "piedra",
-        "c": "gris",
-        "m": "punto"
+        "f": "piedra_triangular",
+        "c": "gris"
        }
       },
       "b": {
-       "txt": "con raya",
+       "txt": "allá",
        "o": {
         "f": "piedra",
-        "c": "gris",
-        "m": "raya"
+        "c": "gris"
        }
       }
      },
      "pistas": [
       {
        "o": {
-        "f": "piedra",
+        "f": "piedra_triangular",
         "c": "gris",
         "m": "raya"
-       },
-       "mochila": "b"
-      },
-      {
-       "o": {
-        "f": "piedra_cuadrada",
-        "c": "gris",
-        "m": "punto"
-       },
-       "mochila": "a"
-      },
-      {
-       "o": {
-        "f": "piedra_cuadrada",
-        "c": "gris",
-        "m": "raya"
-       },
-       "mochila": "b"
-      },
-      {
-       "o": {
-        "f": "piedra_cuadrada",
-        "c": "gris",
-        "m": "punto"
        },
        "mochila": "a"
       },
@@ -10505,7 +10952,15 @@
        "o": {
         "f": "piedra_triangular",
         "c": "gris",
-        "m": "punto"
+        "m": "raya"
+       },
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "piedra_triangular",
+        "c": "gris",
+        "m": ""
        },
        "mochila": "a"
       },
@@ -10513,7 +10968,7 @@
        "o": {
         "f": "piedra",
         "c": "gris",
-        "m": "raya"
+        "m": ""
        },
        "mochila": "b"
       },
@@ -10521,42 +10976,58 @@
        "o": {
         "f": "piedra_triangular",
         "c": "gris",
+        "m": "punto"
+       },
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "piedra_triangular",
+        "c": "gris",
         "m": "raya"
        },
-       "mochila": "b"
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "piedra_triangular",
+        "c": "gris",
+        "m": "punto"
+       },
+       "mochila": "a"
       }
      ],
      "rutas": [
       "9-12"
      ],
-     "rasgo": "detalle"
+     "rasgo": "forma"
     },
     {
      "id": "8a-d4",
-     "consigna": "Guardá cada pista según su marca.",
+     "consigna": "Guardá cada pista en su mochila.",
+     "estado_clinico": "validado por PSP-SR",
+     "regla": "Las de punta, acá. Las redondas, allá.",
      "modo": "mochilas",
      "mochilas": {
       "a": {
-       "txt": "con punto",
+       "txt": "acá",
        "o": {
-        "f": "piedra",
-        "c": "gris",
-        "m": "punto"
+        "f": "hoja_roble",
+        "c": "verde"
        }
       },
       "b": {
-       "txt": "con raya",
+       "txt": "allá",
        "o": {
-        "f": "piedra",
-        "c": "gris",
-        "m": "raya"
+        "f": "pelota",
+        "c": "coral"
        }
       }
      },
      "pistas": [
       {
        "o": {
-        "f": "mochila",
+        "f": "pelota",
         "c": "coral",
         "m": "raya"
        },
@@ -10564,65 +11035,65 @@
       },
       {
        "o": {
-        "f": "taza",
-        "c": "celeste",
-        "m": "raya"
+        "f": "pelota",
+        "c": "coral",
+        "m": "punto"
        },
        "mochila": "b"
       },
       {
        "o": {
-        "f": "piedra",
-        "c": "coral",
-        "m": "punto"
-       },
-       "mochila": "a"
-      },
-      {
-       "o": {
-        "f": "mochila",
-        "c": "coral",
-        "m": "punto"
-       },
-       "mochila": "a"
-      },
-      {
-       "o": {
-        "f": "taza",
-        "c": "celeste",
-        "m": "punto"
-       },
-       "mochila": "a"
-      },
-      {
-       "o": {
-        "f": "piedra",
-        "c": "coral",
+        "f": "hoja_roble",
+        "c": "verde",
         "m": "raya"
+       },
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "hoja_roble",
+        "c": "verde",
+        "m": "raya"
+       },
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "hoja_roble",
+        "c": "verde",
+        "m": ""
+       },
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "hoja_roble",
+        "c": "verde",
+        "m": ""
+       },
+       "mochila": "a"
+      },
+      {
+       "o": {
+        "f": "pelota",
+        "c": "coral",
+        "m": ""
        },
        "mochila": "b"
       },
       {
        "o": {
-        "f": "piedra",
-        "c": "coral",
-        "m": "punto"
+        "f": "hoja_roble",
+        "c": "verde",
+        "m": ""
        },
        "mochila": "a"
-      },
-      {
-       "o": {
-        "f": "mochila",
-        "c": "coral",
-        "m": "raya"
-       },
-       "mochila": "b"
       }
      ],
      "rutas": [
       "9-12"
      ],
-     "rasgo": "detalle"
+     "rasgo": "forma"
     }
    ]
   },
@@ -10630,7 +11101,8 @@
    "facil": [
     {
      "id": "8b-f1",
-     "consigna": "En la orilla del río: ¿dónde está la llave?",
+     "consigna": "Buscá la llave de la fábrica en el río.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "escena",
      "fondo": "rio",
      "modelo": {
@@ -10768,7 +11240,8 @@
     },
     {
      "id": "8b-f2",
-     "consigna": "En la orilla del río: ¿dónde está el hueso?",
+     "consigna": "Buscá el hueso del laberinto en el río.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "escena",
      "fondo": "rio",
      "modelo": {
@@ -10905,7 +11378,8 @@
     },
     {
      "id": "8b-f3",
-     "consigna": "En la orilla del río: ¿dónde está la huella?",
+     "consigna": "Buscá la huella del claro en el río.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "escena",
      "fondo": "rio",
      "modelo": {
@@ -11045,7 +11519,8 @@
     },
     {
      "id": "8b-f4",
-     "consigna": "En la orilla del río: ¿dónde está el engranaje?",
+     "consigna": "Buscá el engranaje de la fábrica en el río.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "escena",
      "fondo": "rio",
      "modelo": {
@@ -11188,7 +11663,8 @@
    "intermedio": [
     {
      "id": "8b-i1",
-     "consigna": "Buscá la carpa con esta bandera, al lado del árbol.",
+     "consigna": "Buscá la carpa de bandera igual, junto al árbol.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "campamento",
      "fondo": "campamento",
      "modelo": {
@@ -11249,7 +11725,8 @@
     },
     {
      "id": "8b-i2",
-     "consigna": "Buscá la carpa con esta bandera, al lado del árbol.",
+     "consigna": "Buscá la carpa de bandera igual, junto al árbol.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "campamento",
      "fondo": "campamento",
      "modelo": {
@@ -11310,7 +11787,8 @@
     },
     {
      "id": "8b-i3",
-     "consigna": "Buscá la carpa con esta bandera, al lado del árbol.",
+     "consigna": "Buscá la carpa de bandera igual, junto al árbol.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "campamento",
      "fondo": "campamento",
      "modelo": {
@@ -11371,7 +11849,8 @@
     },
     {
      "id": "8b-i4",
-     "consigna": "Buscá la carpa con esta bandera, al lado del árbol.",
+     "consigna": "Buscá la carpa de bandera igual, junto al árbol.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "campamento",
      "fondo": "campamento",
      "modelo": {
@@ -11434,7 +11913,8 @@
    "dificil": [
     {
      "id": "8b-d1",
-     "consigna": "Llevá a Roco por las pistas en el mismo orden.",
+     "consigna": "Seguí las pistas en orden y llevá a Roco.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "recorrido",
      "cols": 5,
      "filas": 4,
@@ -11496,7 +11976,8 @@
     },
     {
      "id": "8b-d2",
-     "consigna": "Llevá a Roco por las pistas en el mismo orden.",
+     "consigna": "Seguí las pistas en orden y llevá a Roco.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "recorrido",
      "cols": 5,
      "filas": 4,
@@ -11558,7 +12039,8 @@
     },
     {
      "id": "8b-d3",
-     "consigna": "Llevá a Roco por las pistas en el mismo orden.",
+     "consigna": "Seguí las pistas en orden y llevá a Roco.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "recorrido",
      "cols": 5,
      "filas": 4,
@@ -11620,7 +12102,8 @@
     },
     {
      "id": "8b-d4",
-     "consigna": "Llevá a Roco por las pistas en el mismo orden.",
+     "consigna": "Seguí las pistas en orden y llevá a Roco.",
+     "estado_clinico": "validado por PSP-SR",
      "tipo": "recorrido",
      "cols": 5,
      "filas": 4,
@@ -11680,6 +12163,82 @@
      ],
      "rasgo": "orden"
     }
+   ]
+  }
+ },
+ "letras_validadas": {
+  "_nota": "RT-CEX-001-R 3.2. El validador exige que cada ítem con letras use solo estas letras y palabras, en su forma.",
+  "mayuscula": {
+   "letras": [
+    "A",
+    "B",
+    "C",
+    "E",
+    "F",
+    "G",
+    "I",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "Y"
+   ],
+   "palabras": [
+    "SOL",
+    "PAN",
+    "MESA",
+    "CASA",
+    "PATO",
+    "GATO",
+    "MAPA",
+    "HOJA",
+    "NUBE",
+    "BOTA",
+    "TAZA",
+    "PALA"
+   ]
+  },
+  "minuscula": {
+   "letras": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u"
+   ],
+   "palabras": [
+    "sol",
+    "pan",
+    "mesa",
+    "casa",
+    "pato",
+    "gato",
+    "mapa",
+    "hoja",
+    "nube",
+    "bota",
+    "taza",
+    "pala"
    ]
   }
  },

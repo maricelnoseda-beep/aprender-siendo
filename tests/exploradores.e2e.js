@@ -31,10 +31,12 @@ async function resolver(page) {
     for (const i of idx) await page.dispatchEvent(`#esc [data-el="${i}"]`, 'click');
   } else if (v === 'laberinto') {
     if (it.tipo === 'relacion') await click(`#rel [data-r="${it.correcta}"]`);
+    else if (it.tipo === 'su_lado') await click(`#su [data-lado="${it.correcta}"]`);
     else if (it.tipo === 'cartel') { for (let k = 0; k < 4; k++) { const d = await page.evaluate(() => window.__exploradores.S.R.local.dir); if (d === it.objetivo) break; await click('[data-girar="1"]'); } await click('#listo'); }
     else {
       const pasos = await page.evaluate(() => { const { S } = window.__exploradores, it = S.item, st = S.R.local;
         if (it.secuencia) return it.secuencia; return caminoMasCorto(it, st, it.meta, it.pasa_por).map((p) => p.d); });
+      if (it.plan_previo) await click('#empezar-mover');
       for (const d of pasos) {
         if (it.modo === 'perspectiva') { for (let k = 0; k < 4; k++) { const dir = await page.evaluate(() => window.__exploradores.S.R.local.dir); if (dir === d) break; await click('[data-mov="girar-der"]'); } await click('[data-mov="adelante"]'); }
         else await click(`[data-mov="${d}"]`);
@@ -102,13 +104,17 @@ async function resolver(page) {
   await page.click('#a-seguir');
   // Historia: ningún audio automático
   must((await page.evaluate(() => window.__exploradores.DICHOS.length)) === 0, 'la historia no suena sola');
-  await page.click('.parlante'); must((await page.evaluate(() => window.__exploradores.DICHOS.length)) === 1, 'el parlante hace escuchar el texto');
+  must((await page.$$('#h-texto .consigna .parlante')).length === 2, 'REQ-21: cada frase de la lámina tiene su parlante al lado');
+  must(await page.$eval('#h-texto .parlante', (b) => b.getBoundingClientRect().width >= 44 && b.getBoundingClientRect().height >= 44), 'REQ-21: parlante de 44 × 44 px o más');
+  await page.click('#h-texto .parlante'); must((await page.evaluate(() => window.__exploradores.DICHOS.length)) === 1, 'el parlante hace escuchar el texto');
+  await page.click('#h-toda'); must(await page.evaluate(() => { const d = window.__exploradores.DICHOS; return d.length === 2 && /mapa viejo/.test(d[1]) && /lugar que quieras/.test(d[1]); }), '«Escuchar la historia» narra las cinco láminas');
   for (let i = 0; i < 4; i++) await page.click('#h-sig');
   await page.click('#h-fin');
   await page.screenshot({ path: path.join(CAP, '02-mapa.png') });
   const mapa = await page.textContent('#app');
   must(!/estaci[oó]n|f[aá]cil|intermedio|dif[ií]cil|nivel/i.test(mapa), 'REQ-03: el mapa no muestra Estación ni grado');
-  must((await page.$$('[data-juego]')).length === 8, 'REQ-02: ocho lugares abiertos en 6–8');
+  must((await page.$$('[data-juego]')).length === 9, 'REQ-02: nueve lugares abiertos en 6–8 (8B con lugar propio, RT-CEX-001-R 2.2)');
+  must(/El campamento nuevo/.test(mapa) && /El puente de la niebla/.test(mapa), 'nombres de los lugares de PSP-SR');
 
   let capt = 3;
   for (const ruta of ['3-5', '6-8', '9-12']) {
@@ -135,7 +141,7 @@ async function resolver(page) {
       }
     }
   }
-  must((await page.evaluate(() => window.__exploradores.DICHOS.length)) === 1, 'ningún texto sonó solo durante todo el recorrido');
+  must((await page.evaluate(() => window.__exploradores.DICHOS.length)) === 2, 'caso 25: ningún texto sonó solo durante todo el recorrido');
   // Ayudas 1–3 y primer error con pista ofrecida (REQ-06)
   await page.evaluate(() => { const { S } = window.__exploradores; S.ruta = '6-8'; S.gradoDe.sombras = 'facil'; S.estrategiaVista.add('sombras'); entrar('sombras'); });
   const it = await page.evaluate(() => window.__exploradores.S.item);
@@ -148,16 +154,34 @@ async function resolver(page) {
   await page.waitForTimeout(1800);
   await page.screenshot({ path: path.join(CAP, '50-ayuda-rotacion.png') });
   await page.click(`[data-destino="${it.correcta}"]`);
-  // Letra en un ítem con letras: se vuelve a dibujar con la otra forma
-  await page.evaluate(() => { const { S, BANCO } = window.__exploradores; S.ruta = '6-8'; S.gradoDe.objetos = 'dificil'; S.idx = {}; S.estrategiaVista.add('objetos');
-    const l = BANCO.variantes.objetos.dificil.findIndex((x) => x.tipo === 'letras'); S.idx['objetos/dificil/6-8'] = l; entrar('objetos'); });
-  const mayus = await page.$$eval('#bandeja .ficha', (xs) => xs.map((x) => x.textContent.trim()).join(''));
+  // Caso 26 (REQ-CLI-EXP-22): cambiar la letra en medio de un ítem con letras rige desde el ítem siguiente
+  await page.evaluate(() => { const { S, BANCO, MODULO, Motor } = window.__exploradores; S.ruta = '6-8'; S.letra = 'mayuscula'; aplicarLetra(); encabezado(); S.gradoDe.objetos = 'dificil'; S.idx = {}; S.estrategiaVista.add('objetos');
+    const lista = Motor.itemsDe(BANCO, 'objetos', 'dificil', '6-8', { lee: true, letra: 'mayuscula' }); S.idx['objetos/dificil/6-8/mayuscula'] = lista.findIndex((x) => x.tipo === 'letras'); entrar('objetos'); });
+  const antesL = await page.$$eval('#bandeja .ficha', (xs) => xs.map((x) => x.textContent.trim()).join(''));
+  const itL = await page.evaluate(() => window.__exploradores.S.item);
+  must(itL.letra_forma === 'mayuscula' && antesL === antesL.toUpperCase() && itL.rasgo !== 'orientacion', `en mayúscula, ítem de letras de mayúscula sin orientación (${antesL})`);
   await page.click('#l-min');
-  const minus = await page.$$eval('#bandeja .ficha', (xs) => xs.map((x) => x.textContent.trim()).join(''));
-  must(mayus === mayus.toUpperCase() && minus === minus.toLowerCase() && mayus.toLowerCase() !== minus, `letras: cada forma de letra usa su propio conjunto (${mayus} / ${minus})`);
-  await page.screenshot({ path: path.join(CAP, '51-letras-minuscula.png') });
-  await page.click('#l-may');
-  await page.screenshot({ path: path.join(CAP, '52-letras-mayuscula.png') });
+  const durante = await page.$$eval('#bandeja .ficha', (xs) => xs.map((x) => x.textContent.trim()).join(''));
+  must(durante === antesL && (await page.evaluate(() => window.__exploradores.S.letra)) === 'mayuscula', 'caso 26: el ítem en curso no cambia de letra');
+  must((await page.getAttribute('#l-min', 'aria-pressed')) === 'true', 'caso 26: la elección queda marcada para el próximo ítem');
+  await page.screenshot({ path: path.join(CAP, '51-letras-cambio-pendiente.png') });
+  await resolver(page); await page.waitForTimeout(30);
+  must((await page.evaluate(() => { const { S } = window.__exploradores; return S.registros[S.registros.length - 1]; })).tipo_letra === 'mayuscula', 'caso 26: tipo_letra registrado con la forma del ítem');
+  await page.click('#j-seguir');
+  must((await page.evaluate(() => window.__exploradores.S.letra)) === 'minuscula' && !(await page.evaluate(() => document.body.classList.contains('mayus'))), 'caso 26: la minúscula rige desde el ítem siguiente');
+  const sig = await page.evaluate(() => window.__exploradores.S.item);
+  must(!sig.letra_forma || sig.letra_forma === 'minuscula', 'después del cambio no aparecen ítems de mayúscula');
+  await page.screenshot({ path: path.join(CAP, '52-letras-minuscula.png') });
+  // 8A Difícil: la regla de las mochilas se ve y se escucha a pedido
+  await page.evaluate(() => { const { S } = window.__exploradores; S.ruta = '9-12'; S.gradoDe.pistas_relampago = 'dificil'; S.estrategiaVista.add('pistas_relampago'); entrar('pistas_relampago'); });
+  must(/Las de punta, acá/.test(await page.textContent('#regla')), '8A Difícil: regla de las mochilas');
+  await page.click('#j-mapa');
+  // Juego 5 en 9–12: la derecha de Roco
+  await page.evaluate(() => { const { S, BANCO, Motor } = window.__exploradores; S.ruta = '9-12'; S.letra = 'minuscula'; S.gradoDe.laberinto = 'dificil'; S.idx = {}; S.estrategiaVista.add('laberinto');
+    S.idx['laberinto/dificil/9-12/minuscula'] = Motor.itemsDe(BANCO, 'laberinto', 'dificil', '9-12', { lee: true, letra: 'minuscula' }).findIndex((x) => x.tipo === 'su_lado'); entrar('laberinto'); });
+  must(await page.$('#su [data-lado]') && /su derecha/.test(await page.textContent('#consigna')), 'Juego 5: «¿dónde está su derecha?»');
+  await page.screenshot({ path: path.join(CAP, '54-su-derecha.png') });
+  await page.click('#j-mapa');
   // Registro profesional
   await page.evaluate(() => verRegistro());
   const reg = await page.textContent('#r-hab');

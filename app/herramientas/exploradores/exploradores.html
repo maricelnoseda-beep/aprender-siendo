@@ -27,6 +27,8 @@ p{margin:.4em 0}
 .small{font-size:.95rem;color:var(--as-secundario,#526776)}
 /* Letra MAYÚSCULA o minúscula imprenta (pedido de la supervisora): se aplica a todo lo que ve quien juega. */
 body.mayus .nino,body.mayus .nino button,body.mayus .nino .letra{text-transform:uppercase}
+body.mayus .nino .letra-ficha,body.mayus .nino .palabra,body.mayus .nino .letra-fija{text-transform:none}
+#h-toda svg{width:28px;height:28px}
 body.mayus .nino .adulto-txt{text-transform:none}
 .hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .marca{width:44px;height:44px;border-radius:12px;background:var(--as-marca) center/contain no-repeat;flex:none}
@@ -215,6 +217,9 @@ const Motor = (() => {
   const gradosDe = (modulo, ruta, id) => (((modulo.rutas[ruta] || {}).variantes || {})[id] || []).slice();
   const variantesDe = (modulo, ruta) => VAR.filter((v) => gradosDe(modulo, ruta, v).length);
   const juegosDe = (modulo, ruta) => [...new Set(variantesDe(modulo, ruta).map((v) => JUEGO[v]))];
+  /* Lugares del mapa (RT-CEX-001-R 2.2): uno por juego, salvo 8B, que tiene lugar y pieza propios («El campamento nuevo»). */
+  const lugarDe = (modulo, id) => variante(modulo, id).lugar_id || JUEGO[id];
+  const lugaresDe = (modulo, ruta) => [...new Set(variantesDe(modulo, ruta).map((v) => lugarDe(modulo, v)))];
   function ajustarARuta(modulo, ruta, id, grado) {
     const vs = variantesDe(modulo, ruta); if (!vs.length) return null;
     const v = vs.includes(id) ? id : vs[0], gs = gradosDe(modulo, ruta, v), i = GR.indexOf(grado);
@@ -224,8 +229,9 @@ const Motor = (() => {
      (REQ-CLI-EXP-12). Los ítems con letras o palabras solo en rutas que leen. */
   function itemsDe(banco, id, grado, ruta, f = {}) {
     const lee = !!f.lee;
+    // REQ-CLI-EXP-22: cada ítem con letras está hecho para una forma de letra y solo se ofrece con esa forma.
     return (((banco.variantes || {})[id] || {})[grado] || []).filter((it) => (it.rutas || RUTAS).includes(ruta)
-      && !(f.evitarColor && it.rasgo === "color") && !(it.lee && !lee));
+      && !(f.evitarColor && it.rasgo === "color") && !(it.lee && !lee) && !(it.letra_forma && f.letra && it.letra_forma !== f.letra));
   }
 
   /* ---------- M10 (beta 2, 6.10) dentro de cada variante y por habilidad (FEC-015 5.17). El tiempo no interviene (M10-7). ---------- */
@@ -307,17 +313,23 @@ const Motor = (() => {
   /* ---------- Juego 8A: exposición sin reloj visible (REQ-CLI-EXP-08) ----------
      Se acorta solo si la precisión del bloque fue de 85 % o más; si bajó, vuelve al valor anterior. Nunca baja del mínimo, que
      garantiza menos de 3 cambios por segundo (WCAG 2.3.1). */
-  function exposicionSiguiente(estado, precision, cfg) {
-    const ms = estado.ms || cfg.inicial_ms;
-    if (precision >= cfg.umbral_precision) return { ms: Math.max(cfg.min_ms, Math.round(ms * cfg.factor)), anterior: ms };
-    return { ms: estado.anterior || ms, anterior: estado.anterior || ms };
+  /* RT-CEX-001-R 5: mínimo por ruta (1000 ms en 6–8) y nunca más de un acortamiento por sesión (o.yaAcorto). */
+  function exposicionSiguiente(estado, precision, cfg, o = {}) {
+    const ms = estado.ms || cfg.inicial_ms, min = ((cfg.min_ms_por_ruta || {})[o.ruta]) || cfg.min_ms;
+    if (precision >= cfg.umbral_precision) {
+      if (o.yaAcorto) return { ms, anterior: estado.anterior || null, acorto: false };
+      const nuevo = Math.max(min, Math.round(ms * cfg.factor));
+      return { ms: nuevo, anterior: ms, acorto: nuevo < ms };
+    }
+    return { ms: estado.anterior || ms, anterior: estado.anterior || ms, acorto: false };
   }
   const cambiosPorSegundo = (expoMs, pausaMs) => 2000 / (expoMs + pausaMs);
 
   /* Qué cuenta como acierto para M10 (modulo.criterio_acierto: propuesta de DEV-IA, la valida PSP-SR). */
-  function acierto(id, r, modulo) {
+  const precisionMinimaTrazo = (modulo, ruta) => { const c = (modulo && modulo.criterio_acierto) || {}; return ((c.fabrica_precision_minima_por_ruta || {})[ruta]) || c.fabrica_precision_minima || 0.7; };
+  function acierto(id, r, modulo, ruta) {
     const c = (modulo && modulo.criterio_acierto) || {};
-    if (id === "fabrica") return r.errores === 0 && (r.extra.precision_trazo == null || r.extra.precision_trazo >= (c.fabrica_precision_minima || 0.7));
+    if (id === "fabrica") return r.errores === 0 && (r.extra.precision_trazo == null || r.extra.precision_trazo >= precisionMinimaTrazo(modulo, ruta));
     if (id === "pistas_relampago") return (r.extra.precision || 0) >= (c.pistas_precision_minima || 0.85);
     return r.errores === 0;
   }
@@ -336,23 +348,25 @@ const Motor = (() => {
       habilidad: corto(b.habilidad, 40), resultado: corto(b.resultado || (b.errores ? "con-errores" : "resuelto"), 16), intentos: limitar(b.intentos, 0, 999),
       errores: limitar(b.errores, 0, 999), tipos_error: (b.tipos_error || []).slice(0, 12).map((t) => corto(t, 28)),
       apoyos: (b.apoyos || []).slice(0, 20).map((a) => corto(a, 40)), apoyo_inicial: limitar(b.apoyo_inicial, 0, 3), apoyo_max: limitar(b.apoyo_max, 0, 3),
-      autonomia: autonomia(b.apoyo_max), modalidad: corto(b.modalidad || "tocar", 16), autocorreccion: !!b.autocorreccion, ms: limitar(b.ms, 0, 3600000), extra };
+      autonomia: autonomia(b.apoyo_max), modalidad: corto(b.modalidad || "tocar", 16), autocorreccion: !!b.autocorreccion, ms: limitar(b.ms, 0, 3600000),
+      tipo_letra: b.tipo_letra === "minuscula" ? "minuscula" : "mayuscula", con_letras: !!b.con_letras, extra };
   }
   const mediana = (xs) => { const a = xs.filter((x) => x != null).slice().sort((x, y) => x - y), n = a.length; return !n ? null : n % 2 ? a[(n - 1) / 2] : (a[n / 2 - 1] + a[n / 2]) / 2; };
   const masFrecuentes = (xs, n = 2) => { const c = {}; for (const x of xs) c[x] = (c[x] || 0) + 1; return Object.entries(c).sort((a, b) => b[1] - a[1]).slice(0, n).map(([k, v]) => `${k} (${v})`); };
   /* Vista profesional por habilidad (FEC-015 §8; REQ-CLI-EXP-16): una fila por habilidad, sin puntaje global ni colores. */
+  /* RT-CEX-001-R 3.3: en los ítems con letras, el resultado va aparte por tipo de letra, porque no son el mismo ítem. */
   function vistaPorHabilidad(regs, gradoActual = {}) {
     const por = {};
-    for (const r of regs) (por[r.habilidad] || (por[r.habilidad] = [])).push(r);
-    return Object.entries(por).map(([h, rs]) => ({
-      habilidad: h, variantes: [...new Set(rs.map((r) => r.variante))], items: rs.length, grado_actual: gradoActual[h] || rs[rs.length - 1].grado,
+    for (const r of regs) { const k = r.habilidad + (r.con_letras ? "|" + r.tipo_letra : ""); (por[k] || (por[k] = [])).push(r); }
+    return Object.entries(por).map(([k, rs]) => { const h = k.split("|")[0]; return {
+      habilidad: h, letras: k.includes("|") ? k.split("|")[1] : null, variantes: [...new Set(rs.map((r) => r.variante))], items: rs.length, grado_actual: gradoActual[h] || rs[rs.length - 1].grado,
       sin_apoyo: Math.round((rs.filter((r) => r.apoyo_max === 0).length / rs.length) * 100) / 100,
       apoyos: masFrecuentes(rs.flatMap((r) => r.apoyos.filter((a) => !/^0:/.test(a)).map((a) => a.replace(/^inicial:/, "").split(":").slice(1).join(":") || a))),
       tipos_error: masFrecuentes(rs.flatMap((r) => r.tipos_error)),
       tiempo_mediana_ms: mediana(rs.map((r) => r.ms)),
       precision_8a: h === "velocidad-de-procesamiento-visual" ? mediana(rs.map((r) => r.extra.precision)) : null,
       respuesta_8a_ms: h === "velocidad-de-procesamiento-visual" ? mediana(rs.map((r) => r.extra.tiempo_respuesta_mediana_ms)) : null
-    }));
+    }; });
   }
   function medianasTiempo(regs) {
     const g = {};
@@ -376,8 +390,17 @@ const Motor = (() => {
   }
   function consignas(banco) {
     const out = [];
-    for (const v of Object.values(banco.variantes)) for (const g of Object.values(v)) for (const it of g) out.push(it.consigna);
+    for (const v of Object.values(banco.variantes)) for (const g of Object.values(v)) for (const it of g) out.push(it.consigna, ...(it.consigna_tocar ? [it.consigna_tocar] : []), ...(it.regla ? [it.regla] : []));
     return out.concat(Object.values(banco.textos.nino.consignas_generales || {}));
+  }
+  /* RT-CEX-001-R 2: cada texto para quien juega que manda PSP-SR tiene 60 caracteres o menos. */
+  function textosBreves(banco) {
+    const out = consignas(banco), ir = (x) => { if (typeof x === "string") out.push(x); else if (Array.isArray(x)) x.forEach(ir); else if (x && typeof x === "object") Object.entries(x).forEach(([k, v]) => { if (!k.startsWith("_") && k !== "tipos" && k !== "estado_clinico") ir(v); }); };
+    for (const l of banco.historia.laminas) ir(l.frases);
+    for (const e of Object.values(banco.estrategias)) { ir(e.asi_se_juega); ir(e.estrategia); }
+    for (const a of Object.values(banco.ayudas)) if (a && typeof a === "object") ir(a["1"]);
+    ir(banco.devoluciones.error); ir(banco.devoluciones.parcial); ir(banco.textos.nino.tesoroTexto); ir(banco.textos.nino.demostracion);
+    return out;
   }
   function validarBanco(banco, modulo) {
     const e = [];
@@ -430,13 +453,33 @@ const Motor = (() => {
       if (id === "laberinto") ver((modulo.estaciones.variantes.find((v) => v.variante === "laberinto").habilidades || []).includes(it.habilidad), `${k}: el ítem del Juego 5 declara una sola habilidad válida`);
       if (id === "cofre_orden" && it.tipo === "cambiaron") ver(it.cambiados.length === 2, `${k}: tienen que cambiar dos`);
     }
+    // REQ-CLI-EXP-22 y RT-CEX-001-R 3: ítems con letras, por forma de letra.
+    const LV = banco.letras_validadas || {};
+    for (const [id, gs] of Object.entries(banco.variantes)) for (const [g, its] of Object.entries(gs)) for (const it of its) {
+      if (!it.lee) continue;
+      const k = `${id}/${g}/${it.id}`, set = LV[it.letra_forma] || {};
+      ver(it.letra_forma === "mayuscula" || it.letra_forma === "minuscula", `${k}: ítem con letras sin forma de letra (letra_forma)`);
+      ver(["orientacion", "detalle", "forma"].includes(it.rasgo), `${k}: ítem con letras sin rasgo de orientación, detalle o forma`);
+      ver(!(it.letra_forma === "mayuscula" && it.rasgo === "orientacion"), `${k}: en mayúscula no hay ítems de orientación con letras (3.1)`);
+      ver(g === "dificil" && !(it.rutas || RUTAS).includes("3-5"), `${k}: los ítems con letras van solo en Difícil y en rutas que leen (5.12)`);
+      const letras = [it.modelo, ...(it.letras || []), (it.objeto || {}).letra, ...((it.sombras || []).map((x) => x.letra))].filter((x) => typeof x === "string");
+      for (const l of letras) ver((set.letras || []).includes(l), `${k}: la letra «${l}» no está en el conjunto validado para ${it.letra_forma}`);
+      if (it.tipo === "palabra") for (const w of it.opciones) ver((set.palabras || []).includes(w), `${k}: la palabra «${w}» no está en el conjunto validado para ${it.letra_forma}`);
+      if (it.tipo === "palabra") ver(it.tapa === (it.letra_forma === "mayuscula" ? "abajo" : "arriba"), `${k}: en mayúscula se tapa la mitad de abajo y en minúscula la de arriba (3.2)`);
+    }
+    for (const id of VAR) for (const ruta of RUTAS) { const lee = !!(modulo.rutas[ruta] || {}).lee;
+      for (const g of gradosDe(modulo, ruta, id)) for (const letra of ["mayuscula", "minuscula"])
+        ver(itemsDe(banco, id, g, ruta, { lee, letra }).length >= (modulo.items_minimos_prueba || 4), `${id}/${g}/${ruta}/${letra}: menos de ${modulo.items_minimos_prueba || 4} ítems con esa forma de letra`); }
+    const solo = (modulo.colores_daltonismo || {}).solo_en_grados || {};
+    for (const [id, gs] of Object.entries(banco.variantes)) for (const [g, its] of Object.entries(gs)) for (const it of its)
+      if (it.rasgo === "color" && it.colores) { const par = it.colores.slice().sort().join("|"); if (solo[par]) ver(solo[par].includes(g), `${id}/${g}/${it.id}: el par ${par} va solo en ${solo[par].join(" y ")}`); }
     const x = modulo.exposicion_8a;
     ver(x && cambiosPorSegundo(x.min_ms, x.pausa_ms) <= 3, "8A: la exposición mínima produce más de 3 cambios por segundo (WCAG 2.3.1)");
     for (const t of textosNino(banco)) { ver(!PROHIBIDO.test(t), `texto para quien juega con palabra no admitida: «${t}»`); ver(!ESTILO.test(t), `texto que compara con otra obra: «${t}»`); }
-    for (const t of consignas(banco)) if (t.length > (modulo.consigna_breve_max || 60)) e.push(`consigna más larga que ${modulo.consigna_breve_max || 60} caracteres (pedido de consignas breves): «${t}»`);
+    for (const t of textosBreves(banco)) if (t.length > (modulo.consigna_breve_max || 60)) e.push(`consigna más larga que ${modulo.consigna_breve_max || 60} caracteres (pedido de consignas breves): «${t}»`);
     return e;
   }
-  const exportar = { GR, VAR, JUEGO, RUTAS, AUTONOMIA, azar, mezclar, mezclarDistinto, semillaDe, limitar, variante, param, gradosDe, variantesDe, juegosDe, ajustarARuta, itemsDe,
+  const exportar = { GR, VAR, JUEGO, RUTAS, AUTONOMIA, azar, mezclar, mezclarDistinto, semillaDe, limitar, variante, param, gradosDe, variantesDe, juegosDe, lugarDe, lugaresDe, ajustarARuta, itemsDe, precisionMinimaTrazo, textosBreves,
     ajusteM10, siguienteApoyo, sinAyuda, autonomia, tipoRepetido, itemPorRasgo, habilidadDe, tolerancia, distSeg, distCamino, precisionTrazo, claveSeg, faltanSegmentos,
     exposicionSiguiente, cambiosPorSegundo, acierto, registro, mediana, vistaPorHabilidad, medianasTiempo, validarBanco, textosNino, consignas, PROHIBIDO, ESTILO, igualEn, apariencia, caja, cruzan };
   if (typeof module !== "undefined") module.exports = exportar;
@@ -527,7 +570,9 @@ const Dibujo = (() => {
     mapa: () => `<rect width="1200" height="800" fill="${C.crema}"/><path d="M120 640 C320 520 420 700 620 560 S960 420 1080 200" fill="none" stroke="${C.coral}" stroke-width="12" stroke-dasharray="26 20"/>`,
     historia_mapa: () => FONDOS.claro() + `<g transform="translate(470 330) scale(2.6)">${F.pieza({})}</g>`,
     historia_bosque: () => FONDOS.bosque() + [["luna", 300], ["tomas", 480], ["roco", 660], ["michi", 840]].map(([f, x]) => `<g transform="translate(${x - 70} 470) scale(1.4)">${F[f]({})}</g>`).join(""),
-    historia_tesoro: () => FONDOS.claro() + `<g transform="translate(480 300) scale(2.4)">${F.tesoro({})}</g>` + [["luna", 200], ["tomas", 360], ["roco", 840], ["michi", 1000]].map(([f, x]) => `<g transform="translate(${x - 70} 500) scale(1.4)">${F[f]({})}</g>`).join("")
+    historia_lugares: () => FONDOS.mapa() + [[200, 560], [380, 640], [560, 560], [720, 470], [880, 380], [1000, 260], [820, 200], [600, 300]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="38" fill="${C.sol}" ${T}/>`).join(""),
+    historia_piezas: () => FONDOS.mapa() + [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => `<rect x="${250 + (i % 3) * 240}" y="${130 + Math.floor(i / 3) * 190}" width="200" height="160" rx="18" fill="#fff" stroke="${C.coral}" stroke-width="6" stroke-dasharray="18 12"/>`).join(""),
+    historia_tesoro: () => FONDOS.claro() + `<g transform="translate(330 300) scale(2.4)">${F.tesoro({})}</g><g transform="translate(690 330) scale(2.2)">${F.lupa({})}</g>` + [["luna", 200], ["tomas", 360], ["roco", 840], ["michi", 1000]].map(([f, x]) => `<g transform="translate(${x - 70} 500) scale(1.4)">${F[f]({})}</g>`).join("")
   };
   const fondo = (id) => (FONDOS[id] || FONDOS.claro)();
   const lamina = (id, etiqueta = "") => `<svg viewBox="0 0 1200 800" ${etiqueta ? `role="img" aria-label="${etiqueta}"` : 'aria-hidden="true"'} focusable="false">${fondo(id)}</svg>`;
@@ -603,7 +648,8 @@ function msj(t) {
 function encabezado() {
   const completa = !EN_MARCO && (document.fullscreenEnabled || document.webkitFullscreenEnabled)
     ? `<button class="btn sec chico" id="completa">${document.fullscreenElement ? "Salir de pantalla completa" : "Pantalla completa"}</button>` : "";
-  const letras = `<span class="letras" role="group" aria-label="${esc(T.letraGrupo)}"><button type="button" id="l-may" aria-pressed="${S.letra === "mayuscula"}" aria-label="${esc(T.letraMayuscula)}">ABC</button><button type="button" id="l-min" aria-pressed="${S.letra === "minuscula"}" aria-label="${esc(T.letraMinuscula)}">abc</button></span>`;
+  const elegida = S.letraPendiente || S.letra;
+  const letras = `<span class="letras" role="group" aria-label="${esc(T.letraGrupo)}"><button type="button" id="l-may" class="letra-fija" aria-pressed="${elegida === "mayuscula"}" aria-label="${esc(T.letraMayuscula)}">ABC</button><button type="button" id="l-min" class="letra-fija" aria-pressed="${elegida === "minuscula"}" aria-label="${esc(T.letraMinuscula)}">abc</button></span>`;
   $("#hd").innerHTML = (EN_MARCO ? '<span style="margin-right:auto"></span>' : `<span class="marca" aria-hidden="true"></span><span class="nm">${esc(MODULO.nombre)}</span>`)
     + `<span class="rotulo">${esc(T.rotulo)}</span>${letras}${completa}`;
   $("#l-may").onclick = () => cambiarLetra("mayuscula");
@@ -612,13 +658,18 @@ function encabezado() {
   if (c) c.onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement); };
 }
 document.addEventListener("fullscreenchange", encabezado);
-/* Cambiar la letra es un apoyo de acceso: no sube el nivel. Si el ítem en curso tiene letras o palabras, se vuelve a dibujar con la
-   otra forma de letra (el ítem trae las dos versiones en el banco). */
+/* Cambiar la letra es un apoyo de acceso: no sube el nivel (R11). Con un ejercicio en curso, el cambio rige desde el siguiente
+   (REQ-CLI-EXP-22): así un ítem de orientación no se mezcla con uno de detalle. */
 function cambiarLetra(l) {
-  if (S.letra === l) return;
-  S.letra = l; aplicarLetra(); encabezado();
+  if ((S.letraPendiente || S.letra) === l) return;
+  if (S.R && !S.R.terminado) { S.letraPendiente = l === S.letra ? null : l; registrarAcceso("letra"); encabezado(); msj(T.adulto.letraSiguiente); return; }
+  S.letra = l; S.letraPendiente = null; aplicarLetra(); encabezado();
   if (EN_MARCO) parent.postMessage({ type: "exploradores-letra", letra: l }, "*");
-  if (S.R && !S.R.terminado) { registrarAcceso("letra"); if (S.item && S.item.lee) { S.R.redibujos = (S.R.redibujos || 0) + 1; JUEGOS[S.variante].render(S.item); } }
+}
+function aplicarLetraPendiente() {
+  if (!S.letraPendiente) return;
+  S.letra = S.letraPendiente; S.letraPendiente = null; aplicarLetra(); encabezado();
+  if (EN_MARCO) parent.postMessage({ type: "exploradores-letra", letra: S.letra }, "*");
 }
 
 /* ---------- Pantalla de la persona adulta ---------- */
@@ -629,6 +680,7 @@ function pantallaAdulto() {
   $("#app").innerHTML = `<section class="panel">
     <h1>${esc(MODULO.nombre)}</h1>
     <p class="small">${esc(A.intro)} ${esc(T.rotulo)}: banco de la ${esc(MODULO.fec)}, a aprobar por la supervisora.</p>
+    <p class="guia" id="a-parlante">${D.parlante} ${esc(A.parlante)}</p>
     <div class="grupo"><h2>Edad (cómo se presenta)</h2><div class="opciones" style="--min:150px">${RUTAS.map(([r, n]) => { const ok = !!MODULO.rutas[r];
       return `<button class="opcion" data-ruta="${r}" aria-pressed="${r === S.ruta}" ${ok ? "" : "disabled"}><span class="t">${n}</span>${ok ? `<span class="d">${esc(MODULO.rutas[r].sesion_rango)}</span>` : `<span class="d">No disponible</span>`}</button>`; }).join("")}</div>
       <p class="small">${esc(MODULO.rutas_excluidas["13-18"])}</p></div>
@@ -673,9 +725,11 @@ function historia(despues) {
   const L2 = BANCO.historia.laminas; let i = 0;
   const pintar = () => {
     const l = L2[i], ult = i === L2.length - 1;
+    const toda = L2.map((x) => x.frases.join(" ")).join(" ");
     $("#app").innerHTML = `<section class="panel cierre nino" aria-labelledby="h-t"><h1 id="h-t">${esc(N.historiaTitulo)}</h1>
+      <div class="acciones" style="justify-content:center;margin:0 0 8px"><button class="btn suave" id="h-toda" data-decir="${esc(toda)}">${D.parlante} ${esc(N.escucharHistoria)}</button></div>
       <div class="lamina">${D.lamina(l.lamina, l.descripcion)}</div>
-      <div class="consigna" style="justify-content:center"><p id="h-texto" style="flex:0 1 auto">${esc(l.texto)}</p>${escuchar(l.texto)}</div>
+      <div id="h-texto">${l.frases.map((f) => `<div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(f)}</p>${escuchar(f)}</div>`).join("")}</div>
       <p class="small">${i + 1} / ${L2.length}</p>
       ${ult && S.ruta === "3-5" ? `<p class="guia adulto-txt">${esc(BANCO.historia.guia_adulto_3_5)}</p>` : ""}
       <div class="acciones">${i ? `<button class="btn sec" id="h-antes">${esc(N.anterior)}</button>` : ""}<button class="btn" id="${ult ? "h-fin" : "h-sig"}">${esc(ult ? N.alMapa : N.siguiente)}</button></div></section>`;
@@ -687,10 +741,10 @@ function historia(despues) {
 }
 
 /* ---------- Mapa del niño: lugares con nombres de acción, nunca Estación ni grado (REQ-CLI-EXP-03). Todos abiertos (REQ-02). ---------- */
-const LUGARES = () => { const out = []; for (const v of VARIANTES) if (!out.some((x) => x.juego === v.juego)) out.push({ juego: v.juego, lugar: v.lugar, lamina: v.lamina, personaje: v.personaje }); return out; };
+const LUGARES = () => { const out = []; for (const v of VARIANTES) { const id = v.lugar_id || v.juego; if (!out.some((x) => x.juego === id)) out.push({ juego: id, lugar: v.lugar, lamina: v.lamina, personaje: v.personaje }); } return out; };
 function mapa() {
-  S.R = null; if (!S.t0Sesion) S.t0Sesion = Date.now();
-  const juegos = Motor.juegosDe(MODULO, S.ruta), completo = juegos.every((j) => S.piezas.has(j));
+  S.R = null; aplicarLetraPendiente(); if (!S.t0Sesion) S.t0Sesion = Date.now();
+  const juegos = Motor.lugaresDe(MODULO, S.ruta), completo = juegos.every((j) => S.piezas.has(j));
   $("#app").innerHTML = `<section class="panel nino" aria-labelledby="m-t"><div class="consigna"><p id="m-t">${esc(N.mapaConsigna)}</p>${escuchar(N.mapaConsigna)}</div>
     <div class="mapa">${LUGARES().filter((l) => juegos.includes(l.juego)).map((l) => `<button class="lugar" data-juego="${l.juego}">${D.lamina(l.lamina, "")}<span class="t">${esc(l.lugar)}</span>
       ${S.piezas.has(l.juego) ? `<span class="pieza">${esc(N.piezaLista)}</span>` : ""}</button>`).join("")}</div>
@@ -703,7 +757,7 @@ function mapa() {
   const a = $("#m-adulto"); if (a) a.onclick = pantallaAdulto;
 }
 function elegirReto(juego) {
-  const vs = VARIANTES.filter((v) => v.juego === juego && Motor.gradosDe(MODULO, S.ruta, v.variante).length);
+  const vs = VARIANTES.filter((v) => (v.lugar_id || v.juego) === juego && Motor.gradosDe(MODULO, S.ruta, v.variante).length);
   if (vs.length === 1) return entrar(vs[0].variante);
   const l = LUGARES().find((x) => x.juego === juego);
   $("#app").innerHTML = `<section class="panel nino"><div class="consigna"><p>${esc(l.lugar)}</p></div>
@@ -723,8 +777,8 @@ function estrategia() {
   const v = variante(), est = BANCO.estrategias[S.variante];
   $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(v.titulo_nino)}</h1>
     <div class="objeto-grande" style="width:140px;height:140px">${D.figura(v.personaje, {}, "")}</div>
-    <div class="consigna" style="justify-content:center"><p id="e-texto" style="flex:0 1 auto">${esc(est.estrategia)}</p>${escuchar(est.estrategia)}</div>
-    <div class="consigna" style="justify-content:center"><p id="e-como" style="flex:0 1 auto;font-weight:700;font-size:1.05rem">${esc(est.asi_se_juega)}</p>${escuchar(est.asi_se_juega)}</div>
+    <div class="consigna" style="justify-content:center"><p id="e-como" style="flex:0 1 auto">${esc(est.asi_se_juega)}</p>${escuchar(est.asi_se_juega)}</div>
+    <div class="consigna" style="justify-content:center"><p id="e-texto" style="flex:0 1 auto;font-weight:700;font-size:1.05rem">${esc(est.estrategia)}</p>${escuchar(est.estrategia)}</div>
     <div class="acciones"><button class="btn" id="e-empezar">${esc(N.empezar)}</button><button class="btn sec" id="e-mapa">${esc(N.volverMapa)}</button></div></section>`;
   $("#e-empezar").onclick = () => { S.estrategiaVista.add(S.variante); if (EN_MARCO) parent.postMessage({ type: "exploradores-estrategia", variante: S.variante }, "*"); siguienteItem(); };
   $("#e-mapa").onclick = mapa;
@@ -732,8 +786,9 @@ function estrategia() {
 
 /* ---------- Ciclo de ítems, apoyos y registro ---------- */
 function siguienteItem() {
-  const lista = Motor.itemsDe(BANCO, S.variante, S.grado, S.ruta, { lee: lee(), evitarColor: S.evitarColor });
-  const k = S.variante + "/" + S.grado + "/" + S.ruta;
+  aplicarLetraPendiente();
+  const lista = Motor.itemsDe(BANCO, S.variante, S.grado, S.ruta, { lee: lee(), evitarColor: S.evitarColor, letra: S.letra });
+  const k = S.variante + "/" + S.grado + "/" + S.ruta + "/" + S.letra;
   let i = S.idx[k] || 0;
   let apoyo = S.variante in S.apoyoSig ? S.apoyoSig[S.variante] : S.apoyoInicial;
   // REQ-CLI-EXP-18: el mismo tipo de error 3 veces en el grado → el próximo ítem trabaja ese rasgo con apoyo de nivel 1.
@@ -742,7 +797,7 @@ function siguienteItem() {
   S.idx[k] = i + 1;
   S.item = lista[i % lista.length];
   S.R = { t0: Date.now(), errores: 0, intentos: 0, tipos: [], apoyos: [], apoyo_max: 0, apoyo_inicial: apoyo, nivelAyuda: 0, audio_objetivo: false, autocorreccion: false,
-    seguidos: 0, modalidades: new Set(), extra: {}, terminado: false, porRasgo };
+    seguidos: 0, modalidades: new Set(), extra: {}, terminado: false, porRasgo, tipo_letra: S.item.letra_forma || S.letra, con_letras: !!S.item.letra_forma };
   if (JUEGOS[S.variante].render(S.item) !== "espera") aplicarApoyoInicial();
 }
 function aplicarApoyoInicial() {
@@ -783,8 +838,9 @@ function finItem(extra = {}) {
   const reg = Motor.registro({ variante: id, juego: v.juego, estacion: v.estacion, grado: S.grado, item: S.item.id,
     habilidad: Motor.habilidadDe(MODULO, id, S.item, { sinTrazoFino: S.sinTrazoFino }), resultado: extra.resultado, errores: R.errores, intentos: R.intentos,
     tipos_error: R.tipos, apoyos: R.apoyos, apoyo_inicial: R.apoyo_inicial, apoyo_max: R.apoyo_max, modalidad, autocorreccion: R.autocorreccion, ms: Date.now() - R.t0,
+    tipo_letra: R.tipo_letra, con_letras: R.con_letras,
     extra: { ...R.extra, ...(extra.extra || {}), audio_objetivo: id === "cofre_cuales" ? R.audio_objetivo : undefined } });
-  const ok = Motor.acierto(id, reg, MODULO);
+  const ok = Motor.acierto(id, reg, MODULO, S.ruta);
   S.registros.push(reg);
   if (EN_MARCO) parent.postMessage({ type: "exploradores-item", acierto: ok, ...reg }, "*");
   const sig = Motor.siguienteApoyo(reg.apoyo_max); S.apoyoSig[id] = sig.nivel; S.destacar[id] = sig.destacar;
@@ -813,8 +869,8 @@ function finItem(extra = {}) {
 /* ---------- Cierre: pieza del mapa por haber jugado (REQ-CLI-EXP-13), idea fuera de la pantalla (R9) y «Contar» (M07) ---------- */
 function cierre(motivo) {
   const v = variante(), id = S.variante, piso = motivo === "piso", tiempo = motivo === "tiempo";
-  const nueva = !S.piezas.has(v.juego); S.piezas.add(v.juego);
-  if (EN_MARCO) parent.postMessage({ type: "exploradores-pieza", juego: v.juego }, "*");
+  const lugar = v.lugar_id || v.juego, nueva = !S.piezas.has(lugar); S.piezas.add(lugar);
+  if (EN_MARCO) parent.postMessage({ type: "exploradores-pieza", juego: lugar }, "*");
   const t = tiempo ? N.cierreTiempo : piso ? N.cierrePiso : BANCO.devoluciones.cierre[id];
   const idea = BANCO.ideas_fuera[v.juego], C = N.contar;
   const contar = EN_MARCO ? "" : `<div class="contar" id="contar"><h2>${esc(C.titulo)}</h2>${S.ruta === "3-5" ? `<p class="small adulto-txt">${esc(C.conAdulto)}</p>` : ""}
@@ -841,7 +897,7 @@ function cierre(motivo) {
 function tesoro() {
   $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(N.tesoroTitulo)}</h1>
     <div class="lamina">${D.lamina("historia_tesoro", BANCO.historia.tesoro_descripcion)}</div>
-    <div class="consigna" style="justify-content:center"><p id="t-texto" style="flex:0 1 auto">${esc(N.tesoroTexto)}</p>${escuchar(N.tesoroTexto)}</div>
+    <div id="t-texto">${N.tesoroTexto.map((f) => `<div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(f)}</p>${escuchar(f)}</div>`).join("")}</div>
     <div class="acciones"><button class="btn" id="t-mapa">${esc(N.volverMapa)}</button></div></section>`;
   if (EN_MARCO) parent.postMessage({ type: "exploradores-tesoro" }, "*");
   $("#t-mapa").onclick = mapa;
@@ -858,17 +914,17 @@ function verRegistro() {
   d.innerHTML = `<div class="panel" role="dialog" aria-modal="true" aria-labelledby="r-t"><h2 id="r-t">Registro de esta sesión, por habilidad</h2>
     <p class="small">Datos de prueba de esta pantalla: no se guardan ni salen del dispositivo. Calculado en código, sin modelos de lenguaje. Quien juega no ve este registro. Los trazos del Juego 6 no se guardan: solo dos números.</p>
     <p class="leyenda" id="r-ley">${esc(MODULO.ficha.texto_profesional_7_1)}</p>
-    <div class="tabla-scroll"><table class="reg" id="r-hab"><thead><tr><th>Habilidad</th><th>Retos</th><th>Ejercicios</th><th>Grado actual</th><th>En esta actividad resolvió sin apoyo</th><th>Apoyos más usados</th><th>Tipos de error más frecuentes</th><th>Tiempo (mediana, contexto)</th><th>8A · precisión</th><th>8A · tiempo de respuesta</th></tr></thead>
-    <tbody>${filas.map((f) => `<tr><td>${esc(f.habilidad)}</td><td>${esc(f.variantes.map(titulo).join(", "))}</td><td>${f.items}</td><td>${esc(grado(f.grado_actual))}</td><td>${Math.round(f.sin_apoyo * 100)} % de los ejercicios</td>
+    <div class="tabla-scroll"><table class="reg" id="r-hab"><thead><tr><th>Habilidad</th><th>Letra (ítems con letras)</th><th>Retos</th><th>Ejercicios</th><th>Grado actual</th><th>En esta actividad resolvió sin apoyo</th><th>Apoyos más usados</th><th>Tipos de error más frecuentes</th><th>Tiempo (mediana, contexto)</th><th>8A · precisión</th><th>8A · tiempo de respuesta</th></tr></thead>
+    <tbody>${filas.map((f) => `<tr><td>${esc(f.habilidad)}</td><td>${f.letras ? esc(f.letras) : "—"}</td><td>${esc(f.variantes.map(titulo).join(", "))}</td><td>${f.items}</td><td>${esc(grado(f.grado_actual))}</td><td>${Math.round(f.sin_apoyo * 100)} % de los ejercicios</td>
       <td>${esc(f.apoyos.join(", ") || "—")}</td><td>${esc(f.tipos_error.join(", ") || "—")}</td><td>${ms(f.tiempo_mediana_ms)}</td><td>${f.precision_8a == null ? "—" : Math.round(f.precision_8a * 100) + " %"}</td><td>${f.respuesta_8a_ms == null ? "—" : ms(f.respuesta_8a_ms)}</td></tr>`).join("")
-      || '<tr><td colspan="10">Todavía no hay ejercicios.</td></tr>'}</tbody></table></div>
+      || '<tr><td colspan="11">Todavía no hay ejercicios.</td></tr>'}</tbody></table></div>
     <p class="leyenda">${esc(MODULO.registro.leyenda_tiempo)}</p>
     ${S.contar.length ? `<h3>Contar (opciones cerradas)</h3><ul class="small">${S.contar.map((c) => `<li>${esc(titulo(c.variante))}: le ayudó «${esc(c.ayudo || "—")}», le resultó «${esc(c.resulto || "—")}»</li>`).join("")}</ul>` : ""}
     <div class="acciones"><button class="btn sec" id="r-detalle" aria-expanded="false" aria-controls="r-items">Ver el detalle por ejercicio</button><button class="btn" id="r-cerrar">Cerrar</button></div>
     <div id="r-items" hidden><h3>Tiempo por reto y grado (mediana)</h3><div class="tabla-scroll"><table class="reg"><thead><tr><th>Reto</th><th>Grado</th><th>Ejercicios</th><th>Mediana</th></tr></thead>
     <tbody>${med.map((m) => `<tr><td>${esc(titulo(m.variante))}</td><td>${esc(grado(m.grado))}</td><td>${m.n}</td><td>${ms(m.mediana_ms)}</td></tr>`).join("")}</tbody></table></div>
-    <div class="tabla-scroll"><table class="reg" id="r-tabla"><thead><tr><th>Reto</th><th>Grado</th><th>Ejercicio</th><th>Habilidad</th><th>Resultado</th><th>Errores · tipo</th><th>Apoyo de entrada → máximo</th><th>Modalidad</th><th>Autocorrección</th><th>Tiempo</th><th>Datos del reto</th></tr></thead>
-    <tbody>${S.registros.map((r) => `<tr><td>${esc(titulo(r.variante))}</td><td>${esc(grado(r.grado))}</td><td>${esc(r.item)}</td><td>${esc(r.habilidad)}</td><td>${esc(r.resultado)}</td><td>${r.errores}${r.tipos_error.length ? " · " + esc(r.tipos_error.join(", ")) : ""}</td>
+    <div class="tabla-scroll"><table class="reg" id="r-tabla"><thead><tr><th>Reto</th><th>Grado</th><th>Ejercicio</th><th>Habilidad</th><th>Letra</th><th>Resultado</th><th>Errores · tipo</th><th>Apoyo de entrada → máximo</th><th>Modalidad</th><th>Autocorrección</th><th>Tiempo</th><th>Datos del reto</th></tr></thead>
+    <tbody>${S.registros.map((r) => `<tr><td>${esc(titulo(r.variante))}</td><td>${esc(grado(r.grado))}</td><td>${esc(r.item)}</td><td>${esc(r.habilidad)}</td><td>${esc(r.tipo_letra)}${r.con_letras ? " (ítem con letras)" : ""}</td><td>${esc(r.resultado)}</td><td>${r.errores}${r.tipos_error.length ? " · " + esc(r.tipos_error.join(", ")) : ""}</td>
       <td>${r.apoyo_inicial} → ${r.apoyo_max} · ${esc(r.autonomia)}</td><td>${esc(r.modalidad)}</td><td>${r.autocorreccion ? "sí" : "no"}</td><td>${ms(r.ms)}</td><td class="small">${esc(extra(r))}</td></tr>`).join("")}</tbody></table></div></div></div>`;
   document.body.appendChild(d);
   $("#r-detalle", d).onclick = (e) => { const it = $("#r-items", d); it.hidden = !it.hidden; e.currentTarget.setAttribute("aria-expanded", String(!it.hidden)); };
@@ -919,6 +975,10 @@ const ficha = (o, id, cls = "", etiqueta) => `<button type="button" class="ficha
 const fichaFija = (o, extra = "") => `<div class="ficha ${o.f === "letra" ? "letra-ficha" : ""}" role="img" aria-label="${esc(nombre(o))}">${o.f === "letra" ? esc(L(o.letra)) : D.figura(o.f, o)}${extra}</div>`;
 const errorDe = (id, tipo) => ((DEV.error[id] || {})[tipo]) || (DEV.error[id] || {})["*"] || DEV.error["*"];
 const pista1 = (id) => BANCO.ayudas[id][1];
+const llenar = (t, d) => String(t).replace(/\{(\w+)\}/g, (_, k) => (k in d ? d[k] : ""));
+const yaEncontraste = (k, n) => llenar(N.yaEncontraste, { k, n });
+const parcial = (id, d) => llenar((d.n > 1 && DEV.parcial[id + "_plural"]) || DEV.parcial[id], d);
+const demo = (explica) => (explica ? explica + " " : "") + N.demostracion;
 const marcar = (el) => { $$(".marcada").forEach((x) => x.classList.remove("marcada")); if (el) el.classList.add("marcada"); };
 const mezcla = (arr) => Motor.mezclarDistinto(arr, Motor.azar(Motor.semillaDe(S.item.id, S.idx[S.variante + "/" + S.grado + "/" + S.ruta] || 0)));
 const difEntre = (o, m) => ["f", "s", "r", "c", "m"].find((a) => String(o[a] || "") !== String(m[a] || ""));
@@ -960,9 +1020,9 @@ JUEGOS.objetos = {
   },
   cajas(it) {
     const letras = it.tipo === "letras";
-    const objs = letras ? L(it.letras).map((l) => ({ f: "letra", letra: { mayuscula: l, minuscula: l } })) : it.objetos;
-    const modelo = letras ? { f: "letra", letra: { mayuscula: L(it.modelo), minuscula: L(it.modelo) } } : it.modelo;
-    const iguales = (o) => (letras ? o.letra.minuscula === modelo.letra.minuscula : Motor.igualEn(o, it.modelo, it.criterio));
+    const objs = letras ? it.letras.map((l) => ({ f: "letra", letra: l })) : it.objetos;   // letras en la forma del ítem (letra_forma)
+    const modelo = letras ? { f: "letra", letra: it.modelo } : it.modelo;
+    const iguales = (o) => (letras ? o.letra === modelo.letra : Motor.igualEn(o, it.modelo, it.criterio));
     S.R.local.objs = objs; S.R.local.iguales = iguales;
     const orden = mezcla(objs.map((_, i) => i));
     marcoJuego(it.consigna, `<div id="ubicar"><div class="cajas">
@@ -976,7 +1036,7 @@ JUEGOS.objetos = {
   ubicar(it, i, destino) {
     const R = S.R, o = R.local.objs[i], va = R.local.iguales(o) ? "luna" : "otras"; R.intentos += 1;
     if (destino !== va) {
-      const tipo = va === "otras" ? (it.tipo === "letras" ? "orientacion" : TIPO_DIF[difEntre(o, it.modelo)] || "detalle") : "omision";
+      const tipo = va === "otras" ? (it.tipo === "letras" ? it.rasgo : TIPO_DIF[difEntre(o, it.modelo)] || "detalle") : "omision";
       return error(errorDe("objetos", tipo), tipo);
     }
     const f = $(`#bandeja [data-id="${i}"]`); f.classList.add("puesta"); f.setAttribute("aria-pressed", "false"); f.tabIndex = -1;
@@ -995,10 +1055,11 @@ JUEGOS.objetos = {
   },
   diferencias(it) {
     marcoJuego(it.consigna, `<p class="small"><b>${esc(N.antes)}</b></p><div class="lamina" style="margin:0 0 10px">${`<svg viewBox="0 0 1200 800" role="img" aria-label="${esc(N.antes)}">${D.fondo(it.escena)}${it.a.map(D.ubicar).join("")}</svg>`}</div>
-      <p class="small"><b>${esc(N.ahora)}</b></p>${escenaHTML(it.escena, it.b, N.ahora)}`, `<p class="guia" id="cuantas">${esc(N.encontradas)} 0 / ${it.cantidad}</p>`);
+      <p class="small"><b>${esc(N.ahora)}</b></p>${escenaHTML(it.escena, it.b, N.ahora)}`, `<p class="guia" id="cuantas">${esc(yaEncontraste(0, it.cantidad))}</p>`);
     engancharEscena("esc", (i, g) => {
       const R = S.R; R.intentos += 1;
-      if (it.diferencias.includes(i)) { if (R.local.hallados.has(i)) return; R.local.hallados.add(i); g.classList.add("hallado"); $("#cuantas").textContent = `${N.encontradas} ${R.local.hallados.size} / ${it.cantidad}`; msj(DEV.parcial.objetos);
+      if (it.diferencias.includes(i)) { if (R.local.hallados.has(i)) return; R.local.hallados.add(i); g.classList.add("hallado"); $("#cuantas").textContent = yaEncontraste(R.local.hallados.size, it.cantidad);
+        const falta = it.diferencias.find((x) => !R.local.hallados.has(x)); if (falta != null) msj(parcial("objetos", { k: R.local.hallados.size, n: it.cantidad - R.local.hallados.size, zona: it.b[falta].y < 400 ? "arriba" : "abajo" }));
         if (R.local.hallados.size === it.cantidad) finItem(); return; }
       error(errorDe("objetos", "diferencia"), "detalle");
     });
@@ -1029,12 +1090,12 @@ JUEGOS.objetos = {
     if (it.tipo === "diferencias") {
       const k = it.diferencias.find((i) => !R.local.hallados.has(i)); if (k == null) return "ayuda";
       if (n === 2) { zonaDe("esc", it.b[k], R.nivelAyuda >= 2 ? 4 : 2); msj(BANCO.ayudas.objetos.zona); return "zona-de-la-diferencia"; }
-      const g = $(`#esc [data-el="${k}"]`); R.local.hallados.add(k); g.classList.add("hallado"); $("#cuantas").textContent = `${N.encontradas} ${R.local.hallados.size} / ${it.cantidad}`; msj(BANCO.ayudas.objetos.mostrada);
+      const g = $(`#esc [data-el="${k}"]`); R.local.hallados.add(k); g.classList.add("hallado"); $("#cuantas").textContent = yaEncontraste(R.local.hallados.size, it.cantidad); msj(demo(BANCO.ayudas.objetos.mostrada));
       if (R.local.hallados.size === it.cantidad) setTimeout(() => finItem(), 0); return "demostracion";
     }
     const malas = $$("#crit [data-c]").filter((b) => b.dataset.c !== it.correcta && !b.disabled);
     if (n === 2) { if (malas[0]) malas[0].disabled = true; msj(BANCO.ayudas.objetos.quedan_dos); return "una-opcion-menos"; }
-    malas.forEach((b) => (b.disabled = true)); msj(it.explica || BANCO.ayudas.objetos[3]); return "comparacion-guiada";
+    malas.forEach((b) => (b.disabled = true)); msj(demo(it.explica)); return "comparacion-guiada";
   }
 };
 
@@ -1054,7 +1115,7 @@ JUEGOS.sombras = {
     const R = S.R; if (R.terminado) return; R.intentos += 1;
     if (k === it.correcta) { $(`[data-destino="${k}"]`).classList.add("marcada"); return finItem(); }
     const tipo = it.sombras[k].error || "forma";
-    error(errorDe("sombras", tipo), tipo);
+    error(errorDe("sombras", (it.transformaciones || []).includes("orientacion") ? "girada" : tipo), tipo);
   },
   ayuda(n, it) {
     if (n === 1) { msj(pista1("sombras")); return "mirar-la-forma"; }
@@ -1078,7 +1139,7 @@ JUEGOS.niebla = {
     S.R.extra.paso_revelado = 0;
     const palabra = it.tipo === "palabra";
     const imagen = palabra
-      ? `<div class="niebla-marco" style="position:relative;padding:28px 10px;text-align:center"><span class="palabra" aria-hidden="true">${esc(it.palabra)}</span><div id="tapa" style="position:absolute;left:0;right:0;bottom:0;height:${it.tapa_pct || 55}%;background:#DDE6EA"></div></div>`
+      ? `<div class="niebla-marco" style="position:relative;padding:28px 10px;text-align:center"><span class="palabra" aria-hidden="true">${esc(it.palabra)}</span><div id="tapa" style="position:absolute;left:0;right:0;${it.tapa === "arriba" ? "top" : "bottom"}:0;height:${it.tapa_pct || 55}%;background:#DDE6EA"></div></div>`
       : `<div class="niebla-marco"><svg viewBox="-6 -6 112 112" role="img" aria-label="${esc(N.imagenTapada)}">${D.transformado(it.objeto.f, it.objeto)}<g id="manchas">${it.manchas.map((m, i) => `<g data-m="${i}">${m.hoja ? `<g transform="translate(${m.x} ${m.y}) rotate(${m.r || 0}) scale(${m.s || 0.5}) translate(-50 -50)">${D.F.hoja({ c: "#5FA77F" })}</g>` : `<circle cx="${m.x}" cy="${m.y}" r="${m.radio}" fill="#DDE6EA"/>`}</g>`).join("")}</g></svg></div>`;
     marcoJuego(it.consigna, `${imagen}<div class="acciones" style="justify-content:center"><button class="btn suave" id="mas">${esc(N.mostrarMas)}</button></div>
       <div class="opciones-dib" id="ops">${orden.map((k) => { const op = it.opciones[k];
@@ -1088,7 +1149,7 @@ JUEGOS.niebla = {
       const R = S.R; if (R.terminado || b.disabled) return; R.intentos += 1;
       const op = it.opciones[+b.dataset.op];
       if (op === it.correcta) { R.extra.paso_revelado = R.local.paso; b.setAttribute("aria-pressed", "true"); this.revelarTodo(it); return finItem(); }
-      const tipo = (it.errores || {})[op] || "otro-objeto"; error(errorDe("niebla", tipo), tipo);
+      const tipo = (it.errores || {})[op] || "otro-objeto"; error(errorDe("niebla", R.local.paso < this.pasos(it) && R.errores >= 1 ? "puede-despejar" : tipo), tipo);
     });
   },
   pasos(it) { return it.tipo === "palabra" ? 3 : Math.ceil(it.manchas.length / (it.por_paso || 1)); },
@@ -1108,7 +1169,7 @@ JUEGOS.niebla = {
       if (malas.length > 1) { malas.slice(1).forEach((k) => { $(`[data-op="${k}"]`).disabled = true; }); msj(BANCO.ayudas.niebla.quedan_dos); return "quedan-dos"; }
       this.mostrarMas(it, true); msj(BANCO.ayudas.niebla[2]); return "una-parte-mas";
     }
-    this.revelarTodo(it); S.R.local.paso = this.pasos(it); msj(it.explica || BANCO.ayudas.niebla[3]); return "imagen-completa-explicada";
+    this.revelarTodo(it); S.R.local.paso = this.pasos(it); msj(demo(it.explica)); return "imagen-completa-explicada";
   }
 };
 
@@ -1116,16 +1177,18 @@ JUEGOS.niebla = {
 function busqueda(id, it) {
   S.R.local = { hallados: new Set() };
   const modelo = it.modelo ? `<div class="modelo" id="modelo">${fichaFija(it.modelo)}<span>${esc(N.buscamos)}</span></div>` : "";
-  marcoJuego(it.consigna, escenaHTML(it.fondo, it.elementos, N.escena), `${modelo}${it.cantidad > 1 ? `<p class="guia" id="cuantas">${esc(N.encontradas)} 0 / ${it.cantidad}</p>` : ""}`);
+  marcoJuego(it.consigna, escenaHTML(it.fondo, it.elementos, N.escena), `${modelo}${it.cantidad > 1 ? `<p class="guia" id="cuantas">${esc(yaEncontraste(0, it.cantidad))}</p>` : ""}`);
   if (it.destacado) $$("#esc [data-el]").forEach((g) => { if (it.elementos[+g.dataset.el].objetivo) g.querySelector(".foco").setAttribute("stroke", "#FFB82E"); });
   engancharEscena("esc", (i, g) => {
     const R = S.R, e = it.elementos[i]; R.intentos += 1;
     if (e.objetivo) {
       if (R.local.hallados.has(i)) return; R.local.hallados.add(i); g.classList.add("hallado");
-      const c = $("#cuantas"); if (c) c.textContent = `${N.encontradas} ${R.local.hallados.size} / ${it.cantidad}`;
-      if (R.local.hallados.size === it.cantidad) return finItem(); msj(DEV.parcial[id] || DEV.parcial.jardin); return;
+      const c = $("#cuantas"); if (c) c.textContent = yaEncontraste(R.local.hallados.size, it.cantidad);
+      if (R.local.hallados.size === it.cantidad) return finItem(); msj(parcial("jardin", { k: R.local.hallados.size, n: it.cantidad - R.local.hallados.size })); return;
     }
     const tipo = it.modelo && e.f === it.modelo.f ? "un-solo-rasgo" : "otro-objeto";
+    // 8B Intermedio: si cumple una de las dos pistas (la bandera o «junto al árbol»), la devolución es la de acierto parcial (RT-CEX-001-R 2.5).
+    if (it.relacional && tipo === "un-solo-rasgo") { error(parcial("pistas_nuevas", {}), tipo); return; }
     error(errorDe(id, tipo), tipo);
   });
 }
@@ -1134,8 +1197,8 @@ function ayudaBusqueda(id, n, it) {
   if (n === 1) { marcar($("#modelo")); msj(pista1(id)); return "mirar-que-buscamos"; }
   if (n === 2) { zonaDe("esc", it.elementos[k], 2); msj(BANCO.ayudas[id][2]); setTimeout(() => { if (!R.terminado) zonaDe("esc", it.elementos[k], 4); }, 1500); return "iluminar-la-zona"; }
   const g = $(`#esc [data-el="${k}"]`); R.local.hallados.add(k); g.classList.add("hallado");
-  const c = $("#cuantas"); if (c) c.textContent = `${N.encontradas} ${R.local.hallados.size} / ${it.cantidad}`;
-  msj(BANCO.ayudas[id][3]); if (R.local.hallados.size === it.cantidad) setTimeout(() => finItem(), 0); return "demostracion";
+  const c = $("#cuantas"); if (c) c.textContent = yaEncontraste(R.local.hallados.size, it.cantidad);
+  msj(N.demostracion); if (R.local.hallados.size === it.cantidad) setTimeout(() => finItem(), 0); return "demostracion";
 }
 JUEGOS.jardin = { render: (it) => busqueda("jardin", it), ayuda: (n, it) => ayudaBusqueda("jardin", n, it) };
 </script>
@@ -1192,7 +1255,7 @@ function tablero(it, alLlegar) {
     st.x = nx; st.y = ny;
     if (it.pasa_por && nx === it.pasa_por.x && ny === it.pasa_por.y) st.paso = true;
     const oi = (it.objetos || []).findIndex((o) => o.x === nx && o.y === ny); if (oi >= 0 && !st.juntados.includes(oi)) st.juntados.push(oi);
-    pintar(); msj("");
+    pintar(); msj(it.secuencia && st.k === 1 && it.secuencia.length > 1 ? parcial("laberinto", {}) : "");
     alLlegar(st);
   };
   $$("[data-mov]").forEach((b) => b.onclick = () => mover(b.dataset.mov));
@@ -1215,13 +1278,25 @@ JUEGOS.laberinto = {
         const v = (r) => r === "arriba" || r === "abajo"; const tipo = v(b.dataset.r) && v(it.correcta) ? "confusion-vertical" : "relacion"; error(errorDe("laberinto", tipo), tipo); });
       return;
     }
+    if (it.tipo === "su_lado") {   // 9–12: la derecha desde el punto de vista de Roco (posición en el espacio)
+      S.R.local = {};
+      const A4 = it.alrededor, celda = (d) => `<button type="button" class="opcion" data-lado="${d}" aria-label="${esc(BANCO.nombres[A4[d]])}">${D.figura(A4[d], {}, "")}<span class="t">${esc(BANCO.nombres[A4[d]])}</span></button>`;
+      const roco = `<div id="roco-mira" style="display:grid;place-items:center"><svg viewBox="-6 -6 112 112" role="img" aria-label="${esc(N.su)}">${D.transformado("roco", {})}<path d="M50 -4 L62 12 H38Z" fill="#FFB82E" stroke="#102F54" stroke-width="3" transform="rotate(${ORD.indexOf(it.dir) * 90} 50 50)"/></svg></div>`;
+      marcoJuego(it.consigna, `<div id="su" style="display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:6px;max-width:520px;margin:0 auto;align-items:center">
+        <span></span>${celda("arriba")}<span></span>${celda("izquierda")}${roco}${celda("derecha")}<span></span>${celda("abajo")}<span></span></div>`);
+      $$("#su [data-lado]").forEach((b) => b.onclick = () => { const R = S.R; if (R.terminado || b.disabled) return; R.intentos += 1;
+        if (b.dataset.lado === it.correcta) { b.setAttribute("aria-pressed", "true"); return finItem(); }
+        const opuesto = ORD[(ORD.indexOf(it.correcta) + 2) % 4], tipo = b.dataset.lado === opuesto || b.dataset.lado === "derecha" ? "confusion-derecha-izquierda" : "orientacion";
+        error(errorDe("laberinto", tipo), tipo); });
+      return;
+    }
     if (it.tipo === "cartel") {
       S.R.local = { dir: it.dir_inicial };
       const L4 = it.alrededor;   // {arriba: fig, derecha: fig, abajo: fig, izquierda: fig}
       const celda = (d) => `<div style="display:grid;place-items:center">${D.figura(L4[d], {}, BANCO.nombres[L4[d]])}</div>`;
       marcoJuego(it.consigna, `<div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;grid-template-rows:auto auto auto;gap:6px;max-width:460px;margin:0 auto;align-items:center">
         <span></span>${celda("arriba")}<span></span>${celda("izquierda")}<div class="cartel" id="cartel"></div>${celda("derecha")}<span></span>${celda("abajo")}<span></span></div>
-        <div class="acciones" style="justify-content:center"><button class="btn sec" data-girar="-1" aria-label="${esc(N.girarUno)}">↺</button><button class="btn sec" data-girar="1" aria-label="${esc(N.girarOtro)}">↻</button><button class="btn" id="listo">${esc(N.listo)}</button></div>`);
+        <div class="acciones" style="justify-content:center"><button class="btn sec" data-girar="1">↻ ${esc(N.girar)}</button><button class="btn" id="listo">${esc(N.listo)}</button></div>`);
       const pintar = () => { $("#cartel").innerHTML = `<svg viewBox="0 0 100 100" role="img" aria-label="${esc(N.cartelApunta)} ${esc(BANCO.nombres[L4[ORD[S.R.local.dir]]])}"><g transform="rotate(${S.R.local.dir * 90 - 90} 50 50)"><path d="M14 40 H62 V24 L90 50 L62 76 V60 H14Z" fill="#FFF1D7" stroke="#102F54" stroke-width="4" stroke-linejoin="round"/></g><circle cx="50" cy="50" r="5" fill="#102F54"/></svg>`; };
       pintar();
       $$("[data-girar]").forEach((b) => b.onclick = () => { if (S.R.terminado) return; S.R.local.dir = (S.R.local.dir + +b.dataset.girar + 4) % 4; pintar(); });
@@ -1232,7 +1307,8 @@ JUEGOS.laberinto = {
       return;
     }
     const modo = it.modo || "absoluto";
-    marcoJuego(it.consigna, `<div id="tab"></div>${flechasHTML(it, modo)}`);
+    marcoJuego(it.consigna, `<div id="tab"></div>${it.plan_previo ? `<div class="acciones" style="justify-content:center" id="plan-mover"><button class="btn" id="empezar-mover">${esc(N.empezarAMover)}</button></div>` : ""}${flechasHTML(it, modo)}`);
+    if (it.plan_previo) { $$("[data-mov]").forEach((b) => (b.disabled = true)); $("#empezar-mover").onclick = () => { $("#plan-mover").style.display = "none"; $$("[data-mov]").forEach((b) => (b.disabled = false)); S.R.extra.plan_previo = true; }; }
     const t = tablero(it, (st) => {
       const enMeta = st.x === it.meta.x && st.y === it.meta.y, finSec = it.secuencia && st.k === it.secuencia.length;
       if (!enMeta && !finSec) return;
@@ -1244,13 +1320,15 @@ JUEGOS.laberinto = {
   ayuda(n, it) {
     const R = S.R;
     if (n === 1) { msj(it.indicacion_picto || pista1("laberinto")); return "repetir-la-indicacion"; }
-    if (it.tipo === "relacion") { if (n === 2) { marcar($(".lamina")); msj(BANCO.ayudas.laberinto.relacion2); return "mirar-la-referencia"; } msj(it.explica || BANCO.ayudas.laberinto[3]); $$("#rel [data-r]").forEach((b) => { if (b.dataset.r !== it.correcta) b.disabled = true; }); return "demostracion"; }
-    if (it.tipo === "cartel") { if (n === 2) { msj(BANCO.ayudas.laberinto.cartel2); return "mirar-hacia-donde"; } R.local.dir = it.objetivo; $$("[data-girar]")[0].click(); $$("[data-girar]")[1].click(); msj(BANCO.ayudas.laberinto[3]); return "demostracion"; }
+    if (it.tipo === "relacion") { if (n === 2) { marcar($(".lamina")); msj(BANCO.ayudas.laberinto.relacion2); return "mirar-la-referencia"; } msj(demo(it.explica)); $$("#rel [data-r]").forEach((b) => { if (b.dataset.r !== it.correcta) b.disabled = true; }); return "demostracion"; }
+    if (it.tipo === "cartel") { if (n === 2) { msj(BANCO.ayudas.laberinto.cartel2); return "mirar-hacia-donde"; } R.local.dir = (it.objetivo + 3) % 4; $$("[data-girar]")[0].click(); msj(N.demostracion); return "demostracion"; }
+    if (it.tipo === "su_lado") { if (n === 2) { marcar($("#roco-mira")); msj(BANCO.ayudas.laberinto.su2); return "mirar-hacia-donde-mira"; }
+      $$("#su [data-lado]").forEach((b) => { if (b.dataset.lado !== it.correcta) b.disabled = true; }); msj(N.demostracion); return "demostracion"; }
     const st = R.local, sig = it.secuencia ? { x: st.x + DIRS[it.secuencia[st.k]][0], y: st.y + DIRS[it.secuencia[st.k]][1], d: it.secuencia[st.k] }
       : caminoMasCorto(it, st, it.meta, it.pasa_por && !st.paso ? it.pasa_por : null)[0];
     if (!sig) return "ayuda";
     if (n === 2) { st.flecha = sig; st.t.pintar(); msj(BANCO.ayudas.laberinto[2]); return "flecha-en-el-camino"; }
-    msj(BANCO.ayudas.laberinto[3]);
+    msj(N.demostracion); const em = $("#empezar-mover"); if (em && $("#plan-mover").style.display !== "none") em.click();
     if (st.modo === "perspectiva") { while (st.dir !== sig.d) st.dir = ORD[(ORD.indexOf(st.dir) + 1) % 4]; st.t.mover("adelante"); } else st.t.mover(sig.d);
     return "roco-hace-un-tramo";
   }
@@ -1310,8 +1388,9 @@ JUEGOS.fabrica = {
       const p = lz.aSvg(e); if (Math.hypot(p.x - ult.x, p.y - ult.y) < 4) return;
       lz.dibujar(ult, p); ult = p; muestras.push(p);
       const tol = this.tol(R.local.ancho / 2), ok = Motor.distCamino(p, P) <= tol;
-      if (dentroAntes && !ok) R.local.salidas += 1; dentroAntes = ok;
+      if (dentroAntes && !ok) { R.local.salidas += 1; msj(errorDe("fabrica", "salida")); } dentroAntes = ok;
       P.forEach((q, i) => { if (Math.hypot(p.x - q.x, p.y - q.y) <= tol * 1.3) cubiertos.add(i); });
+      R.local.hasta = Math.max(R.local.hasta || 0, ...cubiertos);
       const fin = P[P.length - 1];
       if (Math.hypot(p.x - fin.x, p.y - fin.y) <= tol * 1.3 && cubiertos.size >= Math.ceil(P.length * 0.8)) terminar();
     });
@@ -1321,7 +1400,7 @@ JUEGOS.fabrica = {
       R.extra.precision_trazo = r.precision_trazo; R.extra.salidas = R.local.salidas;
       muestras = []; ult = null; lz.borrar();   // el trazo se descarta: no se guarda ni se envía
       $("#banda").setAttribute("stroke", "#BFE6CF");
-      finItem({ devolucion: r.precision_trazo >= (MODULO.criterio_acierto.fabrica_precision_minima || 0.7) ? null : DEV.parcial.fabrica_lento });
+      finItem({ devolucion: r.precision_trazo >= Motor.precisionMinimaTrazo(MODULO, S.ruta) && !R.local.salidas ? null : parcial("fabrica", {}) });
     };
     S.R.local.terminar = terminar;
   },
@@ -1341,7 +1420,8 @@ JUEGOS.fabrica = {
     const lineas = (segs, color, ancho, id = "") => segs.map(([a, b]) => `<line ${id} x1="${P[a].x}" y1="${P[a].y}" x2="${P[b].x}" y2="${P[b].y}" stroke="${color}" stroke-width="${ancho}" stroke-linecap="round"/>`).join("");
     const pts = (r) => P.map((p, i) => `<g data-p="${i}" ${S.sinTrazoFino ? `tabindex="0" role="button" aria-label="${esc(N.punto)} ${i + 1}"` : ""}><circle cx="${p.x}" cy="${p.y}" r="${r}" fill="#fff" stroke="#102F54" stroke-width="4"/>${it.tipo === "puntos" ? `<text x="${p.x}" y="${p.y + 10}" text-anchor="middle" font-size="30" font-weight="800" fill="#102F54">${i + 1}</text>` : ""}</g>`).join("");
     const modeloSvg = it.tipo === "tablero" ? `<div class="modelo-lado"><p class="small" style="margin:0 0 4px"><b>${esc(N.modelo)}</b></p><svg viewBox="0 0 1000 600" role="img" aria-label="${esc(N.modelo)}: ${esc(BANCO.nombres[it.pieza] || "")}"><rect width="1000" height="600" fill="#fff"/>${lineas(modelo, "#196B6A", 16)}${P.map((p) => `<circle cx="${p.x}" cy="${p.y}" r="10" fill="#102F54"/>`).join("")}</svg></div>` : "";
-    marcoJuego(it.consigna, `<div class="tablero-fila"><div class="trazo-marco" style="flex:1 1 420px"><svg viewBox="0 0 1000 600" id="lam6" role="group" aria-label="${esc(N.tablero)}"><rect width="1000" height="600" fill="#FFF1D7"/><g id="hechas"></g><g id="guia"></g>${pts(it.tipo === "puntos" ? 30 : 20)}</svg></div>${modeloSvg}</div>`);
+    marcoJuego(S.sinTrazoFino && it.consigna_tocar ? it.consigna_tocar : it.consigna, `${it.tipo === "tablero" ? `<div class="acciones" style="justify-content:center;margin:0 0 6px"><button class="btn suave chico" id="ver-modelo">${esc(N.verModelo)}</button></div>` : ""}<div class="tablero-fila"><div class="trazo-marco" style="flex:1 1 420px"><svg viewBox="0 0 1000 600" id="lam6" role="group" aria-label="${esc(N.tablero)}"><rect width="1000" height="600" fill="#FFF1D7"/><g id="hechas"></g><g id="guia"></g>${pts(it.tipo === "puntos" ? 30 : 20)}</svg></div>${modeloSvg}</div>`);
+    const vm = $("#ver-modelo"); if (vm) vm.onclick = () => { const m = $(".modelo-lado"); marcar(m); if (m.scrollIntoView) m.scrollIntoView({ block: "nearest" }); };
     const svg = $("#lam6"), cerca = (p) => { let k = -1, d = Infinity; P.forEach((q, i) => { const dd = Math.hypot(p.x - q.x, p.y - q.y); if (dd < d) { d = dd; k = i; } }); return d <= this.tol(MODULO.trazo.radio_punto) ? k : -1; };
     const agregar = (a, b) => {
       R.intentos += 1;
@@ -1382,13 +1462,17 @@ JUEGOS.fabrica = {
     if (it.tipo === "camino") {
       if (n === 1) { const g = $("#inicio"); if (g) g.setAttribute("stroke", "#FFB82E"); marcar($("#marco6")); msj(pista1("fabrica")); return "mirar-donde-empieza"; }
       if (n === 2) { R.local.ancho = Math.round((it.ancho || 70) * 1.5); const b = $("#banda"); if (b) b.setAttribute("stroke-width", R.local.ancho); msj(BANCO.ayudas.fabrica[2]); return "camino-mas-ancho"; }
-      msj(BANCO.ayudas.fabrica.camino3); return "demostracion";
+      // RT-CEX-001-R 6: el nivel 3 muestra el tramo: el camino resaltado desde donde llegó hasta la próxima curva; después sigue la persona.
+      const P = it.puntos, desde = R.local.hasta || 0, hasta = Math.min(P.length - 1, (Math.floor(desde / 6) + 1) * 6);
+      const t = $("#tramo"); if (t) t.remove();
+      $("#lam6").insertAdjacentHTML("beforeend", `<path id="tramo" d="M${P.slice(desde, hasta + 1).map((q) => q.x + " " + q.y).join(" L")}" fill="none" stroke="#FFB82E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`);
+      msj(N.demostracion); return "mostrar-el-tramo";
     }
     const falta = Motor.faltanSegmentos(R.local.modelo, R.local.hechos)[0]; if (!falta) return "ayuda";
     const [a, b] = falta.split("-").map(Number), P = R.local.P;
     if (n === 1) { $("#guia").innerHTML = `<circle cx="${P[a].x}" cy="${P[a].y}" r="34" fill="none" stroke="#FFB82E" stroke-width="8"/>`; msj(pista1("fabrica")); return "mirar-donde-empieza"; }
     if (n === 2) { $("#guia").innerHTML = [a, b].map((i) => `<circle cx="${P[i].x}" cy="${P[i].y}" r="34" fill="none" stroke="#FFB82E" stroke-width="8"/>`).join(""); msj(BANCO.ayudas.fabrica[2]); return "puntos-guia"; }
-    msj(BANCO.ayudas.fabrica[3]); const t = R.local.total, d = R.local.dentro; R.local.agregar(a, b); R.local.total = t; R.local.dentro = d; return "tomas-traza-un-tramo";
+    msj(N.demostracion); const t = R.local.total, d = R.local.dentro; R.local.agregar(a, b); R.local.total = t; R.local.dentro = d; return "tomas-traza-un-tramo";
   }
 };
 </script>
@@ -1442,7 +1526,7 @@ JUEGOS.cofre_cuales = {
     const volver = () => this.sonda(it);
     $("#cuerpo").innerHTML = `<div class="fila-obj">${it.mostrar.map((o) => fichaFija(o)).join("")}</div><div class="acciones" style="justify-content:center"><button class="btn" id="ya-mire">${esc(N.yaMire)}</button></div>`;
     $("#ya-mire").onclick = volver;
-    msj(n === 2 ? BANCO.ayudas.cofre_cuales[2] : BANCO.ayudas.cofre_cuales[3]); return n === 2 ? "segunda-observacion" : "estrategia-de-nombrar";
+    msj(n === 2 ? BANCO.ayudas.cofre_cuales[2] : N.demostracion); return n === 2 ? "segunda-observacion" : "estrategia-de-nombrar";
   }
 };
 JUEGOS.cofre_orden = {
@@ -1461,7 +1545,7 @@ JUEGOS.cofre_orden = {
       if (it.fijo_primero) R.local.puestos[0] = true;
       ubicable($("#ubicar"), (id, destino) => {
         R.intentos += 1;
-        if (+id !== +destino) return error(errorDe("cofre_orden", "transposicion"), "transposicion");
+        if (+id !== +destino) { const bien = Object.keys(R.local.puestos).length; return error(bien >= Math.ceil(sec.length / 2) ? parcial("cofre_orden", {}) : errorDe("cofre_orden", "transposicion"), "transposicion"); }
         R.local.puestos[+id] = true; msj("");
         if (Object.keys(R.local.puestos).length === sec.length) return finItem();
         this.responder(it);
@@ -1496,7 +1580,7 @@ JUEGOS.cofre_orden = {
       if (Object.keys(R.local.puestos).length === it.secuencia.length) setTimeout(() => finItem(), 0); else this.responder(it); return "reconstruccion-parcial"; }
     $("#cuerpo").innerHTML = `<div class="casilleros">${it.secuencia.map((o, i) => `<div class="casillero lleno"><span class="num">${i + 1}</span>${fichaFija(o)}</div>`).join("")}</div><div class="acciones" style="justify-content:center"><button class="btn" id="ya-mire">${esc(N.yaMire)}</button></div>`;
     $("#ya-mire").onclick = () => this.responder(it);
-    msj(n === 2 ? BANCO.ayudas.cofre_orden.segunda : BANCO.ayudas.cofre_orden[3]); return n === 2 ? "segunda-observacion" : "estrategia-de-nombrar";
+    msj(n === 2 ? BANCO.ayudas.cofre_orden.segunda : N.demostracion); return n === 2 ? "segunda-observacion" : "estrategia-de-nombrar";
   }
 };
 
@@ -1513,7 +1597,7 @@ JUEGOS.pistas_relampago = {
     const collar = it.modo === "mochilas"
       ? `<div class="cajas" style="grid-template-columns:1fr 1fr">${["a", "b"].map((m) => `<div class="destino" data-destino="${m}"><span class="tit">${D.figura("mochila", { c: m === "a" ? "coral" : "celeste" }, "")}${esc(it.mochilas[m].txt)}</span><div class="dentro">${fichaFija(it.mochilas[m].o)}</div></div>`).join("")}</div>`
       : `<div class="collar">${D.figura("roco", {}, "")}<span>${esc(N.collarDeRoco)}</span>${fichaFija(it.objetivo)}</div>`;
-    marcoJuego(it.consigna, `${collar}<div class="sendero" id="sendero"></div><div id="resp"></div>`);
+    marcoJuego(it.consigna, `${it.regla ? `<div class="consigna" style="justify-content:center"><p id="regla" style="flex:0 1 auto">${esc(it.regla)}</p>${escuchar(it.regla)}</div>` : ""}${collar}<div class="sendero" id="sendero"></div><div id="resp"></div>`);
     this.pista(it);
   },
   pista(it) {
@@ -1547,7 +1631,8 @@ JUEGOS.pistas_relampago = {
     if (L2.k < it.pistas.length) return setTimeout(() => { if (!R.terminado) this.pista(it); }, MODULO.exposicion_8a.pausa_ms);
     const precision = L2.bien / it.pistas.length;
     R.extra.precision = precision; R.extra.tiempo_respuesta_mediana_ms = Motor.mediana(L2.tiempos);
-    if (L2.breve) S.expo[S.grado] = Motor.exposicionSiguiente(S.expo[S.grado], precision, MODULO.exposicion_8a);
+    if (L2.breve) { S.expoAcorto = S.expoAcorto || {}; const sig = Motor.exposicionSiguiente(S.expo[S.grado], precision, MODULO.exposicion_8a, { ruta: S.ruta, yaAcorto: !!S.expoAcorto[S.grado] });
+      if (sig.acorto) S.expoAcorto[S.grado] = true; S.expo[S.grado] = sig; }
     $("#sendero").innerHTML = `<div class="lamina chica" style="margin:0">${D.lamina("bosque", N.pausaBosque)}</div>`; $("#resp").innerHTML = "";
     finItem({ devolucion: DEV.acierto.pistas_relampago });
   },
@@ -1555,7 +1640,7 @@ JUEGOS.pistas_relampago = {
     if (n === 1) { marcar($(".collar") || $(".cajas")); msj(pista1("pistas_relampago")); if (S.R.local.breve) this.exponer(); return "mirar-otra-vez"; }
     const p = it.pistas[S.R.local.k];
     if (n === 2) { if (it.modo === "grupo") { const b = $$("#sendero [data-op]").find((x) => +x.dataset.op !== p.correcta); if (b) b.disabled = true; } msj(BANCO.ayudas.pistas_relampago[2]); return "un-detalle"; }
-    msj(BANCO.ayudas.pistas_relampago[3]); return "demostracion";
+    msj(N.demostracion); return "demostracion";
   }
 };
 function usarApoyoMirala() { const R = S.R; if (!R || R.terminado) return; R.apoyo_max = Math.max(R.apoyo_max, 1); if (R.apoyos.length < 20) R.apoyos.push("1:mirala-otra-vez"); }
@@ -1597,7 +1682,7 @@ JUEGOS.pistas_nuevas = {
     if (n === 2) { $("#juntadas").insertAdjacentHTML("afterend", `<div class="fila-obj" id="recordatorio">${it.orden.map((i) => fichaFija(it.objetos[i])).join("")}</div>`); msj(BANCO.ayudas.pistas_nuevas.recorrido2); return "ver-las-pistas-otra-vez"; }
     const st = S.R.local.t.st, prox = it.orden[st.juntados.length]; if (prox == null) return "ayuda";
     const c = caminoMasCorto(it, st, it.objetos[prox])[0]; if (c) S.R.local.t.mover(c.d);
-    msj(BANCO.ayudas.pistas_nuevas.recorrido3); return "demostracion-de-un-paso";
+    msj(N.demostracion); return "demostracion-de-un-paso";
   }
 };
 </script>
