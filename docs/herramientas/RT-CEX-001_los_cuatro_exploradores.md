@@ -28,7 +28,7 @@
 3. **Textos para la persona adulta:** ahora con voseo y sin códigos internos. «Sin trazo fino» está explicado en lenguaje llano.
 4. **«¿Cómo te resultó?»** usa caritas dibujadas por el portal, no emojis del teléfono.
 
-**Una decisión tuya.** [Seguro] PSP-SR cambió la lámina 4 de la historia: «Vos sos el quinto explorador del equipo» pasó a **«¡Vos también sos parte del equipo!»**, para que no quede en masculino cuando juega una nena. Ya está puesto. Si preferís el texto anterior, decímelo y lo vuelvo a poner. También cambió la lámina 2 («En el camino al tesoro hay muchos retos»), porque en el mapa hay nueve lugares y no ocho.
+**Lámina 4: decidido.** [Seguro] La supervisora eligió el 2026-11-21 el texto de PSP-SR: **«¡Vos también sos parte del equipo!»**. También cambió la lámina 2 («En el camino al tesoro hay muchos retos»), porque en el mapa hay nueve lugares y no ocho.
 
 **Qué falta antes del paquete de revisión:**
 
@@ -36,7 +36,7 @@
 - La alerta al profesional, la revisión de colores con un simulador hecha por una persona y la calibración (Parte D.2).
 - Las ilustraciones finales. Su costo y plazo los decide el responsable del proyecto.
 
-**Qué te pido:** que pruebes el archivo, que me digas qué preferís para la lámina 4 y que le lleves a PSP-SR esta revisión, el banco v0.3.0, la lista de cambios y las capturas.
+**Qué te pido:** que pruebes el archivo y que le lleves a PSP-SR esta revisión, el banco v0.3.0, la lista de cambios y las capturas.
 
 ---
 
@@ -108,7 +108,7 @@ Los 25 están corregidos. Cada uno lleva en el banco el campo `cambio_v030` con 
 2. **Voseo:** «Acompañá sin dar las respuestas. Podés tocar el parlante, tocar «Escuchar la historia» o leer cada texto en voz alta.»
 3. **Sin códigos a la vista:** se sacó «(D7)» y los números de juego pasaron a nombres de lugar en «sin trazo fino», «sin exposición breve», «evitar color» y «nombres en audio».
 4. **«Sin trazo fino»:** el texto de PSP-SR, tal cual.
-5. **Historia:** láminas 2, 3 y 4 con los textos de PSP-SR. La lámina 4 lleva el campo `pendiente_supervisora` con el texto anterior, por si la supervisora prefiere mantenerlo.
+5. **Historia:** láminas 2, 3 y 4 con los textos de PSP-SR. La lámina 4 quedó con el texto de PSP-SR por decisión de la supervisora del 2026-11-21 (campo `decision_supervisora` y `decisiones_supervisora.lamina_4` en la ficha).
 6. **Idea fuera de la pantalla del Juego 5 en 3–5:** el texto de PSP-SR. La herramienta elige la idea por ruta.
 7. **Devoluciones de error:** las de B.2.7 y E.5. La frase del Juego 2 que hablaba del color de la sombra se retiró. «Se parece. Mirá el detalle de arriba.» quedó guardada para ítems que declaren la zona; hoy ninguno la declara.
 8. **Rutas en Difícil y en 8B (respuesta a la pregunta).** [Seguro] Se cumple de las dos formas:
@@ -125,7 +125,7 @@ Los 25 están corregidos. Cada uno lleva en el banco el campo `cambio_v030` con 
 | E.3 | Plantilla «iguales a esta/este» en todo Intermedio del jardín y en Difícil de 3–5. El validador comprueba que la escena tenga exactamente la cantidad de objetivos que dice la consigna y que ningún distractor sea igual al objetivo. |
 | E.4 | Todas las consignas de mover usan la misma palabra que el botón; ninguna dice «adelante» ni «atrás». Difícil 9–12: «Roco mira para allá. Tocá lo que está a su derecha.» |
 | E.5 | Devoluciones de B.2.7. |
-| E.6 | Láminas 2 y 4. |
+| E.6 | Láminas 2 y 4 (la 4, confirmada por la supervisora el 2026-11-21). |
 | E.7 | Se sigue con la FEC-015 v0.3. |
 
 ### C.4 Textos de interfaz (C.3 de PSP-SR)

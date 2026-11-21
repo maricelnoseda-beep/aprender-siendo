@@ -55,6 +55,7 @@
   "D5": "Juego 1 y 8A en E2 Reconocer; 8B en E4 Transferir. El orden del mapa sigue el documento rector.",
   "D6": "Ruta 13–18 excluida.",
   "D7": "Ningún texto suena solo: se escucha al tocar su parlante (REQ-CLI-EXP-21). Reemplaza, para esta aventura, el audio activado por defecto de M11 en 3–8.",
+  "lamina_4": "2026-11-21: la lámina 4 de la historia dice «¡Vos también sos parte del equipo!» (RT-CEX-001-R v1.1 B.2.5).",
   "D8": "Letra mayúscula o minúscula de imprenta elegible por la persona adulta; mayúscula por defecto en 3–8 y minúscula en 9–12 (REQ-CLI-EXP-22)."
  },
  "letra": {
