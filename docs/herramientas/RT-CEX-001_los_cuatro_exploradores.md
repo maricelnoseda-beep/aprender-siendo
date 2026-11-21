@@ -5,39 +5,38 @@
 | TIPO | Revisión técnica |
 | DE | DEV-IA |
 | PARA | PSP-SR (copia: Supervisora) |
-| ID | RT-CEX-001 v1.1 |
-| FECHA | 2026-11-16 (v1.0: 2026-11-15) |
-| REFIERE A | FEC-015 v0.3 y RT-CEX-001-R v1.0 de PSP-SR (paquete único del 2026-11-15); decisiones D1 a D8 de la supervisora |
+| ID | RT-CEX-001 v1.2 |
+| FECHA | 2026-11-21 (v1.0: 2026-11-15; v1.1: 2026-11-16) |
+| REFIERE A | RT-CEX-001-R v1.1 de PSP-SR (observación bloqueante para el paquete de revisión, 2026-11-21); FEC-015 v0.3; decisiones D1 a D8 de la supervisora |
 
-- **Estado:** prototipo v0.2.0 **en entorno de prueba, con datos sintéticos**. No hay registro de aprobación: nada sale del entorno de prueba.
-- **Qué cambia respecto de v1.0:** se cargaron los textos, las letras y las palabras de RT-CEX-001-R v1.0 y se aplicaron sus correcciones (secciones 3.1, 3.3, 5 y 6) y la FEC v0.3 (REQ-CLI-EXP-21 y 22, casos 25 y 26). Esta versión reemplaza a la v1.0.
-- **Alcance:** cómo se construyó lo que pide el paquete y qué falta. Textos, grados, umbrales y Estaciones son contenido clínico de PSP-SR, a aprobar por la supervisora. Esta revisión no los valida.
+- **Estado:** prototipo v0.3.0 y banco v0.3.0 **en entorno de prueba, con datos sintéticos**. No hay registro de aprobación: nada sale del entorno de prueba.
+- **Qué cambia respecto de v1.1:** se aplicó el dictamen ítem por ítem de RT-CEX-001-R v1.1: los 25 ítems de B.1, las 8 correcciones globales de B.2, la Parte E y los cambios de texto de C.3. Se generaron los ítems que pide D.1 y se cargaron las mejoras viables de B.3. Esta versión reemplaza a la v1.1.
+- **Alcance:** cómo se construyó lo que pide el dictamen y qué falta. Textos, grados, umbrales y Estaciones son contenido clínico de PSP-SR, a aprobar por la supervisora. Esta revisión no los valida.
 - **Tests de la sección 0.2:** ni esta revisión ni el código los nombran (REQ-CLI-EXP-00d). Se los menciona como «los instrumentos de la sección 0.2».
+- **Lista de cambios ítem por ítem:** `docs/herramientas/RT-CEX-001_cambios_banco_v0.3.0.md` (se genera desde el banco con `scripts/exploradores_cambios.py`).
 
 ---
 
 ## Parte A. Resumen para la supervisora (sin jerga)
 
-**El juego ya tiene los textos de PSP-SR y las correcciones que pidió.** [Seguro] El archivo de prueba nuevo está en la carpeta de descargas, `AprenderSiendo_Los_cuatro_exploradores_prueba.html`, y la versión anterior quedó en `Históricos/`.
+**Ya está aplicado todo lo que pidió PSP-SR.** [Seguro] El archivo de prueba nuevo está en la carpeta de descargas, `AprenderSiendo_Los_cuatro_exploradores_prueba.html`. La versión anterior quedó en `Históricos/`.
 
-**Qué vas a notar al probarlo:**
+**Qué cambió:**
 
-1. **La historia** tiene los textos de PSP-SR. Cada frase tiene su parlante al lado. Arriba hay un botón «Escuchar la historia» que la cuenta entera de una vez. Nada suena solo.
-2. **Los lugares del mapa** tienen los nombres que eligió PSP-SR. «Pistas nuevas» ahora tiene su propio lugar: «El campamento nuevo».
-3. **Las consignas, las pistas y las devoluciones** son las de PSP-SR.
-4. **La letra.** Si cambiás entre ABC y abc en medio de un ejercicio, el cambio se aplica desde el ejercicio siguiente. Así lo pidió PSP-SR, para no mezclar ejercicios distintos. Los ejercicios con letras ahora están hechos para una sola forma de letra: en mayúscula no hay ejercicios de «letras dadas vuelta» como b y d.
-5. **En el Juego 6**, la ayuda más fuerte ahora pinta el tramo del camino que sigue. Antes era solo un mensaje.
-6. **En el Juego 5** de 9 a 12 años hay un ejercicio nuevo: «Desde donde mira Roco, ¿dónde está su derecha?».
+1. **Los 25 ejercicios con problemas están corregidos.** Por ejemplo, en el jardín la consigna ahora dice «Encontrá las 2 hojas iguales a esta», en el laberinto la consigna y el botón dicen la misma palabra («para arriba») y en el cofre ya no aparece el cofre como cosa para recordar.
+2. **Hay muchos más ejercicios: 394 en vez de 186.** PSP-SR pidió al menos 12 por juego y por grado para los chicos de 6 a 8 años. Ahora todos los juegos tienen 12 o más, también de 3 a 5 y de 9 a 12, salvo «Pistas relámpago» Difícil (8, solo de 9 a 12 años: con más saldrían ejercicios casi iguales).
+3. **Textos para la persona adulta:** ahora con voseo y sin códigos internos. «Sin trazo fino» está explicado en lenguaje llano.
+4. **«¿Cómo te resultó?»** usa caritas dibujadas por el portal, no emojis del teléfono.
 
-**Qué falta:**
+**Una decisión tuya.** [Seguro] PSP-SR cambió la lámina 4 de la historia: «Vos sos el quinto explorador del equipo» pasó a **«¡Vos también sos parte del equipo!»**, para que no quede en masculino cuando juega una nena. Ya está puesto. Si preferís el texto anterior, decímelo y lo vuelvo a poner. También cambió la lámina 2 («En el camino al tesoro hay muchos retos»), porque en el mapa hay nueve lugares y no ocho.
 
-- Que PSP-SR revise **uno por uno** los 186 ejercicios del banco. Dejé el archivo `banco.json` en la carpeta compartida para que se lo lleves.
-- La **alerta al profesional** cuando alguien se traba mucho en un juego: hay que probarla junto con el portal antes del paquete de revisión.
-- Las **ilustraciones finales** del equipo de marca, la **revisión de colores** con un simulador hecha por una persona y algunos detalles menores (Parte D).
+**Qué falta antes del paquete de revisión:**
 
-**Qué te pido:** que pruebes el archivo y que le lleves a PSP-SR esta revisión y el `banco.json`.
+- Que PSP-SR revise los ejercicios nuevos y los que cambiaron. Los otros 133 ya están validados y no cambian.
+- La alerta al profesional, la revisión de colores con un simulador hecha por una persona y la calibración (Parte D.2).
+- Las ilustraciones finales. Su costo y plazo los decide el responsable del proyecto.
 
-**Cuánto lleva lo que falta.** [Suposición] Unas 5 a 8 jornadas de trabajo técnico, más las ilustraciones originales. Calculo entre 150 y 220 horas de dibujo, unas 5 a 7 semanas con una persona a medio tiempo. El costo depende de su tarifa.
+**Qué te pido:** que pruebes el archivo, que me digas qué preferís para la lámina 4 y que le lleves a PSP-SR esta revisión, el banco v0.3.0, la lista de cambios y las capturas.
 
 ---
 
@@ -79,91 +78,170 @@
 
 ---
 
-## Parte C. Cómo se aplicó RT-CEX-001-R
 
-### C.1 Textos (sección 2)
-
-- **Historia:** cinco láminas con dos frases cada una, y la escena del tesoro con la lupa. Cada frase tiene su parlante. «Escuchar la historia» narra las cinco láminas seguidas. Dos láminas nuevas de relleno: el mapa con los lugares y el mapa con los huecos para las piezas.
-- **Lugares:** los nueve nombres de 2.2. 8B tiene lugar y pieza propios, así que el mapa tiene 9 lugares en 6–12 y 7 en 3–5.
-- **«Así se juega»:** las dos frases de 2.3, en ese orden. La estrategia larga de la FEC queda en la ficha profesional.
-- **Consignas:** las plantillas de 2.4. Cada ítem cambia solo el objeto entre corchetes. DEV-IA ajustó el artículo y el plural («la llave», «el hueso», «los caracoles»). Donde la plantilla no encajaba con el ítem, el ítem lo dice en el campo `plantilla` (ver D.1).
-- **Botones:** «Caja de iguales», «Caja de distintos», «Despejar un poco», «Girar», «Listo», «Empezar a mover», «Ver el modelo», «Ya miré», «Estaba», «No estaba», «Es igual», «No es igual», «Por partes», «Por la forma», «Por el color», «¿Cumple todas las pistas?», «Sí, listo», «Reviso» y «Ya encontraste 1 de 3.».
-- **Ayudas:** las de nivel 1 de 2.4. El nivel 3 termina con la frase común.
-- **Devoluciones:** las de error y de acierto parcial de 2.5. Cada tipo de error que registra un reto va a una de las frases de PSP-SR (tabla en `banco.json`, `devoluciones.error`). Se mantiene sin sonido de error, sin cruz roja ni vibración, y con el mismo estilo que la de acierto.
-- Cada ítem lleva `estado_clinico: "validado por PSP-SR"`. Se quitó la marca «propuesta de DEV-IA» de todos los ítems.
-
-### C.2 Letras y palabras (sección 3)
-
-- **3.1:** cada ítem con letras es de una sola forma de letra (`letra_forma`) y declara su `rasgo`. En minúscula, b–d–p–q trabajan orientación y m–n y c–e trabajan detalle. En mayúscula, E–F, P–R–B y O–Q trabajan detalle y M–N trabaja forma. No hay letras espejadas.
-- **3.2:** el Juego 2 usa A, G, e y r. Cada una aparece con serifa y se busca su sombra sin serifa, entre letras del mismo conjunto. El Juego 3 usa CASA, PATO, mesa y gato, con opciones del conjunto validado. En mayúscula se tapa la mitad de abajo y en minúscula la de arriba. Los conjuntos validados quedan en `banco.json` (`letras_validadas`) y el validador rechaza cualquier letra o palabra que no esté ahí.
-- **3.3:** la letra inicial se toma de D8. Se registra `tipo_letra` por ítem y la vista profesional separa los ítems con letras por tipo de letra.
-
-### C.3 Valores (sección 5)
-
-- **8A:** mínimo de 1000 ms en 6–8 y 700 ms en 9–12. Un solo acortamiento por sesión. Hoy 8A Difícil, el único grado con exposición breve, se publica solo en 9–12, así que el mínimo de 6–8 queda preparado para cuando se publique.
-- **Juego 6:** precisión mínima de 0,6 en 3–5 y de 0,7 en las demás rutas.
-- **Colores:** el validador exige que lila–sol aparezca solo en Intermedio y Difícil. Hoy ningún ítem lo usa.
-
-### C.4 Lo que el prototipo no hacía (sección 6)
-
-- **Juego 6, nivel 3 en caminos:** ahora resalta el camino desde donde llegó la persona hasta la próxima curva, y después sigue ella. En el tablero de puntos ya marcaba el segmento que falta.
-- **Demostraciones:** dibujo fijo con el paso resuelto y la frase común. En el Juego 2 se mantiene la rotación animada.
-- **Personas ciegas:** declarado como limitación en la ficha (P7).
-- **Alerta del piso:** no está hecha (ver D.2).
+**Agregados de v1.2 a la trazabilidad.** [Seguro] REQ-CLI-EXP-22 suma la regla E.1: si un ítem mezcla letras de un mismo grupo de orientación (b–d–p–q o n–u), el validador exige rasgo «orientacion». REQ-CLI-EXP-21 suma la regla B.2.3: el validador rechaza códigos internos (D7, REQ-…, «Juego 6») en los textos para la persona adulta. Las dos están en `tests/exploradores.test.js` con su caso en contra.
 
 ---
 
-## Parte D. Pendientes y preguntas para PSP-SR
+## Parte C. Cómo se aplicó RT-CEX-001-R v1.1
 
-### D.1 Plantillas que no encajaban tal cual con el ítem
+### C.1 Ítems a corregir (B.1)
 
-| Reto | Qué pasó | Qué hice |
+Los 25 están corregidos. Cada uno lleva en el banco el campo `cambio_v030` con lo que cambió.
+
+| Ítems | Qué se hizo | Estado en el banco |
 | --- | --- | --- |
-| 2 Intermedio | La plantilla dice «giró y cambió de color», pero la FEC 5.5 pide una sola transformación en Intermedio. | La partí en dos: «La [hoja] giró. ¿Y su sombra?» y «La [llave] cambió de color. ¿Y su sombra?» |
-| 2 Difícil | «Así se ve la [carpa] desde arriba» necesita dibujos vistos desde arriba, que no hay. | Usé «La [x] giró y cambió de color. ¿Y su sombra?» en los ítems que giran, cambian de color y de tamaño. Los dibujos desde arriba quedan para las láminas finales. |
-| 2 Fácil | La plantilla dice «creció». | Todos los ítems de Fácil ahora agrandan el objeto. |
-| 5 Fácil | La plantilla dice «arriba o abajo», pero hay ítems con «adentro o afuera» y «al lado o arriba». | Usé las dos alternativas de cada ítem: «¿El hueso está adentro o afuera del cofre?» |
-| 5 Intermedio, 3–5 | En 3–5 no se usan derecha ni izquierda (5.8). | Usé «Dos pasos adelante.» |
-| 5 Intermedio, 3–5 | Un ítem tiene tres alternativas. | Usé «¿El caracol está arriba, abajo o al lado del tronco?» |
-| 5 Difícil | «¿Dónde está su derecha?» es una pregunta, no un recorrido. | Reemplacé el recorrido «desde donde mira Roco» por un ítem nuevo de 9–12: Roco mira hacia un lado, hay una cosa en cada lado y se toca la que queda a su derecha. |
-| 1 Intermedio, 4 Difícil en 3–5, 6 Intermedio y Difícil (caminos), 7B Intermedio | No tienen plantilla propia en 2.4. | Usé la plantilla del grado más cercano (detalle en el campo `plantilla` de cada ítem). |
-| 8A Difícil | La regla «Las de punta, acá. Las redondas, allá.» separa por forma. | Rehíce los ítems: se separan por forma (punta o redonda), y la marca y el color cambian sin decidir nada. |
-| 8B Fácil | «la [llave] de la fábrica» | Cada objeto nombra el reto de donde viene: la llave y el engranaje de la fábrica, el hueso del laberinto, la huella del claro. |
+| obj-d2, obj-d3 | Se agregó un objeto de otra forma con la misma marca: una taza con punto entre las mochilas y una mochila con punto entre las tazas, como en obj-d1. | A revisar |
+| obj-d4, obj-d5 | Consigna «¿En qué se parecen estas dos? Elegí una.» y botones «La forma» · «El color» · «La marca» (E.2). | Validado (texto de PSP-SR) |
+| obj-d8 | Letras «n, m, n, h, n, m» (E.1). | Validado |
+| jar-i2, jar-i4, jar-i6 | Plantilla «iguales a esta/este» (E.3). | Validado |
+| jar-d5 a jar-d8 | Rehechos: una sola característica en la consigna, distractores de la misma categoría que difieren en un rasgo (llaves plateadas y con agujero cuadrado entre las doradas, caracol azul, regadera azul, pelota azul), 28 a 30 elementos y más superposición que en Intermedio. Consigna con la plantilla de E.3. | A revisar |
+| lab-f5, lab-f6, lab-i4 a lab-i8 | Consignas de E.4: «para arriba», la misma palabra que el botón. | Validado |
+| fab-i5 | Chispa en zigzag: tres segmentos, dos cambios de dirección. | A revisar |
+| c7a-f1, c7a-i4, c7a-d2, c7a-f2, c7a-i5 | El cofre se reemplazó por otro objeto que no estaba en el ítem. El generador comprueba que los ítems cambiados son exactamente los de la lista de PSP-SR. | A revisar |
 
-**Pregunta 1.** ¿Validan esas adaptaciones o prefieren otra redacción?
+**Regla nueva en el generador.** [Seguro] El cofre no se usa como estímulo en todo el Juego 7 (7A y 7B). Lo verifica la prueba.
 
-### D.2 Lo que falta antes del paquete de revisión
+### C.2 Correcciones globales (B.2)
 
-1. **Validación ítem por ítem.** Dejé `banco.json` en la carpeta compartida (`propuestas/banco_Los_cuatro_exploradores_v0.2.0.json`). Tiene 186 ítems, entre 4 y 9 por variante, grado, ruta y forma de letra. La FEC pide 12 en 6–8. Subir la cantidad es cuestión de contenido, no de programación.
-2. **Alerta del piso con el portal.** La herramienta avisa al portal cuando se llega al piso, igual que «Los tres cerditos». Todavía falta la prueba de punta a punta con un profesional vinculado (alerta de M10-6) y sin profesional vinculado (sin alerta).
-3. **La a y la g de dos formas (Juego 2, solo 9–12).** No están. Hace falta una tipografía de imprenta que traiga esas formas y se pueda incluir en el archivo sin conexión. **Pregunta 2.** ¿Las dejamos para las láminas finales o prefieren que se dibujen como figura?
-4. **Revisión humana de los pares de colores** con un simulador.
-5. **Calibración** de la tolerancia del trazo y de la exposición de 8A. El informe del entorno de prueba va a reportar `precision_trazo` por tipo de entrada y tamaño de pantalla.
+1. **Marca de validación.** [Seguro] «validado por PSP-SR» queda solo en lo que PSP-SR validó o escribió literalmente. Lo que armó DEV-IA lleva «pendiente de revisión de PSP-SR (banco v0.3.0, RT-CEX-001 v1.2)» y dice qué cambió en `cambio_v030`. En el banco hay **164 validados** (133 sin cambios y 31 cambiados con texto literal de PSP-SR) y **230 a revisar** (22 cambiados y 208 nuevos).
+2. **Voseo:** «Acompañá sin dar las respuestas. Podés tocar el parlante, tocar «Escuchar la historia» o leer cada texto en voz alta.»
+3. **Sin códigos a la vista:** se sacó «(D7)» y los números de juego pasaron a nombres de lugar en «sin trazo fino», «sin exposición breve», «evitar color» y «nombres en audio».
+4. **«Sin trazo fino»:** el texto de PSP-SR, tal cual.
+5. **Historia:** láminas 2, 3 y 4 con los textos de PSP-SR. La lámina 4 lleva el campo `pendiente_supervisora` con el texto anterior, por si la supervisora prefiere mantenerlo.
+6. **Idea fuera de la pantalla del Juego 5 en 3–5:** el texto de PSP-SR. La herramienta elige la idea por ruta.
+7. **Devoluciones de error:** las de B.2.7 y E.5. La frase del Juego 2 que hablaba del color de la sombra se retiró. «Se parece. Mirá el detalle de arriba.» quedó guardada para ítems que declaren la zona; hoy ninguno la declara.
+8. **Rutas en Difícil y en 8B (respuesta a la pregunta).** [Seguro] Se cumple de las dos formas:
+   - **Campo `rutas`:** todos los ítems Difícil de los Juegos 1, 2, 3 y 7A y todos los de 8B declaran `rutas: ["6-8", "9-12"]` (el Juego 6 y 7B ya lo tenían; 8A Difícil dice `["9-12"]`).
+   - **Filtro de la ficha:** `modulo.json` no publica Difícil de esos juegos en 3–5 ni 8A u 8B en 3–5.
+   - **Casos de prueba:** uno exige el campo `rutas` sin 3–5 en cada uno de esos ítems. Otro comprueba que la ficha no ofrece esos grados en 3–5. Un tercero muestra que, aunque un ítem perdiera el campo, Difícil igual no aparece en 3–5.
 
-### D.3 Textos de interfaz que siguen siendo de DEV-IA
+### C.3 Parte E (correcciones a RT-CEX-001-R v1.0)
 
-PSP-SR no mandó estos textos, así que siguen como propuesta de DEV-IA (marcados en `banco.json`):
+| Punto | Cómo quedó |
+| --- | --- |
+| E.1 | n–u pasa a orientación, solo en minúscula. El banco guarda los grupos de orientación (`letras_validadas.orientacion`). El validador rechaza un ítem de «detalle» o «forma» que mezcle letras de un mismo grupo; hay un caso de prueba que pone una u en obj-d8 y lo rechaza. Se sumó obj-d16 (n–u, orientación, minúscula). |
+| E.2 | Consigna y botones nuevos en el Juego 1. En 8B Difícil siguen «Por partes», «Por la forma» y «Por el color». |
+| E.3 | Plantilla «iguales a esta/este» en todo Intermedio del jardín y en Difícil de 3–5. El validador comprueba que la escena tenga exactamente la cantidad de objetivos que dice la consigna y que ningún distractor sea igual al objetivo. |
+| E.4 | Todas las consignas de mover usan la misma palabra que el botón; ninguna dice «adelante» ni «atrás». Difícil 9–12: «Roco mira para allá. Tocá lo que está a su derecha.» |
+| E.5 | Devoluciones de B.2.7. |
+| E.6 | Láminas 2 y 4. |
+| E.7 | Se sigue con la FEC-015 v0.3. |
 
-- Ayudas de nivel 2 y avisos auxiliares: «Quedan dos», «Mirá en esta parte», «Ahora el camino es más ancho».
-- Los textos «¿Querés una pista?», «Pedir una pista», «Volver al mapa», «Antes / Ahora», «Seguir», «Jugar otra vez» y «Elegí un lugar del bosque.».
-- Los cierres por tiempo y por piso, y los títulos de las pantallas.
-- Los textos para la persona adulta, entre ellos el aviso «La letra cambia desde el próximo ejercicio.».
+### C.4 Textos de interfaz (C.3 de PSP-SR)
 
-**Pregunta 3.** ¿Los validan como están o mandan otros?
+Todos los textos de interfaz quedaron validados como están, salvo los de la tabla de C.3, que ya tienen el texto de PSP-SR:
 
-### D.4 Detalle para la historia
+- «Antes» pasó a «Volver» en la historia.
+- La ayuda de nivel 2 de las sombras dice «Ahora hay menos sombras para elegir.».
+- La ayuda de nivel 2 de «¿arriba o abajo?» nombra el objeto de referencia de cada ítem («Mirá dónde está el tronco.»). Cada ítem lo trae en el campo `ayuda2`.
+- En el tablero del Juego 6, el nivel 2 dice «Mirá los puntos marcados en el modelo.».
+- 8B cierra con «Revisaste y lo cambiaste: así queda bien.» solo si hubo autocorrección. Si no, cierra con «Usaste lo que sabías en un lugar nuevo.».
+- Las caritas son pictogramas dibujados por el portal.
+- «piña» pasó a «piña de pino».
 
-La lámina 2 dice «hay ocho retos», pero en el mapa hay nueve lugares y diez actividades, porque el cofre tiene dos retos y las pistas tienen dos lugares. **Pregunta 4.** ¿Se mantiene «ocho retos»?
+### C.5 Mejoras de B.3
 
-### D.5 Abiertos de la FEC
+| Ítems | ¿Se aplicó? | Cómo |
+| --- | --- | --- |
+| obj-i5, obj-i6 | Sí | obj-i6 tiene escena propia (carpa, bandera, regadera…). Cada ítem de diferencias declara el rasgo de cada diferencia (`rasgos_diferencias`). Se sumó obj-i11 con una tercera escena. |
+| som-f1 a f6 | Sí | Seis ítems nuevos «se achicó» (som-f7 a f12). |
+| som-i4, som-i6 | No, en esos dos | No hay otra llave ni otro hongo de forma distinta entre los objetos de `nombres`, y PSP-SR pidió que los objetos nuevos se le manden antes de generar. Los seis ítems nuevos de Intermedio (som-i7 a i12) sí usan distractores de la misma categoría. **Pregunta 1:** ¿dibujo una segunda llave y un segundo hongo y te los mando? |
+| som-d1 a d5 | Sí | Consigna «A la [hoja] le pasaron muchas cosas. ¿Y su sombra?» (y «Al [zapato]…»). |
+| Juego 2 en general | Sí, en los nuevos | Las sombras ahora pueden dibujarse giradas o con otro tamaño. Los nuevos de Fácil tienen una sombra de otra forma con el tamaño del objeto transformado (error «se-guio-por-tamano»). Los nuevos de Intermedio y Difícil que giran tienen una sombra de otra forma girada igual (error «girada»). |
+| nie-i3, nie-i5 | Medido | Ver D.3: porcentaje tapado de cada ítem. No cambié las manchas de los ítems validados. |
+| nie-d3 | Sí | La carpa pasa a «forma-parecida». Los nuevos de Difícil distinguen las dos clases de error. |
+| jar-i1, i3, i5 | Sí | Plantilla «iguales a esta». |
+| lab-d5 a d8 | Sí | Consigna de PSP-SR. lab-d7 ahora tiene a Roco mirando para arriba. |
+| fab-i7 | Sí | Puerta como marco (⊓) de tres segmentos. |
+| c7b-f4, i3, i5 | Sí | Sin cofre. |
+| 8a-d2, 8a-d4 | Sí | Hoja con puntas contra hoja redonda. |
+| 8b-f1 a f4 | Sí | «junto al río». |
+| 8b-i1, 8b-i3 | Sí | Una carpa de otra bandera junto al árbol. Lo cumplen también los 8 campamentos nuevos. |
 
-P2, P6, P7 y P8 siguen abiertas, sin cambios. Falta también el contrato de cesión con quien ilustre.
+**Un arreglo que no pidió PSP-SR.** [Seguro] En fab-i4 (el cartel), el palo era un segmento que pasaba por encima de otro punto del tablero. Si el chico tocaba ese punto, el juego lo tomaba como error. Lo partí en dos en ese punto: se ve igual. La prueba ahora exige que ningún segmento de ningún tablero pase por encima de otro punto.
+
+---
+
+## Parte D. Ítems nuevos y lo que falta
+
+### D.1 Cantidad de ítems
+
+[Seguro] Cantidad por variante y grado, contada por forma de letra, como la cuenta la herramienta. Primero 3–5, después 6–8 y después 9–12; «—» quiere decir que ese grado no se publica en esa ruta.
+
+| Variante | Fácil | Intermedio | Difícil |
+| --- | --- | --- | --- |
+| 1 · Objetos | 12 · 12 · 12 | 12 · 12 · 12 | — · 12 · 12 |
+| 2 · Sombras | 12 · 12 · 12 | 12 · 12 · 12 | — · 12 · 12 |
+| 3 · Niebla | 12 · 12 · 12 | 12 · 12 · 12 | — · 12 · 12 |
+| 4 · Jardín | 12 · 12 · 12 | 12 · 12 · 12 | 12 · 12 · 12 |
+| 5 · Laberinto | 12 · 12 · 12 | 12 · 12 · 12 | — · 12 · 16 |
+| 6 · Fábrica | 12 · 12 · 12 | 12 · 12 · 12 | — · 12 · 12 |
+| 7A · ¿Cuáles? | 12 · 12 · 12 | 12 · 12 · 12 | — · 12 · 12 |
+| 7B · Orden | 12 · 12 · 12 | — · 12 · 12 | — · 12 · 12 |
+| 8A · Pistas relámpago | — · 12 · 12 | — · 12 · 12 | — · — · 8 |
+| 8B · Pistas nuevas | — · 12 · 12 | — · 12 · 12 | — · 12 · 12 |
+
+Hay **208 ítems nuevos**, todos «a revisar». La prueba exige al menos 12 por variante, grado y forma de letra en 6–8 (`items_minimos_paquete` en `modulo.json`).
+
+**Cómo se respetaron las reglas de D.1:**
+
+- **Objetos.** Solo se usaron objetos de `nombres` y letras de `letras_validadas`. No hizo falta ningún objeto nuevo.
+- **Escenas.** Hay tres escenas distintas del claro y doce campamentos distintos. La prueba comprueba que no se repite ninguna. En 7A, el generador no repite el mismo grupo de cosas para mirar.
+- **Cofre.** Nunca es estímulo en el Juego 7.
+- **Jardín.** Usa «iguales a esta» y tiene exactamente la cantidad que dice la consigna. Difícil de 6 a 12 tiene ocho combinaciones nuevas de color y marca, con pares de colores validados en simulación: celeste/naranja, azul/naranja y azul/amarillo. Difícil de 3 a 5 tiene doce ítems con distractores de la misma categoría.
+- **Laberinto.** La consigna y el botón dicen la misma palabra. Los ocho recorridos nuevos de Difícil:
+  - no usan perspectiva, así que sirven en 6–8;
+  - tienen solución, y pasar por la fuente alarga el camino;
+  - se comprueban con una búsqueda de camino.
+- **8B Difícil.** Los recorridos nuevos se comprueban de la misma forma.
+- **8A Difícil.** Quedó en 8 y no en 12. Los dos pares que separan «de punta» y «redondas» son pocos: los cuatro nuevos mezclan los dos pares y cambian el color sin que decida nada. Más ítems serían casi iguales. **Pregunta 2:** ¿preferís 8 distintos o 12 con ítems más parecidos? ¿Hay otro par de formas «de punta» y «redonda» que te sirva?
+
+### D.2 Lo demás
+
+| Pendiente | Estado |
+| --- | --- |
+| Alerta del piso de punta a punta (con profesional vinculado y sin él) | Sigue pendiente: se prueba junto con el portal. Sin cambios en esta versión. |
+| Revisión humana de los pares de colores con simulador | Sigue pendiente: la tiene que hacer una persona, con registro. Hay pares nuevos en uso (jardín Difícil): celeste/naranja, azul/naranja y azul/amarillo, todos de la lista validada en simulación. |
+| Calibración de la tolerancia del trazo y de la exposición de 8A | Sigue pendiente: necesita personas probando en el entorno de prueba. |
+| Lugares del mapa | Listo: ahora están también en `banco.json` (`lugares`), con su número y las variantes de cada uno. |
+| Capturas de un ítem por juego y grado | Listo: 39 capturas, una por juego y grado (y Difícil del jardín en 3–5), más los corregidos que dependen del dibujo, la lámina 4 y las caritas. Van junto con esta revisión, y también va el archivo HTML de prueba. |
+| La a y la g de dos formas (C.2 de PSP-SR) | Pendiente para la próxima entrega: las dibujo como figura vectorial y te mando la captura antes de cargarlas. |
+| Caso de prueba 20 (revisión por una persona con formación en evaluación) | Sigue pendiente. |
+
+### D.3 Porcentaje tapado en la niebla (B.3)
+
+[Seguro] Se midió sobre los píxeles del dibujo del objeto al empezar el ítem, antes de despejar. Lo hace `scripts/exploradores_capturas.js`, que deja el detalle en `niebla_tapado.json`.
+
+| Grado | Ítems validados (v0.2.0) | Ítems nuevos |
+| --- | --- | --- |
+| Fácil (meta: alrededor del 20 %) | f1 13 · f2 16 · f3 25 · f4 10 · f5 26 · f6 16 | f7 19 · f8 20 · f9 19 · f10 20 · f11 21 · f12 20 |
+| Intermedio | i1 69 · i2 65 · **i3 83** · i4 88 · **i5 45** · i6 79 | i7 35 · i8 65 · i9 46 · i10 64 · i11 78 · i12 85 |
+| Difícil | d1 76 · d2 76 · **d3 99** · d4 75 · d5 86 · d6 80 | d11 79 · d12 80 · d13 80 · d14 78 |
+
+En los ítems nuevos, la posición de la hoja (Fácil) y la semilla de las manchas (Difícil) se eligieron midiendo, para quedar cerca del 20 % y del 80 %. En las palabras se tapa el 55 % de la altura.
+
+**Pregunta 3.** [Probable] Tres ítems validados se apartan bastante: nie-f4 (10 %), nie-d3 (99 %, al empezar casi no se ve nada) y nie-i4 (88 %). ¿Querés que los ajuste a una meta? Si es así, ¿qué meta usamos para Intermedio y Difícil?
 
 ---
 
 ## Parte E. Archivos
 
-- `app/herramientas/exploradores/exploradores.html`: la herramienta.
-- `app/herramientas/exploradores/banco.json` y `modulo.json`: generados por `scripts/exploradores_generar.py`, versión 0.2.0-prueba.
-- `python3 app/build.py --exploradores` arma el archivo suelto de prueba.
-- Pruebas: `tests/exploradores.test.js` y `tests/exploradores.e2e.js`.
+- **Generador:** `scripts/exploradores_generar.py` arma el banco v0.3.0: 394 ítems con semilla fija, marcas de B.2.1 y control de la lista del cofre.
+- **Banco y ficha:** `app/herramientas/exploradores/banco.json` y `modulo.json`, versión 0.3.0-prueba.
+- **Lista de cambios:** `scripts/exploradores_cambios.py` genera `docs/herramientas/RT-CEX-001_cambios_banco_v0.3.0.md`.
+- **Herramienta:** `app/herramientas/exploradores/exploradores.html`. Cambios de esta versión:
+  - sombras giradas o con otro tamaño;
+  - ayudas de nivel 2 por ítem y en el tablero;
+  - cierre de 8B según haya habido autocorrección;
+  - idea fuera de la pantalla por ruta;
+  - pictogramas;
+  - validador con E.1 y B.2.3.
+- **Capturas y medición:** `scripts/exploradores_capturas.js`.
+- **Pruebas:** `tests/exploradores.test.js` hace 4136 verificaciones, entre ellas las de RT-CEX-001-R v1.1. `tests/exploradores.e2e.js` hace 394 de punta a punta.
+- **En la carpeta compartida:**
+  - `descargas/AprenderSiendo_Los_cuatro_exploradores_prueba.html` (y su copia en `Históricos/`);
+  - `propuestas/banco_Los_cuatro_exploradores_v0.3.0.json`;
+  - `propuestas/RT-CEX-001_cambios_banco_v0.3.0.md`;
+  - `propuestas/capturas_Los_cuatro_exploradores_v0.3.0/`;
+  - esta revisión.

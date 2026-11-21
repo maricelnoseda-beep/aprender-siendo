@@ -64,9 +64,72 @@ must(lugares.niebla === 'El puente de la niebla' && lugares.laberinto === 'El la
 must(M.lugaresDe(modulo, '6-8').length === 9 && M.lugaresDe(modulo, '3-5').length === 7, '8B tiene lugar propio: 9 lugares en 6–8 y 7 en 3–5');
 must(banco.estrategias.objetos.asi_se_juega === 'Guardá en la caja las cosas iguales al modelo.', '«Así se juega» de PSP-SR');
 must(banco.ayudas.cofre_cuales['1'] === '¿Le pusiste nombre?' && banco.textos.nino.demostracion === 'Así se resuelve este paso. Ahora probá vos.', 'ayudas de nivel 1 y frase de la demostración');
-let sinValidar = 0; recorrer(banco.variantes, (o) => { if (o.consigna && o.estado_clinico !== 'validado por PSP-SR') sinValidar++; });
-must(sinValidar === 0, 'cada ítem con estado_clinico «validado por PSP-SR»');
+// RT-CEX-001-R v1.1 B.2.1: «validado por PSP-SR» solo en lo que PSP-SR validó; lo nuevo o cambiado dice qué cambió y queda para revisar.
+const todos = []; for (const [id, gs] of Object.entries(banco.variantes)) for (const [g, its] of Object.entries(gs)) for (const it of its) todos.push({ id, g, it });
+must(todos.every(({ it }) => it.estado_clinico === 'validado por PSP-SR' || (/pendiente de revisión de PSP-SR/.test(it.estado_clinico) && it.cambio_v030)), 'cada ítem está validado o dice qué cambió y queda pendiente de revisión');
+must(todos.filter(({ it }) => it.estado_clinico === 'validado por PSP-SR' && !it.cambio_v030).length + todos.filter(({ it }) => it.cambio_v030 && it.cambio_v030 !== 'nuevo (D.1)').length === 186, 'los 186 ítems revisados por PSP-SR siguen en el banco (sin cambios o con el cambio declarado)');
+must(todos.filter(({ it }) => it.cambio_v030 === 'nuevo (D.1)').every(({ it }) => /pendiente de revisión/.test(it.estado_clinico)), 'los ítems nuevos no llevan la marca de validado');
 must(!/pendiente de PSP-SR \(RT-CEX-001\)"/.test(JSON.stringify(banco.variantes)), 'ningún ítem queda con la marca «propuesta de DEV-IA»');
+
+// ---------- RT-CEX-001-R v1.1: correcciones de PSP-SR ----------
+const item = (id) => todos.find((x) => x.it.id === id).it;
+must(banco.historia.laminas[1].frases[1] === 'En el camino al tesoro hay muchos retos.' && banco.historia.laminas[3].frases[0] === '¡Vos también sos parte del equipo!', 'B.2.5: láminas 2 y 4');
+must(/^Acompañá .*Podés tocar/.test(banco.historia.guia_adulto_3_5), 'B.2.2: texto para la persona adulta con voseo');
+must(Object.values(banco.textos.adulto).every((t) => typeof t !== 'string' || !/\(D\d|Juego \d/.test(t)), 'B.2.3: sin códigos internos ni números de juego en los textos para la persona adulta');
+let codigo = copia(); codigo.textos.adulto.audio += ' (D7)';
+must(errores(codigo).some((x) => /código interno/.test(x)), 'el validador rechaza un código interno a la vista');
+must(banco.textos.adulto.sinTrazoFino === 'Sin trazo fino (La fábrica de caminos): se arma tocando los puntos en orden. Así se practica el orden, no el trazo.', 'B.2.4: «sin trazo fino» en lenguaje llano');
+must(banco.ideas_fuera_por_ruta['3-5']['5'] === 'Uno esconde un juguete y da pistas: está arriba, abajo o al lado de algo.' && /ideas_fuera_por_ruta/.test(html), 'B.2.6: idea fuera de la pantalla del Juego 5 sin derecha ni izquierda en 3–5');
+must(banco.devoluciones.error.objetos['*'] === 'Se parece. Mirá otra vez los detalles.' && banco.devoluciones.error.objetos.forma && banco.devoluciones.error.objetos.color, 'B.2.7: devoluciones del Juego 1');
+must(banco.devoluciones.error.sombras['*'] === 'Mirá bien la forma de la sombra.' && !/color/.test(JSON.stringify(banco.devoluciones.error.sombras)), 'B.2.7 y E.5: el Juego 2 no habla del color de la sombra');
+must(banco.devoluciones.error.laberinto.relacion === 'Mirá otra vez dónde está cada cosa.' && banco.devoluciones.error.laberinto['confusion-vertical'] === 'Mirá otra vez dónde está cada cosa.', 'B.2.7: devoluciones del Juego 5');
+// B.2.8: Difícil de los Juegos 1, 2, 3 y 7A y todo 8B declaran rutas sin 3–5, y el filtro de rutas no los ofrece en 3–5.
+for (const { id, g, it } of todos) if ((g === 'dificil' && ['objetos', 'sombras', 'niebla', 'cofre_cuales'].includes(id)) || id === 'pistas_nuevas')
+  must(Array.isArray(it.rutas) && !it.rutas.includes('3-5'), `B.2.8: ${it.id} declara rutas sin 3–5`);
+for (const id of ['objetos', 'sombras', 'niebla', 'cofre_cuales']) must(!M.gradosDe(modulo, '3-5', id).includes('dificil'), `B.2.8: ${id} no publica Difícil en 3–5`);
+let sinRuta = copia(); delete sinRuta.variantes.objetos.dificil[0].rutas;
+must(M.itemsDe(sinRuta, 'objetos', 'dificil', '3-5', { lee: false }).length > 0 && !M.gradosDe(modulo, '3-5', 'objetos').includes('dificil'), 'B.2.8: aunque un ítem no declarara rutas, la ficha no ofrece Difícil en 3–5');
+// B.1
+must(['obj-d2', 'obj-d3'].every((k) => { const it = item(k); return it.objetos.some((o) => o.f !== it.modelo.f && o.m === it.modelo.m); }), 'B.1: obj-d2 y obj-d3 tienen otra forma con la misma marca');
+must(item('obj-d4').consigna === '¿En qué se parecen estas dos? Elegí una.' && banco.textos.nino.criterios.forma === 'La forma', 'B.1 y E.2: consigna y botones de «¿En qué se parecen?»');
+must(!item('obj-d8').letras.includes('u'), 'B.1: obj-d8 sin la u');
+let nu = copia(); nu.variantes.objetos.dificil.find((it) => it.id === 'obj-d8').letras[1] = 'u';
+must(errores(nu).some((x) => /orientación/.test(x)), 'E.1: el validador rechaza n y u en un ítem de detalle');
+for (const { id, g, it } of todos) if (id === 'jardin' && (g === 'intermedio' || (it.rutas || []).includes('3-5'))) {
+  must(/iguales a est[ae]\.$/.test(it.consigna), `E.3: ${it.id} usa la plantilla «iguales a esta»`);
+  const n = +((it.consigna.match(/ (\d) /) || [])[1]); must(n === it.cantidad && it.elementos.filter((e) => e.objetivo).length === n, `E.3: ${it.id} tiene exactamente ${n} objetivos`);
+}
+for (const k of ['jar-d5', 'jar-d6', 'jar-d7', 'jar-d8']) { const it = item(k);
+  must(it.elementos.length >= 28 && it.elementos.length <= 30 && it.elementos.some((e) => !e.objetivo && e.f === it.modelo.f), `B.1: ${k} con 28 a 30 elementos y distractores de la misma categoría`); }
+for (const { id, it } of todos) if (id === 'laberinto' && it.tipo === 'mover' && !it.plan_previo) {
+  must(!/adelante|atrás/.test(it.consigna), `E.4: ${it.id} no dice «adelante» ni «atrás»`);
+  for (const w of ['arriba', 'abajo', 'derecha', 'izquierda']) if (it.consigna.includes(w)) must(it.secuencia.includes(w), `E.4: ${it.id}: «${w}» en la consigna y en el botón`);
+}
+for (const { id, it } of todos) if (id === 'laberinto' && it.tipo === 'relacion') must(/^Mirá dónde está (el|la) /.test(it.ayuda2 || ''), `C.3: ${it.id} nombra su objeto de referencia en la ayuda`);
+const rumbo = (P, a, b) => [Math.sign(P[b].x - P[a].x), Math.sign(P[b].y - P[a].y)].join();
+const pts = (it) => { const o = []; for (let y = 0; y < it.filas; y++) for (let x = 0; x < it.cols; x++) o.push({ x, y }); return o; };
+must(new Set(item('fab-i5').modelo.map(([a, b]) => rumbo(pts(item('fab-i5')), a, b))).size >= 2 && item('fab-i5').modelo.length >= 2, 'B.1: fab-i5 cambia de dirección');
+for (const { id, it } of todos) if (it.tipo === 'tablero') { const P = pts(it);   // ningún segmento pasa por encima de otro punto (sería una trampa al tocar)
+  must(it.modelo.every(([a, b]) => { const dx = P[b].x - P[a].x, dy = P[b].y - P[a].y, g = (u, v) => (v ? g(v, u % v) : Math.abs(u)); return g(dx, dy) === 1; }), `${it.id}: ningún segmento pasa por encima de otro punto`); }
+const estimulos = (it) => JSON.stringify([it.mostrar, it.sondas, it.secuencia, it.opciones]);
+must(todos.filter(({ id }) => id === 'cofre_cuales' || id === 'cofre_orden').every(({ it }) => !/"cofre"/.test(estimulos(it))), 'B.1 y B.3: el cofre no es estímulo en el Juego 7');
+// D.1: al menos 12 por variante, grado y forma de letra en 6–8
+for (const id of M.VAR) for (const g of M.gradosDe(modulo, '6-8', id)) for (const letra of ['mayuscula', 'minuscula'])
+  must(M.itemsDe(banco, id, g, '6-8', { lee: true, letra }).length >= modulo.items_minimos_paquete['6-8'], `D.1: ${id}/${g}/6-8/${letra} tiene al menos 12 ítems`);
+// Recorridos con solución (Juego 5 Difícil y 8B Difícil)
+const bfs = (it, a, b) => { const pared = new Set((it.paredes || []).map(([x, y]) => x + ',' + y)), vis = new Set([a.x + ',' + a.y]), q = [a];
+  while (q.length) { const c = q.shift(); if (c.x === b.x && c.y === b.y) return true;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const n = { x: c.x + dx, y: c.y + dy }, k = n.x + ',' + n.y; if (n.x >= 0 && n.y >= 0 && n.x < it.cols && n.y < it.filas && !pared.has(k) && !vis.has(k)) { vis.add(k); q.push(n); } } }
+  return false; };
+for (const { id, g, it } of todos) {
+  if (id === 'laberinto' && it.plan_previo) must(bfs(it, it.roco, it.pasa_por) && bfs(it, it.pasa_por, it.meta), `${it.id}: el recorrido tiene solución`);
+  if (id === 'pistas_nuevas' && it.tipo === 'recorrido') { let a = it.roco; must(it.orden.every((i) => { const ok = bfs(it, a, it.objetos[i]); a = it.objetos[i]; return ok; }), `${it.id}: el recorrido tiene solución`); }
+}
+const escenas = todos.filter(({ id, it }) => (id === 'objetos' && it.tipo === 'diferencias') || (id === 'pistas_nuevas' && it.tipo === 'campamento')).map(({ it }) => JSON.stringify(it.a || it.elementos));
+must(new Set(escenas).size === escenas.length, 'D.1: ninguna escena del claro ni del campamento se repite');
+must(Array.isArray(banco.lugares.lista) && banco.lugares.lista.length === 9 && banco.lugares.lista.some((l) => l.nombre === 'El campamento nuevo'), 'D.2: los lugares del mapa también están en el banco');
+must(banco.textos.nino.contar.opciones_resulto.every((o) => o.pictograma && !o.cara) && /function pictograma/.test(html), 'C.3: pictogramas propios en vez de emojis');
+must(banco.nombres.pina === 'piña de pino' && banco.textos.nino.anterior === 'Volver', 'C.3: «piña de pino» y «Volver»');
 
 // ---------- REQ-CLI-EXP-17 y D6: rutas ----------
 must(!modulo.rutas['13-18'] && modulo.rutas_excluidas['13-18'], 'ruta 13–18 excluida');

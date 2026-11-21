@@ -399,6 +399,7 @@ const Motor = (() => {
     for (const l of banco.historia.laminas) ir(l.frases);
     for (const e of Object.values(banco.estrategias)) { ir(e.asi_se_juega); ir(e.estrategia); }
     for (const a of Object.values(banco.ayudas)) if (a && typeof a === "object") ir(a["1"]);
+    for (const gs of Object.values(banco.variantes || {})) for (const its of Object.values(gs)) for (const it of its) if (it.ayuda2) out.push(it.ayuda2);
     ir(banco.devoluciones.error); ir(banco.devoluciones.parcial); ir(banco.textos.nino.tesoroTexto); ir(banco.textos.nino.demostracion);
     return out;
   }
@@ -466,6 +467,9 @@ const Motor = (() => {
       for (const l of letras) ver((set.letras || []).includes(l), `${k}: la letra «${l}» no está en el conjunto validado para ${it.letra_forma}`);
       if (it.tipo === "palabra") for (const w of it.opciones) ver((set.palabras || []).includes(w), `${k}: la palabra «${w}» no está en el conjunto validado para ${it.letra_forma}`);
       if (it.tipo === "palabra") ver(it.tapa === (it.letra_forma === "mayuscula" ? "abajo" : "arriba"), `${k}: en mayúscula se tapa la mitad de abajo y en minúscula la de arriba (3.2)`);
+      // RT-CEX-001-R v1.1 E.1: si el ítem mezcla letras de un mismo grupo de orientación (b–d–p–q, n–u), el rasgo es «orientacion».
+      const grupos = ((LV.orientacion || {})[it.letra_forma]) || [];
+      if (it.tipo === "letras" && it.rasgo !== "orientacion") ver(!grupos.some((gr) => gr.includes(it.modelo) && it.letras.some((l) => l !== it.modelo && gr.includes(l))), `${k}: mezcla letras que solo cambian de orientación y declara rasgo «${it.rasgo}» (E.1)`);
     }
     for (const id of VAR) for (const ruta of RUTAS) { const lee = !!(modulo.rutas[ruta] || {}).lee;
       for (const g of gradosDe(modulo, ruta, id)) for (const letra of ["mayuscula", "minuscula"])
@@ -476,6 +480,8 @@ const Motor = (() => {
     const x = modulo.exposicion_8a;
     ver(x && cambiosPorSegundo(x.min_ms, x.pausa_ms) <= 3, "8A: la exposición mínima produce más de 3 cambios por segundo (WCAG 2.3.1)");
     for (const t of textosNino(banco)) { ver(!PROHIBIDO.test(t), `texto para quien juega con palabra no admitida: «${t}»`); ver(!ESTILO.test(t), `texto que compara con otra obra: «${t}»`); }
+    // RT-CEX-001-R v1.1 B.2.3: ningún texto de pantalla lleva códigos de decisiones, requisitos ni números de juego.
+    for (const t of Object.values(banco.textos.adulto)) if (typeof t === "string") ver(!/\((?:D\d|REQ-|M\d)|Juego \d/.test(t), `texto para la persona adulta con un código interno: «${t}»`);
     for (const t of textosBreves(banco)) if (t.length > (modulo.consigna_breve_max || 60)) e.push(`consigna más larga que ${modulo.consigna_breve_max || 60} caracteres (pedido de consignas breves): «${t}»`);
     return e;
   }
@@ -866,18 +872,25 @@ function finItem(extra = {}) {
   $("#j-seguir").onclick = () => (fin ? cierre(piso ? "piso" : tiempo ? "tiempo" : "ronda") : siguienteItem());
 }
 
+/* Pictogramas propios para «¿Cómo te resultó?» (RT-CEX-001-R v1.1 C.3): se ven igual en todos los dispositivos. */
+function pictograma(id) {
+  const boca = { "me-salio": "M34 62 Q50 76 66 62", medio: "M36 66 H64", costo: "M34 70 Q50 58 66 70" }[id] || "M36 66 H64";
+  return `<svg class="pictograma" viewBox="0 0 100 100" width="34" height="34" aria-hidden="true" focusable="false" style="vertical-align:middle"><circle cx="50" cy="50" r="42" fill="#FFE29A" stroke="#102F54" stroke-width="5"/><circle cx="36" cy="42" r="5" fill="#102F54"/><circle cx="64" cy="42" r="5" fill="#102F54"/><path d="${boca}" fill="none" stroke="#102F54" stroke-width="6" stroke-linecap="round"/></svg>`;
+}
+
 /* ---------- Cierre: pieza del mapa por haber jugado (REQ-CLI-EXP-13), idea fuera de la pantalla (R9) y «Contar» (M07) ---------- */
 function cierre(motivo) {
   const v = variante(), id = S.variante, piso = motivo === "piso", tiempo = motivo === "tiempo";
   const lugar = v.lugar_id || v.juego, nueva = !S.piezas.has(lugar); S.piezas.add(lugar);
   if (EN_MARCO) parent.postMessage({ type: "exploradores-pieza", juego: lugar }, "*");
-  const t = tiempo ? N.cierreTiempo : piso ? N.cierrePiso : BANCO.devoluciones.cierre[id];
-  const idea = BANCO.ideas_fuera[v.juego], C = N.contar;
+  const revisoAlgo = S.registros.some((r) => r.variante === id && r.autocorreccion);
+  const t = tiempo ? N.cierreTiempo : piso ? N.cierrePiso : (id === "pistas_nuevas" && !revisoAlgo && BANCO.devoluciones.cierre.pistas_nuevas_sin_revision) || BANCO.devoluciones.cierre[id];
+  const idea = ((BANCO.ideas_fuera_por_ruta || {})[S.ruta] || {})[v.juego] || BANCO.ideas_fuera[v.juego], C = N.contar;
   const contar = EN_MARCO ? "" : `<div class="contar" id="contar"><h2>${esc(C.titulo)}</h2>${S.ruta === "3-5" ? `<p class="small adulto-txt">${esc(C.conAdulto)}</p>` : ""}
       <p class="pregunta">${esc(C.ayudo)} ${escuchar(C.ayudo)}</p><div class="opciones" style="--min:180px">${BANCO.contar[id].map((o) =>
         `<button class="opcion" data-ayudo="${o.id}" aria-pressed="false"><span class="t">${esc(o.txt)}</span></button>`).join("")}</div>
       <p class="pregunta">${esc(C.resulto)} ${escuchar(C.resulto)}</p><div class="opciones" style="--min:150px">${C.opciones_resulto.map((o) =>
-        `<button class="opcion" data-resulto="${o.id}" aria-pressed="false"><span class="t">${o.cara} ${esc(o.txt)}</span></button>`).join("")}</div>
+        `<button class="opcion" data-resulto="${o.id}" aria-pressed="false"><span class="t">${pictograma(o.pictograma)} ${esc(o.txt)}</span></button>`).join("")}</div>
       ${id === "niebla" ? `<p class="small">${esc(C.sugerencia_niebla)}</p>` : ""}</div>`;
   $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(nueva ? N.piezaNueva : N.piezaOtraVez)}</h1>
     <div class="objeto-grande" style="width:150px;height:150px">${D.figura("pieza", {}, N.pieza)}</div>
@@ -1107,7 +1120,7 @@ JUEGOS.sombras = {
     const obj = o.f === "letra" ? `<div class="ficha letra-ficha" style="width:180px;height:180px;font-size:7rem;font-family:${o.fuente === "serif" ? "Georgia,'Times New Roman',serif" : "inherit"};font-weight:${o.fuente === "serif" ? 400 : 800}" data-id="obj" role="img" aria-label="${esc(nombre(o))}">${esc(L(o.letra))}</div>`
       : `<div class="objeto-grande" id="obj-g"><button type="button" class="ficha" data-id="obj" aria-pressed="false" aria-label="${esc(nombre(o))}" style="width:100%;height:100%;border:0;background:transparent">${D.figura(o.f, o)}</button></div>`;
     marcoJuego(it.consigna, `<div id="ubicar">${obj}<div class="sombras">${orden.map((k) => { const s = it.sombras[k];
-      return `<button type="button" class="sombra" data-destino="${k}" aria-label="${esc(N.sombra)} ${orden.indexOf(k) + 1}">${s.f === "letra" ? `<span class="palabra" style="color:${D.SOMBRA}">${esc(L(s.letra))}</span>` : D.silueta(s.f, {})}</button>`; }).join("")}</div></div>`);
+      return `<button type="button" class="sombra" data-destino="${k}" aria-label="${esc(N.sombra)} ${orden.indexOf(k) + 1}">${s.f === "letra" ? `<span class="palabra" style="color:${D.SOMBRA}">${esc(L(s.letra))}</span>` : D.silueta(s.f, { r: s.r, s: s.s })}</button>`; }).join("")}</div></div>`);
     ubicable($("#ubicar"), (id, destino) => this.elegir(it, +destino));
     $$(".sombra").forEach((b) => b.addEventListener("click", () => { const f = $('[data-id="obj"][aria-pressed="true"]'); if (!f && !b.disabled) this.elegir(it, +b.dataset.destino); }));
   },
@@ -1320,7 +1333,7 @@ JUEGOS.laberinto = {
   ayuda(n, it) {
     const R = S.R;
     if (n === 1) { msj(it.indicacion_picto || pista1("laberinto")); return "repetir-la-indicacion"; }
-    if (it.tipo === "relacion") { if (n === 2) { marcar($(".lamina")); msj(BANCO.ayudas.laberinto.relacion2); return "mirar-la-referencia"; } msj(demo(it.explica)); $$("#rel [data-r]").forEach((b) => { if (b.dataset.r !== it.correcta) b.disabled = true; }); return "demostracion"; }
+    if (it.tipo === "relacion") { if (n === 2) { marcar($(".lamina")); msj(it.ayuda2 || BANCO.ayudas.laberinto.relacion2); return "mirar-la-referencia"; } msj(demo(it.explica)); $$("#rel [data-r]").forEach((b) => { if (b.dataset.r !== it.correcta) b.disabled = true; }); return "demostracion"; }
     if (it.tipo === "cartel") { if (n === 2) { msj(BANCO.ayudas.laberinto.cartel2); return "mirar-hacia-donde"; } R.local.dir = (it.objetivo + 3) % 4; $$("[data-girar]")[0].click(); msj(N.demostracion); return "demostracion"; }
     if (it.tipo === "su_lado") { if (n === 2) { marcar($("#roco-mira")); msj(BANCO.ayudas.laberinto.su2); return "mirar-hacia-donde-mira"; }
       $$("#su [data-lado]").forEach((b) => { if (b.dataset.lado !== it.correcta) b.disabled = true; }); msj(N.demostracion); return "demostracion"; }
@@ -1471,7 +1484,7 @@ JUEGOS.fabrica = {
     const falta = Motor.faltanSegmentos(R.local.modelo, R.local.hechos)[0]; if (!falta) return "ayuda";
     const [a, b] = falta.split("-").map(Number), P = R.local.P;
     if (n === 1) { $("#guia").innerHTML = `<circle cx="${P[a].x}" cy="${P[a].y}" r="34" fill="none" stroke="#FFB82E" stroke-width="8"/>`; msj(pista1("fabrica")); return "mirar-donde-empieza"; }
-    if (n === 2) { $("#guia").innerHTML = [a, b].map((i) => `<circle cx="${P[i].x}" cy="${P[i].y}" r="34" fill="none" stroke="#FFB82E" stroke-width="8"/>`).join(""); msj(BANCO.ayudas.fabrica[2]); return "puntos-guia"; }
+    if (n === 2) { $("#guia").innerHTML = [a, b].map((i) => `<circle cx="${P[i].x}" cy="${P[i].y}" r="34" fill="none" stroke="#FFB82E" stroke-width="8"/>`).join(""); msj(BANCO.ayudas.fabrica.tablero2 || BANCO.ayudas.fabrica[2]); return "puntos-guia"; }
     msj(N.demostracion); const t = R.local.total, d = R.local.dentro; R.local.agregar(a, b); R.local.total = t; R.local.dentro = d; return "tomas-traza-un-tramo";
   }
 };

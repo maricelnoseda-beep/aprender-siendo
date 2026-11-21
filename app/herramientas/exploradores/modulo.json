@@ -2,12 +2,12 @@
  "id": "exploradores",
  "nombre": "Los cuatro exploradores",
  "tipo": "herramienta",
- "version": "0.2.0-prueba",
- "fecha": "2026-11-15",
- "origen": "Documento rector «La gran aventura de los cuatro exploradores» de la supervisora (2026-11-15), decisiones D1–D8, FEC-015 v0.3 y RT-CEX-001-R v1.0 de PSP-SR",
+ "version": "0.3.0-prueba",
+ "fecha": "2026-11-21",
+ "origen": "Documento rector «La gran aventura de los cuatro exploradores» de la supervisora (2026-11-15), decisiones D1–D8, FEC-015 v0.3 y RT-CEX-001-R v1.0 y v1.1 de PSP-SR",
  "fec": "FEC-015 v0.3",
- "respuesta_psp_sr": "RT-CEX-001-R v1.0",
- "revision_tecnica": "RT-CEX-001 v1.1",
+ "respuesta_psp_sr": "RT-CEX-001-R v1.1",
+ "revision_tecnica": "RT-CEX-001 v1.2",
  "estado": "borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos",
  "activo": true,
  "_nota": "Ficha técnica. Estación, habilidades, grados, apoyos y números salen de la FEC-015 (contenido clínico de PSP-SR, nivel C). DEV-IA solo traduce a parámetros de código. Generada por scripts/exploradores_generar.py.",
@@ -218,6 +218,10 @@
   "_psp_sr": "RT-CEX-001-R 5: de acuerdo, con revisión humana con simulador antes del paquete de revisión; lila|sol solo en Intermedio y Difícil"
  },
  "items_minimos_prueba": 4,
+ "items_minimos_paquete": {
+  "_nota": "RT-CEX-001-R v1.1 D.1: al menos 12 por variante, grado y forma de letra en 6–8 para que M10 tenga ventana. Lo comprueba tests/exploradores.test.js.",
+  "6-8": 12
+ },
  "rutas": {
   "3-5": {
    "lee": false,
@@ -541,7 +545,7 @@
     "estrategia": "Me fijo en la forma, no en el color ni en el tamaño. Si está girada, la giro en mi cabeza.",
     "apoyos": {
      "1": "Mirá la forma, no el color.",
-     "2": "Esa sombra no es. Quedan menos.",
+     "2": "Ahora hay menos sombras para elegir.",
      "3": "Así se resuelve este paso. Ahora probá vos."
     },
     "modalidad_respuesta": [
@@ -641,7 +645,8 @@
     "idea_fuera": "Tapen con un repasador una parte de un objeto y adivinen qué es.",
     "tipos_error": [
      "otro-objeto",
-     "misma-categoria"
+     "misma-categoria",
+     "forma-parecida"
     ],
     "limitaciones": "No accesible para personas ciegas (P7 de la FEC-015)."
    },
@@ -696,7 +701,7 @@
       }
      },
      "dificil": {
-      "describe": "Escena compleja; consigna combinada (dos rasgos). En 3–5, Difícil con un solo rasgo.",
+      "describe": "Escena compleja; consigna combinada (dos rasgos). En 3–5, una sola característica en la consigna, con distractores de la misma categoría que difieren en un rasgo, 28 a 30 elementos y más superposición.",
       "cambia_respecto_al_anterior": [
        "complejidad-consignas",
        "semejanza-distractores"
@@ -809,6 +814,9 @@
     ],
     "transferencia": "B",
     "idea_fuera": "Uno esconde un juguete y da indicaciones: dos pasos adelante, uno a la derecha.",
+    "idea_fuera_por_ruta": {
+     "3-5": "Uno esconde un juguete y da pistas: está arriba, abajo o al lado de algo."
+    },
     "tipos_error": [
      "confusion-vertical",
      "confusion-derecha-izquierda",
