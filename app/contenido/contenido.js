@@ -193,6 +193,17 @@ const ACTIVITIES = [
     ok: ["Pensaste qué pasó en el cuento."], err: [], ficha: { variant: "B" }
   },
   {
+    /* «Los cuatro exploradores»: ocho retos de percepción y procesamiento visual (FEC-015 v0.2 de PSP-SR, RT-CEX-001). Todo PRUEBA hasta el registro
+       de aprobación. Sin sugerencia por diagnóstico. 3 a 12 años; 13–18 excluida (D6); en 3–5 no se ofrecen 8A ni 8B. Banco y ficha: app/herramientas/exploradores/. */
+    id: "exploradores", name: "Los cuatro exploradores", zone: "mirar", skill: "mirar, comparar, ubicarse, trazar y recordar", pillar: "Pensar",
+    area: "Percepción y procesamiento visual en una aventura", ageMin: 3, ageMax: 12, suggestedFor: [],
+    instruction: "Elegí un lugar del bosque. Cuando termines, tocá «Terminé de jugar».",
+    forFamily: "En esta aventura se practica mirar con atención, comparar, encontrar cosas escondidas, ubicarse en un camino, trazar recorridos y recordar lo que se vio. No es un tratamiento ni una evaluación.",
+    levels: ["Fácil", "Intermedio", "Difícil"], strategies: ["Mirar una parte por vez", "Mirar la forma", "Ir despacio"],
+    discover: "Miro con atención, comparo y voy despacio.",
+    ok: ["Miraste con atención."], err: [], ficha: { variant: "B" }
+  },
+  {
     id: "contar", name: "Contar y elegir", zone: "numeros", skill: "contar y comparar", pillar: "Hacer",
     area: "Cálculo inicial", ageMin: 4, ageMax: 8, suggestedFor: ["dea-calculo", "en-evaluacion", "di"],
     instruction: "Contá los puntos y tocá el número correcto.",
