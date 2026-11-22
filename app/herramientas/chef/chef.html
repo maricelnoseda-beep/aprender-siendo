@@ -83,6 +83,8 @@ svg [data-el]:focus-visible .foco{stroke:#b95325;stroke-width:6}
 /* Objetos sueltos (bandejas, cajas, sombras, casilleros) */
 .ficha{border:3px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);background:#fff;padding:4px;width:clamp(72px,16vw,108px);height:clamp(72px,16vw,108px);display:grid;place-items:center;touch-action:none}
 .ficha svg{width:100%;height:100%}
+/* IDV-CEX-001: ficha redonda en la niebla, las pistas de 8A y el cofre. Con :where() no tapa los estados elegida y puesta. */
+.ficha:where(.redonda,[data-variante="cofre_cuales"] #cuerpo *,[data-variante="cofre_orden"] #cuerpo *,[data-variante="pistas_relampago"] #cuerpo *){border-radius:50%;border:3px dashed #8CC9A8;background:#fff;padding:10%}
 .ficha[aria-pressed="true"]{border-color:var(--as-coral,#f58060);box-shadow:0 0 0 3px var(--as-coral,#f58060)}
 .ficha.marcada,.destino.marcada{box-shadow:0 0 0 5px var(--as-sol,#ffb82e)}
 .ficha.puesta{border-color:var(--as-verde,#196b6a);background:var(--as-menta,#e0f2eb);cursor:default}
@@ -94,6 +96,17 @@ svg [data-el]:focus-visible .foco{stroke:#b95325;stroke-width:6}
 .destino .tit svg{width:56px;height:56px;flex:none}
 .destino .dentro{display:flex;flex-wrap:wrap;gap:6px}
 .destino .dentro .ficha{width:64px;height:64px}
+.opcion .redonda{display:grid;place-items:center;width:clamp(76px,18vw,112px);height:clamp(76px,18vw,112px);border-radius:50%;border:3px dashed #8CC9A8;background:#fff;padding:10%;margin:0 auto}
+.opcion .redonda svg{width:100%;height:100%}
+/* IDV-CEX-001: mapa de la aventura para la persona adulta, por Estación (D5) */
+.est-lista{display:grid;gap:0;border:1px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio,22px);background:#fff;padding:4px 16px}
+.est-fila{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--as-borde,#dae3e1)}
+.est-fila:last-child{border-bottom:0}
+.est-mini{flex:0 0 auto;width:72px;height:72px;border-radius:16px;border:3px solid;display:grid;place-items:center}
+.est-mini svg{width:78%;height:78%}
+.est-fila h3{margin:0;font-size:1rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.est-chip{font-size:.75rem;font-weight:800;border-radius:999px;padding:1px 8px;color:#102F54}
+.est-fila p{margin:2px 0 0}
 .modelo{display:flex;align-items:center;gap:12px;background:var(--as-menta,#e0f2eb);border-radius:var(--as-radio-control,14px);padding:8px 12px;font-weight:800}
 .modelo .ficha{cursor:default}
 .modelo.oculto .ficha{visibility:hidden}
@@ -111,11 +124,15 @@ svg [data-el]:focus-visible .foco{stroke:#b95325;stroke-width:6}
 .palabra{font-size:clamp(2rem,8vw,3.4rem);font-weight:800;letter-spacing:.04em}
 /* Laberinto y tableros */
 .grilla{display:grid;gap:3px;max-width:520px;margin:0 auto;touch-action:manipulation}
-.celda{aspect-ratio:1;background:#eef3e9;border-radius:8px;display:grid;place-items:center;position:relative}
-.celda.pared{background:#c9dcc4}
+/* IDV-CEX-001: casillas arena, flechas en tinta, salida verde con su nombre y destino en verde claro */
+.celda{aspect-ratio:1;background:#FFF1D7;border:2px solid #F3DDB3;border-radius:8px;display:grid;place-items:center;position:relative}
+.celda.pared{background:#DCEFD9;border-color:#C4E0BF}
+.celda.salida{background:#196B6A;border-color:#196B6A}
+.celda.salida .salida-txt{position:absolute;top:3px;left:0;right:0;text-align:center;color:#fff;font-weight:800;font-size:clamp(.7rem,1.8vw,.95rem);letter-spacing:.02em;pointer-events:none}
+.celda.destino-lab{background:#E0F2EB;border-color:#8CC9A8}
 .celda svg{width:92%;height:92%}
 .celda.paso{box-shadow:inset 0 0 0 4px var(--as-sol,#ffb82e)}
-.celda.flecha::after{content:attr(data-flecha);position:absolute;font-weight:800;color:var(--as-verde,#196b6a);font-size:1.4rem}
+.celda.flecha::after{content:attr(data-flecha);position:absolute;font-weight:800;color:var(--as-tinta,#102f54);font-size:1.4rem}
 .flechas{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,64px);gap:6px;justify-content:center;margin-top:12px}
 .flechas .btn{min-width:64px;min-height:64px;padding:0;font-size:1.6rem}
 .flechas .arr{grid-column:2}
