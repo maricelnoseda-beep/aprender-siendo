@@ -1,7 +1,7 @@
 {
- "version": "0.1.1-prueba",
+ "version": "0.1.2-prueba",
  "fecha": "2026-11-22",
- "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+ "estado": "corregido por PSP-SR (B1 y B2 de RT-CHF-001-R v1.1); pendiente de supervisora",
  "recetas": [
   {
    "id": "ensalada_frutas",
@@ -69,7 +69,15 @@
    "sin_carne": true,
    "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
    "alergenos": [],
-   "sin_tacc": null
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay banana.",
+     "reemplazo": "Usar otra fruta que haya",
+     "ingrediente": "banana"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "sandwich_queso",
@@ -139,7 +147,15 @@
    "alergenos": [
     "gluten",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay queso.",
+     "reemplazo": "Hacerlos de tomate",
+     "ingrediente": "queso"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "yogur_cereales",
@@ -160,7 +176,7 @@
     "cuchara",
     "cuchillo"
    ],
-   "sin_tacc": "arroz",
+   "sin_tacc": "cereales_sin_tacc",
    "pasos": [
     {
      "accion": "cortar",
@@ -210,7 +226,15 @@
    "alergenos": [
     "gluten",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay cereales.",
+     "reemplazo": "Usar avena",
+     "ingrediente": "cereales"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "tostadas",
@@ -280,7 +304,20 @@
    "alergenos": [
     "gluten",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay mermelada.",
+     "reemplazo": "Usar dulce de leche",
+     "ingrediente": "mermelada"
+    },
+    {
+     "consigna": "No hay queso untable.",
+     "reemplazo": "Hacerlas solo con mermelada",
+     "ingrediente": "queso_untable"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "ensalada_verde",
@@ -313,7 +350,8 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "antes",
-     "texto": "El adulto ralla la zanahoria"
+     "texto": "El adulto ralla la zanahoria",
+     "resultado": "zanahoria_rallada"
     },
     {
      "accion": "cortar",
@@ -361,7 +399,20 @@
    "sin_carne": true,
    "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
    "alergenos": [],
-   "sin_tacc": null
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay zanahoria.",
+     "reemplazo": "Usar otra verdura que haya",
+     "ingrediente": "zanahoria_rallada"
+    },
+    {
+     "consigna": "No hay lechuga.",
+     "reemplazo": "Hacerla de tomate y zanahoria",
+     "ingrediente": "lechuga"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "bolitas_coco",
@@ -430,7 +481,15 @@
    "alergenos": [
     "leche"
    ],
-   "sin_tacc": null
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay coco.",
+     "reemplazo": "Pasarlas por cacao",
+     "ingrediente": "coco"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "bizcochuelo",
@@ -513,7 +572,20 @@
     "gluten",
     "huevo",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay leche.",
+     "reemplazo": "Usar jugo de naranja",
+     "ingrediente": "leche"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "galletitas",
@@ -596,7 +668,20 @@
     "gluten",
     "huevo",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay manteca.",
+     "reemplazo": "Usar aceite",
+     "ingrediente": "manteca"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "pizza",
@@ -612,7 +697,9 @@
     "levadura",
     "tomate_tri",
     "queso",
-    "aceite"
+    "aceite",
+    "agua",
+    "sal"
    ],
    "utensilios": [
     "bol",
@@ -630,7 +717,7 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Mezclar harina y levadura"
+     "texto": "Mezclar harina, levadura, agua y sal"
     },
     {
      "accion": "amasar",
@@ -680,7 +767,20 @@
    "alergenos": [
     "gluten",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay queso.",
+     "reemplazo": "Hacerla sin queso, con tomate",
+     "ingrediente": "queso"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "panqueques",
@@ -730,7 +830,9 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Cocinar en la sartén"
+     "texto": "El adulto cocina el panqueque y lo deja entibiar",
+     "recipiente": "sarten",
+     "enfria": true
     },
     {
      "accion": "untar",
@@ -754,7 +856,20 @@
     "gluten",
     "huevo",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay dulce de leche.",
+     "reemplazo": "Rellenar con mermelada",
+     "ingrediente": "dulce_leche"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "tarta_verdura",
@@ -838,7 +953,15 @@
     "gluten",
     "huevo",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay espinaca.",
+     "reemplazo": "Usar acelga",
+     "ingrediente": "espinaca"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "empanadas",
@@ -880,7 +1003,8 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Cocinar el relleno"
+     "texto": "Cocinar el relleno",
+     "recipiente": "sarten"
     },
     {
      "accion": "distribuir",
@@ -921,7 +1045,15 @@
    "alergenos": [
     "gluten",
     "huevo"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay morrón.",
+     "reemplazo": "Hacerlas sin morrón",
+     "ingrediente": "morron"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "fideos_salsa",
@@ -945,7 +1077,7 @@
     "sarten",
     "hornalla"
    ],
-   "sin_tacc": "arroz",
+   "sin_tacc": "fideos_sin_tacc",
    "pasos": [
     {
      "accion": "hervir",
@@ -954,7 +1086,8 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Hervir los fideos"
+     "texto": "Hervir los fideos",
+     "recipiente": "olla"
     },
     {
      "accion": "cocinar",
@@ -963,16 +1096,18 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Calentar la salsa"
+     "texto": "Calentar la salsa",
+     "recipiente": "sarten"
     },
     {
      "accion": "trasladar",
      "utensilio": "colador",
      "ingrediente": "fideos",
-     "actor": "persona",
-     "riesgo": null,
+     "actor": "adulto",
+     "riesgo": "calor",
      "momento": "durante",
-     "texto": "Colar los fideos"
+     "texto": "El adulto cuela los fideos",
+     "recipiente": "olla"
     },
     {
      "accion": "servir",
@@ -995,7 +1130,15 @@
    "alergenos": [
     "gluten",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay queso.",
+     "reemplazo": "Servir sin queso",
+     "ingrediente": "queso"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "arroz_verduras",
@@ -1036,16 +1179,18 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Hervir el arroz"
+     "texto": "Hervir el arroz",
+     "recipiente": "olla"
     },
     {
      "accion": "mezclar",
      "utensilio": "cuchara",
      "ingrediente": "choclo",
-     "actor": "persona",
-     "riesgo": null,
+     "actor": "adulto",
+     "riesgo": "calor",
      "momento": "durante",
-     "texto": "Sumar las verduras"
+     "texto": "El adulto suma las verduras al arroz",
+     "recipiente": "olla"
     },
     {
      "accion": "servir",
@@ -1065,7 +1210,15 @@
    "sin_carne": true,
    "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
    "alergenos": [],
-   "sin_tacc": null
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay choclo.",
+     "reemplazo": "Usar arvejas",
+     "ingrediente": "choclo"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "tortas_fritas",
@@ -1115,7 +1268,8 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Freír en la sartén"
+     "texto": "Freír en la sartén",
+     "recipiente": "sarten"
     },
     {
      "accion": "servir",
@@ -1138,11 +1292,24 @@
    "alergenos": [
     "gluten",
     "leche"
-   ]
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay manteca.",
+     "reemplazo": "Usar grasa o aceite",
+     "ingrediente": "manteca"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   },
   {
    "id": "locro",
-   "nombre": "Locro",
+   "nombre": "Locro de verduras",
    "dulce": false,
    "coccion": true,
    "horno": false,
@@ -1182,16 +1349,18 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Hervir con agua"
+     "texto": "Hervir con agua",
+     "recipiente": "olla"
     },
     {
      "accion": "mezclar",
      "utensilio": "cuchara",
      "ingrediente": null,
      "actor": "persona",
-     "riesgo": null,
+     "riesgo": "calor",
      "momento": "durante",
-     "texto": "Revolver de a ratos"
+     "texto": "Revolver de a ratos",
+     "recipiente": "olla"
     },
     {
      "accion": "servir",
@@ -1206,7 +1375,103 @@
    "sin_carne": true,
    "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
    "alergenos": [],
-   "sin_tacc": null
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay zapallo.",
+     "reemplazo": "Usar calabaza",
+     "ingrediente": "zapallo"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR"
   }
- ]
+ ],
+ "situaciones": {
+  "Hoy vienen amigos a merendar.": [
+   "ensalada_frutas",
+   "yogur_cereales",
+   "tostadas",
+   "sandwich_queso",
+   "bolitas_coco",
+   "bizcochuelo",
+   "galletitas",
+   "panqueques",
+   "tortas_fritas"
+  ],
+  "Es el cumpleaños de la abuela.": [
+   "ensalada_frutas",
+   "tostadas",
+   "sandwich_queso",
+   "bolitas_coco",
+   "bizcochuelo",
+   "galletitas",
+   "panqueques",
+   "tortas_fritas",
+   "pizza",
+   "empanadas"
+  ],
+  "Vienen los primos a cenar.": [
+   "ensalada_verde",
+   "fideos_salsa",
+   "arroz_verduras",
+   "tarta_verdura",
+   "empanadas",
+   "pizza",
+   "locro"
+  ],
+  "Hoy cocinamos para la familia.": [
+   "ensalada_verde",
+   "fideos_salsa",
+   "arroz_verduras",
+   "tarta_verdura",
+   "empanadas",
+   "pizza",
+   "locro",
+   "panqueques"
+  ],
+  "Llueve y nos quedamos en casa.": [
+   "ensalada_frutas",
+   "sandwich_queso",
+   "yogur_cereales",
+   "tostadas",
+   "ensalada_verde",
+   "bolitas_coco",
+   "bizcochuelo",
+   "galletitas",
+   "pizza",
+   "panqueques",
+   "tarta_verdura",
+   "empanadas",
+   "fideos_salsa",
+   "arroz_verduras",
+   "tortas_fritas",
+   "locro"
+  ],
+  "Vamos de picnic a la plaza.": [
+   "sandwich_queso",
+   "bolitas_coco",
+   "galletitas",
+   "bizcochuelo",
+   "ensalada_frutas",
+   "empanadas",
+   "tarta_verdura"
+  ],
+  "Hay que llevar algo a la escuela.": [
+   "galletitas",
+   "bizcochuelo",
+   "bolitas_coco",
+   "tortas_fritas",
+   "empanadas",
+   "pizza"
+  ],
+  "Hay una juntada en el club.": [
+   "galletitas",
+   "bizcochuelo",
+   "bolitas_coco",
+   "tortas_fritas",
+   "empanadas",
+   "pizza",
+   "sandwich_queso"
+  ]
+ }
 }

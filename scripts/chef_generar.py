@@ -14,7 +14,7 @@ import json, pathlib, random
 
 raiz = pathlib.Path(__file__).resolve().parent.parent
 dest = raiz / "app" / "herramientas" / "chef"
-VERSION, FECHA = "0.1.1-prueba", "2026-11-22"
+VERSION, FECHA = "0.1.2-prueba", "2026-11-22"
 VALIDADO = "validado por PSP-SR (RT-CHF-001-R v1.0, pendiente de aprobación de la supervisora)"
 PEND = "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)"
 R = random.Random(16)
@@ -65,6 +65,10 @@ ING = {
   "levadura":    dict(nombre="levadura", dib="paquete", color="#EDE2C8", tipo="almacen", forma="otra", alergenos=[]),
   "harina_sin_tacc": dict(nombre="harina sin TACC", dib="bolsa", color="#E0F2EB", tipo="almacen", forma="otra", alergenos=[]),
   "pan_sin_tacc": dict(nombre="pan sin TACC", dib="rebanada", color="#E0F2EB", tipo="panaderia", forma="otra", alergenos=[]),
+  # RT-CHF-001-R v1.1, sección 4: agua de la pizza y alternativas sin TACC rotuladas (al final, para no cambiar el sorteo del banco)
+  "agua": dict(nombre="agua", dib="botella", color="#8EC3E6", tipo="bebida", forma="otra", alergenos=[]),
+  "fideos_sin_tacc": dict(nombre="fideos sin TACC", dib="paquete", color="#E0F2EB", tipo="almacen", forma="otra", alergenos=[]),
+  "cereales_sin_tacc": dict(nombre="cereales sin TACC", dib="caja", color="#E0F2EB", tipo="almacen", forma="otra", alergenos=[]),
 }
 for k, v in ING.items(): v["id"] = k
 
@@ -192,7 +196,7 @@ RINCON_DR = {1: "¿Qué vamos a cocinar?", 2: "La despensa del chef", 3: "Vamos 
 ACCION_NINO = {"1-zona": "Mirar recetas", "1-espacio": "Elegir qué cocinar", "2-zona": "Buscar ingredientes", "2-espacio": "Recordar la lista",
   "3-zona": "Contar y llenar el carrito", "3-espacio": "Hacer las cuentas", "4-zona": "Ordenar los pasos", "4-espacio": "Pensar qué va antes",
   "5-zona": "Encontrar con cuidado", "5-espacio": "Seguir el gorro", "6-zona": "Escuchar y señalar", "6-espacio": "Armar frases de cocina",
-  "7-zona": "Cocinar con el chef", "7-espacio": "Cocinar casi solo", "8-zona": "Preparar todo", "8-espacio": "Resolver imprevistos"}
+  "7-zona": "Cocinar con el chef", "7-espacio": "Cocinar con menos ayuda", "8-zona": "Preparar todo", "8-espacio": "Resolver imprevistos"}
 # Disponibilidad por ruta (FEC 5.11). 13–18 queda deshabilitada en el prototipo hasta tener los textos de PSP-SR (T1).
 DISP = {
  "1-zona":   {"3-5": ["facil", "intermedio"], "6-8": GR, "9-12": GR, "13-18": GR},
@@ -599,8 +603,8 @@ for it in banco["2-espacio"]["facil"]:
 TEXTOS = {
  "rotulo": "Contenido de prueba no validado",
  "nino": {"cocinaConsigna": "¿A qué rincón de la cocina vamos?", "historiaTitulo": "¡Hoy cocinamos!", "escuchar": "Escuchar", "escucharHistoria": "Escuchar la historia",
-   "ayuda": "Pedir ayuda", "seguir": "Seguir", "volver": "Volver a la cocina", "empezar": "Empezar", "siguiente": "Siguiente", "anterior": "Anterior", "alaCocina": "Ir a la cocina",
-   "ofrecerAyuda": "Si querés, pedí ayuda.", "listo": "Listo", "yaMire": "Ya miré", "verLista": "Ver la lista otra vez", "recetario": "Mi recetario",
+   "ayuda": "Pedir una pista", "seguir": "Seguir", "volver": "Volver a la cocina", "empezar": "Empezar", "siguiente": "Siguiente", "anterior": "Anterior", "alaCocina": "Ir a la cocina",
+   "ofrecerAyuda": "Si querés, pedí una pista.", "listo": "Listo", "yaMire": "Ya miré", "verLista": "Ver la lista otra vez", "recetario": "Mi recetario",
    "tarjetaNueva": "¡Nueva tarjeta para tu recetario!", "tarjetaOtraVez": "¡Otra receta para tu recetario!", "ideaTitulo": "Idea para hacer fuera de la pantalla",
    "otraVez": "Jugar otra vez", "pedirChef": "Pedile al chef que", "cierreTiempo": "Por hoy cocinamos un montón. Seguimos otro día.",
    "cierrePiso": "Hoy practicaste mucho. Probemos otro rincón.", "recetaEnCurso": "Receta de hoy", "cambiarReceta": "Cambiar la receta",
@@ -673,7 +677,7 @@ for vid, rin, nombre_accion, est, hab, sec in V:
 for v in variantes: v["recetas_alergenos"] = {r: REC[r]["alergenos"] for r in v["recetas_usadas"]}
 
 modulo = dict(id="chef", nombre="Chef en Acción", nombre_trabajo=True, tipo="herramienta", version=VERSION, fecha=FECHA,
-  fec="FEC-016 v0.3", revision_tecnica="RT-CHF-001 v1.1 · respuesta RT-CHF-001-R v1.0", estado="borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos", activo=True,
+  fec="FEC-016 v0.3", revision_tecnica="RT-CHF-001 v1.2 · respuestas RT-CHF-001-R v1.0 y v1.1 (con anexo B1–B2)", estado="borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos", activo=True,
   _nota="Ficha técnica generada por scripts/chef_generar.py. Estación, habilidades, grados, disponibilidades y reglas salen de la FEC-016 v0.3 (contenido clínico de PSP-SR, nivel C). Taxonomías de error, «Contar», lista de atragantamiento, reglas y muestras de 13–18 son de PSP-SR (RT-CHF-001-R v1.0). Recetas y el resto de las consignas son borrador de DEV-IA, pendientes de PSP-SR.",
   ficha=dict(
     proposito="Practicar habilidades cognitivas y funcionales dentro de una actividad cotidiana: elegir, reunir, comprar, organizar y preparar una receta.",
@@ -711,12 +715,49 @@ modulo = dict(id="chef", nombre="Chef en Acción", nombre_trabajo=True, tipo="he
     "familia": ["estimulacion", "madurez"]},
   originalidad="Arte SVG de relleno dibujado en código, sin imágenes externas ni IA generativa. Los nombres de los productos de referencia (FEC I.3.F) se controlan por huella en scripts/originalidad.py.")
 
+# RT-CHF-001-R v1.1: correcciones B1 y B2 de PSP-SR (mismo resultado que su anexo), secciones 3 y 4 y estado clínico por ítem
+import chef_psp_v11
+# Copias independientes: en el generador las listas de opciones y los pasos se comparten entre ítems; en los archivos, no.
+RECETAS = json.loads(json.dumps(RECETAS)); banco = json.loads(json.dumps(banco))   # sin alias, como en los archivos
+_R = {"recetas": RECETAS}; _B = {"variantes": banco, "estado": PEND}; CAMBIOS = []
+chef_psp_v11.b1_b2(_R, _B, CAMBIOS)
+CORREGIDOS = chef_psp_v11.extras(_R, _B, ING, CAMBIOS)
+SITUACIONES_RECETAS = _R["situaciones"]
+
+# CHF-16: ocho situaciones distintas por grado en 8B. Las reasignaciones de B2 dejaron situaciones repetidas en Fácil y Difícil.
+# DEV-IA las resuelve dentro de la relación situación–receta de PSP-SR; quedan para revisar por PSP-SR (pregunta T17).
+def _rehacer_8b(iid, rid, sit):
+    lst = banco["8-espacio"][{"f": "facil", "i": "intermedio", "d": "dificil"}[iid.split("-")[-1][0]]]
+    k = next(i for i, it in enumerate(lst) if it["id"] == iid); it = lst[k]
+    assert rid is None or rid in SITUACIONES_RECETAS[sit]
+    if rid:
+        et = json.loads(json.dumps(etapas_8a(rid, k)))
+        c, rep = chef_psp_v11.FALT[rid][0]
+        et.insert(3, dict(rincon=8, formato="elegir", imprevisto=True, consigna=c, pregunta="¿Qué hacemos?", falta=chef_psp_v11.FALT_ING[c],
+                          opciones=[{"id": "reemplazar", "txt": rep}, {"id": "cambiar", "txt": "Cambiar de receta"}, {"id": "nada", "txt": "Seguir como si estuviera"}],
+                          correctas=["reemplazar", "cambiar"], tipo_error="imprevisto_no_resuelto", ok="Buscaste otra opción."))
+        if iid.split("-")[-1][0] in "id":   # Intermedio y Difícil llevan además un imprevisto general
+            et.insert(5, dict(rincon=8, formato="elegir", imprevisto=True, consigna="Vienen dos amigos más.", pregunta="¿Qué hacemos?",
+                              opciones=[{"id": "adaptar", "txt": "Hacer más cantidad"}, {"id": "cambiar", "txt": "Hacer algo que rinda más"}, {"id": "nada", "txt": "Hacer la misma cantidad"}],
+                              correctas=["adaptar", "cambiar"], tipo_error="imprevisto_no_resuelto", ok="Buscaste otra opción."))
+        it["receta"] = rid; it["etapas"] = et
+    else:
+        assert it["receta"] in SITUACIONES_RECETAS[sit]
+    it["situacion"] = it["consigna"] = sit
+    it["estado"] = "corregido por DEV-IA (CHF-16), a revisar por PSP-SR"; it["estado_clinico"] = chef_psp_v11.CORREGIDO
+    CAMBIOS.append(f"CHF-16 | {iid} -> {rid or it['receta']} · {sit}")
+_rehacer_8b("8-espacio-f3", "bolitas_coco", "Vamos de picnic a la plaza.")
+_rehacer_8b("8-espacio-f7", "tortas_fritas", "Hay una juntada en el club.")
+_rehacer_8b("8-espacio-i7", "sandwich_queso", "Vamos de picnic a la plaza.")
+_rehacer_8b("8-espacio-d7", None, "Hoy cocinamos para la familia.")
+_rehacer_8b("8-espacio-d6", None, "Hay que llevar algo a la escuela.")
+
 # Las recetas van en su propio archivo (aceptado por PSP-SR en RT-CHF-001-R); el armado las une a BANCO.recetas.
-banco_out = dict(version=VERSION, fecha=FECHA, fec="FEC-016 v0.3", estado=PEND, ingredientes=ING, utensilios=UT, acciones=ACCIONES,
+banco_out = dict(version=VERSION, fecha=FECHA, fec="FEC-016 v0.3", estado=_B["estado"], ingredientes=ING, utensilios=UT, acciones=ACCIONES,
   textos=TEXTOS, estrategias=ESTRATEGIA, desafio_recetas=DESAFIO_RECETAS, atragantamiento_3_5=sorted(i for i in ING if ING[i].get("atragantamiento_3_5")),
   atragantamiento=ATRAGANTAMIENTO, variantes=banco)
 dest.mkdir(parents=True, exist_ok=True)
-(dest / "recetas.json").write_text(json.dumps(dict(version=VERSION, fecha=FECHA, estado=PEND, recetas=RECETAS), ensure_ascii=False, indent=1))
+(dest / "recetas.json").write_text(json.dumps(dict(version=VERSION, fecha=FECHA, estado=_R["estado"], recetas=RECETAS, situaciones=SITUACIONES_RECETAS), ensure_ascii=False, indent=1))
 (dest / "banco.json").write_text(json.dumps(banco_out, ensure_ascii=False, indent=1))
 (dest / "modulo.json").write_text(json.dumps(modulo, ensure_ascii=False, indent=1))
 n = sum(len(banco[v][g]) for v in banco for g in GR)

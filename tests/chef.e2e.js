@@ -81,7 +81,7 @@ async function jugarVariante(page, id, grado) {
   must((await page.evaluate(() => Motor.textosNino(BANCO))).every((t) => !/^(Fácil|Difícil)$/.test(t)) && (await page.evaluate(() => Motor.validarBanco(BANCO, MODULO).length)) === 0, 'O1: «Fácil», «Más o menos» y «Difícil» de «¿Cómo te resultó?» quedan exceptuadas por id');
   must(!(await page.$('[data-ruta="13-18"][disabled]')), '13–18 habilitada con las muestras de PSP-SR (T1)');
   must((await page.evaluate(() => BANCO.recetas.length)) === 16, 'las recetas llegan desde recetas.json');
-  must(await page.evaluate(() => Object.values(BANCO.variantes).flatMap((g) => Object.values(g).flat()).filter((it) => it.rutas.includes('13-18') && it.estado_clinico === 'validado por PSP-SR').length === 8), '13–18: las ocho muestras de PSP-SR cargadas como validadas');
+  must(await page.evaluate(() => Object.values(BANCO.variantes).flatMap((g) => Object.values(g).flat()).filter((it) => it.rutas.includes('13-18') && /validado por PSP-SR|a revisar por PSP-SR/.test(it.estado_clinico)).length === 9), '13–18: las ocho muestras de PSP-SR y el ítem de repartir, con su estado clínico');
   must(await page.evaluate(() => MODULO.estaciones.variantes.every((v) => v.tipos_error.includes('sin_respuesta') && v.tipos_error.includes('otro'))), 'T4: todas las variantes con sin_respuesta y otro');
   must(await page.evaluate(() => BANCO.atragantamiento.estado_clinico === 'validado por PSP-SR' && BANCO.atragantamiento.lista.length === 16 && BANCO.ingredientes.manzana.atragantamiento_3_5 && BANCO.ingredientes.zanahoria.atragantamiento_3_5), 'T11: lista de atragantamiento con manzana y zanahoria marcadas');
   must(await page.evaluate(() => BANCO.recetas.find((r) => r.id === 'ensalada_verde').ingredientes.includes('zanahoria_rallada')), 'T11: la ensalada usa zanahoria rallada (forma preparada con id propio)');
@@ -101,8 +101,21 @@ async function jugarVariante(page, id, grado) {
   await page.click('[data-rincon="3"]');
   const t3 = await page.$eval('#app', (x) => x.textContent.toLowerCase());
   must(!/zona|espacio|estaci/.test(t3), 'CHF-03: la elección dentro del rincón usa nombres de acción');
+  must(await page.$('#e-volver') && !(await page.$('[data-v]')), 'O7: en 3–12 el rincón entra directo a la variante habilitada por la persona adulta (por defecto, la de base)');
+  await page.click('#e-volver');
+  await page.evaluate(() => { S.habilitadas.add('3-espacio'); });
+  await page.click('[data-rincon="3"]');
+  must((await page.$$('[data-v]')).length === 2, 'O7: con la de mayor demanda habilitada, el menú del rincón ofrece las dos');
   await page.click('#r-volver');
+  await page.evaluate(() => { S.habilitadas.delete('3-espacio'); });
+  must(/Pedir una pista/.test(await page.evaluate(() => N.ayuda)) && (await page.evaluate(() => VARIANTES.find((v) => v.variante === '7-espacio').titulo_nino)) === 'Cocinar con menos ayuda', 'O5 y O6: «Pedir una pista» y «Cocinar con menos ayuda»');
+  const b12 = await page.evaluate(() => { const b = JSON.parse(JSON.stringify(BANCO)); const f = b.recetas.find((r) => r.id === 'fideos_salsa'); const p = f.pasos.find((x) => /cuela/.test(x.texto)); p.riesgo = null; p.actor = 'persona';
+    const it = b.variantes['8-espacio'].facil[0]; const e = it.etapas.find((x) => x.imprevisto); e.falta = 'manteca'; e.consigna = 'No hay manteca.'; return Motor.validarBanco(b, MODULO); });
+  must(b12.some((e) => /B1/.test(e) && /cuela/.test(e)), 'B1: el validador detecta un paso en la olla caliente sin riesgo (riesgo heredado)');
+  must(b12.some((e) => /B2/.test(e) && /manteca/.test(e)), 'B2: el validador rechaza un imprevisto con un faltante que no sale de la receta');
+  must(await page.evaluate(() => Motor.validarBanco(BANCO, MODULO).length === 0 && Object.values(BANCO.variantes['8-espacio']).every((l) => new Set(l.map((it) => it.situacion)).size === l.length)), 'CHF-16: situaciones distintas en cada grado de 8B');
 
+  let desafios = 0;
   const rutas = ['6-8', '9-12', '3-5', '13-18'];
   for (const ruta of rutas) {
     await page.evaluate((r) => { S.ruta = r; }, ruta);
@@ -112,7 +125,8 @@ async function jugarVariante(page, id, grado) {
       must(ok, `${ruta} ${id} ${g}: llegó al cierre del rincón`);
       if (ok) {
         must(await page.$('.recetario .receta'), `${id}: tarjeta del recetario al cerrar (CHF-11)`);
-        must(!(await page.$('.desafio')), `${id}: sin desafío para casa mientras las recetas estén pendientes de PSP-SR (O4)`);
+        const des = await page.evaluate(() => { const d = document.querySelector('.desafio'); if (!d) return null; const r = BANCO.recetas.find((x) => d.textContent.includes(x.nombre)); return { ok: !!r && r.estado_clinico === 'validado por PSP-SR' && !r.coccion && BANCO.desafio_recetas.includes(r.id), aviso: /alergia/.test(d.textContent) }; });
+        if (des) { desafios++; must(des.ok && des.aviso, `${id}: el desafío para casa usa solo recetas validadas por PSP-SR, sin cocción y con el aviso de alergias (O4)`); }
         must((await page.$$('[data-resulto]')).length === 3 && (await page.$$('[data-ayudo]')).length >= 4, `${id}: «Contar» con «¿Cómo te resultó?» y «¿Qué te ayudó?» de PSP-SR (T14)`);
         if (ruta === '13-18') must(!(await page.$$eval('svg.personaje', (x) => x.filter((s) => s.getBoundingClientRect().width > 0).length)), `13–18 ${id}: sin personajes (modo sobrio)`);
         if (CAP && ruta === '6-8' && g === 'facil') await page.screenshot({ path: path.join(CAP, `cierre-${id}.png`), fullPage: true });
@@ -127,6 +141,7 @@ async function jugarVariante(page, id, grado) {
       must(n === '1,2,3,4,6,8', `13–18: solo los rincones con textos propios (${n})`);
     }
   }
+  must(desafios > 0, `el desafío para casa aparece con las cuatro recetas validadas por PSP-SR (${desafios} veces)`);
   // Ayudas 1–3 y primer error con pista (CHF-06)
   await page.evaluate(() => { S.ruta = '6-8'; S.gradoDe['3-espacio'] = 'facil'; S.estrategiaVista.add('3-espacio'); entrar('3-espacio'); });
   if (CAP) await page.screenshot({ path: path.join(CAP, '02-3B.png'), fullPage: true });
@@ -138,6 +153,12 @@ async function jugarVariante(page, id, grado) {
   must((await page.evaluate(() => S.R.apoyo_max)) === 3, 'escala de apoyos hasta 3');
   must(/Ahora probá vos/.test(await page.$eval('#msj', (x) => x.textContent)), 'nivel 3: demostración que devuelve el turno');
   must(it3.formato === 'numero', 'el ítem de 3B Fácil usa el teclado numérico');
+  // O8: en 7A Fácil el chef muestra el paso (dibujo y texto) antes de resaltar los botones
+  await page.evaluate(() => { S.ruta = '6-8'; S.gradoDe['7-zona'] = 'facil'; S.estrategiaVista.add('7-zona'); S.idx = {}; entrar('7-zona'); });
+  const m8 = await page.evaluate(() => ({ txt: document.querySelector('#modelo-txt').textContent, ut: !!document.querySelector('#modelo-ut svg'), visible: !document.querySelector('#modelo').hidden, ofrecida: document.querySelectorAll('.ofrecida').length }));
+  must(m8.visible && m8.ut && /^El chef/.test(m8.txt) && m8.ofrecida === 0, `O8: el chef hace el paso primero (${JSON.stringify(m8)})`);
+  await page.waitForTimeout(1400);
+  must((await page.$$('.ofrecida')).length > 0, 'O8: después se resalta el botón');
   // Cocina de juego con horno en 6–8 (caso 8)
   await page.evaluate(() => { S.gradoDe['7-zona'] = 'intermedio'; S.estrategiaVista.add('7-zona'); S.idx = {}; entrar('7-zona'); });
   if (CAP) await page.screenshot({ path: path.join(CAP, '03-cocina-de-juego.png'), fullPage: true });
