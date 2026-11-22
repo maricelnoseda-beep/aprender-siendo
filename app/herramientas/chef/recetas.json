@@ -1,12 +1,11 @@
 {
- "version": "0.1.2-prueba",
+ "version": "0.1.3-prueba",
  "fecha": "2026-11-22",
- "estado": "corregido por PSP-SR (B1 y B2 de RT-CHF-001-R v1.1); pendiente de supervisora",
+ "estado": "corregido según RT-CHF-001-R v1.2 (C1 a C4); pendiente de PSP-SR (19 ítems) y de la supervisora",
  "recetas": [
   {
    "id": "ensalada_frutas",
    "nombre": "Ensalada de frutas",
-   "dulce": true,
    "coccion": false,
    "horno": false,
    "porciones": 4,
@@ -77,12 +76,12 @@
      "ingrediente": "banana"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
   },
   {
    "id": "sandwich_queso",
    "nombre": "Sándwiches de pan con queso",
-   "dulce": false,
    "coccion": false,
    "horno": false,
    "porciones": 2,
@@ -155,12 +154,12 @@
      "ingrediente": "queso"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
   },
   {
    "id": "yogur_cereales",
    "nombre": "Yogur con cereales y fruta",
-   "dulce": true,
    "coccion": false,
    "horno": false,
    "porciones": 1,
@@ -234,12 +233,12 @@
      "ingrediente": "cereales"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
   },
   {
    "id": "tostadas",
    "nombre": "Tostadas con queso untable y mermelada",
-   "dulce": true,
    "coccion": false,
    "horno": false,
    "porciones": 2,
@@ -317,12 +316,12 @@
      "ingrediente": "queso_untable"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "los dos"
   },
   {
    "id": "ensalada_verde",
    "nombre": "Ensalada de lechuga, tomate y zanahoria",
-   "dulce": false,
    "coccion": false,
    "horno": false,
    "porciones": 4,
@@ -412,12 +411,12 @@
      "ingrediente": "lechuga"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
   },
   {
    "id": "bolitas_coco",
    "nombre": "Bolitas de coco y dulce de leche",
-   "dulce": true,
    "coccion": false,
    "horno": false,
    "porciones": 6,
@@ -489,12 +488,12 @@
      "ingrediente": "coco"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
   },
   {
    "id": "bizcochuelo",
    "nombre": "Bizcochuelo",
-   "dulce": true,
    "coccion": true,
    "horno": true,
    "porciones": 8,
@@ -585,12 +584,12 @@
      "ingrediente": "harina"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
   },
   {
    "id": "galletitas",
    "nombre": "Galletitas",
-   "dulce": true,
    "coccion": true,
    "horno": true,
    "porciones": 12,
@@ -681,12 +680,12 @@
      "ingrediente": "harina"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
   },
   {
    "id": "pizza",
    "nombre": "Pizza",
-   "dulce": false,
    "coccion": true,
    "horno": true,
    "porciones": 8,
@@ -780,12 +779,12 @@
      "ingrediente": "harina"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
   },
   {
    "id": "panqueques",
    "nombre": "Panqueques",
-   "dulce": true,
    "coccion": true,
    "horno": false,
    "porciones": 6,
@@ -869,12 +868,12 @@
      "ingrediente": "harina"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
   },
   {
    "id": "tarta_verdura",
    "nombre": "Tarta de verdura",
-   "dulce": false,
    "coccion": true,
    "horno": true,
    "porciones": 6,
@@ -961,12 +960,12 @@
      "ingrediente": "espinaca"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
   },
   {
    "id": "empanadas",
    "nombre": "Empanadas",
-   "dulce": false,
    "coccion": true,
    "horno": true,
    "porciones": 12,
@@ -1003,8 +1002,10 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Cocinar el relleno",
-     "recipiente": "sarten"
+     "texto": "El adulto cocina el relleno y lo deja enfriar",
+     "recipiente": "sarten",
+     "enfria": true,
+     "produce": "relleno"
     },
     {
      "accion": "distribuir",
@@ -1013,7 +1014,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Rellenar las tapas"
+     "texto": "Rellenar las tapas",
+     "usa": "relleno"
     },
     {
      "accion": "completar",
@@ -1053,12 +1055,12 @@
      "ingrediente": "morron"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
   },
   {
    "id": "fideos_salsa",
    "nombre": "Fideos con salsa",
-   "dulce": false,
    "coccion": true,
    "horno": false,
    "porciones": 4,
@@ -1138,12 +1140,12 @@
      "ingrediente": "queso"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
   },
   {
    "id": "arroz_verduras",
    "nombre": "Arroz con verduras",
-   "dulce": false,
    "coccion": true,
    "horno": false,
    "porciones": 4,
@@ -1218,12 +1220,12 @@
      "ingrediente": "choclo"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
   },
   {
    "id": "tortas_fritas",
    "nombre": "Tortas fritas",
-   "dulce": false,
    "coccion": true,
    "horno": false,
    "porciones": 10,
@@ -1268,8 +1270,10 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Freír en la sartén",
-     "recipiente": "sarten"
+     "texto": "El adulto fríe las tortas y las deja entibiar",
+     "recipiente": "sarten",
+     "enfria": true,
+     "produce": "tortas"
     },
     {
      "accion": "servir",
@@ -1278,7 +1282,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Servir"
+     "texto": "Servir",
+     "usa": "tortas"
     }
    ],
    "rutas": [
@@ -1305,12 +1310,12 @@
      "ingrediente": "harina"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "los dos"
   },
   {
    "id": "locro",
    "nombre": "Locro de verduras",
-   "dulce": false,
    "coccion": true,
    "horno": false,
    "porciones": 8,
@@ -1383,7 +1388,8 @@
      "ingrediente": "zapallo"
     }
    ],
-   "estado_clinico": "validado por PSP-SR"
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
   }
  ],
  "situaciones": {

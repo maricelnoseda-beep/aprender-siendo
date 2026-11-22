@@ -2,9 +2,9 @@
 TIPO: Revisión técnica
 DE: DEV-IA
 PARA: PSP-SR (copia: Supervisora; Responsable del proyecto)
-ID: RT-CHF-001 v1.2
-FECHA: 2026-11-22 (v1.1: 2026-11-22; v1.0: 2026-11-21)
-REFIERE A: RT-CHF-001-R v1.1 y su anexo B1–B2 (2026-11-22); RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
+ID: RT-CHF-001 v1.3
+FECHA: 2026-11-22 (v1.2 y v1.1: 2026-11-22; v1.0: 2026-11-21)
+REFIERE A: RT-CHF-001-R v1.2 y decisión D4 de la supervisora (2026-11-22); RT-CHF-001-R v1.1 y su anexo B1–B2 (2026-11-22); RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
 ```
 
 # RT-CHF-001 · «Chef en Acción»: revisión técnica
@@ -385,3 +385,36 @@ Mientras no las respondas, el prototipo usa lo indicado en la Parte A. Ninguna b
 - **T19. Empanadas.** [Probable] «Cocinar el relleno» va en la sartén y el paso siguiente, «Rellenar las tapas», lo hace quien juega. ¿Hace falta un paso «El adulto deja enfriar el relleno»? Hoy el validador no lo marca, porque rellenar no usa la sartén.
 
 **Pruebas.** [Seguro] La prueba de punta a punta pasa 924 de 924 verificaciones; ahora controla menos cosas en cada cierre de rincón porque el desafío solo aparece con recetas validadas. Se sumaron pruebas de B1, B2, CHF-16, O5 a O8 y del desafío. El validador devuelve cero observaciones.
+
+---
+
+## Parte I. Respuesta RT-CHF-001-R v1.2 · prototipo v0.1.3
+
+**Para la supervisora, en una línea.** [Seguro] Están aplicadas las cuatro correcciones de PSP-SR y las dos condiciones de la decisión D4 sobre la imagen. Quedan 19 ítems para que PSP-SR los revise. Siguen el cartel «Contenido de prueba no validado» y el entorno de prueba.
+
+**Cómo se aplicó.** [Seguro] Las correcciones están en el generador (`scripts/chef_psp_v12.py`, después de `chef_psp_v11.py`), así que el banco sale corregido cada vez que se genera. Comparé el banco nuevo con el de la v0.1.2: **cambiaron exactamente los 19 ítems de la sección 6 y ninguno más.**
+
+| Punto | Qué se hizo | Dónde |
+| --- | --- | --- |
+| C1 | Cada receta declara `sabor` con tu tabla, y tostadas y tortas fritas son «los dos». Ya no aparecen en ningún ítem de dulce o salado. En el Rincón 1 se cambió la otra opción por una receta del sabor contrario, sin cambiar la condición del horno. Cuando la receta del ítem es de «los dos», la consigna pasa a **«Elegí una receta para la merienda.»** y la otra opción es un plato de cena (fideos con salsa, arroz con verduras o tarta de verdura). El dibujo de la receta usa un tercer color para «los dos». | recetas, 13 ítems |
+| C1, validador | Rechaza una receta sin `sabor`, una receta de «los dos» en un ítem de dulce o salado, y una correcta que no tiene el sabor pedido. | validador |
+| C2 | Si la receta tiene otro faltante que está en la lista, se usa ese. En 8-espacio-f7 es «El súper no tiene la harina de siempre.». Si no lo tiene, la lista del Rincón 2 suma el ingrediente que falta (i8, i9, d1, d3, d4, d6 y d7). Además, **el imprevisto del faltante va siempre después de buscar la lista** (f5, i3, d1, d3 y d6 lo tenían antes). | 8 ítems de C2 y f5, i3 |
+| C2, validador | Rechaza un faltante que no está en la lista, un imprevisto de faltante que aparece antes de la búsqueda y un «No hay…» sin el campo `falta`. | validador |
+| C3 | Empanadas: «El adulto cocina el relleno y lo deja enfriar». Tortas fritas: «El adulto fríe las tortas y las deja entibiar». Los dos pasos llevan `enfria` y la cantidad de pasos no cambia. | recetas, f7, i8, d4, d6 |
+| C3, validador | Nueva regla `Motor.productoCaliente`: lo que sale de un paso con calor (el campo `produce`, por ejemplo el relleno o lo frito, o el ingrediente que se cocinó) solo lo usa quien juega si ese paso lo dejó enfriar. Si se quita el enfriado de las empanadas, la prueba automática falla en «Rellenar las tapas». | validador |
+| C4 | La situación de 8-espacio-i9 es tu texto: «El domingo cocinás para varias personas. Falta un ingrediente y viene alguien más.». Ver T20. | 13–18 |
+| Estado clínico | 194 ítems «validado por PSP-SR» y 19 «corregido según RT-CHF-001-R v1.2, a revisar por PSP-SR». Es el mismo conteo de tu sección 6. | banco |
+| O9 | Queda para el banco v0.2.0, como pediste. | — |
+
+**Decisión D4: imagen con volumen.** [Seguro] Están aplicadas las dos condiciones.
+1. **Sin personajes con cara en 13–18.** Antes solo se ocultaban con estilos. Ahora, en esa ruta, el chef y el ayudante **no se dibujan**. La prueba automática juega toda la ruta 13–18 y revisa en cada pantalla que no aparezca ninguna cara, con un control que confirma que la revisión funciona.
+2. **Contraste de 3:1 o más (WCAG 2.2, 1.4.11).** El contorno de cada dibujo se calcula para que tenga al menos 3:1 contra los 12 fondos donde aparecen los dibujos: tarjetas, mesada, estante, rincones y recetas. Si el tono del mismo color no alcanza, se oscurece hasta llegar. La prueba mide el contorno de todas las formas de ingredientes, utensilios y recetas. Ninguna baja de 3:1.
+
+**Para revisar por PSP-SR** (punto 7.2: solo los 19): `propuestas/Chef_v0.1.3_items_corregidos_para_PSP-SR.json`. Cada ítem trae la lista de lo que cambió, la tabla de sabores y las dos recetas con enfriado.
+
+**Preguntas nuevas**
+- **T20. Largo de la consigna en 8-espacio-i9.** [Seguro] Tu texto de C4 tiene 83 caracteres, y la regla de 13–18 admite hasta 80 en la consigna. Lo dejé completo como situación, que es lo que se ve en pantalla al empezar. La consigna corta quedó en «El domingo cocinás para varias personas.», porque los dos imprevistos ya dicen el resto. ¿Te sirve así o preferís otro texto de 80 caracteres o menos?
+- **T21. Opciones nuevas del Rincón 1.** [Probable] Las elegí con una regla fija: el sabor contrario y la misma condición del horno; para la merienda, un plato de cena. ¿Las validás? Los cambios por ítem están en el JSON.
+- **T22. Orden del faltante.** [Probable] Moví el imprevisto del faltante después del Rincón 2 en cinco ítems, para que la persona pueda vincularlo con la lista que acaba de usar, como pide C2. ¿Lo dejamos como regla del validador?
+
+**Pruebas.** [Seguro] La prueba de punta a punta pasa 936 de 936 verificaciones (12 nuevas: C1 a C4, el estado clínico, el validador roto a propósito y D4). El validador devuelve cero observaciones y el control de originalidad pasa.

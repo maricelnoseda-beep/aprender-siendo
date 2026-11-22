@@ -115,6 +115,44 @@ async function jugarVariante(page, id, grado) {
   must(b12.some((e) => /B2/.test(e) && /manteca/.test(e)), 'B2: el validador rechaza un imprevisto con un faltante que no sale de la receta');
   must(await page.evaluate(() => Motor.validarBanco(BANCO, MODULO).length === 0 && Object.values(BANCO.variantes['8-espacio']).every((l) => new Set(l.map((it) => it.situacion)).size === l.length)), 'CHF-16: situaciones distintas en cada grado de 8B');
 
+  // RT-CHF-001-R v1.2: C1 a C4, estado clínico y D4
+  const v12 = await page.evaluate(() => {
+    const todos = Object.values(BANCO.variantes).flatMap((g) => Object.values(g).flat()), REC = Object.fromEntries(BANCO.recetas.map((r) => [r.id, r]));
+    const enDulceSalado = todos.filter((it) => [it, ...(it.etapas || [])].some((e) => (e.formato === 'elegir' && /receta (dulce|salada)/.test(e.consigna || '') && (e.opciones || []).some((o) => o.receta && REC[o.receta].sabor === 'los dos'))
+      || (e.formato === 'clasificar' && (e.fichas || []).some((f) => f.receta && REC[f.receta].sabor === 'los dos'))));
+    const c2 = todos.filter((it) => it.etapas).every((it) => { const k2 = it.etapas.findIndex((e) => e.rincon === 2 && e.lista); return it.etapas.every((e, k) => !e.falta || k2 < 0 || (it.etapas[k2].lista.includes(e.falta) && k > k2)); });
+    const paso = (rid, re) => REC[rid].pasos.find((p) => re.test(p.texto));
+    const i9 = BANCO.variantes['8-espacio'].intermedio.find((it) => it.rutas.includes('13-18'));
+    const est = todos.reduce((a, it) => (a[it.estado_clinico] = (a[it.estado_clinico] || 0) + 1, a), {});
+    return { sabores: BANCO.recetas.every((r) => ['dulce', 'salado', 'los dos'].includes(r.sabor)) && REC.tostadas.sabor === 'los dos' && REC.tortas_fritas.sabor === 'los dos' && REC.panqueques.sabor === 'dulce',
+      enDulceSalado: enDulceSalado.map((it) => it.id), c2, i9: i9.situacion, i9lista: i9.etapas.find((e) => e.rincon === 2).lista.includes('queso'),
+      emp: (paso('empanadas', /relleno/) || {}).enfria === true && /deja enfriar/.test(paso('empanadas', /relleno/).texto), tor: (paso('tortas_fritas', /fr[ií]e/) || {}).enfria === true && /deja entibiar/.test(paso('tortas_fritas', /fr[ií]e/).texto),
+      pasosIguales: REC.empanadas.pasos.length === 5 && REC.tortas_fritas.pasos.length === 4,
+      validados: est['validado por PSP-SR'], corregidos: todos.filter((it) => /RT-CHF-001-R v1\.2, a revisar por PSP-SR/.test(it.estado_clinico)).map((it) => it.id).sort() }; });
+  must(v12.sabores, 'C1: cada receta declara su sabor; tostadas y tortas fritas son «los dos»');
+  must(!v12.enDulceSalado.length, `C1: ninguna receta de «los dos» en un ítem de dulce o salado (${v12.enDulceSalado})`);
+  must(v12.c2, 'C2: cada faltante está en la lista del Rincón 2 y aparece después de buscarla');
+  must(v12.emp && v12.tor && v12.pasosIguales, 'C3: empanadas y tortas fritas enfrían dentro del paso del adulto, con la misma cantidad de pasos');
+  must(v12.i9 === 'El domingo cocinás para varias personas. Falta un ingrediente y viene alguien más.' && v12.i9lista, 'C4: la situación de 13–18 no da por sentada la familia (y su faltante está en la lista)');
+  const DIECINUEVE = ['1-espacio-f4', '1-zona-i1', '1-zona-i4', '8-espacio-d1', '8-espacio-d3', '8-espacio-d4', '8-espacio-d5', '8-espacio-d6', '8-espacio-d7', '8-espacio-f5', '8-espacio-f7', '8-espacio-i1', '8-espacio-i3', '8-espacio-i4', '8-espacio-i8', '8-espacio-i9', '8-zona-f2', '8-zona-i3', '8-zona-i4'];
+  must(v12.validados === 194 && JSON.stringify(v12.corregidos) === JSON.stringify(DIECINUEVE), `estado clínico: 194 validados y los 19 corregidos de la sección 6 (${v12.validados}, ${v12.corregidos.length})`);
+  const r12 = await page.evaluate(() => { const b = JSON.parse(JSON.stringify(BANCO));
+    b.variantes['1-zona'].intermedio[0].fichas[0].receta = 'tostadas';
+    const it = b.variantes['8-espacio'].facil.find((x) => x.receta === 'tortas_fritas'); const e = it.etapas.find((x) => x.imprevisto && x.falta); e.falta = 'manteca'; e.consigna = 'No hay manteca.';
+    const emp = b.recetas.find((r) => r.id === 'empanadas').pasos.find((p) => p.produce); delete emp.enfria;
+    delete b.recetas.find((r) => r.id === 'pizza').sabor; return Motor.validarBanco(b, MODULO); });
+  must(r12.some((e) => /C1/.test(e) && /tostadas/.test(e)) && r12.some((e) => /pizza: sin sabor/.test(e)), 'C1: el validador rechaza una receta de «los dos» en dulce y salado, y una receta sin sabor');
+  must(r12.some((e) => /C2/.test(e) && /manteca/.test(e)), 'C2: el validador rechaza un faltante que no está en la lista del Rincón 2');
+  must(r12.some((e) => /C3/.test(e) && /Rellenar/.test(e)), 'C3: el validador rechaza rellenar con el relleno recién cocinado sin enfriar');
+  // D4, condición 2: contorno de 3:1 o más contra todos los fondos, medido en los dibujos tal como se ven
+  const d4 = await page.evaluate(() => { const box = document.createElement('div'); document.body.appendChild(box);
+    box.innerHTML = Object.keys(BANCO.ingredientes).map((i) => Dibujo.ing(BANCO, i)).join('') + Object.keys(BANCO.utensilios).map((u) => Dibujo.ut(BANCO, u)).join('') + BANCO.recetas.map((r) => Dibujo.receta(BANCO, r.id)).join('');
+    const malos = []; let n = 0;
+    for (const el of box.querySelectorAll('[fill^="url(#v3-"][stroke]')) { n++; for (const f of Dibujo.FONDOS) { const c = Dibujo.contraste(el.getAttribute('stroke'), f); if (c < 3) malos.push(`${el.getAttribute('stroke')} sobre ${f}: ${c.toFixed(2)}`); } }
+    box.remove(); return { n, malos: [...new Set(malos)] }; });
+  must(d4.n > 100 && !d4.malos.length, `D4: el contorno de los dibujos con volumen tiene contraste de 3:1 o más contra los fondos (${d4.n} formas; ${d4.malos.slice(0, 3)})`);
+  await page.evaluate(() => { window.__caras1318 = []; new MutationObserver(() => { if (S.ruta === '13-18') for (const x of document.querySelectorAll('[data-cara]')) window.__caras1318.push(S.variante || 'cocina'); }).observe(document.body, { subtree: true, childList: true, attributes: true }); });
+
   let desafios = 0;
   const rutas = ['6-8', '9-12', '3-5', '13-18'];
   for (const ruta of rutas) {
@@ -137,6 +175,12 @@ async function jugarVariante(page, id, grado) {
       must(n === 7, `3–5: siete rincones, sin el 5 (rincones: ${n})`);
     }
     if (ruta === '13-18') {
+      await page.evaluate(() => { cocina(); historia(cocina); });
+      const caras = await page.evaluate(() => [...new Set(window.__caras1318)]);
+      must(!caras.length, `D4, condición 1: en 13–18 los personajes con cara no se dibujan en ninguna pantalla (${caras})`);
+      must(await page.evaluate(async () => { const r = S.ruta; S.ruta = '6-8'; const con = /data-cara/.test(Dibujo.personaje('chef')); S.ruta = '13-18'; const sin = Dibujo.personaje('chef') === '';
+        document.body.insertAdjacentHTML('beforeend', '<i data-cara="1" id="control-cara"></i>'); await new Promise((ok) => setTimeout(ok, 50)); const visto = window.__caras1318.length > 0;
+        document.getElementById('control-cara').remove(); window.__caras1318 = []; S.ruta = r; return con && sin && visto; }), 'D4: control de la prueba (en 6–8 el chef tiene cara; en 13–18 no se dibuja; el observador detecta una cara)');
       const n = await page.evaluate(() => Motor.rinconesDe(MODULO, '13-18').join(','));
       must(n === '1,2,3,4,6,8', `13–18: solo los rincones con textos propios (${n})`);
     }

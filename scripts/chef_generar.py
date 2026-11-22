@@ -14,7 +14,7 @@ import json, pathlib, random
 
 raiz = pathlib.Path(__file__).resolve().parent.parent
 dest = raiz / "app" / "herramientas" / "chef"
-VERSION, FECHA = "0.1.2-prueba", "2026-11-22"
+VERSION, FECHA = "0.1.3-prueba", "2026-11-22"
 VALIDADO = "validado por PSP-SR (RT-CHF-001-R v1.0, pendiente de aprobación de la supervisora)"
 PEND = "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)"
 R = random.Random(16)
@@ -677,7 +677,7 @@ for vid, rin, nombre_accion, est, hab, sec in V:
 for v in variantes: v["recetas_alergenos"] = {r: REC[r]["alergenos"] for r in v["recetas_usadas"]}
 
 modulo = dict(id="chef", nombre="Chef en Acción", nombre_trabajo=True, tipo="herramienta", version=VERSION, fecha=FECHA,
-  fec="FEC-016 v0.3", revision_tecnica="RT-CHF-001 v1.2 · respuestas RT-CHF-001-R v1.0 y v1.1 (con anexo B1–B2)", estado="borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos", activo=True,
+  fec="FEC-016 v0.3", revision_tecnica="RT-CHF-001 v1.3 · respuestas RT-CHF-001-R v1.0, v1.1 (con anexo B1–B2) y v1.2", estado="borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos", activo=True,
   _nota="Ficha técnica generada por scripts/chef_generar.py. Estación, habilidades, grados, disponibilidades y reglas salen de la FEC-016 v0.3 (contenido clínico de PSP-SR, nivel C). Taxonomías de error, «Contar», lista de atragantamiento, reglas y muestras de 13–18 son de PSP-SR (RT-CHF-001-R v1.0). Recetas y el resto de las consignas son borrador de DEV-IA, pendientes de PSP-SR.",
   ficha=dict(
     proposito="Practicar habilidades cognitivas y funcionales dentro de una actividad cotidiana: elegir, reunir, comprar, organizar y preparar una receta.",
@@ -751,6 +751,12 @@ _rehacer_8b("8-espacio-f7", "tortas_fritas", "Hay una juntada en el club.")
 _rehacer_8b("8-espacio-i7", "sandwich_queso", "Vamos de picnic a la plaza.")
 _rehacer_8b("8-espacio-d7", None, "Hoy cocinamos para la familia.")
 _rehacer_8b("8-espacio-d6", None, "Hay que llevar algo a la escuela.")
+
+# RT-CHF-001-R v1.2: C1 (sabor), C2 (faltante de la lista), C3 (enfriado), C4 (situación de 13–18) y estado clínico (194 validados, 19 a corregir)
+import chef_psp_v12
+_n0 = len(CAMBIOS); ESTADO_V12 = chef_psp_v12.aplicar(_R, _B, CAMBIOS)
+import os
+if os.environ.get("CHEF_LOG"): print("\n".join(CAMBIOS[_n0:]))
 
 # Las recetas van en su propio archivo (aceptado por PSP-SR en RT-CHF-001-R); el armado las une a BANCO.recetas.
 banco_out = dict(version=VERSION, fecha=FECHA, fec="FEC-016 v0.3", estado=_B["estado"], ingredientes=ING, utensilios=UT, acciones=ACCIONES,
