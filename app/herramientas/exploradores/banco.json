@@ -1,6 +1,6 @@
 {
  "_nota": "Banco de PRUEBA v0.3.0 de «Los cuatro exploradores» (FEC-015 v0.3). Ítems generados por scripts/exploradores_generar.py con semilla fija, con las consignas, letras y palabras de RT-CEX-001-R v1.0 y v1.1. estado_clinico «validado por PSP-SR» = validado ítem por ítem en RT-CEX-001-R v1.1 (pendiente de aprobación de la supervisora); «pendiente de revisión de PSP-SR» = nuevo o cambiado en v0.3.0, con el detalle en cambio_v030. Estímulos del mundo de la aventura (0.4), ninguno tomado de un test. Al menos 12 ítems por variante, grado y forma de letra en 6–8 (D.1); detalle por ruta en RT-CEX-001 v1.2.",
- "version": "0.3.0-prueba",
+ "version": "0.3.1-prueba",
  "textos": {
   "rotulo": "Contenido de prueba",
   "letraGrupo": "Forma de la letra",
@@ -63,6 +63,7 @@
    "acercar": "Acercar",
    "alejar": "Alejar",
    "laberinto": "Laberinto",
+   "salida": "Salida",
    "hayArbusto": "Ahí hay un arbusto. Probá por otro lado.",
    "girar": "Girar",
    "listo": "Listo",

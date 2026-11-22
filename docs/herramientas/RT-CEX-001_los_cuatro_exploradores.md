@@ -5,11 +5,12 @@
 | TIPO | Revisión técnica |
 | DE | DEV-IA |
 | PARA | PSP-SR (copia: Supervisora) |
-| ID | RT-CEX-001 v1.2 |
-| FECHA | 2026-11-21 (v1.0: 2026-11-15; v1.1: 2026-11-16) |
-| REFIERE A | RT-CEX-001-R v1.1 de PSP-SR (observación bloqueante para el paquete de revisión, 2026-11-21); FEC-015 v0.3; decisiones D1 a D8 de la supervisora |
+| ID | RT-CEX-001 v1.3 |
+| FECHA | 2026-11-22 (v1.0: 2026-11-15; v1.1: 2026-11-16; v1.2: 2026-11-21) |
+| REFIERE A | RT-CEX-001-R v1.1 de PSP-SR (observación bloqueante para el paquete de revisión, 2026-11-21); FEC-015 v0.3; decisiones D1 a D8 de la supervisora; IDV-CEX-001 v0.1 de PSP-SR (identidad visual, propuesta pendiente de aprobación) |
 
-- **Estado:** prototipo v0.3.0 y banco v0.3.0 **en entorno de prueba, con datos sintéticos**. No hay registro de aprobación: nada sale del entorno de prueba.
+- **Qué cambia respecto de v1.2:** se aplicó al prototipo (v0.3.1) la propuesta de identidad visual IDV-CEX-001 v0.1. Ver la Parte F. Los ejercicios del banco no cambian.
+- **Estado:** prototipo v0.3.1 y banco v0.3.0 (con el texto «Salida» agregado) **en entorno de prueba, con datos sintéticos**. No hay registro de aprobación: nada sale del entorno de prueba.
 - **Qué cambia respecto de v1.1:** se aplicó el dictamen ítem por ítem de RT-CEX-001-R v1.1: los 25 ítems de B.1, las 8 correcciones globales de B.2, la Parte E y los cambios de texto de C.3. Se generaron los ítems que pide D.1 y se cargaron las mejoras viables de B.3. Esta versión reemplaza a la v1.1.
 - **Alcance:** cómo se construyó lo que pide el dictamen y qué falta. Textos, grados, umbrales y Estaciones son contenido clínico de PSP-SR, a aprobar por la supervisora. Esta revisión no los valida.
 - **Tests de la sección 0.2:** ni esta revisión ni el código los nombran (REQ-CLI-EXP-00d). Se los menciona como «los instrumentos de la sección 0.2».
@@ -245,3 +246,22 @@ En los ítems nuevos, la posición de la hoja (Fácil) y la semilla de las manch
   - `propuestas/RT-CEX-001_cambios_banco_v0.3.0.md`;
   - `propuestas/capturas_Los_cuatro_exploradores_v0.3.0/`;
   - esta revisión.
+
+---
+
+## Parte F. Identidad visual IDV-CEX-001 v0.1 (prototipo v0.3.1)
+
+**Estado:** la lámina IDV-CEX-001 v0.1 de PSP-SR dice que es una **propuesta pendiente de aprobación de la supervisora**. Se aplicó solo en el entorno de prueba para que se pueda ver y decidir. No es un registro de aprobación. [Seguro]
+
+| Qué pide la propuesta | Cómo quedó en el prototipo |
+| --- | --- |
+| Mapa para la persona adulta por Estación, según D5 | En la pantalla de la persona adulta hay un «Mapa de la aventura» con las 4 Estaciones: color de marca, personaje, juegos y habilidades. El reparto sale del módulo (D5) y un test verifica que coincida. El nombre de la Estación va siempre escrito, así el color no es la única señal. Quien juega sigue viendo lugares, no Estaciones. |
+| Paleta de marca | Tinta, verde, verde claro, sol, coral, lila, arena, pasto y cielo, cargados en `modulo.json` (`identidad_visual.paleta`). |
+| Separación entre la historia y el reto | Las láminas de la historia usan un bosque cálido con luz «sol» entre los árboles. Las pantallas de reto tienen el fondo liso del lugar (cielo y pasto), sin adornos: solo los objetos del ejercicio. El río del puente se mantiene porque es parte de la escena. |
+| Ficha redonda | Borde punteado verde claro y fondo blanco en las opciones de la niebla, las pistas de 8A y los objetos del cofre. Los estados «elegida» y «puesta» se siguen viendo igual. |
+| Tira «Buscamos esto» | Siempre a la derecha de la escena, en el jardín y en el campamento. Ya estaba así; se mantiene. |
+| Casillas del laberinto | Casillas color arena, flechas en tinta, la salida en verde con la palabra «Salida» escrita y el destino en verde claro. Los arbustos siguen marcando los lugares por donde no se pasa. |
+| Letra según D8 | Nunito, con el cambio entre mayúscula y minúscula de imprenta. La palabra «Salida» también cambia. |
+
+**Para revisar:** los personajes de cada Estación siguen los roles de la FEC. Las miniaturas definitivas las dibuja quien ilustre. Las capturas están en `capturas_Los_cuatro_exploradores_IDV_v0.3.1/` (se generan con `scripts/exploradores_capturas_idv.js`). [Seguro]
+
