@@ -2,7 +2,7 @@
  "id": "exploradores",
  "nombre": "Los cuatro exploradores",
  "tipo": "herramienta",
- "version": "0.3.0-prueba",
+ "version": "0.3.1-prueba",
  "fecha": "2026-11-21",
  "origen": "Documento rector «La gran aventura de los cuatro exploradores» de la supervisora (2026-11-15), decisiones D1–D8, FEC-015 v0.3 y RT-CEX-001-R v1.0 y v1.1 de PSP-SR",
  "fec": "FEC-015 v0.3",
@@ -78,6 +78,68 @@
   "regla": "D7: nada suena solo; cada texto tiene su parlante al lado y se escucha al tocarlo (REQ-CLI-EXP-21)."
  },
  "consigna_breve_max": 60,
+ "identidad_visual": {
+  "_estado": "IDV-CEX-001 v0.1 de PSP-SR (2026-11-21): propuesta pendiente de aprobación de la supervisora. No es un registro de aprobación.",
+  "paleta": {
+   "tinta": "#102F54",
+   "verde": "#196B6A",
+   "verde_claro": "#8CC9A8",
+   "sol": "#FFB82E",
+   "coral": "#F58060",
+   "lila": "#BD89C4",
+   "arena": "#FFF1D7",
+   "pasto": "#DCEFD9",
+   "cielo": "#EAF5F8"
+  },
+  "registros": {
+   "historia": "Historia, mapa y cierre: cálido y con aventura (bosque con luz «sol», los cuatro juntos).",
+   "reto": "Pantalla de reto: fondo liso del lugar (cielo y pasto), solo los objetos del ejercicio, sin animación."
+  },
+  "componentes": {
+   "ficha_redonda": "Opciones de la niebla, pistas de 8A y objetos del cofre: borde punteado verde claro, fondo blanco.",
+   "buscamos_esto": "Siempre a la derecha de la escena, en el jardín y en el campamento; a la vista durante toda la búsqueda.",
+   "casillas": "Laberinto de Roco: casillas arena, flechas en tinta, salida verde con su nombre escrito, destino que es un lugar de la historia."
+  },
+  "estaciones": [
+   {
+    "estacion": "explorar",
+    "numero": 1,
+    "titulo": "ESTACIÓN 1. EXPLORAR",
+    "color": "verde_claro",
+    "personaje": "michi",
+    "juegos": "Juego 2 · El bosque de las sombras",
+    "habilidades": "Constancia de forma."
+   },
+   {
+    "estacion": "reconocer",
+    "numero": 2,
+    "titulo": "ESTACIÓN 2. RECONOCER",
+    "color": "sol",
+    "personaje": "luna",
+    "juegos": "Juegos 1, 3, 4 y 8A · El claro, el puente, el jardín y la carrera de pistas",
+    "habilidades": "Discriminación visual, cierre visual, figura-fondo y velocidad de procesamiento visual."
+   },
+   {
+    "estacion": "integrar",
+    "numero": 3,
+    "titulo": "ESTACIÓN 3. INTEGRAR",
+    "color": "coral",
+    "personaje": "roco",
+    "juegos": "Juegos 5, 6 y 7 · El laberinto, la fábrica y el cofre",
+    "habilidades": "Procesamiento espacial, integración visomotora y memoria visual."
+   },
+   {
+    "estacion": "transferir",
+    "numero": 4,
+    "titulo": "ESTACIÓN 4. TRANSFERIR",
+    "color": "lila",
+    "personaje": "tomas",
+    "juegos": "Juego 8B · El campamento nuevo",
+    "habilidades": "Aplicación de estrategias de reconocimiento en escenas nuevas."
+   }
+  ],
+  "nota_personajes": "El personaje de cada Estación sigue los roles de la FEC: Michi encuentra detalles escondidos, Luna presenta los retos de observación, Roco descubre caminos y Tomás organiza y resuelve. Las miniaturas definitivas las dibuja quien ilustre."
+ },
  "habilidades_nuevas_propuestas": {
   "_nota": "FEC-015 5.2: provisorias hasta la tabla de anclajes EST-07 y la aprobación de la supervisora.",
   "constancia-de-forma": "Juego 2",

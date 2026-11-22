@@ -85,6 +85,8 @@ svg [data-el]:focus-visible .foco{stroke:#b95325;stroke-width:6}
 /* Objetos sueltos (bandejas, cajas, sombras, casilleros) */
 .ficha{border:3px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);background:#fff;padding:4px;width:clamp(72px,16vw,108px);height:clamp(72px,16vw,108px);display:grid;place-items:center;touch-action:none}
 .ficha svg{width:100%;height:100%}
+/* IDV-CEX-001: ficha redonda en la niebla, las pistas de 8A y el cofre. Con :where() no tapa los estados elegida y puesta. */
+.ficha:where(.redonda,[data-variante="cofre_cuales"] #cuerpo *,[data-variante="cofre_orden"] #cuerpo *,[data-variante="pistas_relampago"] #cuerpo *){border-radius:50%;border:3px dashed #8CC9A8;background:#fff;padding:10%}
 .ficha[aria-pressed="true"]{border-color:var(--as-coral,#f58060);box-shadow:0 0 0 3px var(--as-coral,#f58060)}
 .ficha.marcada,.destino.marcada{box-shadow:0 0 0 5px var(--as-sol,#ffb82e)}
 .ficha.puesta{border-color:var(--as-verde,#196b6a);background:var(--as-menta,#e0f2eb);cursor:default}
@@ -96,6 +98,17 @@ svg [data-el]:focus-visible .foco{stroke:#b95325;stroke-width:6}
 .destino .tit svg{width:56px;height:56px;flex:none}
 .destino .dentro{display:flex;flex-wrap:wrap;gap:6px}
 .destino .dentro .ficha{width:64px;height:64px}
+.opcion .redonda{display:grid;place-items:center;width:clamp(76px,18vw,112px);height:clamp(76px,18vw,112px);border-radius:50%;border:3px dashed #8CC9A8;background:#fff;padding:10%;margin:0 auto}
+.opcion .redonda svg{width:100%;height:100%}
+/* IDV-CEX-001: mapa de la aventura para la persona adulta, por Estación (D5) */
+.est-lista{display:grid;gap:0;border:1px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio,22px);background:#fff;padding:4px 16px}
+.est-fila{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--as-borde,#dae3e1)}
+.est-fila:last-child{border-bottom:0}
+.est-mini{flex:0 0 auto;width:72px;height:72px;border-radius:16px;border:3px solid;display:grid;place-items:center}
+.est-mini svg{width:78%;height:78%}
+.est-fila h3{margin:0;font-size:1rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.est-chip{font-size:.75rem;font-weight:800;border-radius:999px;padding:1px 8px;color:#102F54}
+.est-fila p{margin:2px 0 0}
 .modelo{display:flex;align-items:center;gap:12px;background:var(--as-menta,#e0f2eb);border-radius:var(--as-radio-control,14px);padding:8px 12px;font-weight:800}
 .modelo .ficha{cursor:default}
 .modelo.oculto .ficha{visibility:hidden}
@@ -113,11 +126,15 @@ svg [data-el]:focus-visible .foco{stroke:#b95325;stroke-width:6}
 .palabra{font-size:clamp(2rem,8vw,3.4rem);font-weight:800;letter-spacing:.04em}
 /* Laberinto y tableros */
 .grilla{display:grid;gap:3px;max-width:520px;margin:0 auto;touch-action:manipulation}
-.celda{aspect-ratio:1;background:#eef3e9;border-radius:8px;display:grid;place-items:center;position:relative}
-.celda.pared{background:#c9dcc4}
+/* IDV-CEX-001: casillas arena, flechas en tinta, salida verde con su nombre y destino en verde claro */
+.celda{aspect-ratio:1;background:#FFF1D7;border:2px solid #F3DDB3;border-radius:8px;display:grid;place-items:center;position:relative}
+.celda.pared{background:#DCEFD9;border-color:#C4E0BF}
+.celda.salida{background:#196B6A;border-color:#196B6A}
+.celda.salida .salida-txt{position:absolute;top:3px;left:0;right:0;text-align:center;color:#fff;font-weight:800;font-size:clamp(.7rem,1.8vw,.95rem);letter-spacing:.02em;pointer-events:none}
+.celda.destino-lab{background:#E0F2EB;border-color:#8CC9A8}
 .celda svg{width:92%;height:92%}
 .celda.paso{box-shadow:inset 0 0 0 4px var(--as-sol,#ffb82e)}
-.celda.flecha::after{content:attr(data-flecha);position:absolute;font-weight:800;color:var(--as-verde,#196b6a);font-size:1.4rem}
+.celda.flecha::after{content:attr(data-flecha);position:absolute;font-weight:800;color:var(--as-tinta,#102f54);font-size:1.4rem}
 .flechas{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,64px);gap:6px;justify-content:center;margin-top:12px}
 .flechas .btn{min-width:64px;min-height:64px;padding:0;font-size:1.6rem}
 .flechas .arr{grid-column:2}
@@ -563,10 +580,13 @@ const Dibujo = (() => {
   const silueta = (fig, a = {}, etiqueta = "") => figura(fig, { ...a, c: SOMBRA, m: "", b: "" }, etiqueta).replace(/fill="(?!none)[^"]*"/g, `fill="${SOMBRA}"`).replace(/stroke="[^"]*"/g, `stroke="${SOMBRA}"`);
   const VB = { w: 1200, h: 800 };
   const FONDOS = {
-    claro: () => `<rect width="1200" height="800" fill="${C.cielo}"/><rect y="300" width="1200" height="500" fill="${C.pasto}"/><circle cx="110" cy="260" r="90" fill="#9ccbb0"/><circle cx="1110" cy="250" r="100" fill="#9ccbb0"/>`,
-    jardin: () => `<rect width="1200" height="800" fill="${C.pasto}"/><path d="M0 120 H1200" stroke="#c4e0bf" stroke-width="40"/>`,
+    /* IDV-CEX-001: pantalla de reto limpia, con el fondo liso del lugar (cielo y pasto) y solo los objetos del ejercicio. */
+    claro: () => `<rect width="1200" height="800" fill="${C.cielo}"/><rect y="300" width="1200" height="500" fill="${C.pasto}"/>`,
+    jardin: () => `<rect width="1200" height="800" fill="${C.cielo}"/><rect y="120" width="1200" height="680" fill="${C.pasto}"/>`,
+    /* Historia, mapa y cierre: bosque cálido con luz «sol» entre los árboles. */
+    calido: () => `<rect width="1200" height="800" fill="${C.cielo}"/>${[[160, 0.22], [520, 0.18], [860, 0.22]].map(([x, o]) => `<path d="M${x} 0 L${x + 140} 0 L${x + 330} 800 L${x + 60} 800Z" fill="${C.sol}" opacity="${o}"/>`).join("")}<rect y="440" width="1200" height="360" fill="${C.pasto}"/>${[60, 250, 950, 1140].map((x) => `<g transform="translate(${x - 90} 190) scale(1.8)">${F.arbol({ c: "#5FA77F" })}</g>`).join("")}`,
     rio: () => `<rect width="1200" height="800" fill="${C.pasto}"/><path d="M0 560 C300 480 600 640 1200 520 V800 H0Z" fill="${C.celeste}"/>`,
-    campamento: () => `<rect width="1200" height="800" fill="${C.pasto}"/><path d="M0 700 H1200" stroke="${C.tierra}" stroke-width="60"/>`,
+    campamento: () => `<rect width="1200" height="800" fill="${C.cielo}"/><rect y="120" width="1200" height="680" fill="${C.pasto}"/>`,
     bosque: () => `<rect width="1200" height="800" fill="${C.cielo}"/><rect y="420" width="1200" height="380" fill="${C.pasto}"/>${[80, 300, 900, 1120].map((x) => `<g transform="translate(${x - 90} 170) scale(1.8)">${F.arbol({ c: "#5FA77F" })}</g>`).join("")}`,
     puente: () => `<rect width="1200" height="800" fill="${C.cielo}"/><rect y="520" width="1200" height="280" fill="${C.celeste}"/><path d="M80 520 Q600 360 1120 520" fill="none" stroke="${C.marron}" stroke-width="26"/><rect x="0" y="500" width="160" height="300" fill="${C.pasto}"/><rect x="1040" y="500" width="160" height="300" fill="${C.pasto}"/>`,
     fabrica: () => `<rect width="1200" height="800" fill="${C.crema}"/><rect x="200" y="260" width="800" height="440" fill="${C.gris}" ${T}/><path d="M200 260 L330 150 L460 260 L590 150 L720 260 L850 150 L1000 260" fill="${C.plata}" ${T}/><g transform="translate(540 480) scale(2)">${F.puerta({})}</g>`,
@@ -574,11 +594,11 @@ const Dibujo = (() => {
     sendero: () => `<rect width="1200" height="800" fill="${C.pasto}"/><path d="M0 600 C300 420 700 720 1200 380" fill="none" stroke="${C.tierra}" stroke-width="120"/>`,
     laberinto: () => `<rect width="1200" height="800" fill="${C.pasto}"/>${[0, 1, 2, 3, 4].map((i) => `<rect x="${120 + i * 200}" y="${i % 2 ? 140 : 380}" width="150" height="280" rx="40" fill="#5FA77F" ${T}/>`).join("")}`,
     mapa: () => `<rect width="1200" height="800" fill="${C.crema}"/><path d="M120 640 C320 520 420 700 620 560 S960 420 1080 200" fill="none" stroke="${C.coral}" stroke-width="12" stroke-dasharray="26 20"/>`,
-    historia_mapa: () => FONDOS.claro() + `<g transform="translate(470 330) scale(2.6)">${F.pieza({})}</g>`,
-    historia_bosque: () => FONDOS.bosque() + [["luna", 300], ["tomas", 480], ["roco", 660], ["michi", 840]].map(([f, x]) => `<g transform="translate(${x - 70} 470) scale(1.4)">${F[f]({})}</g>`).join(""),
+    historia_mapa: () => FONDOS.calido() + `<g transform="translate(470 330) scale(2.6)">${F.pieza({})}</g>`,
+    historia_bosque: () => FONDOS.calido() + [["luna", 300], ["tomas", 480], ["roco", 660], ["michi", 840]].map(([f, x]) => `<g transform="translate(${x - 70} 470) scale(1.4)">${F[f]({})}</g>`).join(""),
     historia_lugares: () => FONDOS.mapa() + [[200, 560], [380, 640], [560, 560], [720, 470], [880, 380], [1000, 260], [820, 200], [600, 300]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="38" fill="${C.sol}" ${T}/>`).join(""),
     historia_piezas: () => FONDOS.mapa() + [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => `<rect x="${250 + (i % 3) * 240}" y="${130 + Math.floor(i / 3) * 190}" width="200" height="160" rx="18" fill="#fff" stroke="${C.coral}" stroke-width="6" stroke-dasharray="18 12"/>`).join(""),
-    historia_tesoro: () => FONDOS.claro() + `<g transform="translate(330 300) scale(2.4)">${F.tesoro({})}</g><g transform="translate(690 330) scale(2.2)">${F.lupa({})}</g>` + [["luna", 200], ["tomas", 360], ["roco", 840], ["michi", 1000]].map(([f, x]) => `<g transform="translate(${x - 70} 500) scale(1.4)">${F[f]({})}</g>`).join("")
+    historia_tesoro: () => FONDOS.calido() + `<g transform="translate(330 300) scale(2.4)">${F.tesoro({})}</g><g transform="translate(690 330) scale(2.2)">${F.lupa({})}</g>` + [["luna", 200], ["tomas", 360], ["roco", 840], ["michi", 1000]].map(([f, x]) => `<g transform="translate(${x - 70} 500) scale(1.4)">${F[f]({})}</g>`).join("")
   };
   const fondo = (id) => (FONDOS[id] || FONDOS.claro)();
   const lamina = (id, etiqueta = "") => `<svg viewBox="0 0 1200 800" ${etiqueta ? `role="img" aria-label="${etiqueta}"` : 'aria-hidden="true"'} focusable="false">${fondo(id)}</svg>`;
@@ -679,6 +699,17 @@ function aplicarLetraPendiente() {
 }
 
 /* ---------- Pantalla de la persona adulta ---------- */
+/* Mapa de la aventura para la persona adulta (IDV-CEX-001 v0.1, propuesta de PSP-SR pendiente de aprobación; reparto según D5).
+   Cada Estación con su color de marca, su personaje, sus juegos y sus habilidades. El nombre va siempre escrito: el color no es la única señal.
+   Quien juega no ve Estaciones: ve lugares. */
+function mapaEstaciones() {
+  const I = MODULO.identidad_visual; if (!I) return "";
+  const P = I.paleta, claro = { verde_claro: "#E9F5EE", sol: "#FFF4D6", coral: "#FDE6DF", lila: "#F3E7F4" };
+  return `<div class="grupo" id="a-estaciones"><h2>Mapa de la aventura</h2><div class="est-lista">${I.estaciones.map((e) =>
+    `<div class="est-fila" data-estacion="${e.estacion}"><div class="est-mini" style="border-color:${P[e.color]};background:${claro[e.color]}">${D.figura(e.personaje, {}, "")}</div>
+      <div><h3><span class="est-chip" style="background:${P[e.color]}">E${e.numero}</span>${esc(e.titulo)}</h3><p><b>${esc(e.juegos)}</b></p><p class="small">${esc(e.habilidades)}</p></div></div>`).join("")}</div>
+    <p class="small">${esc(I.nota_personajes)} ${esc(I._estado)}</p></div>`;
+}
 function pantallaAdulto() {
   S.R = null;
   const disp = (id) => Motor.gradosDe(MODULO, S.ruta, id);
@@ -694,6 +725,7 @@ function pantallaAdulto() {
       <button class="opcion" data-letra="mayuscula" aria-pressed="${S.letra === "mayuscula"}"><span class="t">MAYÚSCULA IMPRENTA</span><span class="d">ABC</span></button>
       <button class="opcion" data-letra="minuscula" aria-pressed="${S.letra === "minuscula"}"><span class="t">minúscula imprenta</span><span class="d">abc</span></button></div>
       <p class="small">${esc(A.letra)}</p></div>
+    ${mapaEstaciones()}
     <div class="grupo"><h2>Retos y grado de partida (por habilidad)</h2>
       <div class="tabla-scroll"><table class="reg"><thead><tr><th>Lugar del mapa</th><th>Reto</th><th>Estación</th><th>Habilidad</th><th>Grado de partida</th></tr></thead><tbody>
       ${VARIANTES.map((v) => { const gs = disp(v.variante); return `<tr><td>${esc(v.lugar)}</td><td>${esc(v.titulo)}</td><td>${esc(NOMBRE_EST[v.estacion])}</td><td>${esc(v.habilidad_referencia)}</td><td>${gs.length
@@ -815,7 +847,7 @@ function aplicarApoyoInicial() {
 function marcoJuego(consigna, cuerpo, lado = "") {
   // En Fácil e Intermedio el botón de ayuda está a la vista; en Difícil, disponible y no destacado (FEC-015 5.3).
   const clase = S.grado === "dificil" ? "btn sec chico" : "btn suave";
-  $("#app").innerHTML = `<section class="panel nino"><div class="consigna"><p id="consigna">${esc(consigna)}</p>${escuchar(consigna)}</div>
+  $("#app").innerHTML = `<section class="panel nino" data-variante="${S.variante}"><div class="consigna"><p id="consigna">${esc(consigna)}</p>${escuchar(consigna)}</div>
     <div class="juego"><div id="cuerpo">${cuerpo}</div><div class="lado">${lado}<button class="${clase}" id="ayuda">${esc(N.ayuda)}</button>
     <div class="msj-caja"><div class="msj" id="msj" aria-live="polite"></div>${escuchar("", 'id="msj-oir" hidden')}</div>
     <button class="btn sec chico" id="j-mapa">${esc(N.volverMapa)}</button></div></div></section>`;
@@ -1156,7 +1188,7 @@ JUEGOS.niebla = {
       : `<div class="niebla-marco"><svg viewBox="-6 -6 112 112" role="img" aria-label="${esc(N.imagenTapada)}">${D.transformado(it.objeto.f, it.objeto)}<g id="manchas">${it.manchas.map((m, i) => `<g data-m="${i}">${m.hoja ? `<g transform="translate(${m.x} ${m.y}) rotate(${m.r || 0}) scale(${m.s || 0.5}) translate(-50 -50)">${D.F.hoja({ c: "#5FA77F" })}</g>` : `<circle cx="${m.x}" cy="${m.y}" r="${m.radio}" fill="#DDE6EA"/>`}</g>`).join("")}</g></svg></div>`;
     marcoJuego(it.consigna, `${imagen}<div class="acciones" style="justify-content:center"><button class="btn suave" id="mas">${esc(N.mostrarMas)}</button></div>
       <div class="opciones-dib" id="ops">${orden.map((k) => { const op = it.opciones[k];
-        return palabra ? `<button class="opcion" data-op="${k}"><span class="palabra" style="font-size:1.8rem">${esc(op)}</span></button>` : `<button class="opcion" data-op="${k}" aria-label="${esc(BANCO.nombres[op] || op)}">${D.figura(op, {})}<span class="t">${esc(BANCO.nombres[op] || op)}</span></button>`; }).join("")}</div>`);
+        return palabra ? `<button class="opcion" data-op="${k}"><span class="palabra" style="font-size:1.8rem">${esc(op)}</span></button>` : `<button class="opcion" data-op="${k}" aria-label="${esc(BANCO.nombres[op] || op)}"><span class="redonda">${D.figura(op, {})}</span><span class="t">${esc(BANCO.nombres[op] || op)}</span></button>`; }).join("")}</div>`);
     $("#mas").onclick = () => this.mostrarMas(it, false);
     $$("#ops [data-op]").forEach((b) => b.onclick = () => {
       const R = S.R; if (R.terminado || b.disabled) return; R.intentos += 1;
@@ -1242,7 +1274,8 @@ function grillaHTML(it, st) {
     const dib = roco ? `<svg viewBox="-6 -6 112 112" aria-hidden="true">${D.transformado("roco", {})}${st.modo === "perspectiva" ? `<path d="M50 -4 L62 12 H38Z" fill="#FFB82E" stroke="#102F54" stroke-width="3" transform="rotate(${ORD.indexOf(st.dir) * 90} 50 50)"/>` : ""}</svg>`
       : obj && !(st.juntados || []).includes((it.objetos || []).indexOf(obj)) ? D.figura(obj.f, obj) : meta ? D.figura(it.meta.f || "hueso", {}) : por && !st.paso ? D.figura(it.pasa_por.f || "fuente", {}) : pared ? D.figura("arbusto", {}) : "";
     const flecha = st.flecha && st.flecha.x === x && st.flecha.y === y ? ` flecha" data-flecha="${FLECHA[st.flecha.d]}` : "";
-    h += `<div class="celda ${pared ? "pared" : ""}${flecha}" data-x="${x}" data-y="${y}">${dib}</div>`;
+    const salida = it.roco.x === x && it.roco.y === y, destino = meta;
+    h += `<div class="celda ${pared ? "pared" : ""}${salida ? " salida" : ""}${destino && !salida ? " destino-lab" : ""}${flecha}" data-x="${x}" data-y="${y}">${salida ? `<span class="salida-txt">${esc(N.salida)}</span>` : ""}${dib}</div>`;
   }
   return `<div class="grilla" id="grilla" style="grid-template-columns:repeat(${it.cols},1fr)" role="img" aria-label="${esc(N.laberinto)}">${h}</div>`;
 }

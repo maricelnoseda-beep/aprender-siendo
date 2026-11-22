@@ -42,7 +42,7 @@ NINO = {
     "tesoroTexto": ["¡Juntamos todas las piezas! Encontramos el tesoro.", "Es una lupa de explorador para seguir mirando afuera."],
     "letra": "letra", "cajaLuna": "Caja de iguales", "cajaOtras": "Caja de distintos",
     "antes": "Antes", "ahora": "Ahora", "yaEncontraste": "Ya encontraste {k} de {n}.", "sombra": "Sombra", "imagenTapada": "Imagen tapada", "mostrarMas": "Despejar un poco",
-    "buscamos": "Buscamos esto", "escena": "Escena", "acercar": "Acercar", "alejar": "Alejar", "laberinto": "Laberinto",
+    "buscamos": "Buscamos esto", "escena": "Escena", "acercar": "Acercar", "alejar": "Alejar", "laberinto": "Laberinto", "salida": "Salida",
     "hayArbusto": "Ahí hay un arbusto. Probá por otro lado.", "girar": "Girar", "listo": "Listo", "empezarAMover": "Empezar a mover", "cartelApunta": "El cartel apunta a",
     "caminoDe": "Camino de la fábrica", "empezaEnLaChispa": "Empezá en la chispa.", "seguiDondeQuedaste": "Seguí desde donde quedaste.", "punto": "Punto",
     "tocaEnOrden": "Tocá los puntos en orden.", "modelo": "Modelo", "verModelo": "Ver el modelo", "tablero": "Tablero de puntos",
@@ -831,7 +831,7 @@ def pistas_nuevas():
 
 BANCO = {
     "_nota": "Banco de PRUEBA v0.3.0 de «Los cuatro exploradores» (FEC-015 v0.3). Ítems generados por scripts/exploradores_generar.py con semilla fija, con las consignas, letras y palabras de RT-CEX-001-R v1.0 y v1.1. estado_clinico «validado por PSP-SR» = validado ítem por ítem en RT-CEX-001-R v1.1 (pendiente de aprobación de la supervisora); «pendiente de revisión de PSP-SR» = nuevo o cambiado en v0.3.0, con el detalle en cambio_v030. Estímulos del mundo de la aventura (0.4), ninguno tomado de un test. Al menos 12 ítems por variante, grado y forma de letra en 6–8 (D.1); detalle por ruta en RT-CEX-001 v1.2.",
-    "version": "0.3.0-prueba",
+    "version": "0.3.1-prueba",
     "textos": TEXTOS, "historia": HISTORIA,
     "estrategias": {k: {"asi_se_juega": a, "estrategia": b, "estado_clinico": VALIDADO} for k, (a, b) in ASI_SE_JUEGA.items()},
     "ayudas": AYUDAS, "devoluciones": DEVOLUCIONES, "ideas_fuera": IDEAS, "ideas_fuera_por_ruta": IDEAS_POR_RUTA, "contar": {k: [{"id": i, "txt": t} for i, t in v] for k, v in CONTAR.items()},
@@ -1005,7 +1005,7 @@ BANCO["lugares"] = {"_nota": "RT-CEX-001-R v1.0 2.2. 9 lugares en 6–12 y 7 en 
                                "variantes": [v["variante"] for v in VARIANTES if v["lugar_id"] == l]} for l in sorted({v["lugar_id"] for v in VARIANTES})]}
 
 MODULO = {
-    "id": "exploradores", "nombre": "Los cuatro exploradores", "tipo": "herramienta", "version": "0.3.0-prueba", "fecha": "2026-11-21",
+    "id": "exploradores", "nombre": "Los cuatro exploradores", "tipo": "herramienta", "version": "0.3.1-prueba", "fecha": "2026-11-21",
     "origen": "Documento rector «La gran aventura de los cuatro exploradores» de la supervisora (2026-11-15), decisiones D1–D8, FEC-015 v0.3 y RT-CEX-001-R v1.0 y v1.1 de PSP-SR",
     "fec": "FEC-015 v0.3", "respuesta_psp_sr": "RT-CEX-001-R v1.1", "revision_tecnica": "RT-CEX-001 v1.2", "estado": "borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos", "activo": True,
     "_nota": "Ficha técnica. Estación, habilidades, grados, apoyos y números salen de la FEC-015 (contenido clínico de PSP-SR, nivel C). DEV-IA solo traduce a parámetros de código. Generada por scripts/exploradores_generar.py.",
@@ -1049,6 +1049,24 @@ MODULO = {
               "_estado": "D8 y RT-CEX-001-R 3.3. Cambiar la letra es apoyo de acceso (R11); con un ítem en curso, rige desde el siguiente. Se registra tipo_letra por ítem."},
     "audio": {"automatico": False, "parlante_min_px": 44, "escuchar_historia": True, "regla": "D7: nada suena solo; cada texto tiene su parlante al lado y se escucha al tocarlo (REQ-CLI-EXP-21)."},
     "consigna_breve_max": 60,
+    "identidad_visual": {
+        "_estado": "IDV-CEX-001 v0.1 de PSP-SR (2026-11-21): propuesta pendiente de aprobación de la supervisora. No es un registro de aprobación.",
+        "paleta": {"tinta": "#102F54", "verde": "#196B6A", "verde_claro": "#8CC9A8", "sol": "#FFB82E", "coral": "#F58060", "lila": "#BD89C4", "arena": "#FFF1D7", "pasto": "#DCEFD9", "cielo": "#EAF5F8"},
+        "registros": {"historia": "Historia, mapa y cierre: cálido y con aventura (bosque con luz «sol», los cuatro juntos).", "reto": "Pantalla de reto: fondo liso del lugar (cielo y pasto), solo los objetos del ejercicio, sin animación."},
+        "componentes": {"ficha_redonda": "Opciones de la niebla, pistas de 8A y objetos del cofre: borde punteado verde claro, fondo blanco.",
+                        "buscamos_esto": "Siempre a la derecha de la escena, en el jardín y en el campamento; a la vista durante toda la búsqueda.",
+                        "casillas": "Laberinto de Roco: casillas arena, flechas en tinta, salida verde con su nombre escrito, destino que es un lugar de la historia."},
+        "estaciones": [   # Mapa de la aventura para la persona adulta (D5). El chico no ve Estaciones: ve lugares.
+            {"estacion": "explorar", "numero": 1, "titulo": "ESTACIÓN 1. EXPLORAR", "color": "verde_claro", "personaje": "michi",
+             "juegos": "Juego 2 · El bosque de las sombras", "habilidades": "Constancia de forma."},
+            {"estacion": "reconocer", "numero": 2, "titulo": "ESTACIÓN 2. RECONOCER", "color": "sol", "personaje": "luna",
+             "juegos": "Juegos 1, 3, 4 y 8A · El claro, el puente, el jardín y la carrera de pistas", "habilidades": "Discriminación visual, cierre visual, figura-fondo y velocidad de procesamiento visual."},
+            {"estacion": "integrar", "numero": 3, "titulo": "ESTACIÓN 3. INTEGRAR", "color": "coral", "personaje": "roco",
+             "juegos": "Juegos 5, 6 y 7 · El laberinto, la fábrica y el cofre", "habilidades": "Procesamiento espacial, integración visomotora y memoria visual."},
+            {"estacion": "transferir", "numero": 4, "titulo": "ESTACIÓN 4. TRANSFERIR", "color": "lila", "personaje": "tomas",
+             "juegos": "Juego 8B · El campamento nuevo", "habilidades": "Aplicación de estrategias de reconocimiento en escenas nuevas."}],
+        "nota_personajes": "El personaje de cada Estación sigue los roles de la FEC: Michi encuentra detalles escondidos, Luna presenta los retos de observación, Roco descubre caminos y Tomás organiza y resuelve. Las miniaturas definitivas las dibuja quien ilustre.",
+    },
     "habilidades_nuevas_propuestas": {"_nota": "FEC-015 5.2: provisorias hasta la tabla de anclajes EST-07 y la aprobación de la supervisora.",
                                       "constancia-de-forma": "Juego 2", "cierre-visual": "Juego 3", "figura-fondo": "Juego 4", "posicion-en-el-espacio": "Juego 5",
                                       "integracion-visomotora": "Juego 6 (solo con la nota de 5.9)", "memoria-visual": "Juego 7A", "memoria-visual-secuencial": "Juego 7B",

@@ -187,6 +187,21 @@ must(!('trazo' in reg.extra) && !('nombre' in reg.extra) && reg.extra.precision 
 const vista = M.vistaPorHabilidad([reg]);
 must(vista.length === 1 && !('puntaje' in vista[0]), 'vista por habilidad sin puntaje global');
 
+// ---------- IDV-CEX-001 v0.1 (propuesta de PSP-SR, pendiente de aprobación) ----------
+const IV = modulo.identidad_visual;
+must(IV && /pendiente de aprobación/.test(IV._estado) && !/aprobad[oa] por la supervisora/.test(IV._estado), 'IDV: queda como propuesta pendiente, no como aprobada');
+must(IV.estaciones.map((e) => e.estacion).join() === 'explorar,reconocer,integrar,transferir', 'IDV: cuatro Estaciones en orden');
+for (const e of IV.estaciones) {
+  must(IV.paleta[e.color] && D.F[e.personaje], `IDV: color y personaje de ${e.estacion}`);
+  const vs = modulo.estaciones.variantes.filter((v) => v.estacion === e.estacion);
+  must(vs.length > 0, `IDV: ${e.estacion} tiene juegos en el reparto D5`);
+}
+must(/\.celda\.salida\{/.test(html) && /class="salida-txt"/.test(html) && banco.textos.nino.salida, 'IDV: la salida del laberinto lleva su nombre escrito');
+must(/border:3px dashed #8CC9A8/.test(html) && /\.ficha:where\(/.test(html) && /class="redonda"/.test(html), 'IDV: ficha redonda');
+must(/data-variante="\$\{S\.variante\}"/.test(html), 'IDV: el marco del reto declara la variante');
+must(/function mapaEstaciones/.test(html) && /\$\{mapaEstaciones\(\)\}/.test(html), 'IDV: mapa de la aventura en la pantalla adulta');
+must(!/circle cx="110" cy="260"/.test(html), 'IDV: el claro del reto queda liso');
+
 // ---------- Dibujos ----------
 recorrer(banco.variantes, (o) => { if (typeof o.f === 'string') must(D.F[o.f], `figura ${o.f} sin dibujo`); });
 
