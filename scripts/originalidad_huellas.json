@@ -16,5 +16,30 @@
   "e7f5e92ed4439485fc6f3db89f308914716473fe0c24fa915e21e8865806ac33",
   "f3e627aa442be8cf0f062226e9bc4bde6cea0906ca2edaa6061ad060add1cada",
   "f5ca35e86d8d8067ac7a447294f358cd2310351b36b389111c7bd5edb0bc42f7"
- ]
+ ],
+ "huellas_chef": {
+  "_nota": "FEC-016 (REQ-CLI-CHF-00c y 00d): huellas de los productos de referencia de la sección I.3.F y del banco de pictogramas no comercial. Se buscan en todo lo de «Chef en Acción» (rutas de 'rutas'). Un documento anterior del repositorio menciona uno de esos sitios para decir que no se usa, por eso no van a la lista general.",
+  "rutas": [
+   "app/herramientas/chef/",
+   "scripts/chef_",
+   "tests/chef",
+   "docs/herramientas/RT-CHF-001"
+  ],
+  "huellas": [
+   "140145462534942e91660ecf98b12688e9d9963d1f2cb320703f3c26a3df0ed0",
+   "17867782dd9b269ca5e54014c254b949ef1bedd3baed9983db334dd5657606fa",
+   "25d7764367547c1031d96cd8040e27a64514ac186c68af30d51d95697724acf9",
+   "38fdaa800ff946e5cb7a4d75e74855973035606296e327293aa9305882a8802e",
+   "3c5c80f1a75cb587270b179c181cb3439823a72554742315f84c4947c8a2d58f",
+   "42091ed377e361908a8f1c72f120058bac4c5d1921cc04fcdd3546146b5ef53b",
+   "4af4bbefb139a7078c2ab59b90d832a6f0c8fd1f77b6a839de87c106c6f6ca49",
+   "9641a29eac3ec2433d1e8016d9fad0cc5f13cb83b90bd7f9104b1d0983cbf994",
+   "bae82ed1c321e529060863ea266df12013fb92b3bf44f073223be5dc12242a82",
+   "c6fcd82057bfcadd6651d29056b346d49968ad0555eecab9b101d86a38d0a553",
+   "cdba249b48f3eecbe9243c5aafd6604672ccdb529f8cd90126e2a4a75131b3c9",
+   "efc079e2cd3365c9a0df8e94727c326b882f0fbf75325b6dbc7fc2587e29097b",
+   "f32a73e27180966a55fbab28a1e7a57e5ccc684efefc0e8d36de2ae9744c15f9",
+   "fe75494c08313619acc6538ae6e9f8687cc7e665718d658d7dfe56bd3003b024"
+  ]
+ }
 }

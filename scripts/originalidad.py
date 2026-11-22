@@ -13,6 +13,8 @@ import hashlib, json, pathlib, re, subprocess, sys, unicodedata
 raiz = pathlib.Path(__file__).resolve().parent.parent
 cfg = json.loads((raiz / "scripts" / "originalidad_huellas.json").read_text())
 HUELLAS, PREFIJO = set(cfg["huellas"]), cfg["prefijo"]
+CHEF = cfg.get("huellas_chef", {})
+HUELLAS_CHEF, RUTAS_CHEF = set(CHEF.get("huellas", [])), CHEF.get("rutas", [])
 PALABRA = re.compile(r"[a-zñ0-9]+")
 BINARIOS = {".png", ".webp", ".jpg", ".jpeg", ".gif", ".ttf", ".woff2", ".pdf", ".zip", ".docx", ".ico"}
 
@@ -33,7 +35,9 @@ def revisar(ruta):
     for n, linea in enumerate(texto.splitlines(), 1):
         ps = PALABRA.findall(normalizar(linea))
         candidatos = ps + [a + b for a, b in zip(ps, ps[1:])]
-        if any(huella(c) in HUELLAS for c in candidatos):
+        rel = str(ruta.relative_to(raiz)) if ruta.is_relative_to(raiz) else str(ruta)
+        buscar = HUELLAS | HUELLAS_CHEF if any(rel.startswith(r) for r in RUTAS_CHEF) else HUELLAS
+        if any(huella(c) in buscar for c in candidatos):
             hallazgos.append((str(ruta.relative_to(raiz)) if ruta.is_relative_to(raiz) else str(ruta), n))
     return hallazgos
 

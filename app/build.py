@@ -12,6 +12,8 @@
                                        (las cinco actividades de «Los tres cerditos», para probar con doble clic)
   python3 app/build.py --exploradores → app/dist-exploradores/Los_cuatro_exploradores.html
                                        (los ocho retos de «Los cuatro exploradores», para probar con doble clic)
+  python3 app/build.py --chef        → app/dist-chef/Chef_en_Accion.html
+                                       (los ocho rincones de «Chef en Acción», prototipo, para probar con doble clic)
 
 Las imágenes, la fuente y los recursos se escriben en las fuentes como @@asset:<ruta>@@.
 La versión modular los sirve como archivos (se descargan solo cuando aparecen en pantalla);
@@ -98,6 +100,20 @@ if "--cerditos" in sys.argv:
     out = root / "dist-cerditos"; out.mkdir(exist_ok=True)
     (out / "Los_tres_cerditos.html").write_text(html)
     print("ok cerditos", (out / "Los_tres_cerditos.html").stat().st_size, "bytes")
+    sys.exit()
+
+if "--chef" in sys.argv:
+    # «Chef en Acción» sola, en un archivo: identidad, banco y ficha adentro (RT-CHF-001).
+    datauri = lambda rel: "data:%s;base64,%s" % (MIME[pathlib.Path(rel).suffix], base64.b64encode((root / rel).read_bytes()).decode())
+    js = lambda t: t.replace("<", "\\u003c")
+    html = read("herramientas/chef/chef.html")
+    html = html.replace("__BRAND_FONT__", TOKEN.sub(lambda m: datauri(m.group(1)), read("nucleo/estilos/identidad.css")), 1)
+    html = (html.replace("__BANCO__", js(json.dumps(json.loads(read("herramientas/chef/banco.json")), ensure_ascii=False)), 1)
+                .replace("__MODULO__", js(json.dumps(json.loads(read("herramientas/chef/modulo.json")), ensure_ascii=False)), 1)
+                .replace("__INICIO__", "{}", 1))
+    out = root / "dist-chef"; out.mkdir(exist_ok=True)
+    (out / "Chef_en_Accion.html").write_text(html)
+    print("ok chef", (out / "Chef_en_Accion.html").stat().st_size, "bytes")
     sys.exit()
 
 if "--exploradores" in sys.argv:

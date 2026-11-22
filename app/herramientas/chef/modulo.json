@@ -1,0 +1,1951 @@
+{
+ "id": "chef",
+ "nombre": "Chef en Acción",
+ "nombre_trabajo": true,
+ "tipo": "herramienta",
+ "version": "0.1.0-prueba",
+ "fecha": "2026-11-21",
+ "fec": "FEC-016 v0.3",
+ "revision_tecnica": "RT-CHF-001 v1.0",
+ "estado": "borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos",
+ "activo": true,
+ "_nota": "Ficha técnica generada por scripts/chef_generar.py. Estación, habilidades, grados, disponibilidades y reglas salen de la FEC-016 v0.3 (contenido clínico de PSP-SR, nivel C). Recetas, consignas y devoluciones son borrador de DEV-IA, pendientes de PSP-SR.",
+ "ficha": {
+  "proposito": "Practicar habilidades cognitivas y funcionales dentro de una actividad cotidiana: elegir, reunir, comprar, organizar y preparar una receta.",
+  "para_que_sirve": "En esta aventura se prepara una receta de principio a fin: elegir qué cocinar, buscar los ingredientes, hacer las compras, ordenar los pasos y cocinar en una cocina de juego. Cada parte se puede jugar por separado. Sirve para practicar cosas que usamos todos los días: recordar, contar, calcular, entender consignas y planificar.",
+  "texto_profesional_7_1": "Esta aventura no es una evaluación de funciones ejecutivas, memoria, atención, lenguaje ni conducta adaptativa, y no tiene baremos. El registro describe cómo se resolvieron estas actividades y con qué apoyos; no describe a la persona. Si observa dificultades persistentes en actividades de la vida diaria, considere una evaluación con instrumentos estandarizados y, según el caso, la interconsulta con terapia ocupacional, fonoaudiología o psicología.",
+  "transferencia_B": "Lo que se practica acá mejora estas actividades. No hay evidencia de que mejore por sí solo la memoria, la atención o la velocidad en general.",
+  "nivel_evidencia": "C",
+  "rotulo_evidencia": "Basada en práctica clínica, con evidencia limitada",
+  "edad": "3 a 18 años (13 a 18 deshabilitada en el prototipo, T1)",
+  "dosis_sugerida": "1 o 2 rincones por sesión, 2 o 3 veces por semana; el gran reto, en una sesión propia.",
+  "dosis_nota": "Propuesta de PSP-SR [Suposición, nivel C], sin estudios que la respalden.",
+  "limitacion": "Para personas ciegas, la cocina visual no es accesible (limitación declarada).",
+  "riesgo": "Alto (Ejercitación adaptativa). Desafío para casa: Medio (M06)."
+ },
+ "decisiones_supervisora": {
+  "D1": "Ruta 13–18 incluida con presentación no infantil",
+  "D2": "Rincones",
+  "D3": "Zona (ex A) y Espacio (ex B)"
+ },
+ "por_defecto_mientras_tanto": {
+  "P4": "precios inventados y redondos",
+  "P5": "sin «Conocé la cocina»",
+  "P9": "audio solo con parlante y letra elegible",
+  "P10": "desafío para casa solo sin cocción en todas las rutas"
+ },
+ "audio": {
+  "automatico": false
+ },
+ "letra": {
+  "por_defecto": {
+   "3-5": "mayuscula",
+   "6-8": "mayuscula",
+   "9-12": "minuscula",
+   "13-18": "minuscula"
+  }
+ },
+ "consigna_breve_max": 60,
+ "apoyos_escala": {
+  "niveles": [
+   "Sin apoyo de aprendizaje",
+   "Pista general",
+   "Ayuda específica",
+   "Demostración"
+  ],
+  "retiro": "El ejercicio siguiente empieza un nivel por debajo del máximo usado, hasta 0."
+ },
+ "m10": {
+  "ventana": 10,
+  "minimo": 5,
+  "subir_aciertos": 0.85,
+  "subir_sin_ayuda": 0.7,
+  "mantener_desde": 0.6,
+  "errores_seguidos": 3,
+  "_nota": "Heredado de FEC-015 hasta la respuesta de PSP-SR (T3)."
+ },
+ "error_repetido_umbral": 3,
+ "exposicion_5a": {
+  "inicial_ms": 2500,
+  "paso_ms": 300,
+  "minimo_ms": {
+   "6-8": 1000,
+   "9-12": 700,
+   "13-18": 700
+  },
+  "pausa_ms": 500,
+  "precision_para_acortar": 0.85,
+  "una_vez_por_sesion": true,
+  "_nota": "Heredado de 8A de FEC-015 hasta T2."
+ },
+ "rutas": {
+  "3-5": {
+   "sesion_min": 10,
+   "items_por_ronda": 4,
+   "con_adulto": true
+  },
+  "6-8": {
+   "sesion_min": 20,
+   "items_por_ronda": 4
+  },
+  "9-12": {
+   "sesion_min": 25,
+   "items_por_ronda": 4
+  }
+ },
+ "rutas_deshabilitadas": {
+  "13-18": "13 a 18 años: incluida por decisión de la supervisora (D1), pero deshabilitada en este prototipo hasta tener los textos de PSP-SR (RT-CHF-001, pregunta T1)."
+ },
+ "coccion_13_18": false,
+ "estaciones": {
+  "variantes": [
+   {
+    "variante": "1-zona",
+    "rincon": 1,
+    "nombre_variante": "Zona",
+    "nombre_accion": "Reconocer recetas",
+    "rincon_nino": "El recetario",
+    "rincon_fec": "¿Qué vamos a cocinar?",
+    "titulo_nino": "Mirar recetas",
+    "estacion": "reconocer",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "categorizacion",
+    "secundarias": [
+     "seguimiento-de-consignas",
+     "vocabulario"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "2 recetas muy distintas; una característica visible",
+      "dimension": [
+       "informacion"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "4 a 6 recetas; clasificar en dulce y salado",
+      "dimension": [
+       "relaciones",
+       "cantidad-estimulos"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Dos condiciones combinadas; recetas que comparten ingredientes",
+      "dimension": [
+       "consignas",
+       "relaciones"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [
+      "facil",
+      "intermedio"
+     ],
+     "6-8": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "confundio-categoria",
+     "eligio-otra-receta"
+    ],
+    "idea_fuera": "Abran la alacena: busquen tres cosas dulces y tres saladas.",
+    "recetas_usadas": [
+     "bizcochuelo",
+     "bolitas_coco",
+     "ensalada_frutas",
+     "panqueques"
+    ],
+    "recetas_alergenos": {
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "bolitas_coco": [
+      "leche"
+     ],
+     "ensalada_frutas": [],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "1-espacio",
+    "rincon": 1,
+    "nombre_variante": "Espacio",
+    "nombre_accion": "Decidir con condiciones",
+    "rincon_nino": "El recetario",
+    "rincon_fec": "¿Qué vamos a cocinar?",
+    "titulo_nino": "Elegir qué cocinar",
+    "estacion": "integrar",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "toma-de-decisiones",
+    "secundarias": [
+     "organizacion-y-planificacion"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Dos condiciones, una negativa",
+      "dimension": [
+       "consignas"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Tres condiciones, con la información en la tarjeta de cada receta",
+      "dimension": [
+       "informacion",
+       "planificacion"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Comparar dos recetas que cumplen; elegir la razón",
+      "dimension": [
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [],
+     "6-8": [
+      "facil",
+      "intermedio"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "no-cumplio-condicion",
+     "razon-incoherente"
+    ],
+    "idea_fuera": "Abran la alacena: busquen tres cosas dulces y tres saladas.",
+    "recetas_usadas": [
+     "arroz_verduras",
+     "bolitas_coco",
+     "ensalada_frutas",
+     "ensalada_verde",
+     "sandwich_queso",
+     "yogur_cereales"
+    ],
+    "recetas_alergenos": {
+     "arroz_verduras": [],
+     "bolitas_coco": [
+      "leche"
+     ],
+     "ensalada_frutas": [],
+     "ensalada_verde": [],
+     "sandwich_queso": [
+      "gluten",
+      "leche"
+     ],
+     "yogur_cereales": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "2-zona",
+    "rincon": 2,
+    "nombre_variante": "Zona",
+    "nombre_accion": "Encontrar ingredientes",
+    "rincon_nino": "La despensa",
+    "rincon_fec": "La despensa del chef",
+    "titulo_nino": "Buscar ingredientes",
+    "estacion": "reconocer",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "atencion-sostenida",
+    "secundarias": [
+     "reconocimiento-visual"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "1 ingrediente, 3 a 4 opciones, lista visible",
+      "dimension": [
+       "informacion"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "2 o 3 ingredientes, alacena con 8 a 12 objetos",
+      "dimension": [
+       "informacion",
+       "cantidad-estimulos"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Heladera y alacena; ingredientes parecidos",
+      "dimension": [
+       "relaciones"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [
+      "facil",
+      "intermedio"
+     ],
+     "6-8": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "lista-visual",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "eligio-parecido",
+     "eligio-otro"
+    ],
+    "idea_fuera": "Uno dice tres cosas de la heladera; el otro las busca sin mirar una lista.",
+    "recetas_usadas": [
+     "bizcochuelo",
+     "galletitas",
+     "panqueques",
+     "pizza",
+     "sandwich_queso",
+     "tortas_fritas",
+     "tostadas"
+    ],
+    "recetas_alergenos": {
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "galletitas": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "pizza": [
+      "gluten",
+      "leche"
+     ],
+     "sandwich_queso": [
+      "gluten",
+      "leche"
+     ],
+     "tortas_fritas": [
+      "gluten",
+      "leche"
+     ],
+     "tostadas": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "2-espacio",
+    "rincon": 2,
+    "nombre_variante": "Espacio",
+    "nombre_accion": "Recordar la lista",
+    "rincon_nino": "La despensa",
+    "rincon_fec": "La despensa del chef",
+    "titulo_nino": "Recordar la lista",
+    "estacion": "integrar",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "memoria-de-trabajo",
+    "secundarias": [
+     "autocorreccion"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Lista que se tapa con «Ya miré», 2 o 3 ingredientes",
+      "dimension": [
+       "autonomia"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "4 ingredientes; «Tengo / Falta»",
+      "dimension": [
+       "informacion"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Actualizar la lista; faltantes y sobrantes",
+      "dimension": [
+       "planificacion",
+       "relaciones"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [
+      "facil"
+     ],
+     "6-8": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion",
+      "volver-a-ver-lista"
+     ]
+    },
+    "tipos_error": [
+     "olvido-ingrediente",
+     "agrego-sobrante",
+     "confundio-tengo-falta"
+    ],
+    "idea_fuera": "Uno dice tres cosas de la heladera; el otro las busca sin mirar una lista.",
+    "recetas_usadas": [
+     "arroz_verduras",
+     "bizcochuelo",
+     "bolitas_coco",
+     "empanadas",
+     "ensalada_frutas",
+     "fideos_salsa",
+     "galletitas",
+     "panqueques",
+     "pizza",
+     "sandwich_queso",
+     "tarta_verdura",
+     "yogur_cereales"
+    ],
+    "recetas_alergenos": {
+     "arroz_verduras": [],
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "bolitas_coco": [
+      "leche"
+     ],
+     "empanadas": [
+      "gluten",
+      "huevo"
+     ],
+     "ensalada_frutas": [],
+     "fideos_salsa": [
+      "gluten",
+      "leche"
+     ],
+     "galletitas": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "pizza": [
+      "gluten",
+      "leche"
+     ],
+     "sandwich_queso": [
+      "gluten",
+      "leche"
+     ],
+     "tarta_verdura": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "yogur_cereales": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "3-zona",
+    "rincon": 3,
+    "nombre_variante": "Zona",
+    "nombre_accion": "Contar y elegir cantidades",
+    "rincon_nino": "El súper",
+    "rincon_fec": "Vamos al supermercado",
+    "titulo_nino": "Contar y llenar el carrito",
+    "estacion": "reconocer",
+    "estacion_provisoria": true,
+    "habilidad_referencia": "calculo-funcional",
+    "secundarias": [
+     "seguimiento-de-consignas"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Contar hasta 5 con objetos",
+      "dimension": [
+       "informacion"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Hasta 10; comparar más y menos",
+      "dimension": [
+       "relaciones"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Equivalencias simples (docena, media docena)",
+      "dimension": [
+       "relaciones",
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [
+      "facil"
+     ],
+     "6-8": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "lista-visual",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion",
+      "calculadora"
+     ]
+    },
+    "tipos_error": [
+     "conto-de-mas",
+     "conto-de-menos",
+     "comparo-al-reves"
+    ],
+    "idea_fuera": "La próxima vez que vayan a comprar, que lleve la cuenta de cuántas cosas ponen en la bolsa.",
+    "recetas_usadas": [],
+    "recetas_alergenos": {}
+   },
+   {
+    "variante": "3-espacio",
+    "rincon": 3,
+    "nombre_variante": "Espacio",
+    "nombre_accion": "Calcular y pagar",
+    "rincon_nino": "El súper",
+    "rincon_fec": "Vamos al supermercado",
+    "titulo_nino": "Hacer las cuentas",
+    "estacion": "integrar",
+    "estacion_provisoria": true,
+    "habilidad_referencia": "manejo-del-dinero",
+    "secundarias": [
+     "calculo-funcional",
+     "organizacion-y-planificacion"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Sumas y restas simples de cantidades",
+      "dimension": [
+       "resolucion"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Precios redondos; comparar; pagar con billetes",
+      "dimension": [
+       "relaciones"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Presupuesto, total y vuelto",
+      "dimension": [
+       "planificacion",
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [],
+     "6-8": [
+      "facil",
+      "intermedio"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "lista-visual",
+      "calculadora-en-planificacion",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion",
+      "calculadora"
+     ]
+    },
+    "tipos_error": [
+     "sumo-en-lugar-de-restar",
+     "no-conto-el-vuelto",
+     "se-paso-del-presupuesto",
+     "monto-incorrecto"
+    ],
+    "idea_fuera": "La próxima vez que vayan a comprar, que lleve la cuenta de cuántas cosas ponen en la bolsa.",
+    "recetas_usadas": [
+     "bizcochuelo",
+     "ensalada_frutas",
+     "panqueques",
+     "pizza"
+    ],
+    "recetas_alergenos": {
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "ensalada_frutas": [],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "pizza": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "4-zona",
+    "rincon": 4,
+    "nombre_variante": "Zona",
+    "nombre_accion": "Ordenar pasos",
+    "rincon_nino": "La mesa de los pasos",
+    "rincon_fec": "Organizamos la receta",
+    "titulo_nino": "Ordenar los pasos",
+    "estacion": "reconocer",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "secuenciacion",
+    "secundarias": [
+     "comprension-verbal"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "2 o 3 pasos con imágenes; modelo disponible",
+      "dimension": [
+       "autonomia"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "4 o 5 pasos; un paso faltante",
+      "dimension": [
+       "informacion"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Detectar el error en una secuencia armada",
+      "dimension": [
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [
+      "facil"
+     ],
+     "6-8": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion",
+      "modelo-de-secuencia"
+     ]
+    },
+    "tipos_error": [
+     "invirtio-dos-pasos",
+     "omitio-un-paso",
+     "no-detecto-error"
+    ],
+    "idea_fuera": "Cuenten en orden cómo se prepara un vaso de leche con cacao: ¿qué va primero?",
+    "recetas_usadas": [
+     "bizcochuelo",
+     "bolitas_coco",
+     "ensalada_frutas",
+     "ensalada_verde",
+     "galletitas",
+     "panqueques",
+     "pizza",
+     "tarta_verdura",
+     "tostadas",
+     "yogur_cereales"
+    ],
+    "recetas_alergenos": {
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "bolitas_coco": [
+      "leche"
+     ],
+     "ensalada_frutas": [],
+     "ensalada_verde": [],
+     "galletitas": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "pizza": [
+      "gluten",
+      "leche"
+     ],
+     "tarta_verdura": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "tostadas": [
+      "gluten",
+      "leche"
+     ],
+     "yogur_cereales": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "4-espacio",
+    "rincon": 4,
+    "nombre_variante": "Espacio",
+    "nombre_accion": "Planificar",
+    "rincon_nino": "La mesa de los pasos",
+    "rincon_fec": "Organizamos la receta",
+    "titulo_nino": "Pensar qué va antes",
+    "estacion": "integrar",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "organizacion-y-planificacion",
+    "secundarias": [
+     "secuenciacion",
+     "flexibilidad-cognitiva"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Pasos que dependen de otros",
+      "dimension": [
+       "relaciones"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Qué se puede hacer mientras tanto",
+      "dimension": [
+       "planificacion"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Anticipar qué pasa si cambia el orden",
+      "dimension": [
+       "planificacion",
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [],
+     "6-8": [
+      "facil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion",
+      "modelo-de-secuencia"
+     ]
+    },
+    "tipos_error": [
+     "dependencia-al-reves",
+     "no-anticipo"
+    ],
+    "idea_fuera": "Cuenten en orden cómo se prepara un vaso de leche con cacao: ¿qué va primero?",
+    "recetas_usadas": [],
+    "recetas_alergenos": {}
+   },
+   {
+    "variante": "5-zona",
+    "rincon": 5,
+    "nombre_variante": "Zona",
+    "nombre_accion": "Encontrar con precisión",
+    "rincon_nino": "Los retos del chef",
+    "rincon_fec": "Retos del chef",
+    "titulo_nino": "Encontrar con cuidado",
+    "estacion": "reconocer",
+    "estacion_provisoria": true,
+    "habilidad_referencia": "velocidad-de-procesamiento-visual",
+    "secundarias": [
+     "atencion-sostenida"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Encontrar un ingrediente entre 3 o 4 iguales",
+      "dimension": [
+       "informacion"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Entre 6 y 9, con distractores parecidos",
+      "dimension": [
+       "consignas"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Exposición breve que se puede desactivar",
+      "dimension": [
+       "informacion",
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [],
+     "6-8": [
+      "facil",
+      "intermedio"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "letra",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion",
+      "tiempo-amplio"
+     ]
+    },
+    "tipos_error": [
+     "eligio-parecido",
+     "eligio-otro"
+    ],
+    "idea_fuera": "En la mesa, junten todas las cucharas; ahora, todo lo que sea de metal.",
+    "recetas_usadas": [],
+    "recetas_alergenos": {}
+   },
+   {
+    "variante": "5-espacio",
+    "rincon": 5,
+    "nombre_variante": "Espacio",
+    "nombre_accion": "Cambiar de regla",
+    "rincon_nino": "Los retos del chef",
+    "rincon_fec": "Retos del chef",
+    "titulo_nino": "Seguir el gorro",
+    "estacion": "integrar",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "flexibilidad-cognitiva",
+    "secundarias": [
+     "atencion-sostenida"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Una regla que cambia una vez, avisada",
+      "dimension": [
+       "consignas"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Alternar dos reglas con señal visible",
+      "dimension": [
+       "consignas",
+       "relaciones"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "La regla cambia sin aviso previo, con señal en la escena",
+      "dimension": [
+       "autonomia",
+       "relaciones"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [],
+     "6-8": [
+      "facil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "siguio-regla-anterior",
+     "error-de-clasificacion"
+    ],
+    "idea_fuera": "En la mesa, junten todas las cucharas; ahora, todo lo que sea de metal.",
+    "recetas_usadas": [],
+    "recetas_alergenos": {}
+   },
+   {
+    "variante": "6-zona",
+    "rincon": 6,
+    "nombre_variante": "Zona",
+    "nombre_accion": "Comprender",
+    "rincon_nino": "La charla en la cocina",
+    "rincon_fec": "El lenguaje del chef",
+    "titulo_nino": "Escuchar y señalar",
+    "estacion": "reconocer",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "comprension-verbal",
+    "secundarias": [
+     "vocabulario"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Nombre → imagen, 3 opciones",
+      "dimension": [
+       "informacion"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Consignas de una acción con un atributo",
+      "dimension": [
+       "consignas"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Preguntas concretas sobre una escena",
+      "dimension": [
+       "relaciones"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "6-8": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion",
+      "imagen-con-palabra"
+     ]
+    },
+    "tipos_error": [
+     "confundio-palabra",
+     "omitio-atributo"
+    ],
+    "idea_fuera": "Jueguen a «adiviná el utensilio»: uno lo describe y el otro lo adivina.",
+    "recetas_usadas": [],
+    "recetas_alergenos": {}
+   },
+   {
+    "variante": "6-espacio",
+    "rincon": 6,
+    "nombre_variante": "Espacio",
+    "nombre_accion": "Armar y explicar",
+    "rincon_nino": "La charla en la cocina",
+    "rincon_fec": "El lenguaje del chef",
+    "titulo_nino": "Armar frases de cocina",
+    "estacion": "integrar",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "comunicacion-funcional",
+    "secundarias": [
+     "secuenciacion",
+     "construccion-sintactica"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Completar una oración con una tarjeta",
+      "dimension": [
+       "consignas"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Para qué sirve; instrucciones de 2 o 3 pasos",
+      "dimension": [
+       "consignas",
+       "relaciones"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Armar las instrucciones de una receta para otro chef",
+      "dimension": [
+       "planificacion",
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [],
+     "6-8": [
+      "facil",
+      "intermedio"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "tarjeta-incorrecta",
+     "orden-incorrecto"
+    ],
+    "idea_fuera": "Jueguen a «adiviná el utensilio»: uno lo describe y el otro lo adivina.",
+    "recetas_usadas": [
+     "bolitas_coco",
+     "ensalada_frutas",
+     "sandwich_queso",
+     "yogur_cereales"
+    ],
+    "recetas_alergenos": {
+     "bolitas_coco": [
+      "leche"
+     ],
+     "ensalada_frutas": [],
+     "sandwich_queso": [
+      "gluten",
+      "leche"
+     ],
+     "yogur_cereales": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "7-zona",
+    "rincon": 7,
+    "nombre_variante": "Zona",
+    "nombre_accion": "Hacer con modelo",
+    "rincon_nino": "La mesada",
+    "rincon_fec": "¡Manos a la obra!",
+    "titulo_nino": "Cocinar con el chef",
+    "estacion": "reconocer",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "aprendizaje-procedimental",
+    "secundarias": [
+     "seguimiento-de-consignas"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "El personaje hace la acción; modelo permanente",
+      "dimension": [
+       "autonomia"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Elegir utensilio y acción; modelo a pedido",
+      "dimension": [
+       "resolucion"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Receta corta con guía paso a paso",
+      "dimension": [
+       "planificacion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "6-8": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "lista-visual",
+      "modelo-de-secuencia",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "utensilio-incorrecto",
+     "accion-incorrecta"
+    ],
+    "idea_fuera": "Pongan la mesa juntos: platos, vasos y cubiertos sin filo.",
+    "recetas_usadas": [
+     "bizcochuelo",
+     "bolitas_coco",
+     "ensalada_frutas",
+     "ensalada_verde",
+     "fideos_salsa",
+     "galletitas",
+     "panqueques",
+     "pizza",
+     "sandwich_queso",
+     "tarta_verdura",
+     "tostadas",
+     "yogur_cereales"
+    ],
+    "recetas_alergenos": {
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "bolitas_coco": [
+      "leche"
+     ],
+     "ensalada_frutas": [],
+     "ensalada_verde": [],
+     "fideos_salsa": [
+      "gluten",
+      "leche"
+     ],
+     "galletitas": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "pizza": [
+      "gluten",
+      "leche"
+     ],
+     "sandwich_queso": [
+      "gluten",
+      "leche"
+     ],
+     "tarta_verdura": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "tostadas": [
+      "gluten",
+      "leche"
+     ],
+     "yogur_cereales": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "7-espacio",
+    "rincon": 7,
+    "nombre_variante": "Espacio",
+    "nombre_accion": "Hacer con menos ayuda",
+    "rincon_nino": "La mesada",
+    "rincon_fec": "¡Manos a la obra!",
+    "titulo_nino": "Cocinar casi solo",
+    "estacion": "integrar",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "aprendizaje-procedimental",
+    "secundarias": [
+     "autocorreccion"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Receta conocida con menos modelos",
+      "dimension": [
+       "autonomia"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Retomar una receta sin todas las instrucciones",
+      "dimension": [
+       "autonomia",
+       "informacion"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Detectar el error durante la preparación",
+      "dimension": [
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [],
+     "6-8": [
+      "facil",
+      "intermedio"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "lista-visual",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "utensilio-incorrecto",
+     "accion-incorrecta",
+     "no-detecto-error"
+    ],
+    "idea_fuera": "Pongan la mesa juntos: platos, vasos y cubiertos sin filo.",
+    "recetas_usadas": [
+     "arroz_verduras",
+     "bizcochuelo",
+     "bolitas_coco",
+     "ensalada_frutas",
+     "galletitas",
+     "panqueques",
+     "pizza",
+     "sandwich_queso",
+     "yogur_cereales"
+    ],
+    "recetas_alergenos": {
+     "arroz_verduras": [],
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "bolitas_coco": [
+      "leche"
+     ],
+     "ensalada_frutas": [],
+     "galletitas": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "pizza": [
+      "gluten",
+      "leche"
+     ],
+     "sandwich_queso": [
+      "gluten",
+      "leche"
+     ],
+     "yogur_cereales": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "8-zona",
+    "rincon": 8,
+    "nombre_variante": "Zona",
+    "nombre_accion": "Aventura guiada",
+    "rincon_nino": "El gran reto",
+    "rincon_fec": "El gran reto",
+    "titulo_nino": "Preparar todo",
+    "estacion": "integrar",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "organizacion-y-planificacion",
+    "secundarias": [
+     "integra los rincones"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Etapas con apoyos",
+      "dimension": [
+       "autonomia"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Menos apoyos; más etapas solas",
+      "dimension": [
+       "autonomia",
+       "planificacion"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Casi todas las etapas solas",
+      "dimension": [
+       "autonomia",
+       "resolucion"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [
+      "facil"
+     ],
+     "6-8": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": null,
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "lista-visual",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "etapa-con-error"
+    ],
+    "idea_fuera": "Piensen juntos qué podrían preparar si vinieran visitas mañana.",
+    "recetas_usadas": [
+     "bizcochuelo",
+     "bolitas_coco",
+     "ensalada_frutas",
+     "ensalada_verde",
+     "fideos_salsa",
+     "galletitas",
+     "panqueques",
+     "pizza",
+     "sandwich_queso",
+     "tarta_verdura",
+     "tostadas",
+     "yogur_cereales"
+    ],
+    "recetas_alergenos": {
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "bolitas_coco": [
+      "leche"
+     ],
+     "ensalada_frutas": [],
+     "ensalada_verde": [],
+     "fideos_salsa": [
+      "gluten",
+      "leche"
+     ],
+     "galletitas": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "pizza": [
+      "gluten",
+      "leche"
+     ],
+     "sandwich_queso": [
+      "gluten",
+      "leche"
+     ],
+     "tarta_verdura": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "tostadas": [
+      "gluten",
+      "leche"
+     ],
+     "yogur_cereales": [
+      "gluten",
+      "leche"
+     ]
+    }
+   },
+   {
+    "variante": "8-espacio",
+    "rincon": 8,
+    "nombre_variante": "Espacio",
+    "nombre_accion": "Aventura con imprevistos",
+    "rincon_nino": "El gran reto",
+    "rincon_fec": "El gran reto",
+    "titulo_nino": "Resolver imprevistos",
+    "estacion": "transferir",
+    "estacion_provisoria": false,
+    "habilidad_referencia": "transferencia-a-situaciones-nuevas",
+    "secundarias": [
+     "generalizacion",
+     "autocorreccion",
+     "toma-de-decisiones"
+    ],
+    "grados": {
+     "facil": {
+      "que_cambia": "Situación nueva con un imprevisto",
+      "dimension": [
+       "relaciones",
+       "resolucion"
+      ]
+     },
+     "intermedio": {
+      "que_cambia": "Situación nueva con dos imprevistos",
+      "dimension": [
+       "planificacion",
+       "resolucion"
+      ]
+     },
+     "dificil": {
+      "que_cambia": "Imprevistos en cada etapa y evaluar el resultado",
+      "dimension": [
+       "planificacion",
+       "resolucion",
+       "autonomia"
+      ]
+     }
+    },
+    "disponibilidad": {
+     "3-5": [],
+     "6-8": [],
+     "9-12": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ],
+     "13-18": [
+      "facil",
+      "intermedio",
+      "dificil"
+     ]
+    },
+    "transferencia": "B",
+    "texto_transferir": "Se practica en una situación nueva, con imprevistos. Lo que se observa acá no se generaliza solo: conviene practicarlo en la vida diaria con apoyo.",
+    "apoyos": {
+     "acceso": [
+      "audio-consigna",
+      "repetir-consigna",
+      "zoom",
+      "contraste",
+      "sin-arrastre",
+      "tiempo-sin-limite",
+      "letra",
+      "lista-visual",
+      "imagen-con-palabra"
+     ],
+     "aprendizaje": [
+      "pista-general",
+      "resaltar",
+      "sacar-opciones",
+      "demostracion"
+     ]
+    },
+    "tipos_error": [
+     "etapa-con-error",
+     "alternativa-no-valida"
+    ],
+    "idea_fuera": "Piensen juntos qué podrían preparar si vinieran visitas mañana.",
+    "recetas_usadas": [
+     "arroz_verduras",
+     "bizcochuelo",
+     "empanadas",
+     "ensalada_frutas",
+     "ensalada_verde",
+     "fideos_salsa",
+     "galletitas",
+     "panqueques",
+     "pizza",
+     "sandwich_queso",
+     "tortas_fritas",
+     "tostadas"
+    ],
+    "recetas_alergenos": {
+     "arroz_verduras": [],
+     "bizcochuelo": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "empanadas": [
+      "gluten",
+      "huevo"
+     ],
+     "ensalada_frutas": [],
+     "ensalada_verde": [],
+     "fideos_salsa": [
+      "gluten",
+      "leche"
+     ],
+     "galletitas": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "panqueques": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
+     "pizza": [
+      "gluten",
+      "leche"
+     ],
+     "sandwich_queso": [
+      "gluten",
+      "leche"
+     ],
+     "tortas_fritas": [
+      "gluten",
+      "leche"
+     ],
+     "tostadas": [
+      "gluten",
+      "leche"
+     ]
+    }
+   }
+  ]
+ },
+ "dinero": {
+  "billetes": [
+   10,
+   20,
+   50,
+   100,
+   200,
+   500,
+   1000
+  ],
+  "monedas": [
+   1,
+   2,
+   5
+  ],
+  "precios": "inventados y redondos (P4)",
+  "acumulado": false
+ },
+ "palabras_no_admitidas": {
+  "todas": [
+   "mision",
+   "misiones",
+   "chatarra",
+   "engorda",
+   "engordar",
+   "caloria",
+   "calorias",
+   "dieta",
+   "dietas",
+   "light",
+   "sano",
+   "sana",
+   "insalubre",
+   "prohibido",
+   "prohibida",
+   "alcohol",
+   "vino",
+   "cerveza",
+   "genio",
+   "inteligente",
+   "fallaste",
+   "rapido",
+   "rapida",
+   "cerebro",
+   "tdah",
+   "tea",
+   "dislexia",
+   "autismo"
+  ],
+  "nino": [
+   "estacion",
+   "nivel",
+   "facil",
+   "intermedio",
+   "dificil",
+   "zona",
+   "espacio",
+   "desafio",
+   "desafios",
+   "estimulacion"
+  ],
+  "familia": [
+   "estimulacion",
+   "madurez"
+  ]
+ },
+ "originalidad": "Arte SVG de relleno dibujado en código, sin imágenes externas ni IA generativa. Los nombres de los productos de referencia (FEC I.3.F) se controlan por huella en scripts/originalidad.py."
+}
