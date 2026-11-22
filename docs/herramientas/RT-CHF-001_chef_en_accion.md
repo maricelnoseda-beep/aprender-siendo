@@ -2,9 +2,9 @@
 TIPO: Revisión técnica
 DE: DEV-IA
 PARA: PSP-SR (copia: Supervisora; Responsable del proyecto)
-ID: RT-CHF-001 v1.1
-FECHA: 2026-11-22 (v1.0: 2026-11-21)
-REFIERE A: RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
+ID: RT-CHF-001 v1.2
+FECHA: 2026-11-22 (v1.1: 2026-11-22; v1.0: 2026-11-21)
+REFIERE A: RT-CHF-001-R v1.1 y su anexo B1–B2 (2026-11-22); RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
 ```
 
 # RT-CHF-001 · «Chef en Acción»: revisión técnica
@@ -344,3 +344,44 @@ Mientras no las respondas, el prototipo usa lo indicado en la Parte A. Ninguna b
 - **T16.** [Seguro] Para no repetir los textos de 9–12, en 13–18 solo se ofrecen las combinaciones con textos propios. ¿Preferís eso hasta tener el banco completo, o abrir todas con los textos de 9–12 marcados como pendientes?
 
 **Pruebas.** [Seguro] La prueba de punta a punta pasa 970 de 970 verificaciones en las cuatro rutas: cada variante y grado, más las reglas nuevas (T1, T3 a T6, T8, T11, T13, T14, O1 a O4). El validador del banco devuelve cero observaciones.
+
+---
+
+## Parte H. Respuesta RT-CHF-001-R v1.1 y anexo B1–B2 · prototipo v0.1.2
+
+**Para la supervisora, en una línea.** [Seguro] Ya están aplicadas las dos correcciones de PSP-SR. El agua hirviendo y la olla caliente quedan siempre en manos del adulto, y los imprevistos del gran reto tienen que ver con la receta. También están los otros arreglos que pidió y la imagen nueva con volumen. Siguen el cartel «Contenido de prueba no validado» y el entorno de prueba.
+
+**Cómo se usaron los archivos de PSP-SR.** [Seguro] La lógica de `corregir_B1_B2.py` se pasó al generador (`scripts/chef_psp_v11.py`), así que el banco ya sale corregido cada vez que se genera. Comparé el resultado con `banco.json` y `recetas.json` del anexo: **son iguales**, ítem por ítem y receta por receta. Las únicas diferencias son los campos nuevos para el validador y los cambios de abajo.
+
+| Punto | Qué se hizo | Dónde |
+| --- | --- | --- |
+| B1 | Colar los fideos y sumar las verduras al arroz los hace el adulto, con calor. En 3–12 aparece como «Pedile al chef que use el colador / la cuchara». El paso del locro lleva calor, y en 13–18 se ve el paso de seguridad. Los panqueques se entibian en el mismo paso del adulto. | recetas, ítems |
+| B1.3 | Nueva regla del validador, **riesgo heredado**: un paso que trabaja en un recipiente que estuvo en el fuego (`recipiente`: olla o sartén) hereda calor, salvo que antes haya un paso de enfriado (`enfria`). Si se quita el calor del paso de colar, la prueba automática falla. | `Motor.riesgoHeredado` |
+| B2 | Cada receta trae `faltantes_posibles` (con el `ingrediente`) y `recetas.json` trae `situaciones`. El validador rechaza tres cosas: un faltante que la receta no lleva, un imprevisto repetido y una situación que no va con la receta. También rechaza las opciones viejas poco claras. | validador |
+| Sección 3 | Se corrigieron los 11 ítems: pista de 6B, pasos de 4-zona-f4, consigna de 1-zona, devolución de 3-espacio-i5 y «otra persona» en 6-espacio-d5. | `chef_psp_v11.extras` |
+| Sección 4 | Las 16 recetas quedan con `estado_clinico: validado por PSP-SR`. La pizza lleva agua y sal, los fideos y el yogur tienen alternativa sin TACC, y el plato se llama «Locro de verduras». El paso de la zanahoria da `zanahoria_rallada`; el validador revisa que en 3–5 no aparezca la zanahoria en trozos. **El desafío para casa ya aparece** con las cuatro recetas validadas (ensalada de frutas solo fuera de 3–5). | recetas |
+| O5 | «Pedir una pista». | textos |
+| O6 | «Cocinar con menos ayuda». | ficha |
+| O7 | En 3–12, el menú de cada rincón muestra solo las variantes que habilita la persona adulta. Por defecto es la de base. La de mayor demanda se habilita en una casilla nueva de «Persona adulta» o cuando aparece «Hay retos nuevos para probar». En 13–18 elige el adolescente. | `elegirVariante` |
+| O8 | En 7A el chef aparece con el utensilio y la acción («El chef: mezclar con cuchara. Ahora vos.»), con un movimiento corto que se apaga si el equipo pide menos movimiento. Al segundo y medio se resalta el botón. **Aclaración:** el cuadro vacío que vio PSP-SR era un error mío de la v0.1.1, que dejaba sin texto el modelo del chef. Ya está corregido y la prueba automática lo revisa. | `cocina` |
+| Estado clínico | 174 ítems «validado por PSP-SR» y 39 «corregido, a revisar por PSP-SR». Es el mismo conteo de la respuesta. | banco |
+
+**Imagen (pedido de la supervisora del 2026-11-22).** [Seguro] Todos los dibujos tienen ahora volumen, como en una película de animación 3D: degradé con luz desde arriba a la izquierda, contorno en un tono más oscuro del mismo color y una sombra suave. El chef y el ayudante son personajes nuevos y originales, de cabeza grande, ojos con brillo y mejillas. Todo está dibujado en código, con la paleta de marca, sin imágenes externas y sin tomar personajes ni estética de ninguna película. La interfaz (tipografía, botones, paneles) no cambió. [Suposición] Es una propuesta de estilo que espera la aprobación de la supervisora. Las ilustraciones finales siguen en el presupuesto de la Parte E.
+
+**Para revisar por PSP-SR** (punto 7.3: solo lo nuevo o corregido): `propuestas/Chef_v0.1.2_items_corregidos_para_PSP-SR.json`, con 39 ítems.
+
+**Preguntas nuevas**
+- **T17. Ocho situaciones distintas por grado (REQ-CLI-CHF-16).** [Seguro] Después de B2 quedaron situaciones repetidas en Fácil, Intermedio y Difícil de 8B, y el validador no las aceptaba. Las resolví sin salir de tu tabla situación–receta:
+  - 8-espacio-f3 pasa a bolitas de coco en el picnic;
+  - 8-espacio-f7 pasa a tortas fritas en la juntada del club;
+  - 8-espacio-i7 pasa a sándwiches en el picnic;
+  - 8-espacio-d6 queda en «llevar algo a la escuela»;
+  - 8-espacio-d7 queda en «cocinar para la familia».
+
+  En los ítems nuevos el faltante sale de tu lista; en Intermedio se suma «Vienen dos amigos más». ¿Los validás?
+- **T18. Dos detalles del anexo.** [Seguro]
+  - En 8-espacio-d5 y d8, el imprevisto general que se copió todavía decía «Pagar con lo que no hay» y «Hacer lo mismo». Los pasé a las opciones nuevas.
+  - En los ítems que copian los pasos de la pizza también quedó «Mezclar harina, levadura, agua y sal».
+- **T19. Empanadas.** [Probable] «Cocinar el relleno» va en la sartén y el paso siguiente, «Rellenar las tapas», lo hace quien juega. ¿Hace falta un paso «El adulto deja enfriar el relleno»? Hoy el validador no lo marca, porque rellenar no usa la sartén.
+
+**Pruebas.** [Seguro] La prueba de punta a punta pasa 924 de 924 verificaciones; ahora controla menos cosas en cada cierre de rincón porque el desafío solo aparece con recetas validadas. Se sumaron pruebas de B1, B2, CHF-16, O5 a O8 y del desafío. El validador devuelve cero observaciones.
