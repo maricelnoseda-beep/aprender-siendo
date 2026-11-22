@@ -242,6 +242,12 @@ table.reg th,table.reg td{border-bottom:1px solid var(--as-borde,#dae3e1);paddin
 .recetario .receta{width:150px}
 .desafio{margin:16px auto;max-width:760px;text-align:left;border:2px solid var(--as-sol,#ffb82e);border-radius:var(--as-radio,22px);padding:14px 16px}
 .sel-ut[aria-pressed="true"],.sel-acc[aria-pressed="true"]{background:var(--as-menta,#e0f2eb);border-color:var(--as-verde,#196b6a)}
+/* 13–18: presentación sobria, sin personajes (T1 de RT-CHF-001-R) */
+.sobria svg.personaje{display:none}
+.calculadora{margin:10px auto 0;max-width:260px;border:2px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);padding:8px;background:#fff}
+.calculadora[hidden]{display:none}
+.calculadora .teclado{grid-template-columns:repeat(4,52px)}
+.calculadora .teclado .btn{min-width:52px;min-height:48px;font-size:1.1rem}
 </style></head><body>
 <div class="wrap">
   <header class="hd" id="hd"></header>
@@ -250,6 +256,7 @@ table.reg th,table.reg td{border-bottom:1px solid var(--as-borde,#dae3e1);paddin
 </div>
 <script type="application/json" id="datos-banco">__BANCO__</script>
 <script type="application/json" id="datos-modulo">__MODULO__</script>
+<script type="application/json" id="datos-recetas">__RECETAS__</script>
 <script type="application/json" id="datos-inicio">__INICIO__</script>
 <script id="motor">
 "use strict";
@@ -337,6 +344,30 @@ const Motor = (() => {
     if (it.correctas_una_de) return it.correctas_una_de.includes(opcion);
     return it.correcta === opcion;
   }
+  /* Selección múltiple (T6 de RT-CHF-001-R): acierto = todas las correctas y ninguna de más. Parcial = error «omision» o «de_mas». */
+  function validaMultiple(correctas, elegidas) {
+    const c = new Set(correctas), e = new Set(elegidas), bien = [...e].filter((x) => c.has(x)).length, demas = [...e].filter((x) => !c.has(x)).length, faltan = c.size - bien;
+    const tipos = [...(demas ? ["de_mas"] : []), ...(faltan ? ["omision"] : [])];
+    return { ok: !tipos.length, tipos, correctas_marcadas: bien, total_correctas: c.size, faltan, demas };
+  }
+  const NUM = ["ninguna", "una", "dos", "tres", "cuatro", "cinco", "seis"];
+  /* Devolución que reconoce lo que estuvo bien («Encontraste dos. Falta una.»), sin «mal». */
+  function devolucionMultiple(r) {
+    if (r.demas) return r.correctas_marcadas ? `Encontraste ${NUM[r.correctas_marcadas] || r.correctas_marcadas}. Hay ${r.demas > 1 ? "algunas que no van" : "una que no va"}.` : "Mirá otra vez cuáles van.";
+    return r.correctas_marcadas ? `Encontraste ${NUM[r.correctas_marcadas] || r.correctas_marcadas}. Falta${r.faltan > 1 ? "n" : ""} ${NUM[r.faltan] || r.faltan}.` : "Elegí las que van.";
+  }
+  /* Taxonomía cerrada de errores (T4): tipos de la variante; en el gran reto, los del rincón de origen de la etapa (8B suma los suyos). */
+  function tiposPermitidos(modulo, id, o = {}) {
+    const de = (vid) => (variante(modulo, vid).tipos_error || []);
+    let t;
+    if (o.rincon && o.rincon !== 8) t = de(o.rincon + "-zona").concat(de(o.rincon + "-espacio"));
+    else if (o.rincon === 8) t = de("8-espacio");
+    else t = de(id);
+    if (o.multiple) t = t.concat(["omision", "de_mas"]);
+    return [...new Set(t.concat(["sin_respuesta", "otro"]))];
+  }
+  /* El primer candidato que esté en la lista cerrada; si ninguno, «otro». Nunca es un rasgo de la persona. */
+  function tipoCerrado(permitidos, candidatos) { for (const c of [].concat(candidatos || [])) if (c && permitidos.includes(c)) return c; return "otro"; }
   function presupuestoOk(it, eleccion) {   // 3B Difícil: un producto por ingrediente y total ≤ presupuesto
     if (!eleccion || eleccion.length !== it.productos.length || eleccion.some((p) => p == null)) return { ok: false, motivo: "falta-elegir" };
     const total = eleccion.reduce((s, p, i) => s + it.productos[i].precios[p], 0);
@@ -347,7 +378,7 @@ const Motor = (() => {
   const acierto = (r) => r.resultado === "acierto";
 
   /* ---------- Registro mínimo por ítem (FEC §8). Nunca: voz, texto libre, imagen, alergias, dietas, datos de la casa. ---------- */
-  const CAMPOS_EXTRA = ["receta", "razon", "alternativa", "como_salio", "exposicion_ms", "sin_exposicion_breve", "precision", "repeticiones_consigna", "integrado", "etapa", "rincon_origen", "total", "situacion"];
+  const CAMPOS_EXTRA = ["receta", "razon", "alternativa", "como_salio", "que_cambiarias", "correctas_marcadas", "total_correctas", "calculadora", "exposicion_ms", "sin_exposicion_breve", "precision", "repeticiones_consigna", "integrado", "etapa", "rincon_origen", "total", "situacion"];
   function registro(b) {
     const extra = {}; for (const k of CAMPOS_EXTRA) if (b.extra && b.extra[k] !== undefined) extra[k] = b.extra[k];
     return { variante: String(b.variante), rincon: limitar(b.rincon, 1, 8), estacion: String(b.estacion), grado: String(b.grado), item: String(b.item), habilidad: String(b.habilidad),
@@ -359,7 +390,9 @@ const Motor = (() => {
   function vistaPorHabilidad(regs) {
     const por = {};
     for (const r of regs) {
-      const f = por[r.habilidad] || (por[r.habilidad] = { habilidad: r.habilidad, variantes: new Set(), items: 0, sin_apoyo: 0, con_apoyo: 0, demostracion: 0, primer_intento: 0, apoyos: {}, tipos: {}, rep: 0 });
+      const f = por[r.habilidad] || (por[r.habilidad] = { habilidad: r.habilidad, variantes: new Set(), items: 0, sin_apoyo: 0, con_apoyo: 0, demostracion: 0, primer_intento: 0, apoyos: {}, tipos: {}, rep: 0, gran_reto: { items: 0, sin_apoyo: 0, con_apoyo: 0 } });
+      // T5: lo integrado («En el gran reto») va en una columna aparte y no entra en las cuentas del rincón
+      if (r.extra && r.extra.integrado) { f.gran_reto.items += 1; if (r.resultado === "acierto" && r.apoyo_max === 0) f.gran_reto.sin_apoyo += 1; else f.gran_reto.con_apoyo += 1; continue; }
       f.variantes.add(r.variante); f.items += 1;
       if (r.resultado === "acierto" && r.apoyo_max === 0) f.sin_apoyo += 1; else if (r.apoyo_max >= 3) f.demostracion += 1; else f.con_apoyo += 1;
       if (r.resultado === "acierto" && r.errores === 0) f.primer_intento += 1;
@@ -375,11 +408,25 @@ const Motor = (() => {
   function textosNino(banco) {
     const out = [];
     const CLAVES = ["consigna", "pregunta", "ok", "pista1", "txt", "situacion", "frases", "asi_se_juega", "estrategia"];
-    const walk = (x, texto) => { if (!x) return; if (typeof x === "string") { if (texto) out.push(x); } else if (Array.isArray(x)) x.forEach((y) => walk(y, texto)); else if (typeof x === "object") for (const [k, v] of Object.entries(x)) walk(v, CLAVES.includes(k)); };
+    const walk = (x, texto) => { if (!x) return; if (typeof x === "string") { if (texto) out.push(x); } else if (Array.isArray(x)) x.forEach((y) => walk(y, texto)); else if (typeof x === "object") for (const [k, v] of Object.entries(x)) walk(v, texto === "todo" ? "todo" : CLAVES.includes(k)); };
     for (const gs of Object.values(banco.variantes)) for (const g of Object.values(gs)) walk(g);
-    walk(banco.textos.nino, true); walk(banco.textos.historia); walk(banco.estrategias); walk(banco.textos.como_salio);
+    walk(banco.textos.nino, "todo"); walk(banco.textos.historia); walk(banco.estrategias); walk(banco.textos.como_salio); walk(banco.textos.que_cambiarias);
+    const C = banco.textos.contar || {};
+    walk(C.pregunta, true); walk(C.otra); walk(C.ayudo, "todo"); walk(C.ayudo_extra_13_18, "todo");
+    // O1: «Fácil», «Más o menos» y «Difícil» de «¿Cómo te resultó?» son opinión de la persona, no nivel: se exceptúan por id (solo esas tres)
+    if (C.resulto) { walk(C.resulto.pregunta, true); for (const o of C.resulto.opciones || []) if (!EXCEPTUADAS_O1.includes(o.id)) walk(o); }
     return out;
   }
+  const EXCEPTUADAS_O1 = ["facil", "mas_o_menos", "dificil"];
+  /* Textos de 13–18 (T1): sin diminutivos (salvo nombres de producto) ni exclamaciones infantiles. */
+  const NO_DIMINUTIVO = ["galletitas", "galletita", "necesita", "necesitas", "necesito", "visita", "frito", "fritos", "frita", "fritas", "maldito", "escrito", "bonito", "infinito", "favorito", "favorita", "cita", "pepita"];
+  function reglas1318(texto, excepciones = []) {
+    const E = [], ok = new Set(NO_DIMINUTIVO.concat(excepciones));
+    for (const w of normalizar(texto).match(/[a-zñ]+/g) || []) if (w.length >= 6 && /(ito|ita|itos|itas|illo|illa|illos|illas)$/.test(w) && !ok.has(w) && !/^(tortilla|tortillas|vainilla|semilla|semillas|cuchillo|cuchillos|frutilla|frutillas|manzanilla|mantequilla|parrilla|ardilla|pastilla|tortitas)$/.test(w)) E.push(`diminutivo «${w}»`);
+    if (/¡/.test(texto)) E.push("exclamación");
+    return E;
+  }
+  function rotuloVariante(texto) { return /^\s*(zona|espacio)\s*$/i.test(texto) || /\b(variante|modo|nivel)\s+(zona|espacio)\b/i.test(normalizar(texto)); }   // O1
   function palabrasProhibidas(texto, lista) {
     const ps = normalizar(texto).match(/[a-zñ0-9]+/g) || [];
     return lista.filter((w) => ps.includes(w));
@@ -418,6 +465,7 @@ const Motor = (() => {
         for (const d of dim) if (!DIMENSIONES.includes(d)) E.push(`${v.variante} ${g}: dimensión fuera del vocabulario ${d}`);
       }
       for (const k of ["estacion", "habilidad_referencia", "transferencia", "idea_fuera", "apoyos", "tipos_error", "recetas_usadas"]) if (!v[k]) E.push(`${v.variante}: falta ${k} en la ficha (CHF-28)`);
+      if (!["sin_respuesta", "otro"].every((x) => (v.tipos_error || []).includes(x))) E.push(`${v.variante}: la lista de errores no tiene sin_respuesta y otro (T4)`);
       if (v.variante === "8-espacio" && !v.texto_transferir) E.push("8-espacio: falta el texto de Transferir (CHF-28)");
       for (const r of RUTAS) for (const g of (v.disponibilidad || {})[r] || []) if (!GR.includes(g)) E.push(`${v.variante}: grado desconocido ${g}`);
       for (const r of v.recetas_usadas || []) if (!(v.recetas_alergenos || {})[r]) E.push(`${v.variante}: receta usada sin alérgenos en la ficha (CHF-28)`);
@@ -437,7 +485,16 @@ const Motor = (() => {
         if (!it.dimension || !it.dimension.length) E.push(`${pos}: sin dimensión (CHF-01)`);
         const t = textoNino(it);
         for (const w of palabrasProhibidas(t, P.todas.concat(P.nino))) E.push(`${pos}: palabra no admitida «${w}» (CHF-14 y 19)`);
-        for (const c of [it.consigna, it.pregunta].filter(Boolean)) if (c.length > modulo.consigna_breve_max) E.push(`${pos}: consigna de más de ${modulo.consigna_breve_max} caracteres`);
+        const solo1318 = (it.rutas || []).length && it.rutas.every((r) => r === "13-18"), R13 = modulo.reglas_13_18 || {};
+        const maxC = solo1318 ? (R13.consigna_max || 80) : modulo.consigna_breve_max;
+        for (const c of [it.consigna, it.pregunta].filter(Boolean)) if (c.length > maxC) E.push(`${pos}: consigna de más de ${maxC} caracteres`);
+        if ((it.rutas || []).includes("13-18")) for (const e of reglas1318(t, R13.excepciones_diminutivo)) E.push(`${pos}: 13–18 con ${e} (T1)`);
+        if ((it.rutas || []).includes("13-18") && !/validado por PSP-SR|pendiente de PSP-SR/.test(it.estado_clinico || "")) E.push(`${pos}: 13–18 sin estado clínico declarado`);
+        // Taxonomía cerrada (T4)
+        const perm = tiposPermitidos(modulo, id, { multiple: it.multiple });
+        for (const tp of [it.tipo_error, ...Object.values(it.error_si || {})].filter(Boolean)) if (!perm.includes(tp)) E.push(`${pos}: tipo de error fuera de la lista de ${id}: ${tp} (T4)`);
+        for (const e of it.etapas || []) { const pe = tiposPermitidos(modulo, id, { rincon: e.rincon, multiple: e.multiple }).concat(id === "8-espacio" ? tiposPermitidos(modulo, "8-espacio") : []);
+          for (const tp of [e.tipo_error, ...Object.values(e.error_si || {})].filter(Boolean)) if (!pe.includes(tp)) E.push(`${pos}: etapa con tipo de error fuera de la lista: ${tp} (T4)`); }
         if (it.validas && !it.validas.every(([o, r]) => (it.opciones || []).some((x) => x.id === o) && (it.razones || []).some((x) => x.id === r))) E.push(`${pos}: combinación válida inexistente (CHF-15)`);
         if (it.formato === "presupuesto" && it.productos.reduce((s, p) => s + Math.min(...p.precios), 0) > it.presupuesto) E.push(`${pos}: presupuesto imposible`);
         if (it.formato === "aventura") for (const e of it.etapas) if (e.rincon !== 8 && (it.rutas || []).some((r) => rutaActiva(modulo, r) && !rinconesDe(modulo, r).includes(e.rincon) && !(r === "3-5" && e.rincon === 3 && e.formato === "carrito"))) E.push(`${pos}: etapa del rincón ${e.rincon} en una ruta donde no está (CHF-29)`);
@@ -446,13 +503,17 @@ const Motor = (() => {
     }
     const n8b = (g) => new Set(((banco.variantes["8-espacio"] || {})[g] || []).map((it) => it.situacion)).size;
     for (const g of GR) if (n8b(g) < 8) E.push(`8-espacio ${g}: menos de 8 situaciones (CHF-16)`);
-    for (const t of textosNino(banco)) for (const w of palabrasProhibidas(t, P.todas.concat(P.nino))) E.push(`texto de quien juega con «${w}»: ${t}`);
+    for (const t of textosNino(banco)) { for (const w of palabrasProhibidas(t, P.todas.concat(P.nino))) E.push(`texto de quien juega con «${w}»: ${t}`); if (rotuloVariante(t)) E.push(`texto de quien juega con el rótulo de la variante: ${t} (O1)`); }
+    const T13 = banco.textos.nino_13_18 || {};
+    for (const [k, t] of Object.entries(T13)) if (k !== "estado_clinico") for (const e of reglas1318(t)) E.push(`texto de 13–18 «${k}» con ${e} (T1)`);
+    // O4: el desafío para casa solo con recetas validadas por PSP-SR (la interfaz no lo muestra si no lo están)
+    if (!(banco.atragantamiento && banco.atragantamiento.lista && banco.atragantamiento.lista.length)) E.push("falta la lista de atragantamiento de 3–5 (T11)");
     for (const t of [modulo.ficha.para_que_sirve]) for (const w of palabrasProhibidas(t, P.familia.concat(P.todas))) E.push(`texto de familia con «${w}» (CHF-19)`);
     return [...new Set(E)];
   }
   const out = { GR, RUTAS, azar, mezclar, semillaDe, normalizar, variante, gradosDe, variantesDe, rinconesDe, itemsDe, ordenarPorReceta, etapasEnRuta, ajusteM10, sugerirOtraVariante,
     siguienteApoyo, sinAyuda, autonomia, tipoRepetido, esAprendizaje, exposicionSiguiente, valida, presupuestoOk, sumaPago, soloDigitos, acierto, registro, vistaPorHabilidad,
-    textosNino, palabrasProhibidas, validarBanco, CAMPOS_EXTRA };
+    textosNino, palabrasProhibidas, validarBanco, CAMPOS_EXTRA, validaMultiple, devolucionMultiple, tiposPermitidos, tipoCerrado, reglas1318, rotuloVariante, EXCEPTUADAS_O1 };
   if (typeof module !== "undefined") module.exports = out;
   return out;
 })();
@@ -521,9 +582,10 @@ const Dibujo = (() => {
   const receta = (banco, id) => { const r = banco.recetas.find((x) => x.id === id); if (!r) return "";
     const color = r.dulce ? "#F9C6BA" : "#DCEFD9";
     return svg(`<rect x="6" y="6" width="88" height="88" rx="16" fill="${color}" ${T}/><g transform="translate(12 14) scale(.38)">${(F[banco.ingredientes[r.ingredientes[0]].dib])(banco.ingredientes[r.ingredientes[0]].color)}</g><g transform="translate(50 14) scale(.38)">${(F[banco.ingredientes[r.ingredientes[1]].dib])(banco.ingredientes[r.ingredientes[1]].color)}</g>${U.plato.replace(/cy="56"/g, 'cy="74"').replace(/ry="22"/, 'ry="14"').replace(/ry="12"/, 'ry="7"')}`, r.nombre); };
-  const personaje = (quien) => svg(quien === "chef"
+  const personaje = (quien) => svgP(quien === "chef"
     ? `<circle cx="50" cy="56" r="22" fill="#E3A866" ${T}/><path d="M30 38 C20 20 40 8 50 16 C60 8 80 20 70 38Z" fill="#fff" ${T}/><rect x="30" y="34" width="40" height="8" fill="#fff" ${T}/><circle cx="42" cy="56" r="3" fill="${INK}"/><circle cx="58" cy="56" r="3" fill="${INK}"/><path d="M42 66 Q50 72 58 66" fill="none" ${T}/><path d="M24 96 C24 80 76 80 76 96" fill="#fff" ${T}/>`
     : `<circle cx="50" cy="52" r="20" fill="#A8714A" ${T}/><path d="M30 46 C30 26 70 26 70 46" fill="#3B4B5C" ${T}/><circle cx="43" cy="54" r="3" fill="${INK}"/><circle cx="57" cy="54" r="3" fill="${INK}"/><path d="M43 62 Q50 68 57 62" fill="none" ${T}/><path d="M26 96 C26 78 74 78 74 96" fill="#FFB82E" ${T}/>`, quien === "chef" ? "El chef" : "El ayudante");
+  const svgP = (inner) => svg(inner).replace("<svg", '<svg class="personaje"');
   const gorro = (regla) => svg(regla === "tipo"
     ? `<path d="M20 70 C6 50 26 20 50 30 C74 20 94 50 80 70Z" fill="#F58060" ${T}/><rect x="20" y="70" width="60" height="16" fill="#F58060" ${T}/><circle cx="50" cy="50" r="10" fill="#fff" ${T}/>`
     : `<path d="M50 12 L84 74 H16Z" fill="#4F7BB0" ${T}/><rect x="16" y="74" width="68" height="14" fill="#4F7BB0" ${T}/><rect x="42" y="44" width="16" height="16" fill="#fff" ${T}/>`, regla === "tipo" ? "Gorro rojo redondo: por tipo" : "Gorro azul en punta: por forma");
@@ -546,6 +608,7 @@ if (typeof module !== "undefined") module.exports = { Dibujo };
 "use strict";
 const leer = (id) => { try { return JSON.parse(document.getElementById(id).textContent); } catch (e) { return null; } };
 const BANCO = leer("datos-banco"), MODULO = leer("datos-modulo"), INICIO = leer("datos-inicio") || {};
+BANCO.recetas = (leer("datos-recetas") || {}).recetas || BANCO.recetas || [];   // las recetas viven en recetas.json (RT-CHF-001-R)
 const T = BANCO.textos, N = T.nino, D = Dibujo;
 const EN_MARCO = window.parent !== window;
 const CON_ADULTO = INICIO.adulto !== false;
@@ -561,14 +624,17 @@ const S = {
   ruta: MODULO.rutas[INICIO.ruta] ? INICIO.ruta : "6-8", variante: null, grado: "facil", gradoDe: { ...(INICIO.grados || {}) }, letra: INICIO.letra || null,
   sinExposicionBreve: false, apoyoInicial: 0, apoyoSig: {}, destacar: {}, fijo: false, idx: {}, hist: {}, cuentaErr: {}, expo: { acortoEnSesion: false },
   sesion: null, item: null, R: null, registros: [], contar: [], recetario: new Set(INICIO.recetario || []), rinconesJugados: new Set(INICIO.rincones || []),
-  historiaVista: !!INICIO.historia, estrategiaVista: new Set(INICIO.estrategias || []), receta: INICIO.receta || null, t0Sesion: null, aventura: null, sugerencias: new Set(), desafio: []
+  historiaVista: !!INICIO.historia, estrategiaVista: new Set(INICIO.estrategias || []), receta: null /* O3: dato de la sesión, no persiste ni se muestra */, t0Sesion: null, aventura: null, sugerencias: new Set(), desafio: []
 };
 const rutaCfg = () => MODULO.rutas[S.ruta];
 if (!S.letra) S.letra = MODULO.letra.por_defecto[S.ruta] || "mayuscula";
 const variante = (id = S.variante) => VARIANTES.find((v) => v.variante === id);
 const gradoInicial = (id) => { const gs = Motor.gradosDe(MODULO, S.ruta, id), g = S.gradoDe[id]; return gs.includes(g) ? g : gs[0]; };
 const nombreIng = (id) => (ING[id] || {}).nombre || id;
-function aplicarLetra() { document.body.classList.toggle("mayus", S.letra === "mayuscula"); }
+function aplicarLetra() { document.body.classList.toggle("mayus", S.letra === "mayuscula"); document.body.classList.toggle("sobria", S.ruta === "13-18"); }
+/* 13–18 (T1): presentación sobria, sin personajes ni exclamaciones; textos propios donde los hay. */
+const ADOLESCENTE = () => S.ruta === "13-18";
+const N2 = (k) => (ADOLESCENTE() && (T.nino_13_18 || {})[k]) || N[k];
 aplicarLetra();
 const avisar = (msg) => { if (EN_MARCO) parent.postMessage(msg, "*"); };
 
@@ -639,7 +705,7 @@ function pantallaAdulto() {
     $$("[data-grado-de]").forEach((s) => { S.gradoDe[s.dataset.gradoDe] = s.value; });
     S.apoyoSig = {}; S.destacar = {};
     avisar({ type: "chef-config", grados: S.gradoDe, letra: S.letra });
-    S.historiaVista ? cocina() : historia(cocina);
+    S.historiaVista || ADOLESCENTE() ? cocina() : historia(cocina);
   };
 }
 
@@ -665,15 +731,13 @@ function cocina() {
   S.R = null; S.aventura = null; aplicarLetraPendiente(); if (!S.t0Sesion) S.t0Sesion = Date.now();
   const rs = Motor.rinconesDe(MODULO, S.ruta);
   const nombre = (n) => VARIANTES.find((v) => v.rincon === n).rincon_nino;
-  $("#app").innerHTML = `<section class="panel nino"><div class="consigna"><p id="m-t">${esc(N.cocinaConsigna)}</p>${escuchar(N.cocinaConsigna)}</div>
-    ${S.receta ? `<p class="guia">${esc(N.recetaEnCurso)}: ${esc(REC[S.receta].nombre)} <button class="btn sec chico" id="m-sinreceta">${esc(N.cambiarReceta)}</button></p>` : ""}
+  $("#app").innerHTML = `<section class="panel nino"><div class="consigna"><p id="m-t">${esc(N2("cocinaConsigna"))}</p>${escuchar(N2("cocinaConsigna"))}</div>
     <div class="rincones">${rs.map((n) => `<button class="rincon" data-rincon="${n}">${D.rincon(n)}<span class="t">${esc(nombre(n))}</span>${S.rinconesJugados.has(n) ? `<span class="tarjeta-ok">${esc(N.recetario)} ✓</span>` : ""}</button>`).join("")}</div>
     ${S.recetario.size ? `<h2 style="margin-top:14px">${esc(N.recetario)}</h2><div class="recetario">${[...S.recetario].map((r) => `<div class="receta">${D.receta(BANCO, r)}<span class="t">${esc(REC[r].nombre)}</span></div>`).join("")}</div>` : ""}
-    <div class="acciones"><button class="btn sec" id="m-historia">${esc(N.verHistoria)}</button>${CON_ADULTO ? '<button class="btn sec" id="m-adulto"><span class="adulto-txt">Persona adulta</span></button>' : ""}</div></section>`;
+    <div class="acciones">${ADOLESCENTE() ? "" : `<button class="btn sec" id="m-historia">${esc(N.verHistoria)}</button>`}${CON_ADULTO ? '<button class="btn sec" id="m-adulto"><span class="adulto-txt">Persona adulta</span></button>' : ""}</div></section>`;
   $$("[data-rincon]").forEach((b) => b.onclick = () => elegirVariante(+b.dataset.rincon));
-  $("#m-historia").onclick = () => historia(cocina);
+  const mh = $("#m-historia"); if (mh) mh.onclick = () => historia(cocina);
   const a = $("#m-adulto"); if (a) a.onclick = pantallaAdulto;
-  const s = $("#m-sinreceta"); if (s) s.onclick = () => { S.receta = null; cocina(); };
 }
 /* Cada rincón ofrece sus variantes por nombre de acción; quien juega nunca ve «Zona», «Espacio», Estación ni grado. */
 function elegirVariante(n) {
@@ -694,7 +758,7 @@ function entrar(id) {
 function estrategia() {
   const v = variante(), e = BANCO.estrategias[S.variante];
   $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(v.titulo_nino)}</h1>
-    <div class="objeto-grande" style="width:140px;height:140px">${D.personaje(v.rincon % 2 ? "chef" : "ayudante")}</div>
+    ${ADOLESCENTE() ? "" : `<div class="objeto-grande" style="width:140px;height:140px">${D.personaje(v.rincon % 2 ? "chef" : "ayudante")}</div>`}
     <div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(e.asi_se_juega)}</p>${escuchar(e.asi_se_juega)}</div>
     <div class="consigna" style="justify-content:center"><p style="flex:0 1 auto;font-weight:700;font-size:1.05rem">${esc(e.estrategia)}</p>${escuchar(e.estrategia)}</div>
     <div class="acciones"><button class="btn" id="e-empezar">${esc(N.empezar)}</button><button class="btn sec" id="e-volver">${esc(N.volver)}</button></div></section>`;
@@ -748,13 +812,16 @@ function usarAyuda(nivel, inicial) {
   const b = $("#ayuda"); if (b) { b.classList.remove("ofrecida"); if (R.nivelAyuda >= 3) b.disabled = true; }
 }
 /* Error: devolución neutra con pista; desde el primer error se ofrece la ayuda de nivel 1 (REQ-CLI-CHF-06). Sin cruces ni sonidos. */
-function error(t, tipo, cuantos = 1) {
+function permitidos() { return Motor.tiposPermitidos(MODULO, S.aventura ? S.aventura.variante : S.variante, { rincon: S.aventura ? S.item.rincon : undefined, multiple: S.item && S.item.multiple }); }
+/* candidatos: ids en orden de preferencia; se registra el primero de la lista cerrada (o «otro»). Con o.todos, cada uno (selección múltiple). */
+function error(t, candidatos, cuantos = 1, o = {}) {
   const R = S.R; if (!R || R.terminado) return;
-  R.errores += cuantos; R.intentos += 1; if (tipo) R.tipos.push(tipo);
+  R.errores += cuantos; R.intentos += 1;
+  if (cuantos > 0) { const pm = permitidos(); if (o.todos) for (const c of candidatos) R.tipos.push(Motor.tipoCerrado(pm, c)); else R.tipos.push(Motor.tipoCerrado(pm, candidatos)); }
   const b = $("#ayuda"); const pista = t || "Casi. Mirá otra vez.";
   if (b && R.nivelAyuda < 3) { b.classList.add("ofrecida"); msj(pista + " " + N.ofrecerAyuda); } else msj(pista);
 }
-const tipoDe = (it, def) => it.tipo_error || def || (variante().tipos_error || [])[0];
+const tipoDe = (it, ...def) => [it.tipo_error, ...def].filter(Boolean);
 function finItem(extra = {}) {
   const R = S.R, it = S.item; if (!R || R.terminado) return; R.terminado = true; R.intentos += 1;
   const mods = [...R.modalidades], modalidad = !mods.length ? "tocar" : mods.length > 1 ? "mixta" : mods[0];
@@ -826,19 +893,26 @@ function siguienteEtapa() {
 function comoSalio() {
   $("#app").innerHTML = `<section class="panel cierre nino"><div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(N.comoSalio)}</p>${escuchar(N.comoSalio)}</div>
     <div class="opciones" style="--min:220px">${T.como_salio.map((o) => `<button class="opcion" data-cs="${o.id}"><span class="t">${esc(o.txt)}</span></button>`).join("")}</div></section>`;
-  $$("[data-cs]").forEach((b) => b.onclick = () => finAventura(b.dataset.cs));   // autoevaluación: no se califica
+  // Autoevaluación: no se califica ni entra en M10 (T3). Si «lo haría distinto», se pregunta qué cambiaría (T14), con opciones cerradas.
+  $$("[data-cs]").forEach((b) => b.onclick = () => {
+    if (b.dataset.cs !== "distinto") return finAventura(b.dataset.cs);
+    const Q = T.que_cambiarias;
+    $("#app").innerHTML = `<section class="panel cierre nino"><div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(Q.pregunta)}</p>${escuchar(Q.pregunta)}</div>
+      <div class="opciones" style="--min:220px">${Q.opciones.map((o) => `<button class="opcion" data-qc="${o.id}"><span class="t">${esc(o.txt)}</span></button>`).join("")}</div></section>`;
+    $$("[data-qc]").forEach((q) => q.onclick = () => finAventura("distinto", q.dataset.qc));
+  });
 }
-function finAventura(cs) {
+function finAventura(cs, qc) {
   const A = S.aventura, v = variante(A.variante);
   S.item = A.item;
   const reg = Motor.registro({ variante: A.variante, rincon: 8, estacion: v.estacion, grado: S.grado, item: A.item.id, habilidad: v.habilidad_referencia, resultado: A.ok ? "acierto" : "error",
-    errores: A.errores, intentos: A.etapas.length, tipos_error: A.ok ? [] : ["etapa-con-error"], apoyos: [], apoyo_inicial: A.item.apoyo_por_etapa || 0, apoyo_max: A.max, modalidad: "mixta", ms: Date.now() - A.t0, tipo_letra: S.letra,
-    extra: { receta: A.item.receta, como_salio: cs || undefined, situacion: A.item.situacion } });
+    errores: A.errores, intentos: A.etapas.length, tipos_error: A.ok ? [] : [...new Set(A.tipos)], apoyos: [], apoyo_inicial: A.item.apoyo_por_etapa || 0, apoyo_max: A.max, modalidad: "mixta", ms: Date.now() - A.t0, tipo_letra: S.letra,
+    extra: { receta: A.item.receta, como_salio: cs || undefined, que_cambiarias: qc || undefined, situacion: A.item.situacion } });
   S.registros.push(reg); avisar({ type: "chef-item", acierto: Motor.acierto(reg), ...reg });
   S.aventura = null;
   $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(variante().titulo_nino)}</h1><div class="lado"></div><div class="msj-caja"><div class="msj" id="msj"></div>${escuchar("", 'id="msj-oir" hidden')}</div></section>`;
   S.sesion.items = 99;
-  cerrarRegistro(reg, "Mesa compartida: ¡a comer todos juntos!");
+  cerrarRegistro(reg, ADOLESCENTE() ? N2("finAventura") : "Mesa compartida: ¡a comer todos juntos!");
 }
 
 /* ---------- Cierre del rincón: tarjeta de «Mi recetario» por jugar (CHF-11), idea fuera de la pantalla, «Contar» y desafío para casa ---------- */
@@ -849,21 +923,28 @@ function cierre(motivo) {
   const nueva = !S.recetario.has(recUsada); S.recetario.add(recUsada); S.rinconesJugados.add(v.rincon);
   avisar({ type: "chef-tarjeta", receta: recUsada, rincon: v.rincon });
   const mejoro = delRincon.length >= 2 && delRincon[delRincon.length - 1].apoyo_max < delRincon[0].apoyo_max;
-  const t = tiempo ? N.cierreTiempo : piso ? N.cierrePiso : (mejoro ? N.mejora : "Gracias por cocinar en este rincón.");
-  const C = T.contar;
+  // O2: la frase de mejora aparece solo si el apoyo bajó; si subió o se mantuvo, no se dice nada sobre apoyo ni tiempo
+  const t = tiempo ? N.cierreTiempo : piso ? N.cierrePiso : (mejoro ? N.mejora : (ADOLESCENTE() ? N2("cierreRincon") : "Gracias por cocinar en este rincón."));
+  const C = T.contar, ayudo = (C.ayudo[String(v.rincon)] || []).concat(ADOLESCENTE() ? ((C.ayudo_extra_13_18 || {})[String(v.rincon)] || []) : []);
+  // «Contar» (T14): opciones cerradas de PSP-SR; no se puntúa ni entra en M10
   const contar = `<div class="contar"><h2>${esc(C.titulo)}</h2>${S.ruta === "3-5" ? `<p class="small adulto-txt">${esc(C.con_adulto_3_5)}</p>` : ""}
-    <p class="pregunta">${esc(C.pregunta)} ${escuchar(C.pregunta)}</p><div class="opciones" style="--min:160px">${C.opciones.map((o) => `<button class="opcion" data-ayudo="${o.id}" aria-pressed="false"><span class="t">${esc(o.txt)}</span></button>`).join("")}</div>
+    <p class="pregunta">${esc(C.resulto.pregunta)} ${escuchar(C.resulto.pregunta)}</p><div class="opciones" style="--min:140px">${C.resulto.opciones.map((o) => `<button class="opcion" data-resulto="${o.id}" aria-pressed="false"><span class="t">${esc(o.txt)}</span></button>`).join("")}</div>
+    <p class="pregunta">${esc(C.pregunta)} ${escuchar(C.pregunta)}</p><div class="opciones" style="--min:180px">${ayudo.map((x, k) => `<button class="opcion" data-ayudo="r${v.rincon}-${k + 1}" data-txt="${esc(x)}" aria-pressed="false"><span class="t">${esc(x)}</span></button>`).join("")}<button class="opcion" data-ayudo="${C.otra.id}" data-txt="${esc(C.otra.txt)}" aria-pressed="false"><span class="t">${esc(C.otra.txt)}</span></button></div>
     <p class="small adulto-txt">${esc(C.oral)}</p></div>`;
-  const des = BANCO.desafio_recetas.includes(recUsada) && REC[recUsada].rutas.includes(S.ruta) ? desafioHTML(recUsada) : "";
-  $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(nueva ? N.tarjetaNueva : N.tarjetaOtraVez)}</h1>
+  // O4: el desafío para casa usa solo recetas validadas por PSP-SR (hoy ninguna: no se muestra)
+  const rv = REC[recUsada] || {};
+  const des = BANCO.desafio_recetas.includes(recUsada) && (rv.rutas || []).includes(S.ruta) && rv.estado_clinico === "validado por PSP-SR" ? desafioHTML(recUsada) : "";
+  $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(nueva ? N2("tarjetaNueva") : N2("tarjetaOtraVez"))}</h1>
     <div class="recetario"><div class="receta">${D.receta(BANCO, recUsada)}<span class="t">${esc(REC[recUsada].nombre)}</span></div></div>
     <div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(t)}</p>${escuchar(t)}</div>
     <div class="idea"><h2>${esc(N.ideaTitulo)}</h2><div class="consigna"><p>${esc(v.idea_fuera)}</p>${escuchar(v.idea_fuera)}</div><p class="small adulto-txt">${esc(T.ideaNota)}</p></div>
     ${contar}${des}
     <div class="acciones"><button class="btn" id="c-volver">${esc(N.volver)}</button>${piso || tiempo ? "" : `<button class="btn sec" id="c-otra">${esc(N.otraVez)}</button>`}
     ${CON_ADULTO ? '<button class="btn sec" id="c-registro"><span class="adulto-txt">Registro (persona adulta)</span></button>' : ""}</div></section>`;
-  const resp = { variante: id, ayudo: null }; let guardada = false;
-  $$("[data-ayudo]").forEach((b) => b.onclick = () => { resp.ayudo = b.dataset.ayudo; if (!guardada) { S.contar.push(resp); guardada = true; } $$("[data-ayudo]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
+  const resp = { variante: id, resulto: null, ayudo: [] }; let guardada = false;
+  const guardar = () => { if (!guardada) { S.contar.push(resp); guardada = true; } };
+  $$("[data-resulto]").forEach((b) => b.onclick = () => { resp.resulto = b.dataset.resulto; guardar(); $$("[data-resulto]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
+  $$("[data-ayudo]").forEach((b) => b.onclick = () => { const k = b.dataset.txt, i = resp.ayudo.indexOf(k); i >= 0 ? resp.ayudo.splice(i, 1) : resp.ayudo.push(k); guardar(); b.setAttribute("aria-pressed", i < 0); });   // selección múltiple
   const lh = $("#d-hicimos"); if (lh) lh.onclick = () => { S.desafio.push({ receta: recUsada }); lh.disabled = true; lh.textContent = "¡Qué bueno!"; };
   $("#c-volver").onclick = cocina;
   const o = $("#c-otra"); if (o) o.onclick = () => entrar(id);
@@ -888,11 +969,11 @@ function verRegistro() {
   const filas = Motor.vistaPorHabilidad(S.registros), tit = (id) => { const v = variante(id); return v ? `Rincón ${v.rincon} · ${v.nombre_variante}` : id; };
   const d = document.createElement("div"); d.className = "dialogo";
   d.innerHTML = `<div class="panel" role="dialog" aria-modal="true" aria-labelledby="r-t"><h2 id="r-t">Registro de esta sesión, por habilidad</h2>
-    <p class="small">Datos de prueba de esta pantalla: no se guardan ni salen del dispositivo. Calculado en código, sin modelos de lenguaje. Quien juega no ve este registro. La app no infiere estrategias.</p>
+    <p class="small">Datos de prueba de esta pantalla: no se guardan ni salen del dispositivo. Calculado en código, sin modelos de lenguaje. Quien juega no ve este registro. La app no infiere estrategias. Los tipos de error describen la respuesta en el ejercicio, nunca a la persona. «En el gran reto» cuenta aparte lo resuelto de forma integrada y no mueve el grado del rincón.</p>
     <p class="leyenda">${esc(MODULO.ficha.texto_profesional_7_1)}</p>
-    <div class="tabla-scroll"><table class="reg" id="r-hab"><thead><tr><th>Habilidad</th><th>Variantes</th><th>Ejercicios</th><th>En esta actividad: resuelve sin apoyo</th><th>Resuelve con apoyo</th><th>Todavía con demostración</th><th>Al primer intento</th><th>Apoyos más usados</th><th>Tipos de error</th><th>Repeticiones de consigna</th></tr></thead>
-    <tbody>${filas.map((f) => `<tr><td>${esc(f.habilidad)}</td><td>${esc(f.variantes.map(tit).join(", "))}</td><td>${f.items}</td><td>${f.sin_apoyo}</td><td>${f.con_apoyo}</td><td>${f.demostracion}</td><td>${f.primer_intento}</td><td>${esc(f.apoyos.join(", ") || "—")}</td><td>${esc(f.tipos.join(", ") || "—")}</td><td>${f.rep}</td></tr>`).join("") || '<tr><td colspan="10">Todavía no hay ejercicios.</td></tr>'}</tbody></table></div>
-    ${S.contar.length ? `<h3>Contar (opciones cerradas)</h3><ul class="small">${S.contar.map((c) => `<li>${esc(tit(c.variante))}: le ayudó «${esc(c.ayudo || "—")}»</li>`).join("")}</ul>` : ""}
+    <div class="tabla-scroll"><table class="reg" id="r-hab"><thead><tr><th>Habilidad</th><th>Variantes</th><th>Ejercicios</th><th>En esta actividad: resuelve sin apoyo</th><th>Resuelve con apoyo</th><th>Todavía con demostración</th><th>Al primer intento</th><th>Apoyos más usados</th><th>Tipos de error</th><th>Repeticiones de consigna</th><th>En el gran reto</th></tr></thead>
+    <tbody>${filas.map((f) => `<tr><td>${esc(f.habilidad)}</td><td>${esc(f.variantes.map(tit).join(", "))}</td><td>${f.items}</td><td>${f.sin_apoyo}</td><td>${f.con_apoyo}</td><td>${f.demostracion}</td><td>${f.primer_intento}</td><td>${esc(f.apoyos.join(", ") || "—")}</td><td>${esc(f.tipos.join(", ") || "—")}</td><td>${f.rep}</td><td>${f.gran_reto.items ? `${f.gran_reto.items} (sin apoyo: ${f.gran_reto.sin_apoyo})` : "—"}</td></tr>`).join("") || '<tr><td colspan="11">Todavía no hay ejercicios.</td></tr>'}</tbody></table></div>
+    ${S.contar.length ? `<h3>Contar (opciones cerradas)</h3><ul class="small">${S.contar.map((c) => `<li>${esc(tit(c.variante))}: le resultó «${esc(((T.contar.resulto.opciones.find((o) => o.id === c.resulto)) || {}).txt || "—")}»; le ayudó «${esc(c.ayudo.join("», «") || "—")}»</li>`).join("")}</ul>` : ""}
     <h3>Detalle por ejercicio</h3><div class="tabla-scroll"><table class="reg" id="r-tabla"><thead><tr><th>Variante</th><th>Grado</th><th>Ejercicio</th><th>Habilidad</th><th>Resultado</th><th>Errores · tipo</th><th>Apoyo de entrada → máximo</th><th>Datos</th></tr></thead>
     <tbody>${S.registros.map((r) => `<tr><td>${esc(tit(r.variante))}</td><td>${esc(r.grado)}</td><td>${esc(r.item)}</td><td>${esc(r.habilidad)}</td><td>${esc(r.resultado)}</td><td>${r.errores}${r.tipos_error.length ? " · " + esc(r.tipos_error.join(", ")) : ""}</td><td>${r.apoyo_inicial} → ${r.apoyo_max} · ${esc(r.autonomia)}</td><td class="small">${esc(Object.entries(r.extra).map(([k, v]) => k + "=" + v).join(", "))}</td></tr>`).join("")}</tbody></table></div>
     <div class="acciones"><button class="btn" id="r-cerrar">Cerrar</button></div></div>`;
@@ -958,19 +1039,23 @@ const FORMATOS = {
       $$("#ops [data-op]").forEach((b) => b.onclick = () => {
         if (S.R.terminado) return;
         const id = b.dataset.op;
-        if (it.multiple) { elegidas.has(id) ? elegidas.delete(id) : elegidas.add(id); b.setAttribute("aria-pressed", elegidas.has(id)); return; }
-        if (it.con_razon) { op = id; $$("#ops [data-op]").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("#razones").hidden = false; $("#razones button").focus(); return; }
+        // Cambiar la respuesta antes de confirmar no es error: se registra como autocorrección (T3)
+        if (it.multiple) { if (elegidas.has(id)) { elegidas.delete(id); S.R.autocorreccion = true; } else elegidas.add(id); b.setAttribute("aria-pressed", elegidas.has(id)); return; }
+        if (it.con_razon) { if (op && op !== id) S.R.autocorreccion = true; op = id; $$("#ops [data-op]").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("#razones").hidden = false; $("#razones button").focus(); return; }
         if (Motor.valida(it, id)) { S.R.extra.razon = undefined; if (S.aventura && it.imprevisto) S.R.extra.alternativa = id; if (it.receta && ["1-zona", "1-espacio"].includes(S.variante)) S.receta = it.receta; finItem(); }
         else { b.disabled = true; error(it.pista1, tipoDe(it)); if (S.aventura && it.imprevisto) S.R.extra.alternativa = id; }
       });
       $$("#razones [data-razon]").forEach((b) => b.onclick = () => {
         if (S.R.terminado || !op) return;
         S.R.extra.razon = b.dataset.razon;
-        if (Motor.valida(it, op, b.dataset.razon)) { S.receta = op; finItem(); } else { error("Esa razón no va con esa receta. Mirá otra vez.", "razon-incoherente"); }
+        if (Motor.valida(it, op, b.dataset.razon)) { S.receta = op; finItem(); } else { error("Esa razón no va con esa receta. Mirá otra vez.", ["razon_incoherente"]); }
       });
       const l = $("#listo"); if (l) l.onclick = () => {
-        const c = new Set(correctasDe(it)), ok = [...c].every((x) => elegidas.has(x)) && [...elegidas].every((x) => c.has(x));
-        if (ok) finItem(); else error(it.pista1, tipoDe(it, "eligio-otra-receta"));
+        if (S.R.terminado) return;
+        if (!elegidas.size) return msj("Elegí las que van.");   // sin respuesta: no es error (M10-7)
+        const r = Motor.validaMultiple(correctasDe(it), [...elegidas]);
+        S.R.extra.correctas_marcadas = r.correctas_marcadas; S.R.extra.total_correctas = r.total_correctas;   // T6
+        if (r.ok) finItem(); else error(Motor.devolucionMultiple(r), r.tipos, 1, { todos: true });
       };
     },
     ayuda(n, it) {
@@ -992,7 +1077,7 @@ const FORMATOS = {
       ubicable($("#cuerpo"), (fid, dest) => {
         const f = it.fichas.find((x) => x.id === fid); if (!f || S.R.terminado) return;
         if (f.destino === dest) { const el = $(`#bandeja [data-id="${CSS.escape(fid)}"]`); el.classList.add("puesta"); el.setAttribute("aria-pressed", "false"); $(`[data-destino="${dest}"] .dentro`).appendChild(el); hechas += 1; msj(""); if (hechas === it.fichas.length) finItem(); }
-        else error(it.pista1, tipoDe(it, dest === "sobra" ? "agrego-sobrante" : dest === "falta" ? "confundio-tengo-falta" : null));
+        else error(it.pista1, tipoDe(it, dest === "sobra" || dest === "falta" ? "falta_sobra_invertido" : "categoria_cruzada", "categoria_vecina"));
       });
     },
     ayuda(n, it) {
@@ -1013,7 +1098,7 @@ const FORMATOS = {
         if (S.R.terminado || b.classList.contains("puesta")) return;
         const id = b.dataset.id;
         if (faltan.has(id)) { faltan.delete(id); b.classList.add("puesta"); $("#mesada").appendChild(b); msj(""); if (!faltan.size) finItem(); }
-        else error(it.pista1, (ING[id] || {}).parecido && it.lista.includes(ING[id].parecido) ? "eligio-parecido" : tipoDe(it, it.recordar ? "agrego-sobrante" : "eligio-otro"));
+        else error(it.pista1, it.recordar ? ["intrusion"] : (ING[id] || {}).parecido && it.lista.includes(ING[id].parecido) ? ["parecido_visual"] : tipoDe(it, "categoria_vecina", "de_mas"));
       });
     },
     ayuda(n, it) {
@@ -1029,8 +1114,8 @@ const FORMATOS = {
         <h3>Carrito</h3><div class="carrito" id="carro"></div><div class="acciones"><button class="btn" id="listo">${esc(N.listo)}</button></div>`);
       let n = 0; const pintar = () => { $("#cuenta").textContent = n; $("#carro").innerHTML = Array.from({ length: n }, () => D.ing(BANCO, it.ing, false)).join(""); };
       $("#mas").onclick = () => { if (n < (it.maximo || 10)) { n += 1; pintar(); } };
-      $("#menos").onclick = () => { if (n > 0) { n -= 1; pintar(); if (S.R.errores) S.R.autocorreccion = true; } };
-      $("#listo").onclick = () => { if (S.R.terminado) return; if (n === it.cantidad) finItem(); else error(it.pista1, n > it.cantidad ? "conto-de-mas" : "conto-de-menos"); };
+      $("#menos").onclick = () => { if (n > 0) { n -= 1; pintar(); S.R.autocorreccion = true; } };
+      $("#listo").onclick = () => { if (S.R.terminado) return; if (n === it.cantidad) finItem(); else error(it.pista1, n > it.cantidad ? ["conteo_de_mas"] : ["conteo_de_menos"]); };
     },
     ayuda(n, it) { if (n === 2) { msj(`Contá en voz alta: ${Array.from({ length: it.cantidad }, (_, k) => k + 1).join(", ")}.`); return "recta-numerica"; } it._demo = `Ponemos de a uno hasta ${it.cantidad}.`; return "demostracion"; },
   },
@@ -1038,13 +1123,16 @@ const FORMATOS = {
   numero: {
     render(it) {
       const ver = it.tenemos != null ? `<p class="small" style="text-align:center">Tenemos:</p><div class="cajon" style="max-width:240px;margin:0 auto 10px">${Array.from({ length: it.tenemos }, () => D.ing(BANCO, it.ing, false)).join("")}</div>` : "";
+      const ops = (MODULO.calculadora || {})[S.ruta] || [], conCalc = !S.aventura && S.variante === "3-espacio" && ops.length;
       marcoJuego(it, `${ver}<div class="pantalla-num" id="pant" aria-live="polite">&nbsp;</div><div class="teclado" role="group" aria-label="Teclado de números">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map((k) => k === "" ? "<span></span>" : `<button class="btn sec" data-k="${k}" aria-label="${k === "⌫" ? esc(N.borrar) : k}">${k}</button>`).join("")}</div>
-        <div class="acciones" style="justify-content:center"><button class="btn" id="listo">${esc(N.listo)}</button></div>`);
+        <div class="acciones" style="justify-content:center"><button class="btn" id="listo">${esc(N.listo)}</button></div>${conCalc ? calculadoraHTML(ops) : ""}`, conCalc ? `<button class="btn sec chico" id="calc">${esc(N.calculadora)}</button>` : "");
+      // T13: en un ítem de cálculo la calculadora es apoyo de aprendizaje (nivel 2)
+      if (conCalc) prepararCalculadora(() => { S.R.apoyo_max = Math.max(S.R.apoyo_max, 2); if (!S.R.apoyos.includes("2:calculadora")) S.R.apoyos.push("2:calculadora"); S.R.extra.calculadora = "aprendizaje"; });
       let v = "";
       const pintar = () => { $("#pant").innerHTML = v || "&nbsp;"; };
-      $$("[data-k]").forEach((b) => b.onclick = () => { const k = b.dataset.k; const nv = k === "⌫" ? v.slice(0, -1) : v + k; if (Motor.soloDigitos(nv)) { v = nv; pintar(); } });
+      $$("[data-k]").forEach((b) => b.onclick = () => { const k = b.dataset.k; if (k === "⌫" && v) S.R.autocorreccion = true; const nv = k === "⌫" ? v.slice(0, -1) : v + k; if (Motor.soloDigitos(nv)) { v = nv; pintar(); } });
       document.addEventListener("keydown", S.R.local.tecla = (e) => { if (!$("#pant")) return; if (/^[0-9]$/.test(e.key)) { const nv = v + e.key; if (Motor.soloDigitos(nv)) { v = nv; pintar(); } } else if (e.key === "Backspace") { v = v.slice(0, -1); pintar(); } });
-      $("#listo").onclick = () => { if (S.R.terminado || !v) return; if (+v === it.respuesta) finItem({ extra: { total: +v } }); else error(it.pista1, (it.error_si || {})[v] || tipoDe(it, "monto-incorrecto")); };
+      $("#listo").onclick = () => { if (S.R.terminado || !v) return; if (+v === it.respuesta) finItem({ extra: { total: +v } }); else error(it.pista1, [(it.error_si || {})[v], ...tipoDe(it, "calculo", "numero_cantidad")]); };
     },
     ayuda(n, it) { if (n === 2) { msj(`Contá desde ${it.tenemos} hasta ${it.tenemos + it.respuesta}.`); return "recta-numerica"; } it._demo = `Faltan ${it.respuesta}.`; return "demostracion"; },
   },
@@ -1057,8 +1145,8 @@ const FORMATOS = {
       const puestos = [];
       const pintar = () => { $("#bandeja-pago").innerHTML = puestos.map((x) => `<span>$ ${x}</span>`).join(""); $("#tot").textContent = Motor.sumaPago(puestos); };
       $$("[data-b]").forEach((b) => b.onclick = () => { puestos.push(+b.dataset.b); pintar(); });
-      $("#quitar").onclick = () => { puestos.pop(); pintar(); if (S.R.errores) S.R.autocorreccion = true; };
-      $("#listo").onclick = () => { if (S.R.terminado) return; const t = Motor.sumaPago(puestos); if (t === it.monto) finItem({ extra: { total: t } }); else error(it.pista1, "monto-incorrecto"); };
+      $("#quitar").onclick = () => { if (puestos.length) S.R.autocorreccion = true; puestos.pop(); pintar(); };
+      $("#listo").onclick = () => { if (S.R.terminado) return; const t = Motor.sumaPago(puestos); if (t === it.monto) finItem({ extra: { total: t } }); else error(it.pista1, t < it.monto ? ["pago_insuficiente"] : ["calculo"]); };
     },
     ayuda(n, it) { const b = it.billetes.filter((x) => x <= it.monto).pop(); if (n === 2) { const e = $(`[data-b="${b}"]`); if (e) e.classList.add("ofrecida"); return "resaltar"; } it._demo = `Por ejemplo: ${b} y después lo que falta.`; return "demostracion"; },
   },
@@ -1067,13 +1155,14 @@ const FORMATOS = {
     render(it) {
       marcoJuego(it, `<p class="pregunta">${esc(N.tenes)}: $ ${it.presupuesto}</p><div class="productos">${it.productos.map((p, k) => `<div class="producto">${D.ing(BANCO, p.ing)}<strong>${esc(nombreIng(p.ing))}</strong>
         ${p.precios.map((pr, j) => `<button class="opcion" data-p="${k}" data-j="${j}" aria-pressed="false"><span class="precio">${j ? "Grande" : "Chico"} · $ ${pr}</span></button>`).join("")}</div>`).join("")}</div>
-        <p class="pregunta">${esc(N.total)}: $ <span id="tot">0</span></p><div class="acciones"><button class="btn sec" id="calc">${esc(N.calculadora)}</button><button class="btn" id="listo">${esc(N.pagar)}</button></div><p id="calc-out" class="small"></p>`);
+        <p class="pregunta">${esc(N.total)}: $ <span id="tot">0</span></p><div class="acciones"><button class="btn" id="listo">${esc(N.pagar)}</button></div>${((MODULO.calculadora || {})[S.ruta] || []).length ? calculadoraHTML(MODULO.calculadora[S.ruta]) : ""}`,
+        ((MODULO.calculadora || {})[S.ruta] || []).length ? `<button class="btn sec chico" id="calc">${esc(N.calculadora)}</button>` : "");
       const el = it.productos.map(() => null);
       const pintar = () => { $("#tot").textContent = el.reduce((s, j, k) => s + (j == null ? 0 : it.productos[k].precios[j]), 0); };
-      $$("[data-p]").forEach((b) => b.onclick = () => { const k = +b.dataset.p; el[k] = +b.dataset.j; $$(`[data-p="${k}"]`).forEach((x) => x.setAttribute("aria-pressed", x === b)); pintar(); });
-      // Calculadora: en un ítem de planificación del presupuesto es apoyo de acceso (FEC 5.3)
-      $("#calc").onclick = () => { registrarAcceso("calculadora-en-planificacion"); $("#calc-out").textContent = `Suma de lo elegido: ${$("#tot").textContent}. Te quedan: ${it.presupuesto - +$("#tot").textContent}.`; };
-      $("#listo").onclick = () => { if (S.R.terminado) return; const r = Motor.presupuestoOk(it, el); if (r.ok) finItem({ extra: { total: r.total } }); else error(r.motivo === "falta-elegir" ? "Elegí uno de cada uno." : it.pista1, r.motivo === "falta-elegir" ? null : r.motivo); };
+      $$("[data-p]").forEach((b) => b.onclick = () => { const k = +b.dataset.p; if (el[k] != null && el[k] !== +b.dataset.j) S.R.autocorreccion = true; el[k] = +b.dataset.j; $$(`[data-p="${k}"]`).forEach((x) => x.setAttribute("aria-pressed", x === b)); pintar(); });
+      // Calculadora: en un ítem de planificación del presupuesto es apoyo de acceso (FEC 5.3, T13): no sube apoyo_max
+      if ($("#calc")) prepararCalculadora(() => { registrarAcceso("calculadora-en-planificacion"); S.R.extra.calculadora = "acceso"; });
+      $("#listo").onclick = () => { if (S.R.terminado) return; const r = Motor.presupuestoOk(it, el); if (r.ok) finItem({ extra: { total: r.total } }); else if (r.motivo === "falta-elegir") msj("Elegí uno de cada uno."); else error(it.pista1, ["presupuesto_excedido"]); };
     },
     ayuda(n, it) { if (n === 2) { it.productos.forEach((p, k) => { const b = $(`[data-p="${k}"][data-j="0"]`); if (b) b.classList.add("ofrecida"); }); return "resaltar"; } it._demo = "Los chicos cuestan menos: probá con esos."; return "demostracion"; },
   },
@@ -1087,13 +1176,13 @@ const FORMATOS = {
       marcoJuego(it, `${fal}<div id="orden" ${it.faltante ? "hidden" : ""}><div class="bandeja" id="bandeja">${mezcla.map((p) => `<button class="ficha opcion" style="width:auto;height:auto;min-height:64px;padding:8px 12px" data-id="${p.id}" aria-pressed="false"><span class="t">${esc(p.txt)}</span></button>`).join("")}</div>
         <div class="casilleros" id="cas">${pasos.map((_, k) => `<button class="casillero" style="width:clamp(120px,22vw,180px);height:auto;min-height:96px" data-destino="${k}"><span class="num">${k + 1}</span><span class="dentro"></span></button>`).join("")}</div></div>`, modelo);
       const vm = $("#ver-modelo"); if (vm) vm.onclick = () => { $("#modelo").hidden = !$("#modelo").hidden; S.R.apoyo_max = Math.max(S.R.apoyo_max, 2); S.R.apoyos.push("2:modelo-de-secuencia"); };   // en 4A el modelo es apoyo de aprendizaje (5.3)
-      $$("#faltan [data-f]").forEach((b) => b.onclick = () => { if (b.dataset.f === it.faltante) { $("#faltan").closest(".grupo").remove(); $("#orden").hidden = false; msj("Ahora ordená los pasos."); } else { b.disabled = true; error(it.pista1, "omitio-un-paso"); } });
+      $$("#faltan [data-f]").forEach((b) => b.onclick = () => { if (b.dataset.f === it.faltante) { $("#faltan").closest(".grupo").remove(); $("#orden").hidden = false; msj("Ahora ordená los pasos."); } else { b.disabled = true; error(it.pista1, ["paso_omitido"]); } });
       let sig = 0;
       ubicable($("#cuerpo"), (pid, dest) => {
         if (S.R.terminado) return;
         if (+dest !== sig) { error("Empezá por el casillero que sigue.", null, 0); return; }
         if (pasos[sig].id === pid) { const el = $(`#bandeja [data-id="${pid}"]`); el.classList.add("puesta"); $(`[data-destino="${dest}"] .dentro`).appendChild(el); $(`[data-destino="${dest}"]`).classList.add("lleno"); sig += 1; msj(""); if (sig === pasos.length) finItem(); }
-        else error(it.pista1, "invirtio-dos-pasos");
+        else error(it.pista1, [sig === 0 || sig === pasos.length - 1 ? "inicio_final" : "pasos_invertidos", "pasos_invertidos", "orden_oracion", "dependencia_rota", "orden"]);
       });
       it._pasos = pasos; S.R.local.sig = () => sig;
     },
@@ -1110,7 +1199,7 @@ const FORMATOS = {
       const R0 = S.R; if (expo) setTimeout(() => { if (S.R !== R0 || R0.terminado || !$("#modelo")) return; $("#modelo").innerHTML = "<span>Modelo</span>"; $("#ops").hidden = false; S.R.local.t1 = Date.now(); }, expo);
       $$("#ops [data-op]").forEach((b) => b.onclick = () => {
         if (S.R.terminado) return;
-        if (b.dataset.op === it.correcta) { cerrarExpo(true); finItem(); } else { b.disabled = true; cerrarExpo(false); error(it.pista1, ING[b.dataset.op].parecido === it.modelo || ING[it.modelo].parecido === b.dataset.op ? "eligio-parecido" : "eligio-otro"); }
+        if (b.dataset.op === it.correcta) { cerrarExpo(true); finItem(); } else { b.disabled = true; cerrarExpo(false); error(it.pista1, ING[b.dataset.op].parecido === it.modelo || ING[it.modelo].parecido === b.dataset.op ? ["distractor_parecido"] : ["otro"]); }
       });
     },
     ayuda(n, it) { if (n === 2) { const malas = $$("#ops [data-op]").filter((b) => b.dataset.op !== it.correcta); malas.slice(0, Math.ceil(malas.length / 2)).forEach((b) => (b.disabled = true)); return "sacar-opciones"; }
@@ -1130,7 +1219,7 @@ const FORMATOS = {
           if (S.R.terminado) return;
           const ing = ING[e.ing], bien = e.regla === "tipo" ? ing.tipo === b.dataset.c : ing.forma === b.dataset.c;
           if (bien) { aciertos += 1; k += 1; if (k === it.ensayos.length) finItem({ extra: { precision: Math.round((aciertos / (aciertos + S.R.errores)) * 100) / 100 } }); else pintar(); }
-          else { const anterior = k > 0 && it.ensayos[k - 1].regla !== e.regla; error(it.pista1, anterior ? "siguio-regla-anterior" : "error-de-clasificacion"); }
+          else { const anterior = k > 0 && it.ensayos[k - 1].regla !== e.regla; error(it.pista1, anterior ? ["perseveracion"] : ["regla_confundida"]); }
         });
       };
       pintar();
@@ -1146,7 +1235,7 @@ const FORMATOS = {
       let k = 0;
       $$("#estante [data-id]").forEach((b) => b.onclick = () => { if (S.R.terminado || b.classList.contains("puesta")) return;
         if (b.dataset.id === it.orden[k]) { k += 1; b.classList.add("puesta"); $("#mesada").appendChild(b); if (k === it.orden.length) finItem(); }
-        else error(it.pista1, it.orden.includes(b.dataset.id) ? "orden-incorrecto" : "tarjeta-incorrecta"); });
+        else error(it.pista1, it.orden.includes(b.dataset.id) ? ["orden_oracion"] : ["palabra_equivocada"]); });
       S.R.local.k = () => k;
     },
     ayuda(n, it) { const id = it.orden[S.R.local.k()]; if (n === 2) { msj("Primero lo primero que escuchaste."); return "resaltar"; } const b = $(`#estante [data-id="${id}"]`); if (b) b.classList.add("resaltada"); it._demo = "Ahora va este."; return "demostracion"; },
@@ -1157,10 +1246,10 @@ const FORMATOS = {
       const ninos = ["3-5", "6-8", "9-12"].includes(S.ruta);
       const pasos = it.pasos, r = Motor.azar(Motor.semillaDe(it.id));
       const utsReceta = [...new Set(pasos.map((p) => p.utensilio))];
-      const seguros = Motor.mezclar([...new Set(utsReceta.filter((u) => !UT[u].riesgo).concat(Motor.mezclar(["bol", "cuchara", "plato", "taza", "espatula", "colador"].filter((u) => !utsReceta.includes(u)), r).slice(0, 2)))], r);
+      const seguros = Motor.mezclar([...new Set(utsReceta.filter((u) => !UT[u].riesgo || !ninos).concat(Motor.mezclar(["bol", "cuchara", "plato", "taza", "espatula", "colador"].filter((u) => !utsReceta.includes(u)), r).slice(0, 2)))], r);
       const riesgosos = utsReceta.filter((u) => UT[u].riesgo);
-      const acciones = Motor.mezclar([...new Set(pasos.filter((p) => !p.riesgo).map((p) => p.accion).concat(Motor.mezclar(["mezclar", "colocar", "servir", "distribuir", "lavar"], r).slice(0, 2)))], r);
-      const modeloTxt = (p) => p.riesgo ? `El chef: ${p.texto.toLowerCase()}.` : `${BANCO.acciones[p.accion]} con ${UT[p.utensilio].nombre}.`;
+      const acciones = Motor.mezclar([...new Set(pasos.filter((p) => !p.riesgo || !ninos).map((p) => p.accion).concat(Motor.mezclar(["mezclar", "colocar", "servir", "distribuir", "lavar"], r).slice(0, 2)))], r);
+      const modeloTxt = (p) => p.riesgo && ninos ? `El chef: ${p.texto.toLowerCase()}.` : `${BANCO.acciones[p.accion]} con ${UT[p.utensilio].nombre}.`;
       const lado = it.modelo === "a_pedido" ? `<button class="btn sec chico" id="ver-chef">Ver al chef</button>` : "";
       marcoJuego(it, `<div class="cocina-juego">
         <div class="modelo-chef" id="modelo" ${["permanente", "guia", "primer_paso"].includes(it.modelo) ? "" : "hidden"}>${D.personaje("chef")}<span id="modelo-txt"></span></div>
@@ -1168,22 +1257,23 @@ const FORMATOS = {
         <div><h3>Utensilios</h3><div class="botonera" id="uts">${seguros.map((u) => `<button class="opcion sel-ut" data-ut="${u}" aria-pressed="false">${D.ut(BANCO, u)}<span class="t">${esc(UT[u].nombre)}</span></button>`).join("")}</div></div>
         <div><h3>Acciones</h3><div class="botonera" id="accs">${acciones.map((a) => `<button class="opcion sel-acc" data-acc="${a}" aria-pressed="false"><span class="t">${esc(BANCO.acciones[a])}</span></button>`).join("")}
           ${ninos ? riesgosos.map((u) => `<button class="opcion chef" data-chef="${u}">${D.ut(BANCO, u)}<span class="t">${esc(N.pedirChef)} use ${esc(UT[u].nombre === "horno" || UT[u].nombre === "cuchillo" || UT[u].nombre === "rallador" ? "el" : "la")} ${esc(UT[u].nombre)}</span></button>`).join("") : ""}</div></div>
-        <h3>Mesada</h3><ol class="pasos-hechos" id="hechos"></ol></div>`, lado);
+        ${ninos ? "" : '<p class="guia" id="seguridad" hidden></p>'}<h3>Mesada</h3><ol class="pasos-hechos" id="hechos"></ol></div>`, lado);
       let k = 0, ut = null;
-      const mostrarModelo = () => { const p = pasos[k]; if (!p) return; const m = $("#modelo"); if (it.modelo === "permanente" || it.modelo === "guia" || (it.modelo === "primer_paso" && k === 0)) { m.hidden = false; $("#modelo-txt").textContent = it.modelo === "guia" ? `Paso ${k + 1}: ${p.texto}` : modeloTxt(p); } else m.hidden = true;
+      const mostrarModelo = () => { const p = pasos[k]; if (!p) return; const m = $("#modelo"), sg = $("#seguridad");
+        if (sg) { sg.hidden = !p.riesgo; sg.textContent = p.riesgo ? (T.seguridad_13_18 || {})[p.riesgo] || "" : ""; }   // 13–18: pasos de seguridad a la vista if (it.modelo === "permanente" || it.modelo === "guia" || (it.modelo === "primer_paso" && k === 0)) { m.hidden = false; $("#modelo-txt").textContent = it.modelo === "guia" ? `Paso ${k + 1}: ${p.texto}` : modeloTxt(p); } else m.hidden = true;
         if (it.modelo === "permanente") { $$("[data-ut],[data-acc],[data-chef]").forEach((b) => b.classList.remove("ofrecida")); const sel = p.riesgo ? `[data-chef="${p.utensilio}"]` : `[data-ut="${p.utensilio}"],[data-acc="${p.accion}"]`; $$(sel).forEach((b) => b.classList.add("ofrecida")); } };
-      const hecho = (p) => { $("#hechos").insertAdjacentHTML("beforeend", `<li class="${p.riesgo ? "adulto" : ""}">${esc(p.texto)}</li>`); k += 1; ut = null; $$("[data-ut],[data-acc]").forEach((b) => b.setAttribute("aria-pressed", "false")); msj(""); if (k === pasos.length) finItem(); else mostrarModelo(); };
+      const hecho = (p) => { $("#hechos").insertAdjacentHTML("beforeend", `<li class="${p.riesgo && ninos ? "adulto" : ""}">${esc(p.texto)}</li>`); k += 1; ut = null; $$("[data-ut],[data-acc]").forEach((b) => b.setAttribute("aria-pressed", "false")); msj(""); if (k === pasos.length) finItem(); else mostrarModelo(); };
       $$("[data-ut]").forEach((b) => b.onclick = () => { if (S.R.terminado) return; ut = b.dataset.ut; $$("[data-ut]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
       $$("[data-acc]").forEach((b) => b.onclick = () => {
         if (S.R.terminado) return; const p = pasos[k];
-        if (p.riesgo && ninos) return error("Este paso lo hace el chef. Pedíselo.", "accion-incorrecta");
+        if (p.riesgo && ninos) return error("Este paso lo hace el chef. Pedíselo.", ["accion"]);
         if (!ut) return msj("Primero elegí un utensilio.");
         if (ut === p.utensilio && b.dataset.acc === p.accion) hecho(p);
-        else error(it.pista1, ut !== p.utensilio ? "utensilio-incorrecto" : "accion-incorrecta");
+        else error(it.pista1, ut !== p.utensilio ? ["utensilio"] : ["accion"]);
       });
       $$("[data-chef]").forEach((b) => b.onclick = () => { if (S.R.terminado) return; const p = pasos[k];
         if (p.riesgo && p.utensilio === b.dataset.chef) hecho(p);   // pedirle al chef cuenta como paso correcto (caso 8)
-        else error(p.riesgo ? it.pista1 : "Este paso lo podés hacer vos.", "accion-incorrecta"); });
+        else error(p.riesgo ? it.pista1 : "Este paso lo podés hacer vos.", ["accion"]); });
       const vc = $("#ver-chef"); if (vc) vc.onclick = () => { registrarAcceso("modelo-de-secuencia"); const p = pasos[k]; $("#modelo").hidden = false; $("#modelo-txt").textContent = modeloTxt(p); };
       mostrarModelo(); S.R.local.k = () => k;
     },
@@ -1202,8 +1292,35 @@ function prepararYaMire(it) {
   $("#ya-mire").onclick = () => { mostrarLista(false); $("#ya-mire").remove(); $("#zona-juego").hidden = false;
     if (it.agregado) msj(`Agregamos ${nombreIng(it.agregado)}.`);
     $("#lista").insertAdjacentHTML("beforeend", `<button class="btn sec chico" id="ver-otra">${esc(N.verLista)}</button>`);
-    // Volver a ver la lista en 2B es apoyo de nivel 2 (FEC 5.5)
-    $("#ver-otra").onclick = () => { mostrarLista(true); S.R.apoyo_max = Math.max(S.R.apoyo_max, 2); S.R.apoyos.push("2:volver-a-ver-lista"); setTimeout(() => mostrarLista(false), 0); $("#lista").classList.remove("tapada"); $("#ver-otra").textContent = N.yaMire; $("#ver-otra").onclick = () => mostrarLista(false); }; };
+    // T8: cada vez que se vuelve a ver la lista después de «Ya miré» es apoyo de aprendizaje nivel 2. No es error ni tiene devolución negativa.
+    let viendo = false;
+    $("#ver-otra").onclick = () => {
+      if (!S.R || S.R.terminado) return;
+      viendo = !viendo; mostrarLista(viendo);
+      if (viendo) { S.R.apoyo_max = Math.max(S.R.apoyo_max, 2); if (S.R.apoyos.length < 20) S.R.apoyos.push("2:volver-a-ver-lista"); }
+      $("#ver-otra").textContent = viendo ? N.yaMire : N.verLista;
+    }; };
+}
+/* Calculadora simple, sin memoria (T13): 9–12 suma, resta y multiplicación; 13–18 las cuatro y %. Se calcula en código. */
+function calculadoraHTML(ops) {
+  const sim = { "+": "+", "-": "−", "*": "×", "/": "÷", "%": "%" };
+  return `<div class="calculadora" id="calculadora" hidden role="group" aria-label="${esc(N.calculadora)}"><div class="pantalla-num" id="calc-pant">0</div>
+    <div class="teclado calc">${[7, 8, 9, 4, 5, 6, 1, 2, 3, 0].map((d) => `<button class="btn sec" data-c="${d}">${d}</button>`).join("")}${ops.map((o) => `<button class="btn sec" data-c="${o}" aria-label="${o === "%" ? "por ciento" : sim[o]}">${sim[o]}</button>`).join("")}<button class="btn sec" data-c="=">=</button><button class="btn sec" data-c="C" aria-label="Borrar todo">C</button></div></div>`;
+}
+function prepararCalculadora(alAbrir) {
+  let a = null, op = null, cur = "", abierta = false;
+  const pant = () => { $("#calc-pant").textContent = cur || (a != null ? String(a) : "0"); };
+  const hacer = (x, o, y) => o === "+" ? x + y : o === "-" ? x - y : o === "*" ? x * y : o === "/" ? (y ? x / y : x) : y;
+  $("#calc").onclick = () => { abierta = !abierta; $("#calculadora").hidden = !abierta; if (abierta) alAbrir(); };
+  $$("#calculadora [data-c]").forEach((b) => b.onclick = () => {
+    const c = b.dataset.c;
+    if (/^\d$/.test(c)) { if (cur.length < 9) cur += c; }
+    else if (c === "C") { a = null; op = null; cur = ""; }
+    else if (c === "%") { if (cur) { const y = +cur; cur = String(a != null && (op === "*" || op === "/") ? y / 100 : a != null ? a * y / 100 : y / 100); } }
+    else if (c === "=") { if (op && cur) { a = Math.round(hacer(a, op, +cur) * 100) / 100; op = null; cur = ""; } }
+    else { if (cur) { a = a == null || !op ? +cur : Math.round(hacer(a, op, +cur) * 100) / 100; cur = ""; } op = c; }
+    pant();
+  });
 }
 function cerrarExpo(ok) {
   if (!S.item.exposicion || S.sinExposicionBreve) return;

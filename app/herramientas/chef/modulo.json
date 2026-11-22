@@ -3,13 +3,13 @@
  "nombre": "Chef en Acción",
  "nombre_trabajo": true,
  "tipo": "herramienta",
- "version": "0.1.0-prueba",
- "fecha": "2026-11-21",
+ "version": "0.1.1-prueba",
+ "fecha": "2026-11-22",
  "fec": "FEC-016 v0.3",
- "revision_tecnica": "RT-CHF-001 v1.0",
+ "revision_tecnica": "RT-CHF-001 v1.1 · respuesta RT-CHF-001-R v1.0",
  "estado": "borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos",
  "activo": true,
- "_nota": "Ficha técnica generada por scripts/chef_generar.py. Estación, habilidades, grados, disponibilidades y reglas salen de la FEC-016 v0.3 (contenido clínico de PSP-SR, nivel C). Recetas, consignas y devoluciones son borrador de DEV-IA, pendientes de PSP-SR.",
+ "_nota": "Ficha técnica generada por scripts/chef_generar.py. Estación, habilidades, grados, disponibilidades y reglas salen de la FEC-016 v0.3 (contenido clínico de PSP-SR, nivel C). Taxonomías de error, «Contar», lista de atragantamiento, reglas y muestras de 13–18 son de PSP-SR (RT-CHF-001-R v1.0). Recetas y el resto de las consignas son borrador de DEV-IA, pendientes de PSP-SR.",
  "ficha": {
   "proposito": "Practicar habilidades cognitivas y funcionales dentro de una actividad cotidiana: elegir, reunir, comprar, organizar y preparar una receta.",
   "para_que_sirve": "En esta aventura se prepara una receta de principio a fin: elegir qué cocinar, buscar los ingredientes, hacer las compras, ordenar los pasos y cocinar en una cocina de juego. Cada parte se puede jugar por separado. Sirve para practicar cosas que usamos todos los días: recordar, contar, calcular, entender consignas y planificar.",
@@ -17,7 +17,7 @@
   "transferencia_B": "Lo que se practica acá mejora estas actividades. No hay evidencia de que mejore por sí solo la memoria, la atención o la velocidad en general.",
   "nivel_evidencia": "C",
   "rotulo_evidencia": "Basada en práctica clínica, con evidencia limitada",
-  "edad": "3 a 18 años (13 a 18 deshabilitada en el prototipo, T1)",
+  "edad": "3 a 18 años",
   "dosis_sugerida": "1 o 2 rincones por sesión, 2 o 3 veces por semana; el gran reto, en una sesión propia.",
   "dosis_nota": "Propuesta de PSP-SR [Suposición, nivel C], sin estudios que la respalden.",
   "limitacion": "Para personas ciegas, la cocina visual no es accesible (limitación declarada).",
@@ -62,7 +62,14 @@
   "subir_sin_ayuda": 0.7,
   "mantener_desde": 0.6,
   "errores_seguidos": 3,
-  "_nota": "Heredado de FEC-015 hasta la respuesta de PSP-SR (T3)."
+  "no_cuenta": [
+   "autocorreccion",
+   "sin_respuesta",
+   "como_salio",
+   "contar"
+  ],
+  "integrado_aparte": true,
+  "_nota": "M10 heredado de FEC-015. PSP-SR (T3): cambiar la respuesta antes de confirmar es autocorrección y no cuenta como error; «¿Cómo salió?» no se puntúa."
  },
  "error_repetido_umbral": 3,
  "exposicion_5a": {
@@ -76,7 +83,7 @@
   "pausa_ms": 500,
   "precision_para_acortar": 0.85,
   "una_vez_por_sesion": true,
-  "_nota": "Heredado de 8A de FEC-015 hasta T2."
+  "_nota": "Heredado de 8A de FEC-015; 13–18 con mínimo de 700 ms confirmado por PSP-SR (T2)."
  },
  "rutas": {
   "3-5": {
@@ -91,12 +98,58 @@
   "9-12": {
    "sesion_min": 25,
    "items_por_ronda": 4
+  },
+  "13-18": {
+   "sesion_min": 30,
+   "items_por_ronda": 4,
+   "sobria": true,
+   "_nota": "Duración de sesión [Suposición], pendiente de PSP-SR."
   }
  },
- "rutas_deshabilitadas": {
-  "13-18": "13 a 18 años: incluida por decisión de la supervisora (D1), pero deshabilitada en este prototipo hasta tener los textos de PSP-SR (RT-CHF-001, pregunta T1)."
+ "coccion_13_18": true,
+ "reglas_13_18": {
+  "estado_clinico": "validado por PSP-SR",
+  "consigna_max": 80,
+  "sin_diminutivos": true,
+  "excepciones_diminutivo": [
+   "galletitas"
+  ],
+  "sin_exclamaciones_infantiles": true,
+  "sin_personajes": true,
+  "persona_hace_pasos_con_riesgo": true,
+  "pasos_de_seguridad_visibles": true
  },
- "coccion_13_18": false,
+ "calculadora": {
+  "6-8": [],
+  "9-12": [
+   "+",
+   "-",
+   "*"
+  ],
+  "13-18": [
+   "+",
+   "-",
+   "*",
+   "/",
+   "%"
+  ],
+  "estado_clinico": "validado por PSP-SR",
+  "_nota": "T13: apoyo de aprendizaje en los ítems de cálculo; apoyo de acceso en los de planificar el presupuesto."
+ },
+ "minimos_por_combinacion": {
+  "3-5": 8,
+  "otras": 12,
+  "rige_desde": "0.2.0",
+  "_nota": "T12; el prototipo 0.1.x tiene 4."
+ },
+ "seleccion_multiple": {
+  "criterio": "todas las correctas y ninguna de más",
+  "parcial": [
+   "omision",
+   "de_mas"
+  ],
+  "_nota": "T6"
+ },
  "estaciones": {
   "variantes": [
    {
@@ -151,11 +204,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -178,8 +227,13 @@
      ]
     },
     "tipos_error": [
-     "confundio-categoria",
-     "eligio-otra-receta"
+     "categoria_cruzada",
+     "asociacion_imagen",
+     "condicion_omitida",
+     "omision",
+     "de_mas",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Abran la alacena: busquen tres cosas dulces y tres saladas.",
     "recetas_usadas": [
@@ -252,9 +306,7 @@
       "dificil"
      ],
      "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
+      "intermedio"
      ]
     },
     "transferencia": "B",
@@ -278,8 +330,12 @@
      ]
     },
     "tipos_error": [
-     "no-cumplio-condicion",
-     "razon-incoherente"
+     "condicion_negativa",
+     "condicion_omitida",
+     "razon_incoherente",
+     "recurso_no_disponible",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Abran la alacena: busquen tres cosas dulces y tres saladas.",
     "recetas_usadas": [
@@ -357,11 +413,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -385,8 +437,12 @@
      ]
     },
     "tipos_error": [
-     "eligio-parecido",
-     "eligio-otro"
+     "parecido_visual",
+     "categoria_vecina",
+     "omision",
+     "de_mas",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Uno dice tres cosas de la heladera; el otro las busca sin mirar una lista.",
     "recetas_usadas": [
@@ -482,9 +538,7 @@
       "dificil"
      ],
      "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
+      "intermedio"
      ]
     },
     "transferencia": "B",
@@ -509,9 +563,12 @@
      ]
     },
     "tipos_error": [
-     "olvido-ingrediente",
-     "agrego-sobrante",
-     "confundio-tengo-falta"
+     "omision",
+     "intrusion",
+     "no_actualizo",
+     "falta_sobra_invertido",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Uno dice tres cosas de la heladera; el otro las busca sin mirar una lista.",
     "recetas_usadas": [
@@ -625,11 +682,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -654,9 +707,13 @@
      ]
     },
     "tipos_error": [
-     "conto-de-mas",
-     "conto-de-menos",
-     "comparo-al-reves"
+     "conteo_de_mas",
+     "conteo_de_menos",
+     "numero_cantidad",
+     "comparacion_invertida",
+     "equivalencia",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "La próxima vez que vayan a comprar, que lleve la cuenta de cuántas cosas ponen en la bolsa.",
     "recetas_usadas": [],
@@ -739,10 +796,14 @@
      ]
     },
     "tipos_error": [
-     "sumo-en-lugar-de-restar",
-     "no-conto-el-vuelto",
-     "se-paso-del-presupuesto",
-     "monto-incorrecto"
+     "operacion_invertida",
+     "calculo",
+     "vuelto_omitido",
+     "presupuesto_excedido",
+     "comparacion_precio",
+     "pago_insuficiente",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "La próxima vez que vayan a comprar, que lleve la cuenta de cuántas cosas ponen en la bolsa.",
     "recetas_usadas": [
@@ -817,11 +878,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -845,9 +902,12 @@
      ]
     },
     "tipos_error": [
-     "invirtio-dos-pasos",
-     "omitio-un-paso",
-     "no-detecto-error"
+     "pasos_invertidos",
+     "paso_omitido",
+     "error_no_detectado",
+     "inicio_final",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Cuenten en orden cómo se prepara un vaso de leche con cacao: ¿qué va primero?",
     "recetas_usadas": [
@@ -949,9 +1009,7 @@
       "dificil"
      ],
      "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
+      "intermedio"
      ]
     },
     "transferencia": "B",
@@ -976,8 +1034,12 @@
      ]
     },
     "tipos_error": [
-     "dependencia-al-reves",
-     "no-anticipo"
+     "dependencia_rota",
+     "paralelo_no_identificado",
+     "paralelo_incorrecto",
+     "consecuencia",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Cuenten en orden cómo se prepara un vaso de leche con cacao: ¿qué va primero?",
     "recetas_usadas": [],
@@ -1029,11 +1091,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -1056,8 +1114,11 @@
      ]
     },
     "tipos_error": [
-     "eligio-parecido",
-     "eligio-otro"
+     "distractor_parecido",
+     "objetivo_omitido",
+     "respuesta_impulsiva",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "En la mesa, junten todas las cucharas; ahora, todo lo que sea de metal.",
     "recetas_usadas": [],
@@ -1109,11 +1170,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -1136,8 +1193,11 @@
      ]
     },
     "tipos_error": [
-     "siguio-regla-anterior",
-     "error-de-clasificacion"
+     "perseveracion",
+     "regla_confundida",
+     "distractor",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "En la mesa, junten todas las cucharas; ahora, todo lo que sea de metal.",
     "recetas_usadas": [],
@@ -1193,11 +1253,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -1220,8 +1276,11 @@
      ]
     },
     "tipos_error": [
-     "confundio-palabra",
-     "omitio-atributo"
+     "palabra_imagen",
+     "atributo_omitido",
+     "pregunta_escena",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Jueguen a «adiviná el utensilio»: uno lo describe y el otro lo adivina.",
     "recetas_usadas": [],
@@ -1276,8 +1335,6 @@
       "dificil"
      ],
      "13-18": [
-      "facil",
-      "intermedio",
       "dificil"
      ]
     },
@@ -1302,8 +1359,12 @@
      ]
     },
     "tipos_error": [
-     "tarjeta-incorrecta",
-     "orden-incorrecto"
+     "orden_oracion",
+     "palabra_equivocada",
+     "paso_omitido",
+     "consigna_parcial",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Jueguen a «adiviná el utensilio»: uno lo describe y el otro lo adivina.",
     "recetas_usadas": [
@@ -1377,11 +1438,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -1406,8 +1463,12 @@
      ]
     },
     "tipos_error": [
-     "utensilio-incorrecto",
-     "accion-incorrecta"
+     "utensilio",
+     "accion",
+     "ingrediente",
+     "orden",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Pongan la mesa juntos: platos, vasos y cubiertos sin filo.",
     "recetas_usadas": [
@@ -1518,11 +1579,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -1546,9 +1603,13 @@
      ]
     },
     "tipos_error": [
-     "utensilio-incorrecto",
-     "accion-incorrecta",
-     "no-detecto-error"
+     "utensilio",
+     "accion",
+     "orden",
+     "paso_omitido",
+     "error_no_detectado",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Pongan la mesa juntos: platos, vasos y cubiertos sin filo.",
     "recetas_usadas": [
@@ -1647,11 +1708,7 @@
       "intermedio",
       "dificil"
      ],
-     "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
-     ]
+     "13-18": []
     },
     "transferencia": "B",
     "texto_transferir": null,
@@ -1675,7 +1732,8 @@
      ]
     },
     "tipos_error": [
-     "etapa-con-error"
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Piensen juntos qué podrían preparar si vinieran visitas mañana.",
     "recetas_usadas": [
@@ -1789,9 +1847,7 @@
       "dificil"
      ],
      "13-18": [
-      "facil",
-      "intermedio",
-      "dificil"
+      "intermedio"
      ]
     },
     "transferencia": "B",
@@ -1816,36 +1872,32 @@
      ]
     },
     "tipos_error": [
-     "etapa-con-error",
-     "alternativa-no-valida"
+     "imprevisto_no_resuelto",
+     "adaptacion_incoherente",
+     "sin_respuesta",
+     "otro"
     ],
     "idea_fuera": "Piensen juntos qué podrían preparar si vinieran visitas mañana.",
     "recetas_usadas": [
      "arroz_verduras",
-     "bizcochuelo",
      "empanadas",
-     "ensalada_frutas",
      "ensalada_verde",
      "fideos_salsa",
      "galletitas",
      "panqueques",
      "pizza",
      "sandwich_queso",
+     "tarta_verdura",
      "tortas_fritas",
-     "tostadas"
+     "tostadas",
+     "yogur_cereales"
     ],
     "recetas_alergenos": {
      "arroz_verduras": [],
-     "bizcochuelo": [
-      "gluten",
-      "huevo",
-      "leche"
-     ],
      "empanadas": [
       "gluten",
       "huevo"
      ],
-     "ensalada_frutas": [],
      "ensalada_verde": [],
      "fideos_salsa": [
       "gluten",
@@ -1869,11 +1921,20 @@
       "gluten",
       "leche"
      ],
+     "tarta_verdura": [
+      "gluten",
+      "huevo",
+      "leche"
+     ],
      "tortas_fritas": [
       "gluten",
       "leche"
      ],
      "tostadas": [
+      "gluten",
+      "leche"
+     ],
+     "yogur_cereales": [
       "gluten",
       "leche"
      ]
@@ -1936,11 +1997,14 @@
    "facil",
    "intermedio",
    "dificil",
-   "zona",
-   "espacio",
    "desafio",
    "desafios",
    "estimulacion"
+  ],
+  "_nota_O1": "«Fácil», «Más o menos» y «Difícil» se admiten solo como opciones de «¿Cómo te resultó?» (por id). «Zona» y «Espacio» se rechazan solo como rótulo de variante.",
+  "rotulo_variante": [
+   "zona",
+   "espacio"
   ],
   "familia": [
    "estimulacion",

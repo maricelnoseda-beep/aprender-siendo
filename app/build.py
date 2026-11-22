@@ -110,6 +110,7 @@ if "--chef" in sys.argv:
     html = html.replace("__BRAND_FONT__", TOKEN.sub(lambda m: datauri(m.group(1)), read("nucleo/estilos/identidad.css")), 1)
     html = (html.replace("__BANCO__", js(json.dumps(json.loads(read("herramientas/chef/banco.json")), ensure_ascii=False)), 1)
                 .replace("__MODULO__", js(json.dumps(json.loads(read("herramientas/chef/modulo.json")), ensure_ascii=False)), 1)
+                .replace("__RECETAS__", js(json.dumps(json.loads(read("herramientas/chef/recetas.json")), ensure_ascii=False)), 1)
                 .replace("__INICIO__", "{}", 1))
     out = root / "dist-chef"; out.mkdir(exist_ok=True)
     (out / "Chef_en_Accion.html").write_text(html)
