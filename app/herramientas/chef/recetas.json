@@ -1,5 +1,5 @@
 {
- "version": "0.1.4-prueba",
+ "version": "0.2.0-prueba",
  "fecha": "2026-11-23",
  "estado": "corregido según RT-CHF-001-R v1.2 (C1 a C4); pendiente de PSP-SR (19 ítems) y de la supervisora",
  "recetas": [
@@ -1404,27 +1404,6 @@
    "panqueques",
    "tortas_fritas"
   ],
-  "Es el cumpleaños de la abuela.": [
-   "ensalada_frutas",
-   "tostadas",
-   "sandwich_queso",
-   "bolitas_coco",
-   "bizcochuelo",
-   "galletitas",
-   "panqueques",
-   "tortas_fritas",
-   "pizza",
-   "empanadas"
-  ],
-  "Vienen los primos a cenar.": [
-   "ensalada_verde",
-   "fideos_salsa",
-   "arroz_verduras",
-   "tarta_verdura",
-   "empanadas",
-   "pizza",
-   "locro"
-  ],
   "Hoy cocinamos para la familia.": [
    "ensalada_verde",
    "fideos_salsa",
@@ -1478,6 +1457,27 @@
    "empanadas",
    "pizza",
    "sandwich_queso"
+  ],
+  "Hoy hay un cumpleaños.": [
+   "ensalada_frutas",
+   "tostadas",
+   "sandwich_queso",
+   "bolitas_coco",
+   "bizcochuelo",
+   "galletitas",
+   "panqueques",
+   "tortas_fritas",
+   "pizza",
+   "empanadas"
+  ],
+  "Vienen visitas a cenar.": [
+   "ensalada_verde",
+   "fideos_salsa",
+   "arroz_verduras",
+   "tarta_verdura",
+   "empanadas",
+   "pizza",
+   "locro"
   ]
  }
 }

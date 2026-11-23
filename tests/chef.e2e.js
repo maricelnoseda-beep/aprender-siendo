@@ -113,7 +113,7 @@ async function jugarVariante(page, id, grado) {
     const it = b.variantes['8-espacio'].facil[0]; const e = it.etapas.find((x) => x.imprevisto); e.falta = 'manteca'; e.consigna = 'No hay manteca.'; return Motor.validarBanco(b, MODULO); });
   must(b12.some((e) => /B1/.test(e) && /cuela/.test(e)), 'B1: el validador detecta un paso en la olla caliente sin riesgo (riesgo heredado)');
   must(b12.some((e) => /B2/.test(e) && /manteca/.test(e)), 'B2: el validador rechaza un imprevisto con un faltante que no sale de la receta');
-  must(await page.evaluate(() => Motor.validarBanco(BANCO, MODULO).length === 0 && Object.values(BANCO.variantes['8-espacio']).every((l) => new Set(l.map((it) => it.situacion)).size === l.length)), 'CHF-16: situaciones distintas en cada grado de 8B');
+  must(await page.evaluate(() => Motor.validarBanco(BANCO, MODULO).length === 0 && Object.values(BANCO.variantes['8-espacio']).every((l) => new Set(l.map((it) => it.situacion)).size >= 8 && new Set(l.map((it) => it.situacion + it.receta)).size === l.length)), 'CHF-16: ocho situaciones distintas o más en cada grado de 8B, sin repetir situación y receta');
 
   // RT-CHF-001-R v1.2: C1 a C4, estado clínico y D4
   const v12 = await page.evaluate(() => {
@@ -135,7 +135,20 @@ async function jugarVariante(page, id, grado) {
   must(v12.emp && v12.tor && v12.pasosIguales, 'C3: empanadas y tortas fritas enfrían dentro del paso del adulto, con la misma cantidad de pasos');
   must(v12.i9 === 'El domingo cocinás para varias personas. Falta un ingrediente y viene alguien más.' && v12.i9lista, 'C4: la situación de 13–18 no da por sentada la familia (y su faltante está en la lista)');
   const DIECINUEVE = ['1-espacio-f4', '1-zona-i1', '1-zona-i4', '8-espacio-d1', '8-espacio-d3', '8-espacio-d4', '8-espacio-d5', '8-espacio-d6', '8-espacio-d7', '8-espacio-f5', '8-espacio-f7', '8-espacio-i1', '8-espacio-i3', '8-espacio-i4', '8-espacio-i8', '8-espacio-i9', '8-zona-f2', '8-zona-i3', '8-zona-i4'];
-  must(v12.validados === 194 && JSON.stringify(v12.corregidos) === JSON.stringify(DIECINUEVE), `estado clínico: 194 validados y los 19 corregidos de la sección 6 (${v12.validados}, ${v12.corregidos.length})`);
+  const v20 = await page.evaluate(() => { const todos = Object.values(BANCO.variantes).flatMap((g) => Object.values(g).flat()); const c = (f) => todos.filter(f).length;
+    const imps = todos.flatMap((it) => (it.etapas || []).filter((e) => e.imprevisto));
+    return { total: todos.length, nuevosPend: todos.every((it) => !it.nuevo_v020 || it.estado_clinico === 'pendiente de PSP-SR'), nuevos: c((it) => it.nuevo_v020), viejosSinPend: c((it) => !it.nuevo_v020 && it.estado_clinico === 'pendiente de PSP-SR'),
+      validados: c((it) => it.estado_clinico === 'validado por PSP-SR'), corregidos: c((it) => /RT-CHF-001-R v1\.3/.test(it.estado_clinico)),
+      harina: imps.filter((e) => /harina de siempre/.test(e.consigna)).every((e) => e.opciones.find((o) => o.id === 'nada').txt === 'Volver sin comprar'),
+      o9: !todos.some((it) => /abuela|primos/.test(it.situacion || '')) && !!BANCO.situaciones['Hoy hay un cumpleaños.'] && !!BANCO.situaciones['Vienen visitas a cenar.'],
+      merienda: todos.flatMap((it) => [it, ...(it.etapas || [])]).filter((e) => e.formato === 'elegir' && /para la merienda/.test(e.consigna || '')).every((e) => e.opciones.filter((o) => o.id !== e.correcta).every((o) => ['fideos_salsa', 'arroz_verduras', 'tarta_verdura'].includes(o.receta))) }; });
+  must(v20.total === 585 && v20.nuevos === 372 && v20.nuevosPend && v20.viejosSinPend === 0, `v0.2.0: 213 ítems de la v0.1.3 y 372 nuevos, pendientes de PSP-SR (${JSON.stringify(v20)})`);
+  must(v20.validados + v20.corregidos === 213 && v20.corregidos === 7, `v0.2.0: los 213 de la v0.1.3 validados, salvo los 7 que cambian por O9 o por la harina (${v20.validados}, ${v20.corregidos})`);
+  must(v20.harina, 'RT-CHF-001-R v1.3: la opción incorrecta del imprevisto de la harina es siempre «Volver sin comprar»');
+  must(v20.o9, 'O9: «Hoy hay un cumpleaños.» y «Vienen visitas a cenar.», en los ítems y en la tabla de situaciones');
+  must(v20.merienda, 'T21: con la consigna de la merienda, la otra opción es siempre un plato de cena');
+  const t12 = await page.evaluate(() => { const b = JSON.parse(JSON.stringify(BANCO)); b.variantes['6-zona'].facil = b.variantes['6-zona'].facil.slice(0, 7); return Motor.validarBanco(b, MODULO); });
+  must(t12.some((e) => /6-zona facil en 3-5: 7 ítems, el mínimo es 8 \(T12\)/.test(e)) && t12.some((e) => /6-zona facil en 6-8: 7 ítems, el mínimo es 12/.test(e)), 'T12: el validador rechaza una combinación por debajo del mínimo');
   const r12 = await page.evaluate(() => { const b = JSON.parse(JSON.stringify(BANCO));
     b.variantes['1-zona'].intermedio[0].fichas[0].receta = 'tostadas';
     const it = b.variantes['8-espacio'].facil.find((x) => x.receta === 'tortas_fritas'); const e = it.etapas.find((x) => x.imprevisto && x.falta); e.falta = 'manteca'; e.consigna = 'No hay manteca.';

@@ -14,7 +14,7 @@ import json, pathlib, random
 
 raiz = pathlib.Path(__file__).resolve().parent.parent
 dest = raiz / "app" / "herramientas" / "chef"
-VERSION, FECHA = "0.1.4-prueba", "2026-11-23"
+VERSION, FECHA = "0.2.0-prueba", "2026-11-23"
 VALIDADO = "validado por PSP-SR (RT-CHF-001-R v1.0, pendiente de aprobación de la supervisora)"
 PEND = "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)"
 R = random.Random(16)
@@ -601,7 +601,7 @@ for it in banco["2-espacio"]["facil"]:
 
 # ---------------- Textos (borrador; los de PSP-SR van literales cuando lleguen) ----------------
 TEXTOS = {
- "rotulo": "Versión de prueba",
+ "rotulo": "Contenido de prueba no validado",
  "nino": {"cocinaConsigna": "¿A qué rincón de la cocina vamos?", "historiaTitulo": "¡Hoy cocinamos!", "escuchar": "Escuchar", "escucharHistoria": "Escuchar la historia",
    "ayuda": "Pedir una pista", "seguir": "Seguir", "volver": "Volver a la cocina", "empezar": "Empezar", "siguiente": "Siguiente", "anterior": "Anterior", "alaCocina": "Ir a la cocina",
    "ofrecerAyuda": "Si querés, pedí una pista.", "listo": "Listo", "yaMire": "Ya miré", "verLista": "Ver la lista otra vez", "recetario": "Mi recetario",
@@ -631,7 +631,7 @@ TEXTOS = {
                       "8": ["Hacer un plan", "Pedir una pista", "Buscar otra opción cuando faltó algo", "Revisar al final"]},
             "ayudo_extra_13_18": {"3": ["Usar la calculadora"]},
             "oral": "Pedile que te cuente cómo lo hizo, sin mirar la pantalla. Escuchá sin corregir.", "con_adulto_3_5": "En 3 a 5 años, «Contar» se hace con la persona adulta."},
- "adulto": {"intro": "Banco armado por DEV-IA con los ejemplos de la FEC-016 y validado por PSP-SR (RT-CHF-001-R v1.3).",
+ "adulto": {"intro": "Banco v0.2.0 de prueba: los 213 ítems de la v0.1.3 están validados por PSP-SR; los ítems nuevos están pendientes de PSP-SR.",
    "parlante": "Ningún texto suena solo: tocá el parlante para escuchar cualquier texto.", "letra": "La letra es un apoyo de acceso. Si hay un ejercicio en curso, el cambio rige desde el siguiente.",
    "libre": "En modo libre, quien juega no ve Estación, grado ni variante. Pasar de Zona a Espacio nunca es automático.",
    "sinExposicion": "Sin exposición breve en «Los retos del chef» (el modelo queda a la vista)", "sinArrastre": "Arrastrar es opcional: siempre se puede tocar y después tocar el destino.",
@@ -677,7 +677,7 @@ for vid, rin, nombre_accion, est, hab, sec in V:
 for v in variantes: v["recetas_alergenos"] = {r: REC[r]["alergenos"] for r in v["recetas_usadas"]}
 
 modulo = dict(id="chef", nombre="Chef en Acción", nombre_trabajo=True, tipo="herramienta", version=VERSION, fecha=FECHA,
-  fec="FEC-016 v0.3", revision_tecnica="RT-CHF-001 v1.3 · respuestas RT-CHF-001-R v1.0, v1.1 (con anexo B1–B2) y v1.2", estado="borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos", activo=True,
+  fec="FEC-016 v0.3", revision_tecnica="RT-CHF-001 v1.5 · respuestas RT-CHF-001-R v1.0 a v1.3 · APR-CHF-001 (v0.1.3)", estado="borrador: sin registro de aprobación · solo entorno de prueba con datos sintéticos", activo=True,
   _nota="Ficha técnica generada por scripts/chef_generar.py. Estación, habilidades, grados, disponibilidades y reglas salen de la FEC-016 v0.3 (contenido clínico de PSP-SR, nivel C). Taxonomías de error, «Contar», lista de atragantamiento, reglas y muestras de 13–18 son de PSP-SR (RT-CHF-001-R v1.0). Recetas y el resto de las consignas son borrador de DEV-IA, pendientes de PSP-SR.",
   ficha=dict(
     proposito="Practicar habilidades cognitivas y funcionales dentro de una actividad cotidiana: elegir, reunir, comprar, organizar y preparar una receta.",
@@ -755,6 +755,13 @@ _rehacer_8b("8-espacio-d6", None, "Hay que llevar algo a la escuela.")
 # RT-CHF-001-R v1.2: C1 (sabor), C2 (faltante de la lista), C3 (enfriado), C4 (situación de 13–18) y estado clínico (194 validados, 19 a corregir)
 import chef_psp_v12
 _n0 = len(CAMBIOS); ESTADO_V12 = chef_psp_v12.aplicar(_R, _B, CAMBIOS)
+# Banco v0.2.0 (RT-CHF-001-R v1.3, sección 4): mínimos de T12 con las reglas fijas; los ítems nuevos, pendientes de PSP-SR
+import chef_v020
+V020 = chef_v020.ampliar(globals(), _R, CAMBIOS)
+for v in variantes:   # la ficha publica las recetas que usan los ítems nuevos, con sus alérgenos
+    v["recetas_usadas"] = sorted({it.get("receta") for g in GR for it in banco[v["variante"]][g] if it.get("receta")})
+    v["recetas_alergenos"] = {r: REC[r]["alergenos"] for r in v["recetas_usadas"]}
+modulo["minimos_por_combinacion"]["_nota"] = "T12; rige desde 0.2.0: 8 ítems por variante y grado en 3–5 y 12 en 6–8 y 9–12, donde la ficha los ofrece."
 import os
 if os.environ.get("CHEF_LOG"): print("\n".join(CAMBIOS[_n0:]))
 

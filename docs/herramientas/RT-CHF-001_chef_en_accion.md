@@ -2,8 +2,8 @@
 TIPO: Revisión técnica
 DE: DEV-IA
 PARA: PSP-SR (copia: Supervisora; Responsable del proyecto)
-ID: RT-CHF-001 v1.4
-FECHA: 2026-11-23 (v1.3, v1.2 y v1.1: 2026-11-22; v1.0: 2026-11-21)
+ID: RT-CHF-001 v1.5
+FECHA: 2026-11-23 (v1.4: 2026-11-23; v1.3, v1.2 y v1.1: 2026-11-22; v1.0: 2026-11-21)
 REFIERE A: RT-CHF-001-R v1.3 y APR-CHF-001 (2026-11-22); RT-CHF-001-R v1.2 y decisión D4 de la supervisora (2026-11-22); RT-CHF-001-R v1.1 y su anexo B1–B2 (2026-11-22); RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
 ```
 
@@ -432,3 +432,36 @@ Mientras no las respondas, el prototipo usa lo indicado en la Parte A. Ninguna b
 - T22: un imprevisto de faltante nunca aparece antes de la búsqueda del Rincón 2. El validador ya lo controla desde la v0.1.3.
 
 **v0.2.0.** [Seguro] Arranca con todas las reglas acumuladas (B1, B2, C1 a C3, T21, T22, O9 y la opción «Volver sin comprar» para la harina) y los mínimos de T12. Va en una versión aparte, para no tocar la v0.1.4 que espera aprobación.
+
+---
+
+## Parte K. Banco v0.2.0 (RT-CHF-001-R v1.3, sección 4)
+
+**Para la supervisora, en una línea.** [Seguro] El banco de prueba v0.2.0 tiene 585 ítems y cumple los mínimos de T12 en todas las combinaciones. Los 372 ítems nuevos esperan la revisión de PSP-SR, así que esta versión vuelve a mostrar «Contenido de prueba no validado». No reemplaza a la v0.1.4 que espera aprobación.
+
+**Qué se hizo.** [Seguro] El banco nuevo sale de `scripts/chef_v020.py`, que parte del banco v0.1.3 validado y lo amplía.
+
+| Punto | Qué se hizo |
+| --- | --- |
+| T12 | 12 ítems por variante y grado en 6–8 y 9–12, y 8 en 3–5 donde la ficha ofrece esa ruta. 8B tiene 12 por grado. Ninguna combinación queda por debajo del mínimo, y el validador lo controla desde la versión 0.2.0. |
+| Reglas fijas | B1 y C3 (pasos de las recetas corregidas), B2 (faltantes de la receta y situación admitida), C1 y T21 (sabor contrario con la misma condición de horno; merienda con plato de cena) y C2 y T22 (faltante en la lista y después de buscarla). |
+| Harina | La opción incorrecta del imprevisto de la harina es siempre «Volver sin comprar», también en 8-espacio-f7. |
+| O9 | «Hoy hay un cumpleaños.» y «Vienen visitas a cenar.», en la tabla y en los ítems. |
+| Regla nueva | Ningún imprevisto aparece después de cocinar. Los 213 ítems validados ya la cumplían; la sumé al validador para los nuevos. |
+| CHF-16 | Cada grado de 8B tiene 8 situaciones o más, sin repetir situación y receta en el mismo grado. |
+| Estado clínico | 206 validados por PSP-SR, 7 cambiados por O9 o por la harina (a revisar) y 372 nuevos pendientes de PSP-SR. |
+
+**Para revisar por PSP-SR (T10).** `propuestas/Chef_v0.2.0_banco_para_PSP-SR.json` trae:
+- las plantillas nuevas, en 12 líneas;
+- los 7 ítems cambiados, con lo que cambió;
+- una muestra de 96 ítems (2 nuevos por variante y grado);
+- los 372 ítems nuevos completos.
+
+**Preguntas nuevas**
+- **T23. Plantillas nuevas.** [Probable] Sumé consignas que no estaban en la v0.1.3. Algunas son «¿Cuál es salada?», «¿En qué cajón hay menos?» y «¿Alcanza con una docena?». También hay dependencias, situaciones de «Mientras…» y consecuencias nuevas en 4B, y tamaños con concordancia en 6A. ¿Las validás?
+- **T24. Muestra.** [Probable] ¿Te alcanza con 2 ítems nuevos por variante y grado (96 en total), o preferís otra muestra?
+- **T25. Imprevistos después de cocinar.** [Probable] ¿Dejamos como regla que ningún imprevisto aparezca después de cocinar?
+
+**Lo que falta para la v0.2.0.** [Seguro] El banco propio de 13–18 lo escribe PSP-SR con estas plantillas (T16). La lista vertical de 4B (T7) sigue pendiente.
+
+**Pruebas.** [Seguro] La prueba de punta a punta pasa 928 de 928 verificaciones; con el banco más grande cambia la cantidad de cierres que se revisan. Las pruebas nuevas cubren T12 (y el validador roto a propósito), la harina, O9, T21 y CHF-16. El validador devuelve cero observaciones y el control de originalidad pasa.

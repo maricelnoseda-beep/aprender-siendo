@@ -375,7 +375,8 @@ const Motor = (() => {
           it.etapas.forEach((e, k) => { if (!e.imprevisto) return;
             if (!e.falta && /\bno hay\b|no tiene/i.test(e.consigna || "") && !/presupuesto/i.test(e.consigna)) E.push(`${pos}: imprevisto de un faltante sin «falta» declarado (C2)`);
             if (e.falta && r2 && !r2.lista.includes(e.falta)) E.push(`${pos}: falta ${e.falta}, que no está en la lista del Rincón 2 (C2)`);
-            if (e.falta && r2 && k < k2) E.push(`${pos}: el imprevisto de ${e.falta} aparece antes de buscar la lista (C2)`); });
+            if (e.falta && r2 && k < k2) E.push(`${pos}: el imprevisto de ${e.falta} aparece antes de buscar la lista (C2)`);
+            const k7 = it.etapas.findIndex((x) => x.rincon === 7); if (k7 >= 0 && k > k7) E.push(`${pos}: imprevisto «${e.consigna}» después de cocinar (8B)`); });
         }
         // B2: imprevistos coherentes con la receta, sin repetir, y situación admitida por la receta
         if (it.formato === "aventura" && id === "8-espacio") {
@@ -388,8 +389,15 @@ const Motor = (() => {
         }
       }
     }
+    // T12: mínimos por combinación, desde la versión 0.2.0 (13–18 queda aparte: banco propio de PSP-SR, T16)
+    const MINI = modulo.minimos_por_combinacion || {}, ver = String(banco.version || modulo.version || "0").split(/[.-]/).map(Number);
+    if (MINI.rige_desde && (ver[0] > 0 || ver[1] >= Number(String(MINI.rige_desde).split(".")[1]))) for (const v of modulo.estaciones.variantes) for (const r of ["3-5", "6-8", "9-12"]) for (const g of ((v.disponibilidad || {})[r] || [])) {
+      const n = ((banco.variantes[v.variante] || {})[g] || []).filter((it) => (it.rutas || []).includes(r)).length, m = r === "3-5" ? MINI["3-5"] : MINI.otras;
+      if (n < m) E.push(`${v.variante} ${g} en ${r}: ${n} ítems, el mínimo es ${m} (T12)`);
+    }
     const n8b = (g) => new Set(((banco.variantes["8-espacio"] || {})[g] || []).map((it) => it.situacion)).size;
     for (const g of GR) if (n8b(g) < 8) E.push(`8-espacio ${g}: menos de 8 situaciones (CHF-16)`);
+    for (const g of GR) { const ps = ((banco.variantes["8-espacio"] || {})[g] || []).map((it) => `${it.situacion} · ${it.receta}`); for (const p of new Set(ps.filter((x, i) => ps.indexOf(x) !== i))) E.push(`8-espacio ${g}: situación y receta repetidas: ${p} (CHF-16)`); }
     for (const t of textosNino(banco)) { for (const w of palabrasProhibidas(t, P.todas.concat(P.nino))) E.push(`texto de quien juega con «${w}»: ${t}`); if (rotuloVariante(t)) E.push(`texto de quien juega con el rótulo de la variante: ${t} (O1)`); }
     const T13 = banco.textos.nino_13_18 || {};
     for (const [k, t] of Object.entries(T13)) if (k !== "estado_clinico") for (const e of reglas1318(t)) E.push(`texto de 13–18 «${k}» con ${e} (T1)`);
