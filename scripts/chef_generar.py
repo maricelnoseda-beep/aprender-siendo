@@ -6,7 +6,7 @@
 CONTENIDO DE PRUEBA NO VALIDADO. Las recetas, consignas, devoluciones y parámetros son un borrador de DEV-IA armado con los
 ejemplos de la FEC-016; todo lleva «pendiente de PSP-SR». Estación, grados, disponibilidades por ruta y reglas son las de la FEC.
 Contenido validado por PSP-SR en RT-CHF-001-R v1.0 (taxonomías de error, «Contar», lista de atragantamiento, reglas y muestras de 13–18)
-lleva estado_clinico «validado por PSP-SR»; en pantalla sigue el rótulo «Contenido de prueba no validado» hasta el registro de aprobación.
+lleva estado_clinico «validado por PSP-SR». v0.1.4 (APR-CHF-001, 3.1): el rótulo pasa a «Versión de prueba»; sin otro cambio de contenido.
 Prototipo v0.1.x: 4 ítems por variante y grado (la FEC pide 12 en 6–8 para el paquete de revisión; ver RT-CHF-001 Parte D).
 Ningún modelo de lenguaje: todo el banco se arma con reglas fijas y semilla fija.
 """
@@ -14,7 +14,7 @@ import json, pathlib, random
 
 raiz = pathlib.Path(__file__).resolve().parent.parent
 dest = raiz / "app" / "herramientas" / "chef"
-VERSION, FECHA = "0.1.3-prueba", "2026-11-22"
+VERSION, FECHA = "0.1.4-prueba", "2026-11-23"
 VALIDADO = "validado por PSP-SR (RT-CHF-001-R v1.0, pendiente de aprobación de la supervisora)"
 PEND = "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)"
 R = random.Random(16)
@@ -601,7 +601,7 @@ for it in banco["2-espacio"]["facil"]:
 
 # ---------------- Textos (borrador; los de PSP-SR van literales cuando lleguen) ----------------
 TEXTOS = {
- "rotulo": "Contenido de prueba no validado",
+ "rotulo": "Versión de prueba",
  "nino": {"cocinaConsigna": "¿A qué rincón de la cocina vamos?", "historiaTitulo": "¡Hoy cocinamos!", "escuchar": "Escuchar", "escucharHistoria": "Escuchar la historia",
    "ayuda": "Pedir una pista", "seguir": "Seguir", "volver": "Volver a la cocina", "empezar": "Empezar", "siguiente": "Siguiente", "anterior": "Anterior", "alaCocina": "Ir a la cocina",
    "ofrecerAyuda": "Si querés, pedí una pista.", "listo": "Listo", "yaMire": "Ya miré", "verLista": "Ver la lista otra vez", "recetario": "Mi recetario",
@@ -631,7 +631,7 @@ TEXTOS = {
                       "8": ["Hacer un plan", "Pedir una pista", "Buscar otra opción cuando faltó algo", "Revisar al final"]},
             "ayudo_extra_13_18": {"3": ["Usar la calculadora"]},
             "oral": "Pedile que te cuente cómo lo hizo, sin mirar la pantalla. Escuchá sin corregir.", "con_adulto_3_5": "En 3 a 5 años, «Contar» se hace con la persona adulta."},
- "adulto": {"intro": "Prototipo para probar cómo se juega. Banco de prueba armado por DEV-IA con los ejemplos de la FEC-016; falta la validación de PSP-SR.",
+ "adulto": {"intro": "Banco armado por DEV-IA con los ejemplos de la FEC-016 y validado por PSP-SR (RT-CHF-001-R v1.3).",
    "parlante": "Ningún texto suena solo: tocá el parlante para escuchar cualquier texto.", "letra": "La letra es un apoyo de acceso. Si hay un ejercicio en curso, el cambio rige desde el siguiente.",
    "libre": "En modo libre, quien juega no ve Estación, grado ni variante. Pasar de Zona a Espacio nunca es automático.",
    "sinExposicion": "Sin exposición breve en «Los retos del chef» (el modelo queda a la vista)", "sinArrastre": "Arrastrar es opcional: siempre se puede tocar y después tocar el destino.",

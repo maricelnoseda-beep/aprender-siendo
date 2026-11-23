@@ -2,9 +2,9 @@
 TIPO: Revisión técnica
 DE: DEV-IA
 PARA: PSP-SR (copia: Supervisora; Responsable del proyecto)
-ID: RT-CHF-001 v1.3
-FECHA: 2026-11-22 (v1.2 y v1.1: 2026-11-22; v1.0: 2026-11-21)
-REFIERE A: RT-CHF-001-R v1.2 y decisión D4 de la supervisora (2026-11-22); RT-CHF-001-R v1.1 y su anexo B1–B2 (2026-11-22); RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
+ID: RT-CHF-001 v1.4
+FECHA: 2026-11-23 (v1.3, v1.2 y v1.1: 2026-11-22; v1.0: 2026-11-21)
+REFIERE A: RT-CHF-001-R v1.3 y APR-CHF-001 (2026-11-22); RT-CHF-001-R v1.2 y decisión D4 de la supervisora (2026-11-22); RT-CHF-001-R v1.1 y su anexo B1–B2 (2026-11-22); RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
 ```
 
 # RT-CHF-001 · «Chef en Acción»: revisión técnica
@@ -418,3 +418,17 @@ Mientras no las respondas, el prototipo usa lo indicado en la Parte A. Ninguna b
 - **T22. Orden del faltante.** [Probable] Moví el imprevisto del faltante después del Rincón 2 en cinco ítems, para que la persona pueda vincularlo con la lista que acaba de usar, como pide C2. ¿Lo dejamos como regla del validador?
 
 **Pruebas.** [Seguro] La prueba de punta a punta pasa 936 de 936 verificaciones (12 nuevas: C1 a C4, el estado clínico, el validador roto a propósito y D4). El validador devuelve cero observaciones y el control de originalidad pasa.
+
+---
+
+## Parte J. RT-CHF-001-R v1.3, APR-CHF-001 y prototipo v0.1.4
+
+**Para la supervisora, en una línea.** [Seguro] PSP-SR validó los 213 ítems y vos aprobaste el contenido clínico de la v0.1.3 (APR-CHF-001). El archivo aprobado está guardado sin cambios: `propuestas/AprenderSiendo_Chef_en_Accion_prueba_v0.1.3.html`, con el SHA-256 4354d094… del registro, verificado. La aprobación técnica sigue pendiente.
+
+**v0.1.4 (APR-CHF-001, 3.1).** [Seguro] Es la v0.1.3 con el rótulo «Versión de prueba» y el aviso de la persona adulta actualizado; no cambia nada más. El detalle completo y la verificación byte por byte están en `propuestas/Chef_v0.1.4_cambios_respecto_de_v0.1.3_para_aprobacion.md`. Necesita su propio registro de aprobación.
+
+**T20, T21 y T22.** [Seguro] Quedan como las validó PSP-SR. Pasan a ser reglas fijas del generador en v0.2.0:
+- T21: sabor contrario y misma condición de horno; para la merienda, un plato de cena.
+- T22: un imprevisto de faltante nunca aparece antes de la búsqueda del Rincón 2. El validador ya lo controla desde la v0.1.3.
+
+**v0.2.0.** [Seguro] Arranca con todas las reglas acumuladas (B1, B2, C1 a C3, T21, T22, O9 y la opción «Volver sin comprar» para la harina) y los mínimos de T12. Va en una versión aparte, para no tocar la v0.1.4 que espera aprobación.
