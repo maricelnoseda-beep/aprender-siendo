@@ -2,9 +2,9 @@
 TIPO: Revisión técnica
 DE: DEV-IA
 PARA: PSP-SR (copia: Supervisora; Responsable del proyecto)
-ID: RT-CHF-001 v1.5
-FECHA: 2026-11-23 (v1.4: 2026-11-23; v1.3, v1.2 y v1.1: 2026-11-22; v1.0: 2026-11-21)
-REFIERE A: RT-CHF-001-R v1.3 y APR-CHF-001 (2026-11-22); RT-CHF-001-R v1.2 y decisión D4 de la supervisora (2026-11-22); RT-CHF-001-R v1.1 y su anexo B1–B2 (2026-11-22); RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
+ID: RT-CHF-001 v1.6
+FECHA: 2026-11-24 (v1.5 y v1.4: 2026-11-23; v1.3, v1.2 y v1.1: 2026-11-22; v1.0: 2026-11-21)
+REFIERE A: RT-CHF-001-R v1.4 y decisión D5 (2026-11-24); RT-CHF-001-R v1.3 y APR-CHF-001 (2026-11-22); RT-CHF-001-R v1.2 y decisión D4 de la supervisora (2026-11-22); RT-CHF-001-R v1.1 y su anexo B1–B2 (2026-11-22); RT-CHF-001-R v1.0 de PSP-SR (2026-11-22); FEC-016 v0.3 («Chef en Acción: ¡Hoy cocinamos!»); decisiones D1 a D3 de la supervisora (2026-11-21); FEC-013 v0.1; FEC-014 v0.2; FEC-015 v0.3 y RT-CEX-001 v1.2; RT-EST-001-R v1.0; ADR-009
 ```
 
 # RT-CHF-001 · «Chef en Acción»: revisión técnica
@@ -465,3 +465,47 @@ Mientras no las respondas, el prototipo usa lo indicado en la Parte A. Ninguna b
 **Lo que falta para la v0.2.0.** [Seguro] El banco propio de 13–18 lo escribe PSP-SR con estas plantillas (T16). La lista vertical de 4B (T7) sigue pendiente.
 
 **Pruebas.** [Seguro] La prueba de punta a punta pasa 928 de 928 verificaciones; con el banco más grande cambia la cantidad de cierres que se revisan. Las pruebas nuevas cubren T12 (y el validador roto a propósito), la harina, O9, T21 y CHF-16. El validador devuelve cero observaciones y el control de originalidad pasa.
+
+## Parte L. RT-CHF-001-R v1.4, decisión D5, v0.1.5 y banco v0.2.1
+
+**O1 · orden parcial.** [Seguro] Implementado en el generador, el validador y la corrección (`scripts/chef_o1.py`).
+- Cada paso de receta declara `antes_de`. Por defecto van en cadena; tostadas, yogur con cereales, ensalada verde y bizcochuelo siguen la tabla de O1.
+- Un ítem o etapa de ordenar con pasos intercambiables lleva `orden_parcial` y acepta cualquier paso cuyos anteriores ya estén puestos. La ayuda resalta un paso que se puede poner.
+- El validador rechaza un ítem de ordenar con pasos intercambiables sin `orden_parcial`, y un `orden_parcial` que no coincide con la receta.
+
+**v0.1.5 (D5).** [Seguro] Es la v0.1.4 más O1 y nada más. Cambia la corrección de los 11 ítems de la lista. SHA-256 `e33d96e73d162259b86206ad8acc1481669341eca084deba14f896f8dd4034a1`. Los cambios respecto de la v0.1.3, verificados byte por byte, están en `propuestas/Chef_v0.1.5_cambios_respecto_de_v0.1.3_para_aprobacion.md`. APR-CHF-002 queda sin efecto.
+
+**Banco v0.2.1.** [Seguro] Es el v0.2.0 con O1 y la sección 3 (`scripts/chef_psp_v14.py`). Fuera de los ítems corregidos, el banco es igual al v0.2.0, campo por campo.
+- **O1:** 24 ítems cambian de corrección, los 11 de la v0.1.3 y 13 nuevos: 4-zona-i5 e i7, 6-espacio-d6, d7 y d11, el Rincón 4 de 8-zona-f7, f10, f12 y d6, y el de 8-espacio-i10, i11, d10 y d11.
+- **Los 22 corregidos,** como pediste.
+  - En 4-zona Difícil el error queda repartido 4, 4 y 4 entre el primer par, el del medio y el último, contando d1 a d4.
+  - 4-zona-d7, d10 y d12 siguen en el último par.
+- **1-espacio-i5.** Lo alcanza la regla «en tu casa». Estaba validado en v0.1.3, y pasó a «Hoy hay juntada. Son 6 y no hay horno. ¿Qué preparás?». Necesito que lo confirmes.
+- **Estado:** 562 validados y 23 a revisar por PSP-SR.
+
+**Reglas nuevas del validador.** [Seguro]
+- Ningún texto dice «en tu casa» ni «tu familia».
+- No se pregunta por un ingrediente que casi todo lleva (sal).
+- El lavado no puede incluir utensilios con filo.
+- Si se piden más de 12, la situación justifica la cantidad.
+- En «¿Cuál elegís?», las dos recetas tienen distinto tiempo y distintas porciones.
+- Con dos faltantes, el reemplazo del segundo no usa un ingrediente que ya faltó.
+- En «¿Qué paso cambiarías de lugar?»:
+  - los pasos cambiados no se pueden invertir;
+  - en cada variante y grado, ningún lugar del error tiene más de la mitad de los ítems.
+- Ningún imprevisto aparece después de cocinar (T25), como regla fija.
+
+Cada regla se probó rompiendo el banco a propósito.
+
+**Preguntas nuevas.** [Probable]
+- **T26.** En 8-zona-d3, 8-espacio-f1 e i2, los tres pasos del Rincón 4 de la ensalada no dependen entre sí, así que cualquier orden vale. ¿Le sumamos «Poner todo en el bol» para que haya un paso que vaya último?
+- **T27.** En fideos con salsa, «Hervir los fideos» y «Calentar la salsa» parecen intercambiables. Lo mismo pasa en arroz con verduras con «Cortar las verduras» y «Hervir el arroz». No están en la tabla de O1. ¿Los sumo?
+- **Sugerencia «Rinde más porciones».** No la apliqué todavía, porque cambiaría 12 ítems ya validados (1-espacio-d1 a d12). Si la querés, la aplico en la próxima versión.
+
+**Envío.** [Seguro] Solo los ítems corregidos y la lista de O1, en `propuestas/Chef_v0.2.1_items_corregidos_y_O1_para_PSP-SR.json`.
+
+**Pruebas.** [Seguro]
+- v0.1.5: 946 de 946 verificaciones.
+- v0.2.1: 940 de 940 verificaciones.
+- El validador devuelve cero observaciones y el control de originalidad pasa.
+
