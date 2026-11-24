@@ -1,0 +1,1661 @@
+{
+ "version": "0.2.1-prueba",
+ "fecha": "2026-11-24",
+ "estado": "validado por PSP-SR en RT-CHF-001-R v1.4, salvo 23 ítems corregidos a revisar; pendiente de la supervisora",
+ "recetas": [
+  {
+   "id": "ensalada_frutas",
+   "nombre": "Ensalada de frutas",
+   "coccion": false,
+   "horno": false,
+   "porciones": 4,
+   "tiempo": "corto",
+   "region": "todo el país",
+   "ingredientes": [
+    "banana",
+    "manzana",
+    "naranja",
+    "frutilla"
+   ],
+   "utensilios": [
+    "bol",
+    "cuchara",
+    "cuchillo"
+   ],
+   "pasos": [
+    {
+     "accion": "cortar",
+     "utensilio": "cuchillo",
+     "ingrediente": "manzana",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "antes",
+     "texto": "El adulto corta la fruta",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "bol",
+     "ingrediente": "banana",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner la fruta en el bol",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "cuchara",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Mezclar con la cuchara",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "servir",
+     "utensilio": "plato",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Servir en los platos",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [],
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay banana.",
+     "reemplazo": "Usar otra fruta que haya",
+     "ingrediente": "banana"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
+  },
+  {
+   "id": "sandwich_queso",
+   "nombre": "Sándwiches de pan con queso",
+   "coccion": false,
+   "horno": false,
+   "porciones": 2,
+   "tiempo": "corto",
+   "region": "todo el país",
+   "ingredientes": [
+    "pan_miga",
+    "queso",
+    "tomate"
+   ],
+   "utensilios": [
+    "plato",
+    "cuchillo"
+   ],
+   "sin_tacc": "pan_sin_tacc",
+   "pasos": [
+    {
+     "accion": "cortar",
+     "utensilio": "cuchillo",
+     "ingrediente": "tomate",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "antes",
+     "texto": "El adulto corta el tomate",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "plato",
+     "ingrediente": "pan_miga",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner el pan en el plato",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "plato",
+     "ingrediente": "queso",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner el queso sobre el pan",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "completar",
+     "utensilio": "plato",
+     "ingrediente": "pan_miga",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Tapar con otro pan",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay queso.",
+     "reemplazo": "Hacerlos de tomate",
+     "ingrediente": "queso"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
+  },
+  {
+   "id": "yogur_cereales",
+   "nombre": "Yogur con cereales y fruta",
+   "coccion": false,
+   "horno": false,
+   "porciones": 1,
+   "tiempo": "corto",
+   "region": "todo el país",
+   "ingredientes": [
+    "yogur",
+    "cereales",
+    "banana"
+   ],
+   "utensilios": [
+    "bol",
+    "cuchara",
+    "cuchillo"
+   ],
+   "sin_tacc": "cereales_sin_tacc",
+   "pasos": [
+    {
+     "accion": "cortar",
+     "utensilio": "cuchillo",
+     "ingrediente": "banana",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "antes",
+     "texto": "El adulto corta la banana",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "bol",
+     "ingrediente": "yogur",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner el yogur en el bol",
+     "antes_de": [
+      2,
+      3
+     ]
+    },
+    {
+     "accion": "distribuir",
+     "utensilio": "cuchara",
+     "ingrediente": "cereales",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Repartir los cereales arriba",
+     "antes_de": []
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "bol",
+     "ingrediente": "banana",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Sumar la banana",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay cereales.",
+     "reemplazo": "Usar avena",
+     "ingrediente": "cereales"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
+  },
+  {
+   "id": "tostadas",
+   "nombre": "Tostadas con queso untable y mermelada",
+   "coccion": false,
+   "horno": false,
+   "porciones": 2,
+   "tiempo": "corto",
+   "region": "todo el país",
+   "ingredientes": [
+    "pan",
+    "queso_untable",
+    "mermelada"
+   ],
+   "utensilios": [
+    "plato",
+    "cuchillo_untar"
+   ],
+   "sin_tacc": "pan_sin_tacc",
+   "pasos": [
+    {
+     "accion": "cocinar",
+     "utensilio": "hornalla",
+     "ingrediente": "pan",
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "antes",
+     "texto": "El adulto tuesta el pan",
+     "antes_de": [
+      1,
+      2
+     ]
+    },
+    {
+     "accion": "untar",
+     "utensilio": "cuchillo_untar",
+     "ingrediente": "queso_untable",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Untar el queso",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "untar",
+     "utensilio": "cuchillo_untar",
+     "ingrediente": "mermelada",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Untar la mermelada",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "servir",
+     "utensilio": "plato",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Servir",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay mermelada.",
+     "reemplazo": "Usar dulce de leche",
+     "ingrediente": "mermelada"
+    },
+    {
+     "consigna": "No hay queso untable.",
+     "reemplazo": "Hacerlas solo con mermelada",
+     "ingrediente": "queso_untable"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "los dos"
+  },
+  {
+   "id": "ensalada_verde",
+   "nombre": "Ensalada de lechuga, tomate y zanahoria",
+   "coccion": false,
+   "horno": false,
+   "porciones": 4,
+   "tiempo": "corto",
+   "region": "todo el país",
+   "ingredientes": [
+    "lechuga",
+    "tomate",
+    "zanahoria_rallada",
+    "aceite",
+    "sal"
+   ],
+   "utensilios": [
+    "bol",
+    "colador",
+    "rallador",
+    "cuchillo",
+    "cuchara"
+   ],
+   "pasos": [
+    {
+     "accion": "rallar",
+     "utensilio": "rallador",
+     "ingrediente": "zanahoria",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "antes",
+     "texto": "El adulto ralla la zanahoria",
+     "resultado": "zanahoria_rallada",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "cortar",
+     "utensilio": "cuchillo",
+     "ingrediente": "tomate",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "antes",
+     "texto": "El adulto corta el tomate",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "lavar",
+     "utensilio": "colador",
+     "ingrediente": "lechuga",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Lavar la lechuga",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "bol",
+     "ingrediente": "lechuga",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner todo en el bol",
+     "antes_de": [
+      4
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "cuchara",
+     "ingrediente": "aceite",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Condimentar y mezclar",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [],
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay zanahoria.",
+     "reemplazo": "Usar otra verdura que haya",
+     "ingrediente": "zanahoria_rallada"
+    },
+    {
+     "consigna": "No hay lechuga.",
+     "reemplazo": "Hacerla de tomate y zanahoria",
+     "ingrediente": "lechuga"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
+  },
+  {
+   "id": "bolitas_coco",
+   "nombre": "Bolitas de coco y dulce de leche",
+   "coccion": false,
+   "horno": false,
+   "porciones": 6,
+   "tiempo": "corto",
+   "region": "todo el país",
+   "ingredientes": [
+    "coco",
+    "dulce_leche"
+   ],
+   "utensilios": [
+    "bol",
+    "cuchara",
+    "plato"
+   ],
+   "pasos": [
+    {
+     "accion": "colocar",
+     "utensilio": "bol",
+     "ingrediente": "dulce_leche",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner el dulce de leche en el bol",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "cuchara",
+     "ingrediente": "coco",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Mezclar con el coco",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "amasar",
+     "utensilio": "plato",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Formar bolitas",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "distribuir",
+     "utensilio": "plato",
+     "ingrediente": "coco",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Pasarlas por coco",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "leche"
+   ],
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay coco.",
+     "reemplazo": "Pasarlas por cacao",
+     "ingrediente": "coco"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
+  },
+  {
+   "id": "bizcochuelo",
+   "nombre": "Bizcochuelo",
+   "coccion": true,
+   "horno": true,
+   "porciones": 8,
+   "tiempo": "largo",
+   "region": "todo el país",
+   "ingredientes": [
+    "harina",
+    "azucar",
+    "huevo",
+    "leche"
+   ],
+   "utensilios": [
+    "bol",
+    "batidor",
+    "fuente",
+    "horno"
+   ],
+   "sin_tacc": "harina_sin_tacc",
+   "pasos": [
+    {
+     "accion": "hornear",
+     "utensilio": "horno",
+     "ingrediente": null,
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "antes",
+     "texto": "Prender el horno",
+     "antes_de": [
+      4
+     ]
+    },
+    {
+     "accion": "batir",
+     "utensilio": "batidor",
+     "ingrediente": "huevo",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Batir los huevos con el azúcar",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "batidor",
+     "ingrediente": "harina",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Sumar la harina y mezclar",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "fuente",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Pasar a la fuente",
+     "antes_de": [
+      4
+     ]
+    },
+    {
+     "accion": "hornear",
+     "utensilio": "horno",
+     "ingrediente": null,
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Hornear",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "huevo",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay leche.",
+     "reemplazo": "Usar jugo de naranja",
+     "ingrediente": "leche"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
+  },
+  {
+   "id": "galletitas",
+   "nombre": "Galletitas",
+   "coccion": true,
+   "horno": true,
+   "porciones": 12,
+   "tiempo": "largo",
+   "region": "todo el país",
+   "ingredientes": [
+    "harina",
+    "manteca",
+    "azucar",
+    "huevo"
+   ],
+   "utensilios": [
+    "bol",
+    "rodillo",
+    "fuente",
+    "horno"
+   ],
+   "sin_tacc": "harina_sin_tacc",
+   "pasos": [
+    {
+     "accion": "mezclar",
+     "utensilio": "bol",
+     "ingrediente": "manteca",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Mezclar manteca y azúcar",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "bol",
+     "ingrediente": "harina",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Sumar huevo y harina",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "amasar",
+     "utensilio": "rodillo",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Estirar la masa",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "fuente",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner en la fuente",
+     "antes_de": [
+      4
+     ]
+    },
+    {
+     "accion": "hornear",
+     "utensilio": "horno",
+     "ingrediente": null,
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Hornear",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "huevo",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay manteca.",
+     "reemplazo": "Usar aceite",
+     "ingrediente": "manteca"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
+  },
+  {
+   "id": "pizza",
+   "nombre": "Pizza",
+   "coccion": true,
+   "horno": true,
+   "porciones": 8,
+   "tiempo": "largo",
+   "region": "todo el país",
+   "ingredientes": [
+    "harina",
+    "levadura",
+    "tomate_tri",
+    "queso",
+    "aceite",
+    "agua",
+    "sal"
+   ],
+   "utensilios": [
+    "bol",
+    "rodillo",
+    "fuente",
+    "cuchara",
+    "horno"
+   ],
+   "sin_tacc": "harina_sin_tacc",
+   "pasos": [
+    {
+     "accion": "mezclar",
+     "utensilio": "bol",
+     "ingrediente": "harina",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Mezclar harina, levadura, agua y sal",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "amasar",
+     "utensilio": "rodillo",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Estirar la masa",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "distribuir",
+     "utensilio": "cuchara",
+     "ingrediente": "tomate_tri",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner la salsa",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "distribuir",
+     "utensilio": "fuente",
+     "ingrediente": "queso",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Repartir el queso",
+     "antes_de": [
+      4
+     ]
+    },
+    {
+     "accion": "hornear",
+     "utensilio": "horno",
+     "ingrediente": null,
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Hornear",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay queso.",
+     "reemplazo": "Hacerla sin queso, con tomate",
+     "ingrediente": "queso"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
+  },
+  {
+   "id": "panqueques",
+   "nombre": "Panqueques",
+   "coccion": true,
+   "horno": false,
+   "porciones": 6,
+   "tiempo": "largo",
+   "region": "todo el país",
+   "ingredientes": [
+    "harina",
+    "leche",
+    "huevo",
+    "dulce_leche"
+   ],
+   "utensilios": [
+    "bol",
+    "batidor",
+    "sarten",
+    "hornalla"
+   ],
+   "sin_tacc": "harina_sin_tacc",
+   "pasos": [
+    {
+     "accion": "batir",
+     "utensilio": "batidor",
+     "ingrediente": "huevo",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Batir huevo y leche",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "batidor",
+     "ingrediente": "harina",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Sumar la harina",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "cocinar",
+     "utensilio": "sarten",
+     "ingrediente": null,
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "El adulto cocina el panqueque y lo deja entibiar",
+     "recipiente": "sarten",
+     "enfria": true,
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "untar",
+     "utensilio": "cuchillo_untar",
+     "ingrediente": "dulce_leche",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Untar con dulce de leche",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "huevo",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay dulce de leche.",
+     "reemplazo": "Rellenar con mermelada",
+     "ingrediente": "dulce_leche"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "dulce"
+  },
+  {
+   "id": "tarta_verdura",
+   "nombre": "Tarta de verdura",
+   "coccion": true,
+   "horno": true,
+   "porciones": 6,
+   "tiempo": "largo",
+   "region": "todo el país",
+   "ingredientes": [
+    "tapa_tarta",
+    "espinaca",
+    "huevo",
+    "queso",
+    "cebolla"
+   ],
+   "utensilios": [
+    "bol",
+    "fuente",
+    "cuchillo",
+    "horno"
+   ],
+   "sin_tacc": "harina_sin_tacc",
+   "pasos": [
+    {
+     "accion": "cortar",
+     "utensilio": "cuchillo",
+     "ingrediente": "cebolla",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "durante",
+     "texto": "Cortar la cebolla",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "bol",
+     "ingrediente": "espinaca",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Mezclar espinaca, huevo y queso",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "colocar",
+     "utensilio": "fuente",
+     "ingrediente": "tapa_tarta",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Poner la tapa en la fuente",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "distribuir",
+     "utensilio": "cuchara",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Rellenar la tarta",
+     "antes_de": [
+      4
+     ]
+    },
+    {
+     "accion": "hornear",
+     "utensilio": "horno",
+     "ingrediente": null,
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Hornear",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "huevo",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay espinaca.",
+     "reemplazo": "Usar acelga",
+     "ingrediente": "espinaca"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
+  },
+  {
+   "id": "empanadas",
+   "nombre": "Empanadas",
+   "coccion": true,
+   "horno": true,
+   "porciones": 12,
+   "tiempo": "largo",
+   "region": "noroeste y todo el país",
+   "ingredientes": [
+    "tapa_empanada",
+    "cebolla",
+    "huevo",
+    "morron"
+   ],
+   "utensilios": [
+    "olla",
+    "cuchara",
+    "fuente",
+    "cuchillo",
+    "horno"
+   ],
+   "sin_tacc": "harina_sin_tacc",
+   "pasos": [
+    {
+     "accion": "cortar",
+     "utensilio": "cuchillo",
+     "ingrediente": "cebolla",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "durante",
+     "texto": "Cortar la cebolla",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "cocinar",
+     "utensilio": "sarten",
+     "ingrediente": "cebolla",
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "El adulto cocina el relleno y lo deja enfriar",
+     "recipiente": "sarten",
+     "enfria": true,
+     "produce": "relleno",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "distribuir",
+     "utensilio": "cuchara",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Rellenar las tapas",
+     "usa": "relleno",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "completar",
+     "utensilio": "fuente",
+     "ingrediente": "tapa_empanada",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Cerrar las empanadas",
+     "antes_de": [
+      4
+     ]
+    },
+    {
+     "accion": "hornear",
+     "utensilio": "horno",
+     "ingrediente": null,
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Hornear",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "huevo"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay morrón.",
+     "reemplazo": "Hacerlas sin morrón",
+     "ingrediente": "morron"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
+  },
+  {
+   "id": "fideos_salsa",
+   "nombre": "Fideos con salsa",
+   "coccion": true,
+   "horno": false,
+   "porciones": 4,
+   "tiempo": "largo",
+   "region": "todo el país",
+   "ingredientes": [
+    "fideos",
+    "tomate_tri",
+    "cebolla",
+    "queso",
+    "sal"
+   ],
+   "utensilios": [
+    "olla",
+    "colador",
+    "sarten",
+    "hornalla"
+   ],
+   "sin_tacc": "fideos_sin_tacc",
+   "pasos": [
+    {
+     "accion": "hervir",
+     "utensilio": "olla",
+     "ingrediente": "fideos",
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Hervir los fideos",
+     "recipiente": "olla",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "cocinar",
+     "utensilio": "sarten",
+     "ingrediente": "tomate_tri",
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Calentar la salsa",
+     "recipiente": "sarten",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "trasladar",
+     "utensilio": "colador",
+     "ingrediente": "fideos",
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "El adulto cuela los fideos",
+     "recipiente": "olla",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "servir",
+     "utensilio": "plato",
+     "ingrediente": "queso",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Servir con queso",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay queso.",
+     "reemplazo": "Servir sin queso",
+     "ingrediente": "queso"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
+  },
+  {
+   "id": "arroz_verduras",
+   "nombre": "Arroz con verduras",
+   "coccion": true,
+   "horno": false,
+   "porciones": 4,
+   "tiempo": "largo",
+   "region": "todo el país",
+   "ingredientes": [
+    "arroz",
+    "zanahoria",
+    "choclo",
+    "morron",
+    "sal"
+   ],
+   "utensilios": [
+    "olla",
+    "cuchara",
+    "cuchillo",
+    "hornalla"
+   ],
+   "pasos": [
+    {
+     "accion": "cortar",
+     "utensilio": "cuchillo",
+     "ingrediente": "morron",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "durante",
+     "texto": "Cortar las verduras",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "hervir",
+     "utensilio": "olla",
+     "ingrediente": "arroz",
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Hervir el arroz",
+     "recipiente": "olla",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "cuchara",
+     "ingrediente": "choclo",
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "El adulto suma las verduras al arroz",
+     "recipiente": "olla",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "servir",
+     "utensilio": "plato",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Servir",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [],
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay choclo.",
+     "reemplazo": "Usar arvejas",
+     "ingrediente": "choclo"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
+  },
+  {
+   "id": "tortas_fritas",
+   "nombre": "Tortas fritas",
+   "coccion": true,
+   "horno": false,
+   "porciones": 10,
+   "tiempo": "largo",
+   "region": "todo el país",
+   "ingredientes": [
+    "harina",
+    "sal",
+    "aceite",
+    "manteca"
+   ],
+   "utensilios": [
+    "bol",
+    "rodillo",
+    "sarten",
+    "hornalla"
+   ],
+   "sin_tacc": "harina_sin_tacc",
+   "pasos": [
+    {
+     "accion": "mezclar",
+     "utensilio": "bol",
+     "ingrediente": "harina",
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Mezclar harina, sal y manteca",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "amasar",
+     "utensilio": "rodillo",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Estirar la masa",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "cocinar",
+     "utensilio": "sarten",
+     "ingrediente": null,
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "El adulto fríe las tortas y las deja entibiar",
+     "recipiente": "sarten",
+     "enfria": true,
+     "produce": "tortas",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "servir",
+     "utensilio": "plato",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Servir",
+     "usa": "tortas",
+     "antes_de": []
+    }
+   ],
+   "rutas": [
+    "3-5",
+    "6-8",
+    "9-12",
+    "13-18"
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [
+    "gluten",
+    "leche"
+   ],
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay manteca.",
+     "reemplazo": "Usar grasa o aceite",
+     "ingrediente": "manteca"
+    },
+    {
+     "consigna": "El súper no tiene la harina de siempre.",
+     "reemplazo": "Comprar otra harina",
+     "ingrediente": "harina"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "los dos"
+  },
+  {
+   "id": "locro",
+   "nombre": "Locro de verduras",
+   "coccion": true,
+   "horno": false,
+   "porciones": 8,
+   "tiempo": "largo",
+   "region": "noroeste y todo el país",
+   "rutas": [
+    "13-18"
+   ],
+   "ingredientes": [
+    "zapallo",
+    "choclo",
+    "papa",
+    "cebolla",
+    "sal"
+   ],
+   "utensilios": [
+    "olla",
+    "cuchara",
+    "cuchillo",
+    "hornalla"
+   ],
+   "pasos": [
+    {
+     "accion": "cortar",
+     "utensilio": "cuchillo",
+     "ingrediente": "zapallo",
+     "actor": "adulto",
+     "riesgo": "filo",
+     "momento": "durante",
+     "texto": "Cortar las verduras",
+     "antes_de": [
+      1
+     ]
+    },
+    {
+     "accion": "hervir",
+     "utensilio": "olla",
+     "ingrediente": "zapallo",
+     "actor": "adulto",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Hervir con agua",
+     "recipiente": "olla",
+     "antes_de": [
+      2
+     ]
+    },
+    {
+     "accion": "mezclar",
+     "utensilio": "cuchara",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": "calor",
+     "momento": "durante",
+     "texto": "Revolver de a ratos",
+     "recipiente": "olla",
+     "antes_de": [
+      3
+     ]
+    },
+    {
+     "accion": "servir",
+     "utensilio": "plato",
+     "ingrediente": null,
+     "actor": "persona",
+     "riesgo": null,
+     "momento": "durante",
+     "texto": "Servir",
+     "antes_de": []
+    }
+   ],
+   "sin_carne": true,
+   "estado": "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)",
+   "alergenos": [],
+   "sin_tacc": null,
+   "faltantes_posibles": [
+    {
+     "consigna": "No hay zapallo.",
+     "reemplazo": "Usar calabaza",
+     "ingrediente": "zapallo"
+    }
+   ],
+   "estado_clinico": "validado por PSP-SR",
+   "sabor": "salado"
+  }
+ ],
+ "situaciones": {
+  "Hoy vienen amigos a merendar.": [
+   "ensalada_frutas",
+   "yogur_cereales",
+   "tostadas",
+   "sandwich_queso",
+   "bolitas_coco",
+   "bizcochuelo",
+   "galletitas",
+   "panqueques",
+   "tortas_fritas"
+  ],
+  "Hoy cocinamos para la familia.": [
+   "ensalada_verde",
+   "fideos_salsa",
+   "arroz_verduras",
+   "tarta_verdura",
+   "empanadas",
+   "pizza",
+   "locro",
+   "panqueques"
+  ],
+  "Llueve y nos quedamos en casa.": [
+   "ensalada_frutas",
+   "sandwich_queso",
+   "yogur_cereales",
+   "tostadas",
+   "ensalada_verde",
+   "bolitas_coco",
+   "bizcochuelo",
+   "galletitas",
+   "pizza",
+   "panqueques",
+   "tarta_verdura",
+   "empanadas",
+   "fideos_salsa",
+   "arroz_verduras",
+   "tortas_fritas",
+   "locro"
+  ],
+  "Vamos de picnic a la plaza.": [
+   "sandwich_queso",
+   "bolitas_coco",
+   "galletitas",
+   "bizcochuelo",
+   "ensalada_frutas",
+   "empanadas",
+   "tarta_verdura"
+  ],
+  "Hay que llevar algo a la escuela.": [
+   "galletitas",
+   "bizcochuelo",
+   "bolitas_coco",
+   "tortas_fritas",
+   "empanadas",
+   "pizza"
+  ],
+  "Hay una juntada en el club.": [
+   "galletitas",
+   "bizcochuelo",
+   "bolitas_coco",
+   "tortas_fritas",
+   "empanadas",
+   "pizza",
+   "sandwich_queso"
+  ],
+  "Hoy hay un cumpleaños.": [
+   "ensalada_frutas",
+   "tostadas",
+   "sandwich_queso",
+   "bolitas_coco",
+   "bizcochuelo",
+   "galletitas",
+   "panqueques",
+   "tortas_fritas",
+   "pizza",
+   "empanadas"
+  ],
+  "Vienen visitas a cenar.": [
+   "ensalada_verde",
+   "fideos_salsa",
+   "arroz_verduras",
+   "tarta_verdura",
+   "empanadas",
+   "pizza",
+   "locro"
+  ]
+ }
+}

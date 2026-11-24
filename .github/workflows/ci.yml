@@ -31,6 +31,8 @@ jobs:
         run: node tests/cerditos.test.js && python3 app/build.py --cerditos
       - name: Los cuatro exploradores (RT-CEX-001) · motor, banco, letra y audio solo con parlante
         run: node tests/exploradores.test.js && python3 app/build.py --exploradores
+      - name: Chef en Acción (RT-CHF-001) · validador del banco y de las recetas, originalidad
+        run: python3 scripts/chef_generar.py && python3 scripts/chef_armar.py && git diff --exit-code app/herramientas/chef/ && python3 app/build.py --chef
       - name: Instalar navegador de prueba
         run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
       - name: Prueba de punta a punta
@@ -43,7 +45,9 @@ jobs:
         run: node tests/cerditos.e2e.js
       - name: Los cuatro exploradores de punta a punta (archivo suelto)
         run: node tests/exploradores.e2e.js
+      - name: Chef en Acción de punta a punta (archivo suelto, 16 variantes y validador)
+        run: node tests/chef.e2e.js
       - name: Huella del artefacto (manifiesto con la huella de cada archivo y módulo)
         run: sha256sum app/dist/manifiesto.json
       - uses: actions/upload-artifact@v4
-        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/\napp/dist-explorapalabras/\napp/dist-luci/\napp/dist-cerditos/\napp/dist-exploradores/" }
+        with: { name: aprender-siendo-dist, path: "app/dist/\napp/dist-un-archivo/\napp/dist-explorapalabras/\napp/dist-luci/\napp/dist-cerditos/\napp/dist-exploradores/\napp/dist-chef/" }

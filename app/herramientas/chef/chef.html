@@ -1,0 +1,1538 @@
+<!doctype html>
+<!-- «Chef en Acción: ¡Hoy cocinamos!» (nombre de trabajo): ocho rincones de la cocina con dos variantes cada uno (Zona y Espacio), según la
+     FEC-016 v0.3 de PSP-SR (2026-11-21) y las decisiones D1 a D3 de la supervisora. Construida por DEV-IA como herramienta del portal (ADR-009,
+     RT-CHF-001 v1.0). Corre aislada (iframe sin acceso a la app ni a sus datos) y también como archivo suelto para probar con doble clic.
+     CONTENIDO DE PRUEBA NO VALIDADO: recetas, consignas, devoluciones y parámetros son borrador de DEV-IA, pendientes de PSP-SR.
+     Dibujos de relleno hechos en código, sin IA generativa y sin imágenes de terceros (REQ-CLI-CHF-00a). Ningún modelo de lenguaje
+     interviene: todo se corrige con el banco, en código (T11). En la cocina de juego, fuego, filo y electrodomésticos los usa el chef. -->
+<html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chef en Acción</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>__BRAND_FONT__
+:root{color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--as-papel,#fcfaf7);color:var(--as-tinta,#102f54);font-family:var(--as-fuente,"Nunito",system-ui,sans-serif);
+  font-size:18px;line-height:1.45;padding:12px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:4px solid var(--as-foco,#b95325);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2,h3{color:var(--as-tinta,#102f54);line-height:1.2;margin:0}
+h1{font-size:1.6rem;font-weight:800}
+h2{font-size:1.15rem;font-weight:800}
+h3{font-size:1.02rem;font-weight:800;margin:16px 0 6px}
+p{margin:.4em 0}
+.small{font-size:.95rem;color:var(--as-secundario,#526776)}
+/* Letra MAYÚSCULA o minúscula imprenta (pedido de la supervisora): se aplica a todo lo que ve quien juega. */
+body.mayus .nino,body.mayus .nino button,body.mayus .nino .letra{text-transform:uppercase}
+body.mayus .nino .letra-ficha,body.mayus .nino .palabra,body.mayus .nino .letra-fija{text-transform:none}
+#h-toda svg{width:28px;height:28px}
+body.mayus .nino .adulto-txt{text-transform:none}
+.hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.marca{width:44px;height:44px;border-radius:12px;background:var(--as-marca) center/contain no-repeat;flex:none}
+.hd .nm{font-weight:800;font-size:1.2rem;margin-right:auto}
+.rotulo{display:inline-block;font-size:.85rem;font-weight:700;color:var(--as-aviso,#805024);background:var(--as-arena,#fff1d7);border-radius:999px;padding:4px 12px}
+.letras{display:inline-flex;border:2px solid var(--as-tinta,#102f54);border-radius:999px;overflow:hidden}
+.letras button{min-height:44px;min-width:56px;border:0;background:var(--as-superficie,#fff);font-weight:800;padding:4px 12px;text-transform:none!important}
+.letras button[aria-pressed="true"]{background:var(--as-tinta,#102f54);color:#fff}
+.panel{background:var(--as-superficie,#fff);border:1px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio,22px);box-shadow:var(--as-sombra,0 2px 10px rgb(16 47 84 / 6%));padding:18px}
+.btn{min-height:48px;border-radius:999px;border:2px solid var(--as-tinta,#102f54);background:var(--as-tinta,#102f54);color:var(--as-superficie,#fff);
+  font-weight:800;font-size:1.05rem;padding:8px 22px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.sec{background:var(--as-superficie,#fff);color:var(--as-tinta,#102f54)}
+.btn.suave{background:var(--as-menta,#e0f2eb);color:var(--as-tinta,#102f54);border-color:var(--as-borde-verde,#75b8a8)}
+.btn.icono{min-width:48px;padding:8px 12px}
+.btn.chico{min-height:44px;font-size:.95rem;padding:6px 16px}
+.btn.ofrecida,.opcion.ofrecida{box-shadow:0 0 0 4px var(--as-sol,#ffb82e)}
+.btn[disabled]{opacity:.55;cursor:default}
+.parlante{min-width:48px;min-height:48px;border-radius:999px;border:2px solid var(--as-tinta,#102f54);background:var(--as-superficie,#fff);display:inline-grid;place-items:center;flex:none;padding:0}
+.parlante svg{width:26px;height:26px}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.opciones{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--min,200px)),1fr))}
+.opcion{border:2px solid var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio-control,14px);background:var(--as-superficie,#fff);
+  text-align:left;padding:10px 14px;min-height:52px;display:flex;flex-direction:column;gap:2px}
+.opcion:hover{background:var(--as-suave,#f4f6f4)}
+.opcion[aria-pressed="true"]{background:var(--as-menta,#e0f2eb);border-color:var(--as-verde,#196b6a);box-shadow:inset 0 0 0 2px var(--as-verde,#196b6a)}
+.opcion[disabled]{opacity:.45;cursor:default}
+.opcion .t{font-weight:800}
+.opcion .d{font-size:.9rem;color:var(--as-texto,#354e60)}
+.grupo{margin:14px 0}
+.grupo>h2{margin-bottom:8px}
+.casillas label{display:flex;align-items:center;gap:8px;min-height:44px}
+.casillas input{width:22px;height:22px}
+.consigna{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.consigna p{flex:1 1 200px;margin:0;font-weight:800;font-size:1.25rem}
+.juego{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.juego{grid-template-columns:minmax(0,1fr) 260px;align-items:start}}
+.lado{display:flex;flex-direction:column;gap:12px}
+.msj-caja{display:flex;gap:8px;align-items:flex-start}
+.msj{flex:1;min-height:3.2em;font-weight:700;padding:10px 12px;border-radius:var(--as-radio-control,14px);background:var(--as-suave,#f4f6f4)}
+.msj:empty{background:transparent}
+.msj-caja .parlante[hidden]{display:none}
+.lamina{max-width:640px;margin:12px auto;border-radius:var(--as-radio-control,14px);overflow:hidden;border:1px solid var(--as-borde,#dae3e1);background:#fff}
+.lamina svg{display:block;width:100%;height:auto}
+.lamina.chica{max-width:380px}
+.guia,.aviso{background:var(--as-arena,#fff1d7);border-radius:var(--as-radio-control,14px);padding:10px 14px;font-weight:700}
+.escena-marco{position:relative;border-radius:var(--as-radio-control,14px);overflow:auto;border:1px solid var(--as-borde,#dae3e1);background:#fff;max-height:72vh}
+.escena-marco svg.escena{display:block;width:calc(100% * var(--zoom,1));height:auto;user-select:none;-webkit-user-select:none}
+svg [data-el]{cursor:pointer}
+svg [data-el]:focus{outline:none}
+svg [data-el]:focus-visible .foco{stroke:#b95325;stroke-width:6}
+.foco{fill:transparent;stroke:transparent}
+.hallado .foco{stroke:var(--as-verde,#196b6a);stroke-width:6;stroke-dasharray:10 6}
+.zoom{display:flex;gap:8px;margin-top:8px}
+/* Objetos sueltos (bandejas, cajas, sombras, casilleros) */
+.ficha{border:3px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);background:#fff;padding:4px;width:clamp(72px,16vw,108px);height:clamp(72px,16vw,108px);display:grid;place-items:center;touch-action:none}
+.ficha svg{width:100%;height:100%}
+/* IDV-CEX-001: ficha redonda en la niebla, las pistas de 8A y el cofre. Con :where() no tapa los estados elegida y puesta. */
+.ficha:where(.redonda,[data-variante="cofre_cuales"] #cuerpo *,[data-variante="cofre_orden"] #cuerpo *,[data-variante="pistas_relampago"] #cuerpo *){border-radius:50%;border:3px dashed #8CC9A8;background:#fff;padding:10%}
+.ficha[aria-pressed="true"]{border-color:var(--as-coral,#f58060);box-shadow:0 0 0 3px var(--as-coral,#f58060)}
+.ficha.marcada,.destino.marcada{box-shadow:0 0 0 5px var(--as-sol,#ffb82e)}
+.ficha.puesta{border-color:var(--as-verde,#196b6a);background:var(--as-menta,#e0f2eb);cursor:default}
+.ficha.letra-ficha{font-size:clamp(2.2rem,7vw,3.4rem);font-weight:800;line-height:1}
+.bandeja{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;min-height:80px}
+.cajas{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.destino{border:3px dashed var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio,22px);background:var(--as-superficie,#fff);min-height:150px;padding:10px;display:flex;flex-direction:column;gap:8px;text-align:left}
+.destino .tit{display:flex;align-items:center;gap:10px;font-weight:800}
+.destino .tit svg{width:56px;height:56px;flex:none}
+.destino .dentro{display:flex;flex-wrap:wrap;gap:6px}
+.destino .dentro .ficha{width:64px;height:64px}
+.opcion .redonda{display:grid;place-items:center;width:clamp(76px,18vw,112px);height:clamp(76px,18vw,112px);border-radius:50%;border:3px dashed #8CC9A8;background:#fff;padding:10%;margin:0 auto}
+.opcion .redonda svg{width:100%;height:100%}
+/* IDV-CEX-001: mapa de la aventura para la persona adulta, por Estación (D5) */
+.est-lista{display:grid;gap:0;border:1px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio,22px);background:#fff;padding:4px 16px}
+.est-fila{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--as-borde,#dae3e1)}
+.est-fila:last-child{border-bottom:0}
+.est-mini{flex:0 0 auto;width:72px;height:72px;border-radius:16px;border:3px solid;display:grid;place-items:center}
+.est-mini svg{width:78%;height:78%}
+.est-fila h3{margin:0;font-size:1rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.est-chip{font-size:.75rem;font-weight:800;border-radius:999px;padding:1px 8px;color:#102F54}
+.est-fila p{margin:2px 0 0}
+.modelo{display:flex;align-items:center;gap:12px;background:var(--as-menta,#e0f2eb);border-radius:var(--as-radio-control,14px);padding:8px 12px;font-weight:800}
+.modelo .ficha{cursor:default}
+.modelo.oculto .ficha{visibility:hidden}
+.sombras{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:12px}
+.sombra{width:clamp(96px,22vw,150px);height:clamp(96px,22vw,150px);border-radius:50%;border:3px solid var(--as-borde,#dae3e1);background:radial-gradient(ellipse at 50% 70%,#e7ece6 0 60%,#f4f6f4 61%);display:grid;place-items:center;padding:12px}
+.sombra svg{width:100%;height:100%}
+.sombra.descartada{opacity:.35}
+.objeto-grande{width:clamp(140px,36vw,220px);height:clamp(140px,36vw,220px);margin:0 auto;display:grid;place-items:center}
+.objeto-grande svg{width:100%;height:100%;overflow:visible}
+.niebla-marco{max-width:360px;margin:0 auto;border-radius:var(--as-radio,22px);overflow:hidden;border:2px solid var(--as-borde,#dae3e1);background:#fff}
+.niebla-marco svg{display:block;width:100%;height:auto}
+.opciones-dib{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));margin-top:12px}
+.opciones-dib .opcion{align-items:center;text-align:center}
+.opciones-dib .opcion svg{width:84px;height:84px}
+.palabra{font-size:clamp(2rem,8vw,3.4rem);font-weight:800;letter-spacing:.04em}
+/* Laberinto y tableros */
+.grilla{display:grid;gap:3px;max-width:520px;margin:0 auto;touch-action:manipulation}
+/* IDV-CEX-001: casillas arena, flechas en tinta, salida verde con su nombre y destino en verde claro */
+.celda{aspect-ratio:1;background:#FFF1D7;border:2px solid #F3DDB3;border-radius:8px;display:grid;place-items:center;position:relative}
+.celda.pared{background:#DCEFD9;border-color:#C4E0BF}
+.celda.salida{background:#196B6A;border-color:#196B6A}
+.celda.salida .salida-txt{position:absolute;top:3px;left:0;right:0;text-align:center;color:#fff;font-weight:800;font-size:clamp(.7rem,1.8vw,.95rem);letter-spacing:.02em;pointer-events:none}
+.celda.destino-lab{background:#E0F2EB;border-color:#8CC9A8}
+.celda svg{width:92%;height:92%}
+.celda.paso{box-shadow:inset 0 0 0 4px var(--as-sol,#ffb82e)}
+.celda.flecha::after{content:attr(data-flecha);position:absolute;font-weight:800;color:var(--as-tinta,#102f54);font-size:1.4rem}
+.flechas{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,64px);gap:6px;justify-content:center;margin-top:12px}
+.flechas .btn{min-width:64px;min-height:64px;padding:0;font-size:1.6rem}
+.flechas .arr{grid-column:2}
+.flechas.persp{grid-template-columns:repeat(3,auto)}
+.flechas.persp .btn{padding:0 12px;font-size:1rem}
+.cartel{width:min(280px,70vw);margin:0 auto}
+.cartel svg{width:100%;height:auto}
+.trazo-marco{position:relative;max-width:760px;margin:0 auto;border-radius:var(--as-radio-control,14px);overflow:hidden;border:2px solid var(--as-borde,#dae3e1);background:#fff;touch-action:none}
+.trazo-marco svg{display:block;width:100%;height:auto}
+.trazo-marco canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.modelo-lado{max-width:220px;border:2px solid var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio-control,14px);background:#fff;padding:6px}
+.modelo-lado svg{width:100%;height:auto;display:block}
+.tablero-fila{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:center}
+/* Cofre y secuencias */
+.fila-obj{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+.fila-obj .ficha{cursor:default}
+.casilleros{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+.casillero{width:clamp(76px,16vw,112px);height:clamp(96px,19vw,136px);border:3px dashed var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio-control,14px);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:4px;gap:2px}
+.casillero .num{font-weight:800;background:var(--as-tinta,#102f54);color:#fff;border-radius:999px;width:28px;height:28px;display:grid;place-items:center;font-size:.9rem;flex:none}
+.casillero .ficha{width:100%;height:auto;aspect-ratio:1;border:0;padding:0}
+.casillero.lleno{border-style:solid}
+.sonda{display:flex;flex-direction:column;align-items:center;gap:12px}
+.sonda .ficha{width:150px;height:150px;cursor:default}
+.dos-botones{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.dos-botones .btn{min-width:150px;min-height:64px;font-size:1.2rem}
+.hojas-caen{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:3/2;background:#eef3e9;border-radius:var(--as-radio,22px)}
+.hojas-caen button{position:absolute;width:64px;height:64px;border:0;background:transparent;padding:0}
+.hojas-caen button svg{width:100%;height:100%}
+.hojas-caen button[disabled]{opacity:.25}
+/* Carrera de pistas */
+.collar{display:flex;align-items:center;gap:12px;justify-content:center;background:var(--as-menta,#e0f2eb);border-radius:var(--as-radio,22px);padding:8px 14px;font-weight:800}
+.collar .ficha{cursor:default;width:84px;height:84px}
+.sendero{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:14px 0;min-height:160px;align-items:center;background:linear-gradient(#f4f6f4,#eef3e9);border-radius:var(--as-radio,22px);padding:10px}
+.sendero .ficha{width:clamp(96px,24vw,140px);height:clamp(96px,24vw,140px)}
+.sendero .tapada{background:#dfe9d8}
+/* Mapa y piezas */
+.mapa{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr))}
+.lugar{border:2px solid var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio,22px);background:#fff;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-height:180px}
+.lugar svg{width:100%;max-width:200px;height:auto;aspect-ratio:3/2;border-radius:14px}
+.lugar .t{font-weight:800}
+.lugar .pieza{font-size:.9rem;font-weight:800;color:var(--as-verde,#196b6a)}
+.lugar[disabled]{opacity:.45}
+.piezas{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0}
+.piezas svg{width:56px;height:56px}
+.cierre{text-align:center}
+.cierre .acciones{justify-content:center}
+.idea,.contar{margin:16px auto;max-width:760px;text-align:left;background:var(--as-suave,#f4f6f4);border-radius:var(--as-radio,22px);padding:14px 16px}
+.idea p{font-weight:700}
+.pregunta{display:flex;align-items:center;gap:8px;font-weight:800;margin-top:12px}
+.dialogo{position:fixed;inset:0;background:rgb(16 47 84 / 45%);display:grid;place-items:center;padding:16px;z-index:10;overflow:auto}
+.dialogo .panel{max-width:980px;width:100%}
+table.reg{border-collapse:collapse;width:100%;font-size:.9rem}
+table.reg th,table.reg td{border-bottom:1px solid var(--as-borde,#dae3e1);padding:6px;text-align:left;vertical-align:top}
+.tabla-scroll{overflow-x:auto}
+.leyenda{font-size:.92rem;padding:8px 12px;border-left:4px solid var(--as-borde-verde,#75b8a8);background:var(--as-suave,#f4f6f4);margin:8px 0}
+.fantasma{position:fixed;pointer-events:none;width:84px;height:84px;transform:translate(-50%,-50%);opacity:.9;z-index:20;border:3px solid var(--as-coral,#f58060);border-radius:14px;background:#fff;display:grid;place-items:center}
+.fantasma svg{width:100%;height:100%}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.girando{transition:transform 1.6s ease-in-out}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* ---------- Propios de «Chef en Acción» ---------- */
+.rincones{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr))}
+.rincon{border:2px solid var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio,22px);background:#fff;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-height:170px}
+.rincon svg{width:100%;max-width:180px;height:auto;aspect-ratio:3/2}
+.rincon .t{font-weight:800}
+.rincon .tarjeta-ok{font-size:.9rem;font-weight:800;color:var(--as-verde,#196b6a)}
+.receta{border:2px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);background:#fff;padding:8px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:52px;text-align:center}
+.receta svg{width:84px;height:84px}
+.receta .t{font-weight:800}
+.receta .ings{display:flex;flex-wrap:wrap;gap:2px;justify-content:center}
+.receta .ings svg{width:30px;height:30px}
+.receta .datos{font-size:.85rem;color:var(--as-texto,#354e60)}
+.opcion.receta{align-items:center;text-align:center}
+.opcion .dib svg,.opcion svg.dib{width:72px;height:72px}
+.ficha .nom,.ing-nom{font-size:.72rem;font-weight:800;line-height:1.1;text-align:center}
+.ficha.con-nombre{display:flex;flex-direction:column;justify-content:center;gap:2px;height:auto;min-height:clamp(84px,18vw,118px)}
+.ficha.con-nombre svg{width:70%;height:auto;aspect-ratio:1}
+.ficha.resaltada,.opcion.resaltada{box-shadow:0 0 0 5px var(--as-sol,#ffb82e)}
+.lista-receta{background:var(--as-arena,#fff1d7);border-radius:var(--as-radio-control,14px);padding:8px 12px}
+.lista-receta ul{margin:4px 0 0;padding-left:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.lista-receta li{display:flex;align-items:center;gap:4px;font-weight:800}
+.lista-receta li svg{width:36px;height:36px}
+.lista-receta.tapada ul{visibility:hidden}
+.mesada{background:#F3EBDD;border:2px solid #D9C8A8;border-radius:var(--as-radio,22px);padding:10px;min-height:96px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mesada .ficha{width:72px;height:72px;cursor:default}
+.estante{background:linear-gradient(#fff 0 86%,#E9D8BE 86%);border:2px solid #D9C8A8;border-radius:var(--as-radio,22px);padding:10px;display:flex;flex-wrap:wrap;gap:8px}
+.contador{font-size:2rem;font-weight:800;min-width:2.5ch;text-align:center}
+.carrito{display:flex;flex-wrap:wrap;gap:4px;min-height:84px;border:3px dashed var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio,22px);padding:8px;align-items:center}
+.carrito svg{width:52px;height:52px}
+.cajon{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:160px}
+.cajon svg{width:30px;height:30px}
+.dinero{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.dinero .billete{min-width:110px;min-height:60px;border:3px solid #102F54;border-radius:10px;background:#E0F2EB;font-weight:800;font-size:1.2rem;display:grid;place-items:center}
+.dinero .moneda{width:64px;height:64px;border-radius:50%;border:3px solid #102F54;background:#FFE29A;font-weight:800;font-size:1.1rem;display:grid;place-items:center}
+.bandeja-pago{min-height:72px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:3px dashed var(--as-borde-verde,#75b8a8);border-radius:var(--as-radio,22px);padding:8px}
+.bandeja-pago span{border:2px solid #102F54;border-radius:8px;padding:4px 8px;font-weight:800;background:#fff}
+.teclado{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center}
+.teclado .btn{min-width:64px;min-height:56px;padding:0;font-size:1.3rem}
+.pantalla-num{font-size:2.2rem;font-weight:800;min-width:4ch;text-align:center;border:3px solid var(--as-tinta,#102f54);border-radius:14px;padding:4px 12px;margin:0 auto 10px;max-width:220px;background:#fff}
+.productos{display:grid;gap:10px}
+.producto{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.producto svg{width:48px;height:48px}
+.precio{font-weight:800}
+.secuencia-mal{margin:6px 0 10px;padding-left:1.4em}
+.secuencia-mal li{font-weight:700;margin:4px 0}
+.gorro{display:flex;align-items:center;gap:10px;justify-content:center;font-weight:800;font-size:1.2rem}
+.gorro svg{width:90px;height:90px}
+.cocina-juego{display:grid;gap:12px}
+.botonera{display:flex;flex-wrap:wrap;gap:8px}
+.botonera .opcion{min-width:120px;align-items:center;text-align:center}
+.botonera .opcion svg{width:44px;height:44px}
+.botonera .opcion.chef{border-color:var(--as-coral,#f58060);background:#FFF5F1}
+.pasos-hechos{margin:0;padding-left:1.4em}
+.pasos-hechos li{font-weight:700}
+.pasos-hechos li.adulto::after{content:" (lo hizo el chef)";font-weight:400;font-size:.9rem}
+.modelo-chef{display:flex;align-items:center;gap:10px;background:var(--as-menta,#e0f2eb);border-radius:var(--as-radio-control,14px);padding:8px 12px;font-weight:800}
+.modelo-chef svg{width:48px;height:48px}
+.modelo-chef[hidden],.pasos-hechos[hidden]{display:none}
+svg.v3d{filter:drop-shadow(0 2px 2px rgba(16,47,84,.22))}
+.lamina svg.v3d,.rincon svg.v3d{filter:none}
+.modelo-ut svg{width:44px;height:44px}
+.modelo-chef.haciendo .modelo-ut{display:inline-block;animation:chef-hace 1.1s ease-in-out 1}
+@keyframes chef-hace{0%{transform:translateY(0) rotate(0)}40%{transform:translateY(-6px) rotate(-12deg)}100%{transform:translateY(0) rotate(0)}}
+@media (prefers-reduced-motion:reduce){.modelo-chef.haciendo .modelo-ut{animation:none}}
+.etapas{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+.etapas span{border:2px solid var(--as-borde,#dae3e1);border-radius:999px;padding:2px 10px;font-size:.9rem;font-weight:800}
+.etapas span.hecha{background:var(--as-menta,#e0f2eb)}
+.etapas span.actual{border-color:var(--as-tinta,#102f54)}
+.recetario{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.recetario .receta{width:150px}
+.desafio{margin:16px auto;max-width:760px;text-align:left;border:2px solid var(--as-sol,#ffb82e);border-radius:var(--as-radio,22px);padding:14px 16px}
+.sel-ut[aria-pressed="true"],.sel-acc[aria-pressed="true"]{background:var(--as-menta,#e0f2eb);border-color:var(--as-verde,#196b6a)}
+/* 13–18: presentación sobria, sin personajes (T1 de RT-CHF-001-R) */
+.sobria svg.personaje{display:none}
+.calculadora{margin:10px auto 0;max-width:260px;border:2px solid var(--as-borde,#dae3e1);border-radius:var(--as-radio-control,14px);padding:8px;background:#fff}
+.calculadora[hidden]{display:none}
+.calculadora .teclado{grid-template-columns:repeat(4,52px)}
+.calculadora .teclado .btn{min-width:52px;min-height:48px;font-size:1.1rem}
+</style></head><body>
+<div class="wrap">
+  <header class="hd" id="hd"></header>
+  <main id="app" aria-live="off"></main>
+  <p class="sr" id="anuncio" role="status" aria-live="polite"></p>
+</div>
+<script type="application/json" id="datos-banco">__BANCO__</script>
+<script type="application/json" id="datos-modulo">__MODULO__</script>
+<script type="application/json" id="datos-recetas">__RECETAS__</script>
+<script type="application/json" id="datos-inicio">__INICIO__</script>
+<script id="motor">
+"use strict";
+/* ---------- Motor: lógica pura y determinista (tests/chef.test.js la prueba sin navegador) ----------
+   Rutas y disponibilidades (FEC 5.11), M10 por variante y habilidad, escala de apoyos 0–3, exposición de 5A, criterio de acierto,
+   registro y validador del banco y de las recetas. Ningún modelo de lenguaje (T11). */
+const Motor = (() => {
+  const GR = ["facil", "intermedio", "dificil"];
+  const RUTAS = ["3-5", "6-8", "9-12", "13-18"];
+  const AUTONOMIA = ["autonomo", "con-pista", "con-ayuda-especifica", "con-demostracion"];
+  const DIMENSIONES = ["informacion", "consignas", "relaciones", "planificacion", "resolucion", "autonomia", "cantidad-estimulos"];
+  const ALERGENOS = ["gluten", "leche", "huevo", "mani", "frutos-secos", "soja", "pescado-mariscos"];
+  const RIESGOS = ["calor", "filo", "electrico"];
+  const limitar = (x, a, b) => Math.max(a, Math.min(b, Math.round(+x || 0)));
+  function azar(semilla) { let s = (semilla >>> 0) || 0x9e3779b9; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
+  const mezclar = (arr, r) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const semillaDe = (t) => { let h = 2166136261; for (const c of String(t)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const normalizar = (t) => String(t || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+  /* ---------- Rutas (FEC 5.11; REQ-CLI-CHF-29) ---------- */
+  const variante = (modulo, id) => modulo.estaciones.variantes.find((v) => v.variante === id) || {};
+  const rutaActiva = (modulo, ruta) => !!modulo.rutas[ruta];
+  const gradosDe = (modulo, ruta, id) => (rutaActiva(modulo, ruta) ? ((variante(modulo, id).disponibilidad || {})[ruta] || []).slice() : []);
+  const variantesDe = (modulo, ruta) => modulo.estaciones.variantes.filter((v) => gradosDe(modulo, ruta, v.variante).length).map((v) => v.variante);
+  const rinconesDe = (modulo, ruta) => [...new Set(variantesDe(modulo, ruta).map((v) => variante(modulo, v).rincon))];
+  function itemsDe(banco, id, grado, ruta) {
+    if (!(variante({ estaciones: { variantes: [] } }, id))) return [];
+    return (((banco.variantes || {})[id] || {})[grado] || []).filter((it) => (it.rutas || []).includes(ruta));
+  }
+  /* Hilo de la receta (FEC §4, RT-CHF-001 B.4): si hay ítems de la receta en curso se usan primero; si no, cualquiera. Nunca bloquea. */
+  function ordenarPorReceta(lista, receta) {
+    if (!receta) return lista.slice();
+    const con = lista.filter((it) => it.receta === receta);
+    return con.length ? con.concat(lista.filter((it) => it.receta !== receta)) : lista.slice();
+  }
+  /* Gran reto: solo etapas de rincones disponibles en la ruta (REQ-CLI-CHF-29). */
+  function etapasEnRuta(modulo, ruta, etapas) {
+    const rs = new Set(rinconesDe(modulo, ruta));
+    return (etapas || []).filter((e) => e.rincon === 8 || rs.has(e.rincon));
+  }
+
+  /* ---------- M10 dentro de cada variante y por habilidad (EST-05, REQ-CLI-CHF-05). Heredado de FEC-015 hasta T3. ---------- */
+  function ajusteM10(historial, grado, o = {}) {
+    const m = o.m10 || { ventana: 10, minimo: 5, subir_aciertos: 0.85, subir_sin_ayuda: 0.7, mantener_desde: 0.6, errores_seguidos: 3 };
+    const gs = o.grados && o.grados.length ? o.grados : GR, i = gs.indexOf(grado);
+    if (o.fijo) return { grado, motivo: "fijado por el profesional (M10-9)" };
+    if (o.erroresSeguidos >= m.errores_seguidos)
+      return i > 0 ? { grado: gs[i - 1], motivo: "3 errores seguidos (M10-5)", masAyuda: true } : { grado, motivo: "3 errores seguidos en el grado mínimo", masAyuda: true };
+    const v = historial.slice(-m.ventana);
+    if (v.length < m.minimo) return { grado, motivo: "menos de 5 ítems (M10-2)" };
+    const ac = v.filter((x) => x.acierto).length / v.length, sa = v.filter((x) => x.acierto && !x.conAyuda).length / v.length;
+    if (ac >= m.subir_aciertos && sa >= m.subir_sin_ayuda && i < gs.length - 1 && !o.yaSubio) return { grado: gs[i + 1], motivo: "subir (M10-3)", subio: true };
+    if (ac < m.mantener_desde && i > 0) return { grado: gs[i - 1], motivo: "menos de 60 % (M10-5)" };
+    return { grado, motivo: "mantener (M10-4)" };
+  }
+  /* Nunca cambia de variante (Zona → Espacio) ni de Estación: solo sugiere (EST-05, RT-EST-001-R P3). */
+  function sugerirOtraVariante(historial, grado, grados) {
+    const v = historial.slice(-5);
+    return grado === grados[grados.length - 1] && v.length >= 5 && v.every((x) => x.acierto && !x.conAyuda);
+  }
+
+  /* ---------- Escala de apoyos 0–3 (FEC 5.3) con retiro progresivo (REQ-CLI-CER-09) ---------- */
+  function siguienteApoyo(apoyoMax) { const m = limitar(apoyoMax, 0, 3); return m >= 2 ? { nivel: m - 1, destacar: false } : { nivel: 0, destacar: m === 1 }; }
+  const sinAyuda = (r) => (r.apoyo_max | 0) === 0;
+  const autonomia = (n) => AUTONOMIA[limitar(n, 0, 3)];
+  /* El mismo tipo de error 3 veces en el grado → el próximo ítem con apoyo 1, sin cambiar el grado (FEC 5.16). */
+  function tipoRepetido(cuenta, tipos, umbral = 3) { let rep = null; for (const t of tipos || []) { cuenta[t] = (cuenta[t] || 0) + 1; if (cuenta[t] >= umbral) { rep = t; cuenta[t] = 0; } } return rep; }
+  /* Qué apoyo es de acceso y cuál de aprendizaje depende de la variante (FEC 5.3, REQ-CLI-CHF-10). */
+  function esAprendizaje(modulo, id, apoyo) { return ((variante(modulo, id).apoyos || {}).aprendizaje || []).includes(apoyo); }
+
+  /* ---------- Rincón 5 · Zona: exposición breve (como 8A de FEC-015; REQ-CLI-CHF-08). Sin reloj visible. ---------- */
+  function exposicionSiguiente(estado, precision, cfg, o = {}) {
+    if (o.desactivada) return { ms: null, motivo: "exposición breve desactivada por la persona adulta" };
+    const min = (cfg.minimo_ms || {})[o.ruta] || 1000, ms = estado.ms || cfg.inicial_ms;
+    if (precision >= cfg.precision_para_acortar && !(cfg.una_vez_por_sesion && estado.acortoEnSesion)) {
+      const nuevo = Math.max(min, ms - cfg.paso_ms); return { ms: nuevo, acorto: nuevo < ms, motivo: nuevo < ms ? "precisión 85 % o más" : "en el mínimo" };
+    }
+    return { ms, motivo: precision < cfg.precision_para_acortar ? "precisión menor a 85 %: no se acorta" : "ya se acortó en esta sesión" };
+  }
+
+  /* ---------- Criterio de acierto (provisorio hasta T3 y T6) ---------- */
+  function valida(it, opcion, razon) {   // 1B Difícil y 8B: toda combinación declarada (REQ-CLI-CHF-15)
+    if (it.validas) return it.validas.some(([o, r]) => o === opcion && r === razon);
+    if (it.correctas) return it.correctas.includes(opcion);
+    if (it.correctas_una_de) return it.correctas_una_de.includes(opcion);
+    return it.correcta === opcion;
+  }
+  /* Selección múltiple (T6 de RT-CHF-001-R): acierto = todas las correctas y ninguna de más. Parcial = error «omision» o «de_mas». */
+  function validaMultiple(correctas, elegidas) {
+    const c = new Set(correctas), e = new Set(elegidas), bien = [...e].filter((x) => c.has(x)).length, demas = [...e].filter((x) => !c.has(x)).length, faltan = c.size - bien;
+    const tipos = [...(demas ? ["de_mas"] : []), ...(faltan ? ["omision"] : [])];
+    return { ok: !tipos.length, tipos, correctas_marcadas: bien, total_correctas: c.size, faltan, demas };
+  }
+  const NUM = ["ninguna", "una", "dos", "tres", "cuatro", "cinco", "seis"];
+  /* Devolución que reconoce lo que estuvo bien («Encontraste dos. Falta una.»), sin «mal». */
+  function devolucionMultiple(r) {
+    if (r.demas) return r.correctas_marcadas ? `Encontraste ${NUM[r.correctas_marcadas] || r.correctas_marcadas}. Hay ${r.demas > 1 ? "algunas que no van" : "una que no va"}.` : "Mirá otra vez cuáles van.";
+    return r.correctas_marcadas ? `Encontraste ${NUM[r.correctas_marcadas] || r.correctas_marcadas}. Falta${r.faltan > 1 ? "n" : ""} ${NUM[r.faltan] || r.faltan}.` : "Elegí las que van.";
+  }
+  /* Taxonomía cerrada de errores (T4): tipos de la variante; en el gran reto, los del rincón de origen de la etapa (8B suma los suyos). */
+  function tiposPermitidos(modulo, id, o = {}) {
+    const de = (vid) => (variante(modulo, vid).tipos_error || []);
+    let t;
+    if (o.rincon && o.rincon !== 8) t = de(o.rincon + "-zona").concat(de(o.rincon + "-espacio"));
+    else if (o.rincon === 8) t = de("8-espacio");
+    else t = de(id);
+    if (o.multiple) t = t.concat(["omision", "de_mas"]);
+    return [...new Set(t.concat(["sin_respuesta", "otro"]))];
+  }
+  /* El primer candidato que esté en la lista cerrada; si ninguno, «otro». Nunca es un rasgo de la persona. */
+  function tipoCerrado(permitidos, candidatos) { for (const c of [].concat(candidatos || [])) if (c && permitidos.includes(c)) return c; return "otro"; }
+  function presupuestoOk(it, eleccion) {   // 3B Difícil: un producto por ingrediente y total ≤ presupuesto
+    if (!eleccion || eleccion.length !== it.productos.length || eleccion.some((p) => p == null)) return { ok: false, motivo: "falta-elegir" };
+    const total = eleccion.reduce((s, p, i) => s + it.productos[i].precios[p], 0);
+    return { ok: total <= it.presupuesto, total, motivo: total <= it.presupuesto ? null : "se-paso-del-presupuesto" };
+  }
+  const sumaPago = (monedas) => (monedas || []).reduce((s, x) => s + (+x || 0), 0);
+  const soloDigitos = (t) => /^[0-9]{0,6}$/.test(String(t));   // REQ-CLI-CHF-09: el teclado de 3B solo admite números
+  const acierto = (r) => r.resultado === "acierto";
+
+  /* ---------- Registro mínimo por ítem (FEC §8). Nunca: voz, texto libre, imagen, alergias, dietas, datos de la casa. ---------- */
+  const CAMPOS_EXTRA = ["receta", "razon", "alternativa", "como_salio", "que_cambiarias", "correctas_marcadas", "total_correctas", "calculadora", "exposicion_ms", "sin_exposicion_breve", "precision", "repeticiones_consigna", "integrado", "etapa", "rincon_origen", "total", "situacion"];
+  function registro(b) {
+    const extra = {}; for (const k of CAMPOS_EXTRA) if (b.extra && b.extra[k] !== undefined) extra[k] = b.extra[k];
+    return { variante: String(b.variante), rincon: limitar(b.rincon, 1, 8), estacion: String(b.estacion), grado: String(b.grado), item: String(b.item), habilidad: String(b.habilidad),
+      resultado: b.resultado === "acierto" ? "acierto" : b.resultado === "abandono" ? "abandono" : "error", errores: limitar(b.errores, 0, 999), intentos: limitar(b.intentos, 0, 999),
+      tipos_error: (b.tipos_error || []).slice(0, 12).map(String), apoyos: (b.apoyos || []).slice(0, 20).map(String), apoyo_inicial: limitar(b.apoyo_inicial, 0, 3), apoyo_max: limitar(b.apoyo_max, 0, 3),
+      autonomia: autonomia(b.apoyo_max), modalidad: String(b.modalidad || "tocar"), autocorreccion: !!b.autocorreccion, ms: limitar(b.ms, 0, 3600000), tipo_letra: String(b.tipo_letra || ""), extra };
+  }
+  /* Vista profesional por habilidad (REQ-CLI-CHF-18): tres columnas como desempeño en la actividad, sin puntaje global. */
+  function vistaPorHabilidad(regs) {
+    const por = {};
+    for (const r of regs) {
+      const f = por[r.habilidad] || (por[r.habilidad] = { habilidad: r.habilidad, variantes: new Set(), items: 0, sin_apoyo: 0, con_apoyo: 0, demostracion: 0, primer_intento: 0, apoyos: {}, tipos: {}, rep: 0, gran_reto: { items: 0, sin_apoyo: 0, con_apoyo: 0 } });
+      // T5: lo integrado («En el gran reto») va en una columna aparte y no entra en las cuentas del rincón
+      if (r.extra && r.extra.integrado) { f.gran_reto.items += 1; if (r.resultado === "acierto" && r.apoyo_max === 0) f.gran_reto.sin_apoyo += 1; else f.gran_reto.con_apoyo += 1; continue; }
+      f.variantes.add(r.variante); f.items += 1;
+      if (r.resultado === "acierto" && r.apoyo_max === 0) f.sin_apoyo += 1; else if (r.apoyo_max >= 3) f.demostracion += 1; else f.con_apoyo += 1;
+      if (r.resultado === "acierto" && r.errores === 0) f.primer_intento += 1;
+      for (const a of r.apoyos) { const n = a.replace(/^inicial:/, ""); f.apoyos[n] = (f.apoyos[n] || 0) + 1; }
+      for (const t of r.tipos_error) f.tipos[t] = (f.tipos[t] || 0) + 1;
+      f.rep += (r.extra.repeticiones_consigna || 0);
+    }
+    const top = (o) => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, n]) => `${k} (${n})`);
+    return Object.values(por).map((f) => ({ ...f, variantes: [...f.variantes], apoyos: top(f.apoyos), tipos: top(f.tipos) }));
+  }
+
+  /* ---------- Textos: lo que ve quien juega y lo que ve la familia ---------- */
+  function textosNino(banco) {
+    const out = [];
+    const CLAVES = ["consigna", "pregunta", "ok", "pista1", "txt", "situacion", "frases", "asi_se_juega", "estrategia"];
+    const walk = (x, texto) => { if (!x) return; if (typeof x === "string") { if (texto) out.push(x); } else if (Array.isArray(x)) x.forEach((y) => walk(y, texto)); else if (typeof x === "object") for (const [k, v] of Object.entries(x)) walk(v, texto === "todo" ? "todo" : CLAVES.includes(k)); };
+    for (const gs of Object.values(banco.variantes)) for (const g of Object.values(gs)) walk(g);
+    walk(banco.textos.nino, "todo"); walk(banco.textos.historia); walk(banco.estrategias); walk(banco.textos.como_salio); walk(banco.textos.que_cambiarias);
+    const C = banco.textos.contar || {};
+    walk(C.pregunta, true); walk(C.otra); walk(C.ayudo, "todo"); walk(C.ayudo_extra_13_18, "todo");
+    // O1: «Fácil», «Más o menos» y «Difícil» de «¿Cómo te resultó?» son opinión de la persona, no nivel: se exceptúan por id (solo esas tres)
+    if (C.resulto) { walk(C.resulto.pregunta, true); for (const o of C.resulto.opciones || []) if (!EXCEPTUADAS_O1.includes(o.id)) walk(o); }
+    return out;
+  }
+  const EXCEPTUADAS_O1 = ["facil", "mas_o_menos", "dificil"];
+  /* Textos de 13–18 (T1): sin diminutivos (salvo nombres de producto) ni exclamaciones infantiles. */
+  const NO_DIMINUTIVO = ["galletitas", "galletita", "necesita", "necesitas", "necesito", "visita", "frito", "fritos", "frita", "fritas", "maldito", "escrito", "bonito", "infinito", "favorito", "favorita", "cita", "pepita"];
+  function reglas1318(texto, excepciones = []) {
+    const E = [], ok = new Set(NO_DIMINUTIVO.concat(excepciones));
+    for (const w of normalizar(texto).match(/[a-zñ]+/g) || []) if (w.length >= 6 && /(ito|ita|itos|itas|illo|illa|illos|illas)$/.test(w) && !ok.has(w) && !/^(tortilla|tortillas|vainilla|semilla|semillas|cuchillo|cuchillos|frutilla|frutillas|manzanilla|mantequilla|parrilla|ardilla|pastilla|tortitas)$/.test(w)) E.push(`diminutivo «${w}»`);
+    if (/¡/.test(texto)) E.push("exclamación");
+    return E;
+  }
+  function rotuloVariante(texto) { return /^\s*(zona|espacio)\s*$/i.test(texto) || /\b(variante|modo|nivel)\s+(zona|espacio)\b/i.test(normalizar(texto)); }   // O1
+  /* B1: devuelve los pasos que trabajan en un recipiente caliente sin riesgo declarado. */
+  function riesgoHeredado(r) {
+    const caliente = new Set(), out = [];
+    for (const p of r.pasos || []) {
+      if (p.recipiente && caliente.has(p.recipiente) && p.riesgo !== "calor") out.push(p.texto);
+      if (p.riesgo === "calor" && p.momento !== "antes" && p.recipiente) caliente.add(p.recipiente);
+      if (p.enfria && p.recipiente) caliente.delete(p.recipiente);
+    }
+    return out;
+  }
+  /* C3 (RT-CHF-001-R v1.2): lo que sale de un paso con calor (el relleno, lo frito, un ingrediente cocinado) solo lo usa quien juega
+     si ese paso lo deja enfriar (enfria). Devuelve los pasos de quien juega que lo usan caliente. */
+  function productoCaliente(r) {
+    const caliente = new Set(), out = [];
+    for (const p of r.pasos || []) {
+      const usa = [p.usa, p.ingrediente].filter(Boolean);
+      if (p.actor !== "adulto" && !p.riesgo && usa.some((x) => caliente.has(x))) out.push(p.texto);
+      if (p.riesgo === "calor" && p.momento !== "antes") for (const x of [p.produce, p.ingrediente].filter(Boolean)) { if (p.enfria) caliente.delete(x); else caliente.add(x); }
+    }
+    return out;
+  }
+  function palabrasProhibidas(texto, lista) {
+    const ps = normalizar(texto).match(/[a-zñ0-9]+/g) || [];
+    return lista.filter((w) => ps.includes(w));
+  }
+
+  /* ---------- Validador del banco (CI): REQ-CLI-CHF-01, 03, 10, 12 a 16, 19 a 24, 28 y 29 ---------- */
+  function validarBanco(banco, modulo) {
+    const E = [], ING = banco.ingredientes, UT = banco.utensilios, REC = Object.fromEntries(banco.recetas.map((r) => [r.id, r]));
+    const P = modulo.palabras_no_admitidas;
+    // Recetas (5.10, 5.13, 5.15)
+    for (const r of banco.recetas) {
+      for (const i of r.ingredientes) if (!ING[i]) E.push(`${r.id}: ingrediente desconocido ${i}`);
+      const al = [...new Set(r.ingredientes.flatMap((i) => (ING[i] || {}).alergenos || []))].sort();
+      if (!Array.isArray(r.alergenos) || JSON.stringify([...r.alergenos].sort()) !== JSON.stringify(al)) E.push(`${r.id}: alérgenos mal declarados (CHF-22)`);
+      for (const a of r.alergenos || []) if (!ALERGENOS.includes(a)) E.push(`${r.id}: alérgeno fuera del vocabulario ${a}`);
+      if ((r.alergenos || []).includes("gluten") && !r.sin_tacc) E.push(`${r.id}: tiene gluten y no ofrece alternativa sin TACC (CHF-22)`);
+      if (r.rutas.includes("3-5") && r.ingredientes.some((i) => (ING[i] || {}).atragantamiento_3_5)) E.push(`${r.id}: alimento con riesgo de atragantamiento en 3–5 (CHF-23)`);
+      for (const p of r.pasos) {
+        const ut = UT[p.utensilio]; if (!ut) { E.push(`${r.id}: utensilio desconocido ${p.utensilio}`); continue; }
+        if (ut.riesgo && p.riesgo !== ut.riesgo) E.push(`${r.id}: paso con ${p.utensilio} sin riesgo declarado`);
+        if (p.riesgo && p.actor !== "adulto" && !r.rutas.every((x) => x === "13-18")) E.push(`${r.id}: paso con ${p.riesgo} hecho por quien juega (CHF-12 y 21)`);
+        if (p.riesgo && !r.rutas.every((x) => x === "13-18") && !/(^el adulto|^prender|^hornear|^cocinar|^hervir|^calentar|^fre[ií]r|^cortar|^rallar)/i.test(p.texto)) E.push(`${r.id}: paso con riesgo sin texto claro: ${p.texto}`);
+        if (/us[aá] el cuchillo/i.test(p.texto)) E.push(`${r.id}: «usá el cuchillo» no está admitido (CHF-21)`);
+      }
+      if (!r.coccion && r.pasos.some((p) => p.riesgo === "calor" && p.momento !== "antes")) E.push(`${r.id}: sin cocción pero con calor durante la receta`);
+      // B1 (RT-CHF-001-R v1.1): riesgo heredado. Un paso en un recipiente que estuvo en el fuego hereda calor, salvo que antes se haya enfriado.
+      for (const e of riesgoHeredado(r)) E.push(`${r.id}: «${e}» usa un recipiente que estuvo en el fuego y no está marcado con calor (B1)`);
+      for (const e of productoCaliente(r)) E.push(`${r.id}: «${e}» usa algo recién cocinado sin un paso que lo deje enfriar (C3)`);
+      // C1 (RT-CHF-001-R v1.2): cada receta declara su sabor
+      if (!["dulce", "salado", "los dos"].includes(r.sabor)) E.push(`${r.id}: sin sabor declarado (dulce, salado o los dos) (C1)`);
+      // B2: los faltantes posibles son ingredientes de la receta
+      for (const f of r.faltantes_posibles || []) if (!r.ingredientes.includes(f.ingrediente)) E.push(`${r.id}: faltante posible que la receta no lleva: ${f.ingrediente} (B2)`);
+      // Sección 4: en 3–5 un ingrediente con riesgo de atragantamiento solo entra en su forma preparada (por ejemplo, zanahoria → zanahoria rallada)
+      if (r.rutas.includes("3-5")) for (const p of r.pasos) if (p.ingrediente && (ING[p.ingrediente] || {}).atragantamiento_3_5 && !(p.resultado && !(ING[p.resultado] || {}).atragantamiento_3_5)) E.push(`${r.id}: «${p.texto}» usa ${p.ingrediente} en 3–5 sin forma preparada segura (T11)`);
+      if (!r.coccion && r.ingredientes.includes("huevo")) E.push(`${r.id}: huevo crudo en receta sin cocción (CHF-24)`);
+      for (const w of palabrasProhibidas([r.nombre, ...r.pasos.map((p) => p.texto)].join(" "), P.todas)) E.push(`${r.id}: palabra no admitida «${w}» (CHF-14)`);
+    }
+    for (const i of Object.values(ING)) if (palabrasProhibidas(i.nombre, ["alcohol", "vino", "cerveza", "licor", "ron", "sidra"]).length) E.push(`ingrediente alcohólico ${i.id} (CHF-14)`);
+    for (const id of banco.desafio_recetas) { const r = REC[id]; if (!r || r.coccion) E.push(`desafío para casa con cocción: ${id} (CHF-20)`); else if (r.pasos.some((p) => p.riesgo && p.momento !== "antes")) E.push(`desafío para casa con un paso de riesgo durante la receta: ${id} (CHF-21)`); }
+    // Variantes y ficha (CHF-01, 28, 29)
+    for (const v of modulo.estaciones.variantes) {
+      for (const g of GR) {
+        const dim = ((v.grados || {})[g] || {}).dimension || [];
+        if (!dim.length || dim.every((d) => d === "cantidad-estimulos")) E.push(`${v.variante} ${g}: sin dimensión distinta de la cantidad (CHF-01)`);
+        for (const d of dim) if (!DIMENSIONES.includes(d)) E.push(`${v.variante} ${g}: dimensión fuera del vocabulario ${d}`);
+      }
+      for (const k of ["estacion", "habilidad_referencia", "transferencia", "idea_fuera", "apoyos", "tipos_error", "recetas_usadas"]) if (!v[k]) E.push(`${v.variante}: falta ${k} en la ficha (CHF-28)`);
+      if (!["sin_respuesta", "otro"].every((x) => (v.tipos_error || []).includes(x))) E.push(`${v.variante}: la lista de errores no tiene sin_respuesta y otro (T4)`);
+      if (v.variante === "8-espacio" && !v.texto_transferir) E.push("8-espacio: falta el texto de Transferir (CHF-28)");
+      for (const r of RUTAS) for (const g of (v.disponibilidad || {})[r] || []) if (!GR.includes(g)) E.push(`${v.variante}: grado desconocido ${g}`);
+      for (const r of v.recetas_usadas || []) if (!(v.recetas_alergenos || {})[r]) E.push(`${v.variante}: receta usada sin alérgenos en la ficha (CHF-28)`);
+    }
+    const NO35 = ["1-espacio", "3-espacio", "4-espacio", "5-zona", "5-espacio", "6-espacio", "7-espacio", "8-espacio"];
+    for (const id of NO35) if (gradosDe(modulo, "3-5", id).length) E.push(`${id} no puede ofrecerse en 3–5 (5.11)`);
+    if (gradosDe(modulo, "6-8", "8-espacio").length) E.push("8B no puede ofrecerse en 6–8 (5.11)");
+    // Ítems
+    const textoNino = (it) => [it.consigna, it.pregunta, it.ok, it.pista1, ...(it.opciones || []).map((o) => o.txt), ...(it.canastas || []).map((c) => c.txt), ...((it.etapas || []).flatMap((e) => [e.consigna, e.pregunta, e.ok, ...(e.opciones || []).map((o) => o.txt)]))].filter(Boolean).join(" ");
+    for (const [id, gs] of Object.entries(banco.variantes)) {
+      const v = variante(modulo, id); if (!v.variante) { E.push(`variante desconocida ${id}`); continue; }
+      for (const g of GR) for (const it of gs[g] || []) {
+        const pos = `${it.id}`;
+        for (const r of it.rutas || []) if (!((v.disponibilidad || {})[r] || []).includes(g)) E.push(`${pos}: ofrecido en ${r} y la ficha no lo publica (CHF-29)`);
+        if (it.receta && !REC[it.receta]) E.push(`${pos}: receta desconocida`);
+        if (it.receta && (it.rutas || []).some((r) => !REC[it.receta].rutas.includes(r))) E.push(`${pos}: receta no disponible en una de sus rutas`);
+        if (!it.dimension || !it.dimension.length) E.push(`${pos}: sin dimensión (CHF-01)`);
+        const t = textoNino(it);
+        for (const w of palabrasProhibidas(t, P.todas.concat(P.nino))) E.push(`${pos}: palabra no admitida «${w}» (CHF-14 y 19)`);
+        const solo1318 = (it.rutas || []).length && it.rutas.every((r) => r === "13-18"), R13 = modulo.reglas_13_18 || {};
+        const maxC = solo1318 ? (R13.consigna_max || 80) : modulo.consigna_breve_max;
+        for (const c of [it.consigna, it.pregunta].filter(Boolean)) if (c.length > maxC) E.push(`${pos}: consigna de más de ${maxC} caracteres`);
+        if ((it.rutas || []).includes("13-18")) for (const e of reglas1318(t, R13.excepciones_diminutivo)) E.push(`${pos}: 13–18 con ${e} (T1)`);
+        if ((it.rutas || []).includes("13-18") && !/validado por PSP-SR|pendiente de PSP-SR|a revisar por PSP-SR/.test(it.estado_clinico || "")) E.push(`${pos}: 13–18 sin estado clínico declarado`);
+        // Taxonomía cerrada (T4)
+        const perm = tiposPermitidos(modulo, id, { multiple: it.multiple });
+        for (const tp of [it.tipo_error, ...Object.values(it.error_si || {})].filter(Boolean)) if (!perm.includes(tp)) E.push(`${pos}: tipo de error fuera de la lista de ${id}: ${tp} (T4)`);
+        for (const e of it.etapas || []) { const pe = tiposPermitidos(modulo, id, { rincon: e.rincon, multiple: e.multiple }).concat(id === "8-espacio" ? tiposPermitidos(modulo, "8-espacio") : []);
+          for (const tp of [e.tipo_error, ...Object.values(e.error_si || {})].filter(Boolean)) if (!pe.includes(tp)) E.push(`${pos}: etapa con tipo de error fuera de la lista: ${tp} (T4)`); }
+        if (it.validas && !it.validas.every(([o, r]) => (it.opciones || []).some((x) => x.id === o) && (it.razones || []).some((x) => x.id === r))) E.push(`${pos}: combinación válida inexistente (CHF-15)`);
+        if (it.formato === "presupuesto" && it.productos.reduce((s, p) => s + Math.min(...p.precios), 0) > it.presupuesto) E.push(`${pos}: presupuesto imposible`);
+        if (it.formato === "aventura") for (const e of it.etapas) if (e.rincon !== 8 && (it.rutas || []).some((r) => rutaActiva(modulo, r) && !rinconesDe(modulo, r).includes(e.rincon) && !(r === "3-5" && e.rincon === 3 && e.formato === "carrito"))) E.push(`${pos}: etapa del rincón ${e.rincon} en una ruta donde no está (CHF-29)`);
+        if (it.formato === "aventura" && id === "8-espacio" && !it.etapas.some((e) => e.imprevisto)) E.push(`${pos}: 8B sin imprevisto`);
+        // O1 (RT-CHF-001-R v1.4): si la receta permite más de un orden entre los pasos del ítem, el ítem los acepta todos
+        for (const e of [it, ...(it.etapas || [])]) {
+          if (e.formato !== "ordenar" || !e.pasos) continue;
+          const rec = REC[e.receta || it.receta]; if (!rec) continue;
+          const tx = rec.pasos.map((p) => p.texto), k = e.pasos.map((p) => tx.indexOf(p.txt)); if (k.some((x) => x < 0)) continue;
+          const antes = (a, b) => { const vis = new Set(), pila = [a]; while (pila.length) { const x = pila.pop(); for (const y of rec.pasos[x].antes_de || []) { if (y === b) return true; if (!vis.has(y)) { vis.add(y); pila.push(y); } } } return false; };
+          const libres = [];
+          for (let i = 0; i < k.length; i++) for (let j = i + 1; j < k.length; j++) if (!antes(k[i], k[j]) && !antes(k[j], k[i])) libres.push(`«${e.pasos[i].txt}» y «${e.pasos[j].txt}»`);
+          const decl = new Set((e.orden_parcial || []).map(([a, b]) => a + ">" + b));
+          const esperado = []; for (let i = 0; i < k.length; i++) for (let j = 0; j < k.length; j++) if (i !== j && antes(k[i], k[j])) esperado.push(e.pasos[i].id + ">" + e.pasos[j].id);
+          if (libres.length && !e.orden_parcial) E.push(`${pos}: ordenar con un solo orden aceptado, pero ${libres[0]} se pueden intercambiar (O1)`);
+          if (e.orden_parcial && (decl.size !== esperado.length || esperado.some((x) => !decl.has(x)))) E.push(`${pos}: el orden parcial no coincide con el de la receta (O1)`);
+        }
+        // C1: en un ítem de dulce o salado no entra una receta de «los dos», y la correcta tiene el sabor pedido
+        const sab = (rid) => (REC[rid] || {}).sabor;
+        if (it.formato === "clasificar" && (it.canastas || []).some((c) => c.id === "dulce")) for (const f of it.fichas || []) {
+          if (sab(f.receta) === "los dos") E.push(`${pos}: «${f.receta}» no es ni dulce ni salada y está en un ítem de dulce y salado (C1)`);
+          else if (f.receta && f.destino !== sab(f.receta)) E.push(`${pos}: «${f.receta}» va en ${sab(f.receta)} (C1)`);
+        }
+        for (const e of [it, ...(it.etapas || [])]) {
+          const m = e.formato === "elegir" && /receta (dulce|salada)/.exec(e.consigna || ""); if (!m) continue;
+          const pedido = m[1] === "dulce" ? "dulce" : "salado";
+          for (const o of e.opciones || []) if (o.receta && sab(o.receta) === "los dos") E.push(`${pos}: «${o.receta}» no es ni dulce ni salada y es opción de «${m[0]}» (C1)`);
+          if (e.correcta && REC[e.correcta] && sab(e.correcta) !== pedido) E.push(`${pos}: la correcta de «${m[0]}» es ${sab(e.correcta)} (C1)`);
+        }
+        // C2: el faltante de un imprevisto está en la lista del Rincón 2 y el imprevisto va después de buscar
+        if (it.formato === "aventura") {
+          const k2 = it.etapas.findIndex((e) => e.rincon === 2 && e.lista), r2 = it.etapas[k2];
+          it.etapas.forEach((e, k) => { if (!e.imprevisto) return;
+            if (!e.falta && /\bno hay\b|no tiene/i.test(e.consigna || "") && !/presupuesto/i.test(e.consigna)) E.push(`${pos}: imprevisto de un faltante sin «falta» declarado (C2)`);
+            if (e.falta && r2 && !r2.lista.includes(e.falta)) E.push(`${pos}: falta ${e.falta}, que no está en la lista del Rincón 2 (C2)`);
+            if (e.falta && r2 && k < k2) E.push(`${pos}: el imprevisto de ${e.falta} aparece antes de buscar la lista (C2)`);
+            const k7 = it.etapas.findIndex((x) => x.rincon === 7); if (k7 >= 0 && k > k7) E.push(`${pos}: imprevisto «${e.consigna}» después de cocinar (8B)`); });
+        }
+        // B2: imprevistos coherentes con la receta, sin repetir, y situación admitida por la receta
+        if (it.formato === "aventura" && id === "8-espacio") {
+          const rec = REC[it.receta] || {}, imps = it.etapas.filter((e) => e.imprevisto), ids = imps.map((e) => e.imprevisto_id || e.consigna);
+          if (new Set(ids).size !== ids.length) E.push(`${pos}: imprevisto repetido (B2)`);
+          for (const e of imps) if (e.falta && !(rec.faltantes_posibles || []).some((f) => f.ingrediente === e.falta)) E.push(`${pos}: imprevisto con un faltante que no sale de la receta: ${e.falta} (B2)`);
+          const SIT = banco.situaciones || {};
+          if (SIT[it.situacion] && !SIT[it.situacion].includes(it.receta)) E.push(`${pos}: la receta no va con la situación «${it.situacion}» (B2)`);
+          for (const e of imps) for (const o of e.opciones || []) if (/^(Volver sin nada|Pagar con lo que no hay|Seguir sin decir nada|Seguir como si nada|Hacer lo mismo)$/.test(o.txt)) E.push(`${pos}: opción poco clara «${o.txt}» (B2)`);
+          // RT-CHF-001-R v1.4: con dos faltantes, el reemplazo del segundo no usa un ingrediente que ya faltó
+          const faltaron = [];
+          for (const e of imps) { if (!e.falta) continue;
+            const re = (e.opciones || []).find((o) => o.id === "reemplazar");
+            for (const f of faltaron) if (re && re.txt.toLowerCase().includes(((ING[f] || {}).nombre || f).toLowerCase())) E.push(`${pos}: el reemplazo «${re.txt}» usa ${f}, que ya faltó (v1.4)`);
+            faltaron.push(e.falta); }
+        }
+        // RT-CHF-001-R v1.4: ningún texto da por sentada la casa o la familia de quien juega
+        if (/en tu casa|tu familia/i.test(JSON.stringify(it))) E.push(`${pos}: texto con «en tu casa» o «tu familia» (v1.4)`);
+        // v1.4: no se pregunta por ingredientes que casi todo lleva
+        if (/llevan? (sal|agua)\?/i.test(it.consigna || "")) E.push(`${pos}: pregunta por un ingrediente que casi todo lleva (v1.4)`);
+        // v1.4: el lavado se nombra con utensilios sin filo
+        if (/lavar (los|todos los) utensilios|lavar (el|los) cuchillos?(?! de untar)/i.test(t)) E.push(`${pos}: lavado que puede incluir utensilios con filo (v1.4)`);
+        // v1.4: si se piden más de 12, la cantidad se justifica en la situación
+        { const m = /^La receta pide (\d+)/.exec(it.consigna || ""); if (m && Number(m[1]) > 12) E.push(`${pos}: pide ${m[1]} sin una situación que lo justifique (v1.4)`); }
+        // v1.4: en «¿Cuál elegís?» con razón, las dos recetas difieren en tiempo y en porciones
+        if (it.con_razon && (it.opciones || []).length === 2) { const [a, b] = it.opciones.map((o) => REC[o.receta] || {});
+          if (a.tiempo === b.tiempo || a.porciones === b.porciones) E.push(`${pos}: las dos recetas tienen el mismo tiempo o las mismas porciones (v1.4)`); }
+        // v1.4: «¿Qué paso cambiarías de lugar?»: los dos pasos cambiados son vecinos y no se pueden invertir
+        if (it.secuencia && it.correctas_una_de && REC[it.receta]) {
+          const rec = REC[it.receta], k = it.correctas_una_de.map((id) => /^p(\d+)$/.test(id) && rec.pasos[Number(id.slice(1))] ? Number(id.slice(1)) : -1);   // el id pN es el paso N de la receta
+          const antes = (a, b) => { const vis = new Set(), pila = [a]; while (pila.length) { const x = pila.pop(); for (const y of rec.pasos[x].antes_de || []) { if (y === b) return true; if (!vis.has(y)) { vis.add(y); pila.push(y); } } } return false; };
+          if (k.length !== 2 || k.some((x) => x < 0) || !(antes(k[0], k[1]) || antes(k[1], k[0]))) E.push(`${pos}: los pasos cambiados de lugar se pueden hacer en cualquier orden (v1.4)`);
+        }
+      }
+    }
+    // v1.4 (T23): en «¿Qué paso cambiarías de lugar?» el error no va casi siempre en el mismo lugar (primer par, del medio o último)
+    for (const [id, gs] of Object.entries(banco.variantes)) for (const g of GR) {
+      const lugar = (gs[g] || []).filter((it) => it.secuencia && it.correctas_una_de).map((it) => { const ix = it.correctas_una_de.map((c) => (it.opciones || []).findIndex((o) => o.id === c)); const a = Math.min(...ix);
+        return a === 0 ? "primer par" : a + 2 === it.secuencia.length ? "último par" : "par del medio"; });
+      const cuenta = {}; for (const l of lugar) cuenta[l] = (cuenta[l] || 0) + 1;
+      for (const [l, n] of Object.entries(cuenta)) if (lugar.length >= 4 && n > lugar.length / 2) E.push(`${id} ${g}: el paso cambiado de lugar está en el ${l} en ${n} de ${lugar.length} ítems (v1.4)`);
+    }
+    // T12: mínimos por combinación, desde la versión 0.2.0 (13–18 queda aparte: banco propio de PSP-SR, T16)
+    const MINI = modulo.minimos_por_combinacion || {}, ver = String(banco.version || modulo.version || "0").split(/[.-]/).map(Number);
+    if (MINI.rige_desde && (ver[0] > 0 || ver[1] >= Number(String(MINI.rige_desde).split(".")[1]))) for (const v of modulo.estaciones.variantes) for (const r of ["3-5", "6-8", "9-12"]) for (const g of ((v.disponibilidad || {})[r] || [])) {
+      const n = ((banco.variantes[v.variante] || {})[g] || []).filter((it) => (it.rutas || []).includes(r)).length, m = r === "3-5" ? MINI["3-5"] : MINI.otras;
+      if (n < m) E.push(`${v.variante} ${g} en ${r}: ${n} ítems, el mínimo es ${m} (T12)`);
+    }
+    const n8b = (g) => new Set(((banco.variantes["8-espacio"] || {})[g] || []).map((it) => it.situacion)).size;
+    for (const g of GR) if (n8b(g) < 8) E.push(`8-espacio ${g}: menos de 8 situaciones (CHF-16)`);
+    for (const g of GR) { const ps = ((banco.variantes["8-espacio"] || {})[g] || []).map((it) => `${it.situacion} · ${it.receta}`); for (const p of new Set(ps.filter((x, i) => ps.indexOf(x) !== i))) E.push(`8-espacio ${g}: situación y receta repetidas: ${p} (CHF-16)`); }
+    for (const t of textosNino(banco)) { for (const w of palabrasProhibidas(t, P.todas.concat(P.nino))) E.push(`texto de quien juega con «${w}»: ${t}`); if (rotuloVariante(t)) E.push(`texto de quien juega con el rótulo de la variante: ${t} (O1)`); }
+    const T13 = banco.textos.nino_13_18 || {};
+    for (const [k, t] of Object.entries(T13)) if (k !== "estado_clinico") for (const e of reglas1318(t)) E.push(`texto de 13–18 «${k}» con ${e} (T1)`);
+    // O4: el desafío para casa solo con recetas validadas por PSP-SR (la interfaz no lo muestra si no lo están)
+    if (!(banco.atragantamiento && banco.atragantamiento.lista && banco.atragantamiento.lista.length)) E.push("falta la lista de atragantamiento de 3–5 (T11)");
+    for (const t of [modulo.ficha.para_que_sirve]) for (const w of palabrasProhibidas(t, P.familia.concat(P.todas))) E.push(`texto de familia con «${w}» (CHF-19)`);
+    return [...new Set(E)];
+  }
+  const out = { GR, RUTAS, azar, mezclar, semillaDe, normalizar, variante, gradosDe, variantesDe, rinconesDe, itemsDe, ordenarPorReceta, etapasEnRuta, ajusteM10, sugerirOtraVariante,
+    siguienteApoyo, sinAyuda, autonomia, tipoRepetido, esAprendizaje, exposicionSiguiente, valida, presupuestoOk, sumaPago, soloDigitos, acierto, registro, vistaPorHabilidad,
+    textosNino, palabrasProhibidas, validarBanco, riesgoHeredado, productoCaliente, CAMPOS_EXTRA, validaMultiple, devolucionMultiple, tiposPermitidos, tipoCerrado, reglas1318, rotuloVariante, EXCEPTUADAS_O1 };
+  if (typeof module !== "undefined") module.exports = out;
+  return out;
+})();
+</script>
+<script id="dibujo">
+"use strict";
+/* ---------- Dibujos de relleno, hechos en código con la paleta de marca y contorno tinta (REQ-CLI-CHF-00a). Sin imágenes externas. ----------
+   Cada ingrediente se distingue por su forma y su nombre, no solo por el color (WCAG 1.4.1). Los billetes y monedas son propios: valor grande
+   y un pictograma de cuchara, sin figuras ni guardas (REQ-CLI-CHF-00f). */
+const Dibujo = (() => {
+  const INK = "#102F54", T = `stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
+  /* Volumen (pedido de la supervisora, 2026-11-22): dibujos vectoriales con aspecto 3D de animación, propios y con la paleta de marca.
+     Cada relleno plano pasa a un degradé radial con luz arriba a la izquierda, el contorno toma un tono más oscuro del mismo color
+     y el conjunto lleva una sombra suave. Se hace en código, sin imágenes externas ni personajes de obras existentes. */
+  const hex6 = (c) => { c = c.replace("#", ""); if (c.length === 3) c = c.split("").map((x) => x + x).join(""); return c.toUpperCase(); };
+  const mezcla = (c, d, f) => { const a = [0, 2, 4].map((k) => parseInt(hex6(c).slice(k, k + 2), 16)), b = [0, 2, 4].map((k) => parseInt(hex6(d).slice(k, k + 2), 16));
+    return "#" + a.map((x, k) => Math.round(x + (b[k] - x) * f).toString(16).padStart(2, "0")).join("").toUpperCase(); };
+  /* D4 (RT-CHF-001-R v1.2, condición 2): el contorno de cada dibujo tiene contraste de 3:1 o más contra todos los fondos de tarjeta
+     y de escena donde aparece (WCAG 2.2, 1.4.11). Si el tono del mismo color no alcanza, se oscurece hasta llegar. */
+  const FONDOS = ["#FFFFFF", "#FCFAF7", "#FFF1D7", "#F3EBDD", "#E9D8BE", "#FFF5F1", "#E0F2EB", "#FDE3DA", "#E4DBF2", "#F9C6BA", "#DCEFD9", "#FFE29A"];
+  const lum = (c) => { const v = [0, 2, 4].map((k) => parseInt(hex6(c).slice(k, k + 2), 16) / 255).map((x) => (x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+  const contraste = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+  const contornoDe = (c) => { let f = hex6(c) === "FFFFFF" ? 0.5 : 0.58, b = mezcla(c, "#102F54", f);
+    while (f < 1 && FONDOS.some((d) => contraste(b, d) < 3)) { f = Math.min(1, f + 0.04); b = mezcla(c, "#102F54", f); }
+    return b; };
+  const HECHOS = new Set();
+  function degrade(c) {
+    const id = "v3-" + hex6(c);
+    if (!HECHOS.has(id) && typeof document !== "undefined" && document.body) {
+      let defs = document.getElementById("defs-volumen");
+      if (!defs) { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("aria-hidden", "true"); s.setAttribute("width", "0"); s.setAttribute("height", "0");
+        s.style.position = "absolute"; s.innerHTML = '<defs id="defs-volumen"></defs>'; document.body.appendChild(s); defs = document.getElementById("defs-volumen"); }
+      const claro = hex6(c) === "FFFFFF" ? "#FFFFFF" : mezcla(c, "#FFFFFF", 0.55), oscuro = mezcla(c, hex6(c) === "FFFFFF" ? "#B8C6D0" : "#102F54", hex6(c) === "FFFFFF" ? 0.55 : 0.32);
+      defs.insertAdjacentHTML("beforeend", `<radialGradient id="${id}" cx="35%" cy="28%" r="80%" fx="30%" fy="22%"><stop offset="0" stop-color="${claro}"/><stop offset=".45" stop-color="#${hex6(c)}"/><stop offset="1" stop-color="${oscuro}"/></radialGradient>`);
+      HECHOS.add(id);
+    }
+    return id;
+  }
+  const volumen = (inner) => inner.replace(/<(path|rect|circle|ellipse)\b([^>]*?)(\/?)>/g, (m, tag, attrs, cierre) => {
+    const f = attrs.match(/fill="(#[0-9A-Fa-f]{3}(?:[0-9A-Fa-f]{3})?)"/); if (!f) return m;
+    const c = f[1], borde = contornoDe(c);
+    const na = attrs.replace(f[0], `fill="url(#${degrade(c)})"`).replace(`stroke="${INK}"`, `stroke="${borde}"`).replace('stroke-width="3"', 'stroke-width="2.4"');
+    return `<${tag}${na}${cierre}>`;
+  });
+  const svg = (inner, et = "", vb = "0 0 100 100") => `<svg class="v3d" viewBox="${vb}" ${et ? `role="img" aria-label="${et.replace(/"/g, "&quot;")}"` : 'aria-hidden="true"'} focusable="false">${volumen(inner)}</svg>`;
+  const F = {
+    bolsa: (c) => `<path d="M24 26 H76 L82 88 H18Z" fill="${c}" ${T}/><path d="M24 26 L32 14 H68 L76 26" fill="${c}" ${T}/><rect x="34" y="46" width="32" height="20" rx="4" fill="#fff" ${T}/>`,
+    salero: (c) => `<path d="M34 34 H66 V88 H34Z" fill="${c}" ${T}/><path d="M34 34 C34 16 66 16 66 34" fill="#C9D1D6" ${T}/><circle cx="44" cy="24" r="2" fill="${INK}"/><circle cx="56" cy="24" r="2" fill="${INK}"/>`,
+    carton: (c) => `<path d="M28 30 H72 V90 H28Z" fill="${c}" ${T}/><path d="M28 30 L40 14 H60 L72 30" fill="#fff" ${T}/><path d="M36 50 H64" stroke="#4F7BB0" stroke-width="6"/>`,
+    pote: (c) => `<path d="M26 34 H74 L68 86 H32Z" fill="${c}" ${T}/><rect x="22" y="24" width="56" height="12" rx="4" fill="#F58060" ${T}/>`,
+    huevo: (c) => `<ellipse cx="50" cy="54" rx="26" ry="34" fill="${c}" ${T}/>`,
+    barra: (c) => `<rect x="14" y="38" width="72" height="30" rx="4" fill="${c}" ${T}/><path d="M30 38 V68" stroke="${INK}" stroke-width="2"/>`,
+    cuna: (c) => `<path d="M14 72 L86 72 L86 52 L14 36Z" fill="${c}" ${T}/><circle cx="40" cy="58" r="5" fill="#fff" ${T}/><circle cx="66" cy="62" r="4" fill="#fff" ${T}/>`,
+    pan: (c) => `<path d="M12 64 C12 40 88 40 88 64 C88 74 12 74 12 64Z" fill="${c}" ${T}/><path d="M32 50 L38 58 M50 48 L56 56 M68 50 L74 58" ${T}/>`,
+    rebanada: (c) => `<path d="M22 86 V40 C22 20 78 20 78 40 V86Z" fill="${c}" ${T}/>`,
+    frasco: (c) => `<rect x="28" y="30" width="44" height="58" rx="10" fill="${c}" ${T}/><rect x="30" y="18" width="40" height="14" rx="4" fill="#C9D1D6" ${T}/><rect x="36" y="50" width="28" height="18" rx="3" fill="#fff" ${T}/>`,
+    caja: (c) => `<rect x="26" y="14" width="48" height="76" rx="4" fill="${c}" ${T}/><circle cx="50" cy="46" r="12" fill="#fff" ${T}/>`,
+    lata: (c) => `<rect x="28" y="22" width="44" height="66" rx="6" fill="${c}" ${T}/><ellipse cx="50" cy="22" rx="22" ry="6" fill="#C9D1D6" ${T}/><rect x="28" y="46" width="44" height="16" fill="#fff" ${T}/>`,
+    botella: (c) => `<path d="M42 10 H58 V28 C70 34 70 40 70 48 V90 H30 V48 C30 40 30 34 42 28Z" fill="${c}" ${T}/>`,
+    paquete: (c) => `<rect x="14" y="34" width="72" height="36" rx="6" fill="${c}" ${T}/><path d="M24 44 H76 M24 52 H76 M24 60 H76" stroke="#C99528" stroke-width="2"/>`,
+    banana: (c) => `<path d="M16 34 C24 78 70 86 88 60 C70 70 34 64 26 30Z" fill="${c}" ${T}/>`,
+    manzana: (c) => `<path d="M50 30 C30 18 12 36 18 60 C24 84 42 90 50 82 C58 90 76 84 82 60 C88 36 70 18 50 30Z" fill="${c}" ${T}/><path d="M50 30 C50 20 54 14 58 10" ${T} fill="none"/><path d="M54 18 C64 10 72 14 70 20 C62 24 56 22 54 18Z" fill="#7CC26A" ${T}/>`,
+    redonda: (c) => `<circle cx="50" cy="54" r="32" fill="${c}" ${T}/><path d="M50 22 L46 14 M50 22 L58 16" ${T}/>`,
+    frutilla: (c) => `<path d="M50 90 C20 70 18 40 30 30 H70 C82 40 80 70 50 90Z" fill="${c}" ${T}/><path d="M30 30 L40 18 L50 28 L60 18 L70 30Z" fill="#7CC26A" ${T}/><circle cx="42" cy="50" r="2" fill="#FFE29A"/><circle cx="58" cy="56" r="2" fill="#FFE29A"/><circle cx="50" cy="70" r="2" fill="#FFE29A"/>`,
+    pera: (c) => `<path d="M50 16 C40 16 40 40 32 52 C20 70 30 90 50 90 C70 90 80 70 68 52 C60 40 60 16 50 16Z" fill="${c}" ${T}/>`,
+    racimo: (c) => [[50, 30], [38, 44], [62, 44], [44, 58], [56, 58], [50, 72]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="11" fill="${c}" ${T}/>`).join(""),
+    hoja: (c) => `<path d="M50 90 C14 70 14 30 50 10 C86 30 86 70 50 90Z" fill="${c}" ${T}/><path d="M50 20 V84 M50 44 L34 34 M50 58 L68 46" stroke="${INK}" stroke-width="2" fill="none"/>`,
+    morron: (c) => `<path d="M30 30 C14 40 20 86 40 86 C46 86 48 80 50 80 C52 80 54 86 60 86 C80 86 86 40 70 30 C60 24 40 24 30 30Z" fill="${c}" ${T}/><path d="M50 26 V14 H58" fill="none" stroke="#196B6A" stroke-width="5"/>`,
+    zanahoria: (c) => `<path d="M24 34 C30 22 44 22 50 30 L84 84 C70 80 34 52 24 34Z" fill="${c}" ${T}/><path d="M40 40 L46 44 M52 50 L58 54 M62 62 L67 65" stroke="#B85F12" stroke-width="2" stroke-linecap="round"/><path d="M30 30 L18 14 M30 30 L26 10 M30 30 L14 24" stroke="#196B6A" stroke-width="5"/>`,
+    papa: (c) => `<ellipse cx="50" cy="54" rx="34" ry="26" fill="${c}" ${T}/><circle cx="38" cy="48" r="2" fill="${INK}"/><circle cx="60" cy="60" r="2" fill="${INK}"/>`,
+    cebolla: (c) => `<path d="M50 16 C70 34 82 50 76 70 C70 88 30 88 24 70 C18 50 30 34 50 16Z" fill="${c}" ${T}/><path d="M50 30 V80" stroke="${INK}" stroke-width="2"/>`,
+    zapallo: (c) => `<ellipse cx="50" cy="58" rx="38" ry="28" fill="${c}" ${T}/><path d="M50 30 V86 M30 34 C24 50 24 70 30 82 M70 34 C76 50 76 70 70 82" stroke="${INK}" stroke-width="2" fill="none"/><rect x="46" y="20" width="8" height="12" fill="#196B6A" ${T}/>`,
+    choclo: (c) => `<path d="M34 14 C24 40 30 76 50 90 C70 76 76 40 66 14Z" fill="${c}" ${T}/><path d="M40 30 H60 M38 44 H62 M38 58 H62 M42 72 H58" stroke="#C99528" stroke-width="2"/><path d="M50 90 C30 70 20 50 26 30" fill="#7CC26A" ${T}/>`,
+    disco: (c) => `<circle cx="50" cy="50" r="36" fill="${c}" ${T}/><circle cx="50" cy="50" r="26" fill="none" stroke="#C99528" stroke-width="2"/>`,
+  };
+  const U = {
+    bol: `<path d="M12 44 H88 C86 74 70 86 50 86 C30 86 14 74 12 44Z" fill="#8EC3E6" ${T}/>`,
+    cuchara: `<ellipse cx="50" cy="26" rx="14" ry="18" fill="#C9D1D6" ${T}/><rect x="46" y="42" width="8" height="48" rx="4" fill="#C9D1D6" ${T}/>`,
+    batidor: `<path d="M50 56 C26 40 30 8 50 8 C70 8 74 40 50 56Z M50 56 C38 40 40 12 50 12 C60 12 62 40 50 56Z" fill="none" ${T}/><rect x="46" y="56" width="8" height="36" rx="4" fill="#F58060" ${T}/>`,
+    fuente: `<rect x="10" y="40" width="80" height="34" rx="8" fill="#FFB82E" ${T}/>`,
+    plato: `<ellipse cx="50" cy="56" rx="40" ry="22" fill="#fff" ${T}/><ellipse cx="50" cy="56" rx="24" ry="12" fill="none" ${T}/>`,
+    taza: `<path d="M24 30 H70 L66 86 H28Z" fill="#E0F2EB" ${T}/><path d="M70 40 C86 40 86 66 68 66" fill="none" ${T}/><path d="M32 48 H44 M32 60 H44 M32 72 H44" stroke="${INK}" stroke-width="2"/>`,
+    colador: `<path d="M16 40 H76 C74 66 62 80 46 80 C30 80 18 66 16 40Z" fill="#C9D1D6" ${T}/><path d="M76 44 H94" ${T}/><circle cx="36" cy="54" r="2" fill="${INK}"/><circle cx="48" cy="60" r="2" fill="${INK}"/><circle cx="58" cy="52" r="2" fill="${INK}"/>`,
+    espatula: `<rect x="34" y="10" width="32" height="34" rx="6" fill="#F58060" ${T}/><rect x="46" y="44" width="8" height="48" rx="4" fill="#A8714A" ${T}/>`,
+    cuchillo_untar: `<path d="M44 10 C58 10 58 50 54 56 H46Z" fill="#C9D1D6" ${T}/><rect x="45" y="56" width="10" height="36" rx="4" fill="#A8714A" ${T}/>`,
+    tabla: `<rect x="14" y="30" width="72" height="44" rx="8" fill="#E3A866" ${T}/><circle cx="76" cy="40" r="4" fill="#fff" ${T}/>`,
+    rodillo: `<rect x="22" y="40" width="56" height="20" rx="8" fill="#E3A866" ${T}/><path d="M8 50 H22 M78 50 H92" ${T} stroke-width="6"/>`,
+    olla: `<rect x="18" y="38" width="64" height="46" rx="6" fill="#4F7BB0" ${T}/><path d="M10 46 H18 M82 46 H90" ${T}/><rect x="16" y="30" width="68" height="10" rx="4" fill="#C9D1D6" ${T}/>`,
+    sarten: `<ellipse cx="40" cy="56" rx="30" ry="16" fill="#3B4B5C" ${T}/><path d="M70 54 H96" ${T} stroke-width="7"/>`,
+    cuchillo: `<path d="M20 64 L80 40 L84 46 L28 70Z" fill="#C9D1D6" ${T}/><rect x="6" y="64" width="24" height="10" rx="3" fill="#A8714A" ${T} transform="rotate(-22 18 69)"/>`,
+    rallador: `<path d="M30 20 H70 L78 88 H22Z" fill="#C9D1D6" ${T}/><path d="M38 40 H46 M54 40 H62 M38 56 H46 M54 56 H62 M38 72 H46 M54 72 H62" stroke="${INK}" stroke-width="3"/>`,
+    horno: `<rect x="12" y="12" width="76" height="76" rx="8" fill="#fff" ${T}/><rect x="22" y="34" width="56" height="44" rx="4" fill="#E0F2EB" ${T}/><circle cx="30" cy="22" r="4" fill="${INK}"/><circle cx="46" cy="22" r="4" fill="${INK}"/>`,
+    hornalla: `<rect x="10" y="40" width="80" height="40" rx="6" fill="#fff" ${T}/><ellipse cx="50" cy="52" rx="24" ry="8" fill="#C9D1D6" ${T}/>`,
+    licuadora: `<path d="M30 14 H70 L64 60 H36Z" fill="#E0F2EB" ${T}/><rect x="30" y="60" width="40" height="28" rx="6" fill="#F58060" ${T}/>`,
+    batidora: `<rect x="24" y="18" width="52" height="30" rx="12" fill="#F58060" ${T}/><path d="M42 48 V80 M58 48 V80" ${T}/>`,
+  };
+  const ing = (banco, id, conNombre = true) => { const i = banco.ingredientes[id]; if (!i) return ""; return svg((F[i.dib] || F.redonda)(i.color), conNombre ? i.nombre : ""); };
+  const ut = (banco, id, conNombre = true) => { const u = banco.utensilios[id]; if (!u) return ""; return svg(U[id] || U.bol, conNombre ? u.nombre : ""); };
+  const receta = (banco, id) => { const r = banco.recetas.find((x) => x.id === id); if (!r) return "";
+    const color = r.sabor === "dulce" ? "#F9C6BA" : r.sabor === "los dos" ? "#FFE29A" : "#DCEFD9";
+    return svg(`<rect x="6" y="6" width="88" height="88" rx="16" fill="${color}" ${T}/><g transform="translate(12 14) scale(.38)">${(F[banco.ingredientes[r.ingredientes[0]].dib])(banco.ingredientes[r.ingredientes[0]].color)}</g><g transform="translate(50 14) scale(.38)">${(F[banco.ingredientes[r.ingredientes[1]].dib])(banco.ingredientes[r.ingredientes[1]].color)}</g>${U.plato.replace(/cy="56"/g, 'cy="74"').replace(/ry="22"/, 'ry="14"').replace(/ry="12"/, 'ry="7"')}`, r.nombre); };
+  const ojos = (y, d = 13) => `<ellipse cx="${50 - d}" cy="${y}" rx="6.5" ry="8" fill="#FFFFFF"/><ellipse cx="${50 + d}" cy="${y}" rx="6.5" ry="8" fill="#FFFFFF"/>`
+    + `<circle cx="${50 - d + 1}" cy="${y + 1.5}" r="4.2" fill="#3B2A1E"/><circle cx="${50 + d + 1}" cy="${y + 1.5}" r="4.2" fill="#3B2A1E"/>`
+    + `<circle cx="${50 - d + 2.5}" cy="${y - 1}" r="1.6" fill="#FFFFFF"/><circle cx="${50 + d + 2.5}" cy="${y - 1}" r="1.6" fill="#FFFFFF"/>`;
+  const estado = { sinCaras: () => false };   // la interfaz lo conecta con la ruta elegida (13–18: sin caras)
+  const personaje = (quien) => estado.sinCaras() ? "" : svgP(quien === "chef"
+    ? `<path d="M22 100 C22 78 78 78 78 100Z" fill="#FFFFFF" ${T}/><path d="M44 80 L50 92 L56 80" fill="#F58060" stroke="none"/>`
+      + `<ellipse cx="50" cy="56" rx="25" ry="24" fill="#E8B07A" ${T}/><ellipse cx="26" cy="58" rx="4" ry="6" fill="#E8B07A" ${T}/><ellipse cx="74" cy="58" rx="4" ry="6" fill="#E8B07A" ${T}/>`
+      + `<path d="M27 40 C14 26 30 6 42 16 C46 4 62 4 64 16 C78 8 88 28 73 40Z" fill="#FFFFFF" ${T}/><path d="M28 34 H72 V44 H28Z" fill="#FFFFFF" ${T}/><path d="M42 18 C44 26 44 30 43 34 M58 18 C56 26 56 30 57 34" fill="none" stroke="#C9D1D6" stroke-width="2"/>`
+      + ojos(56) + `<ellipse cx="36" cy="66" rx="5" ry="3" fill="#F7A08A" opacity=".7"/><ellipse cx="64" cy="66" rx="5" ry="3" fill="#F7A08A" opacity=".7"/>`
+      + `<path d="M40 67 Q50 78 60 67Z" fill="#7A3B2E" ${T}/><path d="M44 70 Q50 74 56 70" fill="none" stroke="#F7A08A" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="50" cy="61" rx="3.2" ry="2.4" fill="#D9925E"/>`
+    : `<path d="M24 100 C24 78 76 78 76 100Z" fill="#FFB82E" ${T}/><path d="M38 82 H62 V100 H38Z" fill="#196B6A" ${T}/>`
+      + `<ellipse cx="50" cy="54" rx="24" ry="23" fill="#B97A50" ${T}/><path d="M26 50 C24 30 40 22 52 24 C66 24 78 34 74 52 C70 40 60 36 50 38 C40 38 30 42 26 50Z" fill="#3B2A1E" ${T}/>`
+      + ojos(56, 11) + `<ellipse cx="37" cy="65" rx="4.5" ry="2.6" fill="#F28C70" opacity=".6"/><ellipse cx="63" cy="65" rx="4.5" ry="2.6" fill="#F28C70" opacity=".6"/>`
+      + `<path d="M42 67 Q50 75 58 67" fill="#7A3B2E" ${T}/>`, quien === "chef" ? "El chef" : "El ayudante");
+  const svgP = (inner, et) => svg(inner, et).replace('<svg class="v3d"', '<svg class="v3d personaje" data-cara="1"');
+  const gorro = (regla) => svg(regla === "tipo"
+    ? `<path d="M20 70 C6 50 26 20 50 30 C74 20 94 50 80 70Z" fill="#F58060" ${T}/><rect x="20" y="70" width="60" height="16" fill="#F58060" ${T}/><circle cx="50" cy="50" r="10" fill="#fff" ${T}/>`
+    : `<path d="M50 12 L84 74 H16Z" fill="#4F7BB0" ${T}/><rect x="16" y="74" width="68" height="14" fill="#4F7BB0" ${T}/><rect x="42" y="44" width="16" height="16" fill="#fff" ${T}/>`, regla === "tipo" ? "Gorro rojo redondo: por tipo" : "Gorro azul en punta: por forma");
+  const lamina = (cual) => svg(({
+    cocina: `<rect width="300" height="200" fill="#FCFAF7"/><rect x="0" y="130" width="300" height="70" fill="#F3EBDD"/><rect x="20" y="30" width="80" height="60" rx="8" fill="#E9D8BE" ${T}/><rect x="200" y="20" width="70" height="110" rx="8" fill="#fff" ${T}/><rect x="120" y="100" width="70" height="40" rx="6" fill="#fff" ${T}/><g transform="translate(130 40) scale(.6)">${U.olla}</g>`,
+    chef: `<rect width="300" height="200" fill="#FCFAF7"/><g transform="translate(40 30) scale(1.4)">${personaje("chef").replace(/<\/?svg[^>]*>/g, "")}</g><g transform="translate(160 50) scale(1.2)">${personaje("ayudante").replace(/<\/?svg[^>]*>/g, "")}</g>`,
+    rincones: `<rect width="300" height="200" fill="#FCFAF7"/>${[0, 1, 2, 3, 4, 5, 6, 7].map((k) => `<rect x="${20 + (k % 4) * 68}" y="${30 + Math.floor(k / 4) * 76}" width="56" height="60" rx="10" fill="${["#E0F2EB", "#FFF1D7", "#FDE3DA", "#E4DBF2"][k % 4]}" ${T}/><text x="${48 + (k % 4) * 68}" y="${68 + Math.floor(k / 4) * 76}" font-size="22" font-weight="800" text-anchor="middle" fill="${INK}">${k + 1}</text>`).join("")}`,
+  })[cual] || "", "", "0 0 300 200");
+  const rincon = (n) => svg(`<rect width="300" height="200" rx="18" fill="${["#E0F2EB", "#FFF1D7", "#FDE3DA", "#E4DBF2", "#E0F2EB", "#FFF1D7", "#FDE3DA", "#E4DBF2"][n - 1]}"/>` +
+    `<g transform="translate(100 40) scale(1.2)">${({ 1: F.caja("#FFB82E"), 2: F.frasco("#D9485F"), 3: `<path d="M10 20 H24 L34 70 H84 L92 34 H28" fill="none" ${T}/><circle cx="40" cy="84" r="7" fill="#fff" ${T}/><circle cx="78" cy="84" r="7" fill="#fff" ${T}/>`,
+      4: `<rect x="10" y="10" width="80" height="80" rx="8" fill="#fff" ${T}/><path d="M24 30 H76 M24 50 H76 M24 70 H60" ${T}/>`, 5: gorro("tipo").replace(/<\/?svg[^>]*>/g, ""), 6: `<path d="M10 20 H90 V66 H40 L22 84 V66 H10Z" fill="#fff" ${T}/>`,
+      7: U.bol, 8: U.plato })[n]}</g>`, "", "0 0 300 200");
+  const billete = (v) => `<span class="billete" aria-hidden="true">${v}</span>`;
+  const parlante = svg(`<path d="M14 38 H32 L54 18 V82 L32 62 H14Z" fill="#fff" ${T}/><path d="M66 34 C74 42 74 58 66 66 M74 24 C88 38 88 62 74 76" fill="none" ${T}/>`, "");
+  return { ing, ut, receta, personaje, gorro, lamina, rincon, billete, parlante, svg, estado, contraste, contornoDe, FONDOS };
+})();
+if (typeof module !== "undefined") module.exports = { Dibujo };
+</script>
+<script id="interfaz">
+"use strict";
+const leer = (id) => { try { return JSON.parse(document.getElementById(id).textContent); } catch (e) { return null; } };
+const BANCO = leer("datos-banco"), MODULO = leer("datos-modulo"), INICIO = leer("datos-inicio") || {};
+BANCO.recetas = (leer("datos-recetas") || {}).recetas || BANCO.recetas || [];   // las recetas viven en recetas.json (RT-CHF-001-R)
+BANCO.situaciones = (leer("datos-recetas") || {}).situaciones || BANCO.situaciones || {};   // situación → recetas que le van (B2)
+const T = BANCO.textos, N = T.nino, D = Dibujo;
+const EN_MARCO = window.parent !== window;
+const CON_ADULTO = INICIO.adulto !== false;
+const VARIANTES = MODULO.estaciones.variantes;
+const GRADOS = [["facil", "Fácil"], ["intermedio", "Intermedio"], ["dificil", "Difícil"]];
+function VARIANTES_INICIALES() { return MODULO.estaciones.variantes.filter((v) => v.variante.endsWith("-zona")).map((v) => v.variante); }   // por defecto, Zona
+const RUTAS = [["3-5", "3 a 5 años"], ["6-8", "6 a 8 años"], ["9-12", "9 a 12 años"], ["13-18", "13 a 18 años"]];
+const NOMBRE_EST = { explorar: "E1 Explorar", reconocer: "E2 Reconocer", integrar: "E3 Integrar", transferir: "E4 Transferir" };
+const HAY_VOZ = "speechSynthesis" in window;
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = (t) => String(t == null ? "" : t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ING = BANCO.ingredientes, UT = BANCO.utensilios, REC = Object.fromEntries(BANCO.recetas.map((r) => [r.id, r]));
+const S = {
+  ruta: MODULO.rutas[INICIO.ruta] ? INICIO.ruta : "6-8", variante: null, grado: "facil", gradoDe: { ...(INICIO.grados || {}) }, letra: INICIO.letra || null,
+  sinExposicionBreve: false, apoyoInicial: 0, apoyoSig: {}, destacar: {}, fijo: false, idx: {}, hist: {}, cuentaErr: {}, expo: { acortoEnSesion: false },
+  sesion: null, item: null, R: null, registros: [], contar: [], recetario: new Set(INICIO.recetario || []), rinconesJugados: new Set(INICIO.rincones || []),
+  habilitadas: new Set(INICIO.habilitadas || VARIANTES_INICIALES()),   // O7: en 3–12 el menú del rincón muestra solo lo que habilita la persona adulta
+  historiaVista: !!INICIO.historia, estrategiaVista: new Set(INICIO.estrategias || []), receta: null /* O3: dato de la sesión, no persiste ni se muestra */, t0Sesion: null, aventura: null, sugerencias: new Set(), desafio: []
+};
+const rutaCfg = () => MODULO.rutas[S.ruta];
+if (!S.letra) S.letra = MODULO.letra.por_defecto[S.ruta] || "mayuscula";
+const variante = (id = S.variante) => VARIANTES.find((v) => v.variante === id);
+const gradoInicial = (id) => { const gs = Motor.gradosDe(MODULO, S.ruta, id), g = S.gradoDe[id]; return gs.includes(g) ? g : gs[0]; };
+const nombreIng = (id) => (ING[id] || {}).nombre || id;
+function aplicarLetra() { document.body.classList.toggle("mayus", S.letra === "mayuscula"); document.body.classList.toggle("sobria", S.ruta === "13-18"); }
+/* 13–18 (T1): presentación sobria, sin personajes ni exclamaciones; textos propios donde los hay. */
+const ADOLESCENTE = () => S.ruta === "13-18";
+const N2 = (k) => (ADOLESCENTE() && (T.nino_13_18 || {})[k]) || N[k];
+D.estado.sinCaras = () => S.ruta === "13-18";   // D4: los personajes con cara nunca se dibujan en 13–18
+aplicarLetra();
+const avisar = (msg) => { if (EN_MARCO) parent.postMessage(msg, "*"); };
+
+/* ---------- Audio: SOLO al tocar el parlante (D7 de FEC-015, aplicado por defecto hasta P9). Escuchar es apoyo de acceso (R11). ---------- */
+let VOZ = null;
+function elegirVoz() { try { const v = speechSynthesis.getVoices(); VOZ = v.find((x) => /^es[-_]AR/i.test(x.lang)) || v.find((x) => /^es/i.test(x.lang)) || null; } catch (e) { } }
+if (HAY_VOZ) { elegirVoz(); speechSynthesis.onvoiceschanged = elegirVoz; }
+const DICHOS = [];
+function decir(t) { DICHOS.push(t); if (!t || !HAY_VOZ) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = VOZ ? VOZ.lang : "es-AR"; if (VOZ) u.voice = VOZ; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) { } }
+function anunciar(t) { const a = $("#anuncio"); a.textContent = ""; setTimeout(() => { a.textContent = t; }, 30); }
+const escuchar = (t, extra = "") => `<button class="parlante" type="button" data-decir="${esc(t)}" aria-label="${esc(N.escuchar)}" ${extra}>${D.parlante}</button>`;
+function registrarAcceso(nombre) { const R = S.R; if (R && !R.terminado && R.apoyos.length < 20 && !R.apoyos.includes("0:" + nombre)) R.apoyos.push("0:" + nombre); }
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-decir]"); if (!b) return;
+  decir(b.dataset.decir);
+  if (b.closest(".consigna") && S.R && !S.R.terminado) { S.R.repeticiones += 1; registrarAcceso("audio-consigna"); }
+});
+function msj(t) { const m = $("#msj"); if (m) m.textContent = t; const p = $("#msj-oir"); if (p) { p.dataset.decir = t; p.hidden = !t; } anunciar(t); }
+
+/* ---------- Encabezado ---------- */
+function encabezado() {
+  const completa = !EN_MARCO && (document.fullscreenEnabled || document.webkitFullscreenEnabled) ? `<button class="btn sec chico" id="completa">${document.fullscreenElement ? "Salir de pantalla completa" : "Pantalla completa"}</button>` : "";
+  const el = S.letraPendiente || S.letra;
+  $("#hd").innerHTML = (EN_MARCO ? '<span style="margin-right:auto"></span>' : `<span class="marca" aria-hidden="true"></span><span class="nm">${esc(MODULO.nombre)}</span>`)
+    + `<span class="rotulo">${esc(T.rotulo)}</span><span class="letras" role="group" aria-label="Letra"><button type="button" id="l-may" class="letra-fija" aria-pressed="${el === "mayuscula"}" aria-label="Letra mayúscula">ABC</button><button type="button" id="l-min" class="letra-fija" aria-pressed="${el === "minuscula"}" aria-label="Letra minúscula">abc</button></span>${completa}`;
+  $("#l-may").onclick = () => cambiarLetra("mayuscula"); $("#l-min").onclick = () => cambiarLetra("minuscula");
+  const c = $("#completa"); if (c) c.onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement); };
+}
+document.addEventListener("fullscreenchange", encabezado);
+function cambiarLetra(l) {
+  if ((S.letraPendiente || S.letra) === l) return;
+  if (S.R && !S.R.terminado) { S.letraPendiente = l === S.letra ? null : l; registrarAcceso("letra"); encabezado(); msj(T.adulto.letraSiguiente); return; }
+  S.letra = l; S.letraPendiente = null; aplicarLetra(); encabezado();
+}
+function aplicarLetraPendiente() { if (!S.letraPendiente) return; S.letra = S.letraPendiente; S.letraPendiente = null; aplicarLetra(); encabezado(); }
+
+/* ---------- Pantalla de la persona adulta ---------- */
+function pantallaAdulto() {
+  S.R = null; const A = T.adulto;
+  $("#app").innerHTML = `<section class="panel">
+    <h1>${esc(MODULO.nombre)}</h1>
+    <p class="small">${esc(A.intro)} ${esc(T.rotulo)}.</p>
+    <p class="guia">${D.parlante} ${esc(A.parlante)}</p>
+    <div class="grupo"><h2>Edad (cómo se presenta)</h2><div class="opciones" style="--min:150px">${RUTAS.map(([r, n]) => { const ok = !!MODULO.rutas[r];
+      return `<button class="opcion" data-ruta="${r}" aria-pressed="${r === S.ruta}" ${ok ? "" : "disabled"}><span class="t">${n}</span><span class="d">${ok ? `Sesión de ${MODULO.rutas[r].sesion_min} min` : "No disponible todavía"}</span></button>`; }).join("")}</div>
+      <p class="small">${esc(A.ruta1318)}</p></div>
+    <div class="grupo"><h2>Rincones, variantes y grado de partida</h2>
+      <div class="tabla-scroll"><table class="reg"><thead><tr><th>Rincón</th><th>Variante</th><th>Estación</th><th>Habilidad</th><th>Grado de partida</th><th>En el menú (3 a 12)</th></tr></thead><tbody>
+      ${VARIANTES.map((v) => { const gs = Motor.gradosDe(MODULO, S.ruta, v.variante); return `<tr><td>Rincón ${v.rincon} · ${esc(v.rincon_fec)}</td><td>${esc(v.nombre_variante)} · ${esc(v.nombre_accion)}</td><td>${esc(NOMBRE_EST[v.estacion])}${v.estacion_provisoria ? " (provisoria)" : ""}</td><td>${esc(v.habilidad_referencia)}</td><td>${gs.length
+        ? `<select data-grado-de="${v.variante}" aria-label="Grado de partida de ${esc(v.nombre_accion)}">${GRADOS.filter(([g]) => gs.includes(g)).map(([g, n]) => `<option value="${g}" ${gradoInicial(v.variante) === g ? "selected" : ""}>${n}</option>`).join("")}</select>`
+        : '<span class="small">No se ofrece en esta edad</span>'}</td><td>${gs.length ? `<label class="small"><input type="checkbox" data-hab="${v.variante}" ${S.habilitadas.has(v.variante) ? "checked" : ""} ${S.ruta === "13-18" ? "disabled" : ""}> Se puede elegir</label>` : ""}</td></tr>`; }).join("")}</tbody></table></div>
+      <p class="small">En 3 a 12 años, quien juega elige solo entre las variantes marcadas (por defecto, la de base de cada rincón). La de mayor demanda se habilita acá o cuando aparece «Hay retos nuevos para probar». En 13 a 18 elige el adolescente.</p>
+      <p class="small">${esc(A.libre)}</p></div>
+    <div class="grupo"><h2>Accesibilidad</h2><div class="casillas"><label><input type="checkbox" id="a-expo" ${S.sinExposicionBreve ? "checked" : ""}> ${esc(A.sinExposicion)}</label></div>
+      <p class="small">${esc(A.sinArrastre)} ${esc(A.letra)}</p></div>
+    <div class="grupo"><h2>Apoyo con el que empieza cada rincón</h2><div class="opciones" style="--min:170px">${[0, 1, 2, 3].map((n) =>
+      `<button class="opcion" data-apoyo="${n}" aria-pressed="${n === S.apoyoInicial}"><span class="t">Nivel ${n}</span><span class="d">${esc(MODULO.apoyos_escala.niveles[n])}</span></button>`).join("")}</div>
+      <p class="small">${esc(MODULO.apoyos_escala.retiro)}</p>
+      <div class="casillas"><label><input type="checkbox" id="a-fijo" ${S.fijo ? "checked" : ""}> Mantener los grados elegidos (no se ajustan solos)</label></div></div>
+    <p class="leyenda">${esc(MODULO.ficha.texto_profesional_7_1)}</p>
+    <p class="small">${esc(MODULO.ficha.transferencia_B)} Nivel de evidencia ${esc(MODULO.ficha.nivel_evidencia)}: ${esc(MODULO.ficha.rotulo_evidencia)}.</p>
+    <div class="acciones"><button class="btn" id="a-seguir">Ir a la cocina</button>${S.registros.length ? '<button class="btn sec" id="a-registro">Registro de la sesión</button>' : ""}</div></section>`;
+  $$("[data-ruta]").forEach((b) => b.onclick = () => { if (b.disabled) return; S.ruta = b.dataset.ruta; S.letra = MODULO.letra.por_defecto[S.ruta] || S.letra; aplicarLetra(); encabezado(); pantallaAdulto(); $(`[data-ruta="${S.ruta}"]`).focus(); });
+  $$("[data-grado-de]").forEach((s) => s.onchange = () => { S.gradoDe[s.dataset.gradoDe] = s.value; });
+  $$("[data-hab]").forEach((c) => c.onchange = () => { c.checked ? S.habilitadas.add(c.dataset.hab) : S.habilitadas.delete(c.dataset.hab); });
+  $$("[data-apoyo]").forEach((b) => b.onclick = () => { S.apoyoInicial = +b.dataset.apoyo; $$("[data-apoyo]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
+  const r = $("#a-registro"); if (r) r.onclick = verRegistro;
+  $("#a-seguir").onclick = () => {
+    S.fijo = $("#a-fijo").checked; S.sinExposicionBreve = $("#a-expo").checked;
+    $$("[data-grado-de]").forEach((s) => { S.gradoDe[s.dataset.gradoDe] = s.value; });
+    S.apoyoSig = {}; S.destacar = {};
+    avisar({ type: "chef-config", grados: S.gradoDe, letra: S.letra });
+    S.historiaVista || ADOLESCENTE() ? cocina() : historia(cocina);
+  };
+}
+
+/* ---------- Historia (primera vez y a pedido) ---------- */
+function historia(despues) {
+  const L = T.historia; let i = 0;
+  const pintar = () => {
+    const l = L[i], ult = i === L.length - 1, toda = L.map((x) => x.frases.join(" ")).join(" ");
+    $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(N.historiaTitulo)}</h1>
+      <div class="acciones" style="justify-content:center;margin:0 0 8px"><button class="btn suave" data-decir="${esc(toda)}">${D.parlante} ${esc(N.escucharHistoria)}</button></div>
+      <div class="lamina">${D.lamina(l.lamina)}</div>
+      ${l.frases.map((f) => `<div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(f)}</p>${escuchar(f)}</div>`).join("")}
+      <p class="small">${i + 1} / ${L.length}</p>
+      <div class="acciones">${i ? `<button class="btn sec" id="h-antes">${esc(N.anterior)}</button>` : ""}<button class="btn" id="h-sig">${esc(ult ? N.alaCocina : N.siguiente)}</button></div></section>`;
+    const a = $("#h-antes"); if (a) a.onclick = () => { i -= 1; pintar(); };
+    $("#h-sig").onclick = () => { if (ult) { S.historiaVista = true; avisar({ type: "chef-historia" }); despues(); } else { i += 1; pintar(); $("#h-sig").focus(); } };
+  };
+  pintar();
+}
+
+/* ---------- La cocina: ocho rincones abiertos, sin orden ni desbloqueo (REQ-CLI-CHF-02); sin Estación, grado ni variante (CHF-03) ---------- */
+function cocina() {
+  S.R = null; S.aventura = null; aplicarLetraPendiente(); if (!S.t0Sesion) S.t0Sesion = Date.now();
+  const rs = Motor.rinconesDe(MODULO, S.ruta);
+  const nombre = (n) => VARIANTES.find((v) => v.rincon === n).rincon_nino;
+  $("#app").innerHTML = `<section class="panel nino"><div class="consigna"><p id="m-t">${esc(N2("cocinaConsigna"))}</p>${escuchar(N2("cocinaConsigna"))}</div>
+    <div class="rincones">${rs.map((n) => `<button class="rincon" data-rincon="${n}">${D.rincon(n)}<span class="t">${esc(nombre(n))}</span>${S.rinconesJugados.has(n) ? `<span class="tarjeta-ok">${esc(N.recetario)} ✓</span>` : ""}</button>`).join("")}</div>
+    ${S.recetario.size ? `<h2 style="margin-top:14px">${esc(N.recetario)}</h2><div class="recetario">${[...S.recetario].map((r) => `<div class="receta">${D.receta(BANCO, r)}<span class="t">${esc(REC[r].nombre)}</span></div>`).join("")}</div>` : ""}
+    <div class="acciones">${ADOLESCENTE() ? "" : `<button class="btn sec" id="m-historia">${esc(N.verHistoria)}</button>`}${CON_ADULTO ? '<button class="btn sec" id="m-adulto"><span class="adulto-txt">Persona adulta</span></button>' : ""}</div></section>`;
+  $$("[data-rincon]").forEach((b) => b.onclick = () => elegirVariante(+b.dataset.rincon));
+  const mh = $("#m-historia"); if (mh) mh.onclick = () => historia(cocina);
+  const a = $("#m-adulto"); if (a) a.onclick = pantallaAdulto;
+}
+/* Cada rincón ofrece sus variantes por nombre de acción; quien juega nunca ve «Zona», «Espacio», Estación ni grado. */
+function elegirVariante(n) {
+  const todas = VARIANTES.filter((v) => v.rincon === n && Motor.gradosDe(MODULO, S.ruta, v.variante).length);
+  // O7: en 3–12 solo las variantes habilitadas por la persona adulta o sugeridas («Hay retos nuevos para probar»); en 13–18 elige el adolescente
+  const elegibles = ADOLESCENTE() ? todas : todas.filter((v) => S.habilitadas.has(v.variante) || S.sugerencias.has(v.variante));
+  const vs = elegibles.length ? elegibles : todas.slice(0, 1);
+  if (vs.length === 1) return entrar(vs[0].variante);
+  $("#app").innerHTML = `<section class="panel nino"><div class="consigna"><p>${esc(vs[0].rincon_nino)}</p>${escuchar(vs[0].rincon_nino)}</div>
+    <div class="opciones" style="--min:240px">${vs.map((v) => `<button class="opcion" data-v="${v.variante}"><span class="t">${esc(v.titulo_nino)}</span></button>`).join("")}</div>
+    ${vs.some((v) => S.sugerencias.has(v.variante)) ? `<p class="guia">Hay retos nuevos para probar.</p>` : ""}
+    <div class="acciones"><button class="btn sec" id="r-volver">${esc(N.volver)}</button></div></section>`;
+  $$("[data-v]").forEach((b) => b.onclick = () => entrar(b.dataset.v));
+  $("#r-volver").onclick = cocina;
+}
+function entrar(id) {
+  S.variante = id; S.grado = gradoInicial(id); S.sesion = { items: 0, subio: false, seguidos: 0, enPiso: 0 };
+  if (!S.estrategiaVista.has(id)) return estrategia();
+  siguienteItem();
+}
+function estrategia() {
+  const v = variante(), e = BANCO.estrategias[S.variante];
+  $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(v.titulo_nino)}</h1>
+    ${ADOLESCENTE() ? "" : `<div class="objeto-grande" style="width:140px;height:140px">${D.personaje(v.rincon % 2 ? "chef" : "ayudante")}</div>`}
+    <div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(e.asi_se_juega)}</p>${escuchar(e.asi_se_juega)}</div>
+    <div class="consigna" style="justify-content:center"><p style="flex:0 1 auto;font-weight:700;font-size:1.05rem">${esc(e.estrategia)}</p>${escuchar(e.estrategia)}</div>
+    <div class="acciones"><button class="btn" id="e-empezar">${esc(N.empezar)}</button><button class="btn sec" id="e-volver">${esc(N.volver)}</button></div></section>`;
+  $("#e-empezar").onclick = () => { S.estrategiaVista.add(S.variante); siguienteItem(); };
+  $("#e-volver").onclick = cocina;
+}
+
+/* ---------- Ciclo de ítems ---------- */
+function siguienteItem() {
+  aplicarLetraPendiente();
+  const lista = Motor.ordenarPorReceta(Motor.itemsDe(BANCO, S.variante, S.grado, S.ruta), S.receta);
+  if (!lista.length) return cocina();
+  const k = S.variante + "/" + S.grado + "/" + S.ruta; const i = S.idx[k] || 0; S.idx[k] = i + 1;
+  const it = lista[i % lista.length];
+  if (it.formato === "aventura") return empezarAventura(it);
+  jugarItem(it, S.variante in S.apoyoSig ? S.apoyoSig[S.variante] : S.apoyoInicial);
+}
+function nuevoR(it, apoyo) {
+  return { t0: Date.now(), errores: 0, intentos: 0, tipos: [], apoyos: [], apoyo_max: 0, apoyo_inicial: apoyo, nivelAyuda: 0, autocorreccion: false, repeticiones: 0,
+    modalidades: new Set(), extra: {}, terminado: false, local: {} };
+}
+function jugarItem(it, apoyo) {
+  S.item = it; S.R = nuevoR(it, apoyo);
+  if (it.receta && S.variante === "1-espacio" || it.receta && S.variante === "1-zona") { /* la receta en curso solo cambia cuando la persona elige */ }
+  const f = FORMATOS[it.formato];
+  f.render(it);
+  for (let n = 1; n <= apoyo; n++) usarAyuda(n, true);
+  if (!apoyo && S.destacar[S.variante]) { const b = $("#ayuda"); if (b) b.classList.add("ofrecida"); }
+}
+function marcoJuego(it, cuerpo, lado = "") {
+  const clase = S.grado === "dificil" ? "btn sec chico" : "btn suave";
+  const et = S.aventura ? `<div class="etapas">${S.aventura.etapas.map((e, k) => `<span class="${k < S.aventura.i ? "hecha" : k === S.aventura.i ? "actual" : ""}">${k + 1}</span>`).join("")}</div>` : "";
+  const preg = it.pregunta ? `<div class="consigna"><p style="font-size:1.1rem">${esc(it.pregunta)}</p>${escuchar(it.pregunta)}</div>` : "";
+  $("#app").innerHTML = `<section class="panel nino">${et}<div class="consigna"><p id="consigna">${esc(it.consigna)}</p>${escuchar(it.consigna)}</div>${preg}
+    <div class="juego"><div id="cuerpo">${cuerpo}</div><div class="lado">${lado}<button class="${clase}" id="ayuda">${esc(N.ayuda)}</button>
+    <div class="msj-caja"><div class="msj" id="msj" aria-live="polite"></div>${escuchar("", 'id="msj-oir" hidden')}</div>
+    <button class="btn sec chico" id="j-volver">${esc(N.volver)}</button></div></div></section>`;
+  $("#ayuda").onclick = () => usarAyuda(Math.min(3, S.R.nivelAyuda + 1));
+  $("#j-volver").onclick = () => { if (S.R && !S.R.terminado) S.R.abandonado = true; cocina(); };
+}
+/* Ayudas 1–3: 1 pista general; 2 ayuda específica (resaltar o sacar opciones); 3 demostración que explica y devuelve el turno (R10). */
+function usarAyuda(nivel, inicial) {
+  const R = S.R; if (!R || R.terminado || nivel < 1 || nivel > 3) return;
+  R.nivelAyuda = Math.max(R.nivelAyuda, nivel); R.apoyo_max = Math.max(R.apoyo_max, nivel);
+  const f = FORMATOS[S.item.formato];
+  let nombre = "pista-general";
+  if (nivel === 1) msj(S.item.pista1 || "Mirá otra vez la consigna.");
+  else nombre = (f.ayuda && f.ayuda(nivel, S.item)) || (nivel === 2 ? "resaltar" : "demostracion");
+  if (nivel === 3) msj((S.item._demo || "") + " Así se resuelve este paso. Ahora probá vos.");
+  R.apoyos.push((inicial ? "inicial:" : "") + nivel + ":" + nombre);
+  const b = $("#ayuda"); if (b) { b.classList.remove("ofrecida"); if (R.nivelAyuda >= 3) b.disabled = true; }
+}
+/* Error: devolución neutra con pista; desde el primer error se ofrece la ayuda de nivel 1 (REQ-CLI-CHF-06). Sin cruces ni sonidos. */
+function permitidos() { return Motor.tiposPermitidos(MODULO, S.aventura ? S.aventura.variante : S.variante, { rincon: S.aventura ? S.item.rincon : undefined, multiple: S.item && S.item.multiple }); }
+/* candidatos: ids en orden de preferencia; se registra el primero de la lista cerrada (o «otro»). Con o.todos, cada uno (selección múltiple). */
+function error(t, candidatos, cuantos = 1, o = {}) {
+  const R = S.R; if (!R || R.terminado) return;
+  R.errores += cuantos; R.intentos += 1;
+  if (cuantos > 0) { const pm = permitidos(); if (o.todos) for (const c of candidatos) R.tipos.push(Motor.tipoCerrado(pm, c)); else R.tipos.push(Motor.tipoCerrado(pm, candidatos)); }
+  const b = $("#ayuda"); const pista = t || "Casi. Mirá otra vez.";
+  if (b && R.nivelAyuda < 3) { b.classList.add("ofrecida"); msj(pista + " " + N.ofrecerAyuda); } else msj(pista);
+}
+const tipoDe = (it, ...def) => [it.tipo_error, ...def].filter(Boolean);
+function finItem(extra = {}) {
+  const R = S.R, it = S.item; if (!R || R.terminado) return; R.terminado = true; R.intentos += 1;
+  const mods = [...R.modalidades], modalidad = !mods.length ? "tocar" : mods.length > 1 ? "mixta" : mods[0];
+  const enAv = !!S.aventura, vAct = enAv ? S.aventura.variante : S.variante, v = variante(vAct);
+  const rinconOrigen = enAv ? it.rincon : v.rincon;
+  const hab = enAv ? (it.rincon === 8 ? "toma-de-decisiones" : (variante(it.rincon + "-zona") || v).habilidad_referencia) : v.habilidad_referencia;
+  const reg = Motor.registro({ variante: vAct, rincon: v.rincon, estacion: v.estacion, grado: S.grado, item: enAv ? `${S.aventura.item.id}/e${S.aventura.i + 1}` : it.id, habilidad: hab,
+    resultado: extra.resultado || "acierto", errores: R.errores, intentos: R.intentos, tipos_error: R.tipos, apoyos: R.apoyos, apoyo_inicial: R.apoyo_inicial, apoyo_max: R.apoyo_max, modalidad,
+    autocorreccion: R.autocorreccion, ms: Date.now() - R.t0, tipo_letra: S.letra,
+    extra: { ...R.extra, ...(extra.extra || {}), receta: it.receta || (enAv ? S.aventura.item.receta : undefined), repeticiones_consigna: R.repeticiones, integrado: enAv || undefined, etapa: enAv ? S.aventura.i + 1 : undefined, rincon_origen: enAv ? rinconOrigen : undefined } });
+  S.registros.push(reg);
+  avisar({ type: "chef-item", acierto: Motor.acierto(reg), ...reg });
+  if (enAv) {
+    const A = S.aventura; A.max = Math.max(A.max, reg.apoyo_max); A.errores += reg.errores; A.tipos.push(...reg.tipos_error); A.ok = A.ok && Motor.acierto(reg);
+    const lado = $(".lado"), ay = $("#ayuda"); if (ay) ay.remove();
+    lado.insertAdjacentHTML("afterbegin", `<button class="btn" id="j-seguir">${esc(N.seguir)}</button>`);
+    msj(extra.devolucion || it.ok || "Bien.");
+    $("#j-seguir").focus(); $("#j-seguir").onclick = () => siguienteEtapa();
+    return;
+  }
+  cerrarRegistro(reg, extra.devolucion || it.ok);
+}
+/* M10, retiro de apoyos y error repetido sobre el registro de la variante (en el gran reto, sobre 8A u 8B; nunca sobre los rincones de origen). */
+function cerrarRegistro(reg, devolucion) {
+  const id = S.variante, v = variante();
+  const ok = Motor.acierto(reg);
+  const sig = Motor.siguienteApoyo(reg.apoyo_max); S.apoyoSig[id] = sig.nivel; S.destacar[id] = sig.destacar;
+  S.sesion.seguidos = ok ? 0 : S.sesion.seguidos + 1;
+  const grados = Motor.gradosDe(MODULO, S.ruta, id);
+  const opc = { m10: MODULO.m10, fijo: S.fijo, yaSubio: S.sesion.subio, erroresSeguidos: S.sesion.seguidos, grados };
+  const key = id + "/" + v.habilidad_referencia, hh = S.hist[key] || (S.hist[key] = []); hh.push({ acierto: ok, conAyuda: !Motor.sinAyuda(reg) });
+  const aj = Motor.ajusteM10(hh, S.grado, opc);
+  const ck = id + "/" + S.grado, cuenta = S.cuentaErr[ck] || (S.cuentaErr[ck] = {});
+  if (Motor.tipoRepetido(cuenta, reg.tipos_error, MODULO.error_repetido_umbral)) S.apoyoSig[id] = Math.max(S.apoyoSig[id], 1);
+  if (aj.grado !== S.grado) { S.grado = aj.grado; S.gradoDe[id] = aj.grado; if (aj.subio) S.sesion.subio = true; S.sesion.seguidos = 0; S.cuentaErr[ck] = {}; }
+  if (aj.masAyuda) { S.apoyoSig[id] = Math.max(S.apoyoSig[id], 2); if (aj.grado === grados[0]) S.sesion.enPiso += 1; S.sesion.seguidos = 0; }
+  if (Motor.sugerirOtraVariante(hh, S.grado, grados)) S.sugerencias.add(id.replace("zona", "espacio"));
+  S.sesion.items += 1;
+  const piso = S.sesion.enPiso >= 2, tiempo = Date.now() - S.t0Sesion >= rutaCfg().sesion_min * 60000;
+  const fin = piso || tiempo || S.sesion.items >= rutaCfg().items_por_ronda || S.item.formato === "aventura";
+  const lado = $(".lado"), ay = $("#ayuda"); if (ay) ay.remove();
+  if (lado) lado.insertAdjacentHTML("afterbegin", `<button class="btn" id="j-seguir">${esc(N.seguir)}</button>`);
+  msj(devolucion || "Bien.");
+  $("#j-seguir").focus();
+  $("#j-seguir").onclick = () => (fin ? cierre(piso ? "piso" : tiempo ? "tiempo" : "ronda") : siguienteItem());
+}
+
+/* ---------- El gran reto (8A y 8B): etapas de los rincones disponibles en la ruta ---------- */
+function empezarAventura(it) {
+  const et = Motor.etapasEnRuta(MODULO, S.ruta, it.etapas);
+  S.aventura = { item: it, variante: S.variante, etapas: et, i: 0, max: 0, errores: 0, tipos: [], ok: true, t0: Date.now() };
+  S.item = it;
+  $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(variante().titulo_nino)}</h1><div class="lamina chica">${D.lamina("cocina")}</div>
+    <div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(it.situacion)}</p>${escuchar(it.situacion)}</div>
+    <div class="acciones"><button class="btn" id="av-empezar">${esc(N.empezar)}</button></div></section>`;
+  $("#av-empezar").onclick = () => jugarEtapa();
+}
+function jugarEtapa() {
+  const A = S.aventura, e = A.etapas[A.i];
+  const apoyo = Math.max(A.item.apoyo_por_etapa || 0, 0);
+  jugarItem({ ...e, id: `${A.item.id}/e${A.i + 1}`, pista1: e.pista1 || "Pensá qué hace falta ahora." }, apoyo);
+}
+function siguienteEtapa() {
+  const A = S.aventura; A.i += 1;
+  if (A.i < A.etapas.length) return jugarEtapa();
+  if (A.item.como_salio) return comoSalio();
+  finAventura(null);
+}
+function comoSalio() {
+  $("#app").innerHTML = `<section class="panel cierre nino"><div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(N.comoSalio)}</p>${escuchar(N.comoSalio)}</div>
+    <div class="opciones" style="--min:220px">${T.como_salio.map((o) => `<button class="opcion" data-cs="${o.id}"><span class="t">${esc(o.txt)}</span></button>`).join("")}</div></section>`;
+  // Autoevaluación: no se califica ni entra en M10 (T3). Si «lo haría distinto», se pregunta qué cambiaría (T14), con opciones cerradas.
+  $$("[data-cs]").forEach((b) => b.onclick = () => {
+    if (b.dataset.cs !== "distinto") return finAventura(b.dataset.cs);
+    const Q = T.que_cambiarias;
+    $("#app").innerHTML = `<section class="panel cierre nino"><div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(Q.pregunta)}</p>${escuchar(Q.pregunta)}</div>
+      <div class="opciones" style="--min:220px">${Q.opciones.map((o) => `<button class="opcion" data-qc="${o.id}"><span class="t">${esc(o.txt)}</span></button>`).join("")}</div></section>`;
+    $$("[data-qc]").forEach((q) => q.onclick = () => finAventura("distinto", q.dataset.qc));
+  });
+}
+function finAventura(cs, qc) {
+  const A = S.aventura, v = variante(A.variante);
+  S.item = A.item;
+  const reg = Motor.registro({ variante: A.variante, rincon: 8, estacion: v.estacion, grado: S.grado, item: A.item.id, habilidad: v.habilidad_referencia, resultado: A.ok ? "acierto" : "error",
+    errores: A.errores, intentos: A.etapas.length, tipos_error: A.ok ? [] : [...new Set(A.tipos)], apoyos: [], apoyo_inicial: A.item.apoyo_por_etapa || 0, apoyo_max: A.max, modalidad: "mixta", ms: Date.now() - A.t0, tipo_letra: S.letra,
+    extra: { receta: A.item.receta, como_salio: cs || undefined, que_cambiarias: qc || undefined, situacion: A.item.situacion } });
+  S.registros.push(reg); avisar({ type: "chef-item", acierto: Motor.acierto(reg), ...reg });
+  S.aventura = null;
+  $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(variante().titulo_nino)}</h1><div class="lado"></div><div class="msj-caja"><div class="msj" id="msj"></div>${escuchar("", 'id="msj-oir" hidden')}</div></section>`;
+  S.sesion.items = 99;
+  cerrarRegistro(reg, ADOLESCENTE() ? N2("finAventura") : "Mesa compartida: ¡a comer todos juntos!");
+}
+
+/* ---------- Cierre del rincón: tarjeta de «Mi recetario» por jugar (CHF-11), idea fuera de la pantalla, «Contar» y desafío para casa ---------- */
+function cierre(motivo) {
+  const v = variante(), id = S.variante, piso = motivo === "piso", tiempo = motivo === "tiempo";
+  const delRincon = S.registros.filter((r) => r.variante === id);
+  const recUsada = (delRincon.slice().reverse().find((r) => r.extra.receta) || {}).extra?.receta || S.receta || BANCO.recetas[0].id;
+  const nueva = !S.recetario.has(recUsada); S.recetario.add(recUsada); S.rinconesJugados.add(v.rincon);
+  avisar({ type: "chef-tarjeta", receta: recUsada, rincon: v.rincon });
+  const mejoro = delRincon.length >= 2 && delRincon[delRincon.length - 1].apoyo_max < delRincon[0].apoyo_max;
+  // O2: la frase de mejora aparece solo si el apoyo bajó; si subió o se mantuvo, no se dice nada sobre apoyo ni tiempo
+  const t = tiempo ? N.cierreTiempo : piso ? N.cierrePiso : (mejoro ? N.mejora : (ADOLESCENTE() ? N2("cierreRincon") : "Gracias por cocinar en este rincón."));
+  const C = T.contar, ayudo = (C.ayudo[String(v.rincon)] || []).concat(ADOLESCENTE() ? ((C.ayudo_extra_13_18 || {})[String(v.rincon)] || []) : []);
+  // «Contar» (T14): opciones cerradas de PSP-SR; no se puntúa ni entra en M10
+  const contar = `<div class="contar"><h2>${esc(C.titulo)}</h2>${S.ruta === "3-5" ? `<p class="small adulto-txt">${esc(C.con_adulto_3_5)}</p>` : ""}
+    <p class="pregunta">${esc(C.resulto.pregunta)} ${escuchar(C.resulto.pregunta)}</p><div class="opciones" style="--min:140px">${C.resulto.opciones.map((o) => `<button class="opcion" data-resulto="${o.id}" aria-pressed="false"><span class="t">${esc(o.txt)}</span></button>`).join("")}</div>
+    <p class="pregunta">${esc(C.pregunta)} ${escuchar(C.pregunta)}</p><div class="opciones" style="--min:180px">${ayudo.map((x, k) => `<button class="opcion" data-ayudo="r${v.rincon}-${k + 1}" data-txt="${esc(x)}" aria-pressed="false"><span class="t">${esc(x)}</span></button>`).join("")}<button class="opcion" data-ayudo="${C.otra.id}" data-txt="${esc(C.otra.txt)}" aria-pressed="false"><span class="t">${esc(C.otra.txt)}</span></button></div>
+    <p class="small adulto-txt">${esc(C.oral)}</p></div>`;
+  // O4: el desafío para casa usa solo recetas validadas por PSP-SR (hoy ninguna: no se muestra)
+  const rv = REC[recUsada] || {};
+  const des = BANCO.desafio_recetas.includes(recUsada) && (rv.rutas || []).includes(S.ruta) && rv.estado_clinico === "validado por PSP-SR" ? desafioHTML(recUsada) : "";
+  $("#app").innerHTML = `<section class="panel cierre nino"><h1>${esc(nueva ? N2("tarjetaNueva") : N2("tarjetaOtraVez"))}</h1>
+    <div class="recetario"><div class="receta">${D.receta(BANCO, recUsada)}<span class="t">${esc(REC[recUsada].nombre)}</span></div></div>
+    <div class="consigna" style="justify-content:center"><p style="flex:0 1 auto">${esc(t)}</p>${escuchar(t)}</div>
+    <div class="idea"><h2>${esc(N.ideaTitulo)}</h2><div class="consigna"><p>${esc(v.idea_fuera)}</p>${escuchar(v.idea_fuera)}</div><p class="small adulto-txt">${esc(T.ideaNota)}</p></div>
+    ${contar}${des}
+    <div class="acciones"><button class="btn" id="c-volver">${esc(N.volver)}</button>${piso || tiempo ? "" : `<button class="btn sec" id="c-otra">${esc(N.otraVez)}</button>`}
+    ${CON_ADULTO ? '<button class="btn sec" id="c-registro"><span class="adulto-txt">Registro (persona adulta)</span></button>' : ""}</div></section>`;
+  const resp = { variante: id, resulto: null, ayudo: [] }; let guardada = false;
+  const guardar = () => { if (!guardada) { S.contar.push(resp); guardada = true; } };
+  $$("[data-resulto]").forEach((b) => b.onclick = () => { resp.resulto = b.dataset.resulto; guardar(); $$("[data-resulto]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
+  $$("[data-ayudo]").forEach((b) => b.onclick = () => { const k = b.dataset.txt, i = resp.ayudo.indexOf(k); i >= 0 ? resp.ayudo.splice(i, 1) : resp.ayudo.push(k); guardar(); b.setAttribute("aria-pressed", i < 0); });   // selección múltiple
+  const lh = $("#d-hicimos"); if (lh) lh.onclick = () => { S.desafio.push({ receta: recUsada }); lh.disabled = true; lh.textContent = "¡Qué bueno!"; };
+  $("#c-volver").onclick = cocina;
+  const o = $("#c-otra"); if (o) o.onclick = () => entrar(id);
+  const r = $("#c-registro"); if (r) r.onclick = verRegistro;
+}
+/* Desafío para casa (M06, REQ-CLI-CHF-20 a 26): solo recetas sin cocción; los pasos con filo o calor los hace el adulto antes; aviso fijo de alergias. */
+function desafioHTML(rid) {
+  const r = REC[rid], Dz = T.desafio;
+  const antes = r.pasos.filter((p) => p.actor === "adulto"), chico = r.pasos.filter((p) => p.actor !== "adulto");
+  return `<div class="desafio adulto-txt"><h2>${esc(Dz.titulo)}: ${esc(r.nombre)}</h2>
+    <p><strong>${esc(Dz.aviso_alergias)}</strong></p>
+    ${r.alergenos.length ? `<p class="small">Esta receta lleva: ${esc(r.alergenos.join(", "))}.${r.sin_tacc ? ` Sin TACC: usen ${esc(nombreIng(r.sin_tacc))}.` : ""}</p>` : ""}
+    <p class="small">${esc(Dz.higiene)}</p>
+    ${antes.length ? `<p>Antes de empezar, el adulto: ${esc(antes.map((p) => p.texto.replace(/^El adulto /, "")).join("; "))}.</p>` : ""}
+    <ol>${chico.map((p) => `<li>${esc(p.texto)}</li>`).join("")}</ol>
+    <p class="small">${esc(Dz.nota)}</p>
+    <button class="btn suave" id="d-hicimos">${esc(Dz.lo_hicimos)}</button></div>`;
+}
+
+/* ---------- Vista profesional (REQ-CLI-CHF-18) ---------- */
+function verRegistro() {
+  const filas = Motor.vistaPorHabilidad(S.registros), tit = (id) => { const v = variante(id); return v ? `Rincón ${v.rincon} · ${v.nombre_variante}` : id; };
+  const d = document.createElement("div"); d.className = "dialogo";
+  d.innerHTML = `<div class="panel" role="dialog" aria-modal="true" aria-labelledby="r-t"><h2 id="r-t">Registro de esta sesión, por habilidad</h2>
+    <p class="small">Datos de prueba de esta pantalla: no se guardan ni salen del dispositivo. Calculado en código, sin modelos de lenguaje. Quien juega no ve este registro. La app no infiere estrategias. Los tipos de error describen la respuesta en el ejercicio, nunca a la persona. «En el gran reto» cuenta aparte lo resuelto de forma integrada y no mueve el grado del rincón.</p>
+    <p class="leyenda">${esc(MODULO.ficha.texto_profesional_7_1)}</p>
+    <div class="tabla-scroll"><table class="reg" id="r-hab"><thead><tr><th>Habilidad</th><th>Variantes</th><th>Ejercicios</th><th>En esta actividad: resuelve sin apoyo</th><th>Resuelve con apoyo</th><th>Todavía con demostración</th><th>Al primer intento</th><th>Apoyos más usados</th><th>Tipos de error</th><th>Repeticiones de consigna</th><th>En el gran reto</th></tr></thead>
+    <tbody>${filas.map((f) => `<tr><td>${esc(f.habilidad)}</td><td>${esc(f.variantes.map(tit).join(", "))}</td><td>${f.items}</td><td>${f.sin_apoyo}</td><td>${f.con_apoyo}</td><td>${f.demostracion}</td><td>${f.primer_intento}</td><td>${esc(f.apoyos.join(", ") || "—")}</td><td>${esc(f.tipos.join(", ") || "—")}</td><td>${f.rep}</td><td>${f.gran_reto.items ? `${f.gran_reto.items} (sin apoyo: ${f.gran_reto.sin_apoyo})` : "—"}</td></tr>`).join("") || '<tr><td colspan="11">Todavía no hay ejercicios.</td></tr>'}</tbody></table></div>
+    ${S.contar.length ? `<h3>Contar (opciones cerradas)</h3><ul class="small">${S.contar.map((c) => `<li>${esc(tit(c.variante))}: le resultó «${esc(((T.contar.resulto.opciones.find((o) => o.id === c.resulto)) || {}).txt || "—")}»; le ayudó «${esc(c.ayudo.join("», «") || "—")}»</li>`).join("")}</ul>` : ""}
+    <h3>Detalle por ejercicio</h3><div class="tabla-scroll"><table class="reg" id="r-tabla"><thead><tr><th>Variante</th><th>Grado</th><th>Ejercicio</th><th>Habilidad</th><th>Resultado</th><th>Errores · tipo</th><th>Apoyo de entrada → máximo</th><th>Datos</th></tr></thead>
+    <tbody>${S.registros.map((r) => `<tr><td>${esc(tit(r.variante))}</td><td>${esc(r.grado)}</td><td>${esc(r.item)}</td><td>${esc(r.habilidad)}</td><td>${esc(r.resultado)}</td><td>${r.errores}${r.tipos_error.length ? " · " + esc(r.tipos_error.join(", ")) : ""}</td><td>${r.apoyo_inicial} → ${r.apoyo_max} · ${esc(r.autonomia)}</td><td class="small">${esc(Object.entries(r.extra).map(([k, v]) => k + "=" + v).join(", "))}</td></tr>`).join("")}</tbody></table></div>
+    <div class="acciones"><button class="btn" id="r-cerrar">Cerrar</button></div></div>`;
+  document.body.appendChild(d);
+  const cerrar = () => { d.remove(); document.removeEventListener("keydown", tecla); }, tecla = (e) => { if (e.key === "Escape") cerrar(); };
+  $("#r-cerrar", d).onclick = cerrar; document.addEventListener("keydown", tecla); $("#r-cerrar", d).focus();
+}
+
+/* ---------- Tocar y ubicar, con arrastre opcional (WCAG 2.5.7) ---------- */
+let ARR = null, ULTIMO_ARRASTRE = 0;
+window.addEventListener("pointermove", (e) => {
+  if (!ARR) return;
+  if (!ARR.movio && Math.hypot(e.clientX - ARR.x, e.clientY - ARR.y) < 12) return;
+  if (!ARR.movio) { ARR.movio = true; ARR.g = document.createElement("div"); ARR.g.className = "fantasma"; ARR.g.innerHTML = ARR.f.querySelector("svg") ? ARR.f.querySelector("svg").outerHTML : ""; document.body.appendChild(ARR.g); }
+  ARR.g.style.left = e.clientX + "px"; ARR.g.style.top = e.clientY + "px";
+});
+window.addEventListener("pointerup", (e) => {
+  if (!ARR) return; const a = ARR; ARR = null; if (!a.movio) return;
+  a.g.remove(); ULTIMO_ARRASTRE = Date.now();
+  const deb = document.elementFromPoint(e.clientX, e.clientY), d = deb && deb.closest("[data-destino]");
+  if (d && a.raiz.contains(d)) { if (S.R) S.R.modalidades.add("arrastre"); a.soltar(); a.alUbicar(a.f.dataset.id, d.dataset.destino); }
+});
+function ubicable(raiz, alUbicar) {
+  let elegida = null;
+  const soltar = () => { if (elegida) elegida.setAttribute("aria-pressed", "false"); elegida = null; };
+  raiz.addEventListener("click", (e) => {
+    if (Date.now() - ULTIMO_ARRASTRE < 300) return;
+    const f = e.target.closest(".ficha[data-id]:not(.puesta)"), d = e.target.closest("[data-destino]");
+    if (f && !f.closest("[data-destino]")) { const misma = elegida === f; soltar(); if (!misma) { elegida = f; f.setAttribute("aria-pressed", "true"); } return; }
+    if (d && elegida) { if (S.R) S.R.modalidades.add("tocar-y-ubicar"); const id = elegida.dataset.id; soltar(); alUbicar(id, d.dataset.destino); }
+  });
+  raiz.addEventListener("pointerdown", (e) => { const f = e.target.closest(".ficha[data-id]:not(.puesta)"); if (!f || f.closest("[data-destino]") || e.button > 0) return; ARR = { f, x: e.clientX, y: e.clientY, movio: false, g: null, raiz, alUbicar, soltar }; });
+}
+</script>
+<script id="formatos">
+"use strict";
+/* ---------- Las formas de jugar (RT-CHF-001 B.5). Cada una: render(it) y ayuda(nivel, it) para los niveles 2 y 3. ---------- */
+const fichaIng = (id, extra = "", conNombre = true) => `<button class="ficha con-nombre" data-id="${esc(id)}" aria-pressed="false" ${extra}>${D.ing(BANCO, id)}${conNombre ? `<span class="nom">${esc(nombreIng(id))}</span>` : ""}</button>`;
+function opcionHTML(o, it) {
+  if (o.receta) { const r = REC[o.receta];
+    return `<button class="opcion receta" data-op="${esc(o.id)}" aria-pressed="false">${D.receta(BANCO, o.receta)}<span class="t">${esc(r.nombre)}</span>
+      ${it.mostrar_ingredientes ? `<span class="ings">${r.ingredientes.map((i) => D.ing(BANCO, i)).join("")}</span><span class="datos">${esc(r.ingredientes.map(nombreIng).join(", "))}</span>` : ""}
+      <span class="datos">${[r.horno ? "Con horno" : "Sin horno", it.mostrar_porciones ? `${r.porciones} porciones` : "", it.mostrar_tiempo ? (r.tiempo === "corto" ? "Se hace rápido" : "Lleva más tiempo") : ""].filter(Boolean).join(" · ")}</span></button>`; }
+  if (o.ing && o.cantidad) return `<button class="opcion" data-op="${esc(o.id)}" aria-pressed="false"><span class="cajon">${Array.from({ length: o.cantidad }, () => D.ing(BANCO, o.ing, false)).join("")}</span><span class="t">${esc(o.txt || "")}</span></button>`;
+  if (o.ing) return `<button class="opcion" data-op="${esc(o.id)}" aria-pressed="false" style="align-items:center"><span class="dib">${D.ing(BANCO, o.ing, !it.sin_nombre)}</span>${it.sin_nombre ? "" : `<span class="t">${esc(nombreIng(o.ing))}</span>`}${o.precio != null ? `<span class="precio">$ ${o.precio}</span>` : ""}</button>`;
+  if (o.ut) return `<button class="opcion" data-op="${esc(o.id)}" aria-pressed="false" style="align-items:center"><span class="dib" ${o.tam === "chica" ? 'style="transform:scale(.65)"' : ""}>${D.ut(BANCO, o.ut, !it.sin_nombre)}</span>${it.sin_nombre ? `<span class="sr">${esc(o.tam || "")}</span>` : `<span class="t">${esc(o.txt || UT[o.ut].nombre)}</span>`}</button>`;
+  return `<button class="opcion" data-op="${esc(o.id)}" aria-pressed="false"><span class="t">${esc(o.txt)}</span></button>`;
+}
+const correctasDe = (it) => it.correctas || it.correctas_una_de || (it.validas ? [...new Set(it.validas.map((x) => x[0]))] : [it.correcta]);
+const FORMATOS = {
+  /* F1 · Elegir (con selección múltiple o razón cerrada) */
+  elegir: {
+    render(it) {
+      const extra = (it.secuencia ? `<ol class="secuencia-mal">${it.secuencia.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>` : "")
+        + (it.escena_chef ? `<div class="modelo-chef">${D.personaje("chef")} El chef usó ${esc(UT[it.escena_chef.ut].nombre === "cuchillo sin filo" ? "un cuchillo sin filo" : "algo")} para ${esc(it.escena_chef.accion)}. ${D.ut(BANCO, it.escena_chef.ut, true)}</div>` : "")
+        + (it.cantidad_vista ? `<div class="cajon" style="max-width:220px;margin:0 auto 8px">${Array.from({ length: it.cantidad_vista }, () => D.ing(BANCO, it.ing, false)).join("")}</div>` : "")
+        + (it.nota_adulto ? `<p class="small adulto-txt">${esc(it.nota_adulto)}</p>` : "");
+      const razones = it.con_razon ? `<div class="grupo" id="razones" hidden><div class="consigna"><p>${esc(it.pregunta)}</p>${escuchar(it.pregunta)}</div><div class="opciones" style="--min:180px">${it.razones.map((r) => `<button class="opcion" data-razon="${r.id}"><span class="t">${esc(r.txt)}</span></button>`).join("")}</div></div>` : "";
+      const lado = it.multiple ? `<button class="btn" id="listo">${esc(N.listo)}</button>` : "";
+      marcoJuego({ ...it, pregunta: it.con_razon ? null : it.pregunta }, `${extra}<div class="opciones" id="ops" style="--min:${it.opciones.some((o) => o.receta) ? 190 : 130}px">${it.opciones.map((o) => opcionHTML(o, it)).join("")}</div>${razones}`, lado);
+      if (it.escena_chef && S.grado === "dificil") { const m = $(".modelo-chef"), R0 = S.R; setTimeout(() => { if (m.isConnected && S.R === R0 && !R0.terminado) m.innerHTML = `${D.personaje("chef")} ¿Te acordás qué usó?`; }, 2500); }
+      const elegidas = new Set(); let op = null;
+      $$("#ops [data-op]").forEach((b) => b.onclick = () => {
+        if (S.R.terminado) return;
+        const id = b.dataset.op;
+        // Cambiar la respuesta antes de confirmar no es error: se registra como autocorrección (T3)
+        if (it.multiple) { if (elegidas.has(id)) { elegidas.delete(id); S.R.autocorreccion = true; } else elegidas.add(id); b.setAttribute("aria-pressed", elegidas.has(id)); return; }
+        if (it.con_razon) { if (op && op !== id) S.R.autocorreccion = true; op = id; $$("#ops [data-op]").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("#razones").hidden = false; $("#razones button").focus(); return; }
+        if (Motor.valida(it, id)) { S.R.extra.razon = undefined; if (S.aventura && it.imprevisto) S.R.extra.alternativa = id; if (it.receta && ["1-zona", "1-espacio"].includes(S.variante)) S.receta = it.receta; finItem(); }
+        else { b.disabled = true; error(it.pista1, tipoDe(it)); if (S.aventura && it.imprevisto) S.R.extra.alternativa = id; }
+      });
+      $$("#razones [data-razon]").forEach((b) => b.onclick = () => {
+        if (S.R.terminado || !op) return;
+        S.R.extra.razon = b.dataset.razon;
+        if (Motor.valida(it, op, b.dataset.razon)) { S.receta = op; finItem(); } else { error("Esa razón no va con esa receta. Mirá otra vez.", ["razon_incoherente"]); }
+      });
+      const l = $("#listo"); if (l) l.onclick = () => {
+        if (S.R.terminado) return;
+        if (!elegidas.size) return msj("Elegí las que van.");   // sin respuesta: no es error (M10-7)
+        const r = Motor.validaMultiple(correctasDe(it), [...elegidas]);
+        S.R.extra.correctas_marcadas = r.correctas_marcadas; S.R.extra.total_correctas = r.total_correctas;   // T6
+        if (r.ok) finItem(); else error(Motor.devolucionMultiple(r), r.tipos, 1, { todos: true });
+      };
+    },
+    ayuda(n, it) {
+      const c = correctasDe(it);
+      if (n === 2) { const malas = $$("#ops [data-op]").filter((b) => !c.includes(b.dataset.op) && !b.disabled); malas.slice(0, Math.max(1, Math.floor(malas.length / 2))).forEach((b) => (b.disabled = true)); return "sacar-opciones"; }
+      it._demo = "Mirá la marcada."; c.slice(0, 1).forEach((x) => { const b = $(`#ops [data-op="${x}"]`); if (b) b.classList.add("resaltada"); }); return "demostracion";
+    },
+  },
+  /* F2 · Clasificar en canastas (también «Tengo / Falta / Sobra» de 2B, con la lista tapada por «Ya miré») */
+  clasificar: {
+    render(it) {
+      const lista = it.recordar ? listaHTML(it.lista, true) : "";
+      const mesada = it.mesada ? `<h3>Mesada</h3><div class="mesada">${it.mesada.map((i) => `<div class="ficha con-nombre">${D.ing(BANCO, i)}<span class="nom">${esc(nombreIng(i))}</span></div>`).join("")}</div>` : "";
+      const fichas = it.fichas.map((f) => f.receta ? `<button class="ficha con-nombre" data-id="${esc(f.id)}" aria-pressed="false">${D.receta(BANCO, f.receta)}<span class="nom">${esc(REC[f.receta].nombre)}</span></button>` : fichaIng(f.ing));
+      marcoJuego(it, `${lista}<div id="zona-juego" ${it.recordar ? "hidden" : ""}>${mesada}<div class="bandeja" id="bandeja">${fichas.join("")}</div>
+        <div class="cajas">${it.canastas.map((c) => `<button class="destino" data-destino="${c.id}"><span class="tit">${esc(c.txt)}</span><span class="dentro"></span></button>`).join("")}</div></div>`);
+      if (it.recordar) prepararYaMire(it);
+      let hechas = 0;
+      ubicable($("#cuerpo"), (fid, dest) => {
+        const f = it.fichas.find((x) => x.id === fid); if (!f || S.R.terminado) return;
+        if (f.destino === dest) { const el = $(`#bandeja [data-id="${CSS.escape(fid)}"]`); el.classList.add("puesta"); el.setAttribute("aria-pressed", "false"); $(`[data-destino="${dest}"] .dentro`).appendChild(el); hechas += 1; msj(""); if (hechas === it.fichas.length) finItem(); }
+        else error(it.pista1, tipoDe(it, dest === "sobra" || dest === "falta" ? "falta_sobra_invertido" : "categoria_cruzada", "categoria_vecina"));
+      });
+    },
+    ayuda(n, it) {
+      if (n === 2) { const p = it.fichas.find((f) => !$(`#bandeja [data-id="${CSS.escape(f.id)}"]`)?.classList.contains("puesta")); if (p) $(`[data-destino="${p.destino}"]`).classList.add("marcada"); return "resaltar"; }
+      const p = it.fichas.find((f) => !$(`[data-id="${CSS.escape(f.id)}"]`)?.classList.contains("puesta"));
+      if (p) { $(`#bandeja [data-id="${CSS.escape(p.id)}"]`).classList.add("resaltada"); $(`[data-destino="${p.destino}"]`).classList.add("marcada"); it._demo = "Esta va acá."; }
+      return "demostracion";
+    },
+  },
+  /* F3 · Buscar en la despensa (2A con lista visible; 2B recordando la lista; etapa de 8) */
+  buscar: {
+    render(it) {
+      marcoJuego(it, `${listaHTML(it.lista, it.recordar)}<div id="zona-juego" ${it.recordar ? "hidden" : ""}><h3>${it.lugar === "heladera-y-alacena" ? "Heladera y alacena" : "Alacena"}</h3>
+        <div class="estante" id="estante">${it.escena.map((i) => fichaIng(i)).join("")}</div><h3>Mesada</h3><div class="mesada" id="mesada"></div></div>`);
+      if (it.recordar) prepararYaMire(it);
+      const faltan = new Set(it.lista);
+      $$("#estante [data-id]").forEach((b) => b.onclick = () => {
+        if (S.R.terminado || b.classList.contains("puesta")) return;
+        const id = b.dataset.id;
+        if (faltan.has(id)) { faltan.delete(id); b.classList.add("puesta"); $("#mesada").appendChild(b); msj(""); if (!faltan.size) finItem(); }
+        else error(it.pista1, it.recordar ? ["intrusion"] : (ING[id] || {}).parecido && it.lista.includes(ING[id].parecido) ? ["parecido_visual"] : tipoDe(it, "categoria_vecina", "de_mas"));
+      });
+    },
+    ayuda(n, it) {
+      const pend = it.lista.filter((i) => !$(`#mesada [data-id="${i}"]`));
+      if (n === 2) { if (it.recordar) { mostrarLista(true); return "volver-a-ver-lista"; } const malas = $$("#estante [data-id]").filter((b) => !it.lista.includes(b.dataset.id)); malas.slice(0, Math.ceil(malas.length / 2)).forEach((b) => (b.disabled = true)); return "sacar-opciones"; }
+      if (pend[0]) { const b = $(`#estante [data-id="${pend[0]}"]`); if (b) b.classList.add("resaltada"); it._demo = `Este es: ${nombreIng(pend[0])}.`; } return "demostracion";
+    },
+  },
+  /* F5 · Carrito con contador visible (3A) */
+  carrito: {
+    render(it) {
+      marcoJuego(it, `<div class="dos-botones"><button class="btn sec" id="menos">${esc(N.carritoQuitar)}</button><span class="contador" id="cuenta" aria-live="polite">0</span><button class="btn" id="mas">${esc(N.carritoPoner)} ${D.ing(BANCO, it.ing, false).replace("<svg", '<svg width="28" height="28"')}</button></div>
+        <h3>Carrito</h3><div class="carrito" id="carro"></div><div class="acciones"><button class="btn" id="listo">${esc(N.listo)}</button></div>`);
+      let n = 0; const pintar = () => { $("#cuenta").textContent = n; $("#carro").innerHTML = Array.from({ length: n }, () => D.ing(BANCO, it.ing, false)).join(""); };
+      $("#mas").onclick = () => { if (n < (it.maximo || 10)) { n += 1; pintar(); } };
+      $("#menos").onclick = () => { if (n > 0) { n -= 1; pintar(); S.R.autocorreccion = true; } };
+      $("#listo").onclick = () => { if (S.R.terminado) return; if (n === it.cantidad) finItem(); else error(it.pista1, n > it.cantidad ? ["conteo_de_mas"] : ["conteo_de_menos"]); };
+    },
+    ayuda(n, it) { if (n === 2) { msj(`Contá en voz alta: ${Array.from({ length: it.cantidad }, (_, k) => k + 1).join(", ")}.`); return "recta-numerica"; } it._demo = `Ponemos de a uno hasta ${it.cantidad}.`; return "demostracion"; },
+  },
+  /* F6 · Teclado numérico en pantalla: solo dígitos (REQ-CLI-CHF-09) */
+  numero: {
+    render(it) {
+      const ver = it.tenemos != null ? `<p class="small" style="text-align:center">Tenemos:</p><div class="cajon" style="max-width:240px;margin:0 auto 10px">${Array.from({ length: it.tenemos }, () => D.ing(BANCO, it.ing, false)).join("")}</div>` : "";
+      const ops = (MODULO.calculadora || {})[S.ruta] || [], conCalc = !S.aventura && S.variante === "3-espacio" && ops.length;
+      marcoJuego(it, `${ver}<div class="pantalla-num" id="pant" aria-live="polite">&nbsp;</div><div class="teclado" role="group" aria-label="Teclado de números">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map((k) => k === "" ? "<span></span>" : `<button class="btn sec" data-k="${k}" aria-label="${k === "⌫" ? esc(N.borrar) : k}">${k}</button>`).join("")}</div>
+        <div class="acciones" style="justify-content:center"><button class="btn" id="listo">${esc(N.listo)}</button></div>${conCalc ? calculadoraHTML(ops) : ""}`, conCalc ? `<button class="btn sec chico" id="calc">${esc(N.calculadora)}</button>` : "");
+      // T13: en un ítem de cálculo la calculadora es apoyo de aprendizaje (nivel 2)
+      if (conCalc) prepararCalculadora(() => { S.R.apoyo_max = Math.max(S.R.apoyo_max, 2); if (!S.R.apoyos.includes("2:calculadora")) S.R.apoyos.push("2:calculadora"); S.R.extra.calculadora = "aprendizaje"; });
+      let v = "";
+      const pintar = () => { $("#pant").innerHTML = v || "&nbsp;"; };
+      $$("[data-k]").forEach((b) => b.onclick = () => { const k = b.dataset.k; if (k === "⌫" && v) S.R.autocorreccion = true; const nv = k === "⌫" ? v.slice(0, -1) : v + k; if (Motor.soloDigitos(nv)) { v = nv; pintar(); } });
+      document.addEventListener("keydown", S.R.local.tecla = (e) => { if (!$("#pant")) return; if (/^[0-9]$/.test(e.key)) { const nv = v + e.key; if (Motor.soloDigitos(nv)) { v = nv; pintar(); } } else if (e.key === "Backspace") { v = v.slice(0, -1); pintar(); } });
+      $("#listo").onclick = () => { if (S.R.terminado || !v) return; if (+v === it.respuesta) finItem({ extra: { total: +v } }); else error(it.pista1, [(it.error_si || {})[v], ...tipoDe(it, "calculo", "numero_cantidad")]); };
+    },
+    ayuda(n, it) { if (n === 2) { msj(`Contá desde ${it.tenemos} hasta ${it.tenemos + it.respuesta}.`); return "recta-numerica"; } it._demo = `Faltan ${it.respuesta}.`; return "demostracion"; },
+  },
+  /* F6 · Pagar con billetes y monedas propios (sin acumulado: el monto se crea en cada ítem; REQ-CLI-CHF-13) */
+  pagar: {
+    render(it) {
+      marcoJuego(it, `<div class="dinero" id="dinero">${it.billetes.map((b) => b >= 10 ? `<button class="billete" data-b="${b}" aria-label="${b} pesos">$ ${b}</button>` : `<button class="moneda" data-b="${b}" aria-label="${b} pesos">$ ${b}</button>`).join("")}</div>
+        <h3>${esc(N.pagar)}</h3><div class="bandeja-pago" id="bandeja-pago"></div><p class="pregunta">${esc(N.total)}: $ <span id="tot">0</span></p>
+        <div class="acciones"><button class="btn sec" id="quitar">${esc(N.borrar)}</button><button class="btn" id="listo">${esc(N.pagar)}</button></div>`);
+      const puestos = [];
+      const pintar = () => { $("#bandeja-pago").innerHTML = puestos.map((x) => `<span>$ ${x}</span>`).join(""); $("#tot").textContent = Motor.sumaPago(puestos); };
+      $$("[data-b]").forEach((b) => b.onclick = () => { puestos.push(+b.dataset.b); pintar(); });
+      $("#quitar").onclick = () => { if (puestos.length) S.R.autocorreccion = true; puestos.pop(); pintar(); };
+      $("#listo").onclick = () => { if (S.R.terminado) return; const t = Motor.sumaPago(puestos); if (t === it.monto) finItem({ extra: { total: t } }); else error(it.pista1, t < it.monto ? ["pago_insuficiente"] : ["calculo"]); };
+    },
+    ayuda(n, it) { const b = it.billetes.filter((x) => x <= it.monto).pop(); if (n === 2) { const e = $(`[data-b="${b}"]`); if (e) e.classList.add("ofrecida"); return "resaltar"; } it._demo = `Por ejemplo: ${b} y después lo que falta.`; return "demostracion"; },
+  },
+  /* 3B Difícil · Presupuesto: un producto por ingrediente, sin pasarse */
+  presupuesto: {
+    render(it) {
+      marcoJuego(it, `<p class="pregunta">${esc(N.tenes)}: $ ${it.presupuesto}</p><div class="productos">${it.productos.map((p, k) => `<div class="producto">${D.ing(BANCO, p.ing)}<strong>${esc(nombreIng(p.ing))}</strong>
+        ${p.precios.map((pr, j) => `<button class="opcion" data-p="${k}" data-j="${j}" aria-pressed="false"><span class="precio">${j ? "Grande" : "Chico"} · $ ${pr}</span></button>`).join("")}</div>`).join("")}</div>
+        <p class="pregunta">${esc(N.total)}: $ <span id="tot">0</span></p><div class="acciones"><button class="btn" id="listo">${esc(N.pagar)}</button></div>${((MODULO.calculadora || {})[S.ruta] || []).length ? calculadoraHTML(MODULO.calculadora[S.ruta]) : ""}`,
+        ((MODULO.calculadora || {})[S.ruta] || []).length ? `<button class="btn sec chico" id="calc">${esc(N.calculadora)}</button>` : "");
+      const el = it.productos.map(() => null);
+      const pintar = () => { $("#tot").textContent = el.reduce((s, j, k) => s + (j == null ? 0 : it.productos[k].precios[j]), 0); };
+      $$("[data-p]").forEach((b) => b.onclick = () => { const k = +b.dataset.p; if (el[k] != null && el[k] !== +b.dataset.j) S.R.autocorreccion = true; el[k] = +b.dataset.j; $$(`[data-p="${k}"]`).forEach((x) => x.setAttribute("aria-pressed", x === b)); pintar(); });
+      // Calculadora: en un ítem de planificación del presupuesto es apoyo de acceso (FEC 5.3, T13): no sube apoyo_max
+      if ($("#calc")) prepararCalculadora(() => { registrarAcceso("calculadora-en-planificacion"); S.R.extra.calculadora = "acceso"; });
+      $("#listo").onclick = () => { if (S.R.terminado) return; const r = Motor.presupuestoOk(it, el); if (r.ok) finItem({ extra: { total: r.total } }); else if (r.motivo === "falta-elegir") msj("Elegí uno de cada uno."); else error(it.pista1, ["presupuesto_excedido"]); };
+    },
+    ayuda(n, it) { if (n === 2) { it.productos.forEach((p, k) => { const b = $(`[data-p="${k}"][data-j="0"]`); if (b) b.classList.add("ofrecida"); }); return "resaltar"; } it._demo = "Los chicos cuestan menos: probá con esos."; return "demostracion"; },
+  },
+  /* F7 · Ordenar tarjetas en casilleros (4A, 6B Difícil, etapa de 8). 4A Intermedio: además, elegir el paso que falta. */
+  ordenar: {
+    render(it) {
+      const pasos = it.faltante ? it.pasos.filter((p) => p.id !== it.faltante) : it.pasos;
+      const r = Motor.azar(Motor.semillaDe(it.id + S.R.t0)); let mezcla = Motor.mezclar(pasos, r); if (mezcla.every((p, k) => p === pasos[k])) mezcla = mezcla.slice().reverse();
+      const fal = it.faltante ? `<div class="grupo"><div class="consigna"><p style="font-size:1.05rem">¿Qué paso falta?</p></div><div class="opciones" id="faltan" style="--min:200px">${Motor.mezclar([it.pasos.find((p) => p.id === it.faltante), it.distractor], r).map((p) => `<button class="opcion" data-f="${p.id}"><span class="t">${esc(p.txt)}</span></button>`).join("")}</div></div>` : "";
+      const modelo = it.modelo_disponible ? `<button class="btn sec chico" id="ver-modelo">Ver al chef</button><ol class="pasos-hechos" id="modelo" hidden>${pasos.map((p) => `<li>${esc(p.txt)}</li>`).join("")}</ol>` : "";
+      marcoJuego(it, `${fal}<div id="orden" ${it.faltante ? "hidden" : ""}><div class="bandeja" id="bandeja">${mezcla.map((p) => `<button class="ficha opcion" style="width:auto;height:auto;min-height:64px;padding:8px 12px" data-id="${p.id}" aria-pressed="false"><span class="t">${esc(p.txt)}</span></button>`).join("")}</div>
+        <div class="casilleros" id="cas">${pasos.map((_, k) => `<button class="casillero" style="width:clamp(120px,22vw,180px);height:auto;min-height:96px" data-destino="${k}"><span class="num">${k + 1}</span><span class="dentro"></span></button>`).join("")}</div></div>`, modelo);
+      const vm = $("#ver-modelo"); if (vm) vm.onclick = () => { $("#modelo").hidden = !$("#modelo").hidden; S.R.apoyo_max = Math.max(S.R.apoyo_max, 2); S.R.apoyos.push("2:modelo-de-secuencia"); };   // en 4A el modelo es apoyo de aprendizaje (5.3)
+      $$("#faltan [data-f]").forEach((b) => b.onclick = () => { if (b.dataset.f === it.faltante) { $("#faltan").closest(".grupo").remove(); $("#orden").hidden = false; msj("Ahora ordená los pasos."); } else { b.disabled = true; error(it.pista1, ["paso_omitido"]); } });
+      let sig = 0;
+      /* O1 (RT-CHF-001-R v1.4): con orden parcial, vale cualquier paso cuyos anteriores ya estén puestos; sin él, el orden es único. */
+      const puestos = new Set(), ids = new Set(pasos.map((p) => p.id));
+      const vale = (pid) => it.orden_parcial ? ids.has(pid) && !puestos.has(pid) && it.orden_parcial.every(([a, b]) => b !== pid || !ids.has(a) || puestos.has(a)) : pasos[sig].id === pid;
+      it._siguiente = () => pasos.find((p) => vale(p.id) && (it.orden_parcial || p === pasos[sig]));
+      ubicable($("#cuerpo"), (pid, dest) => {
+        if (S.R.terminado) return;
+        if (+dest !== sig) { error("Empezá por el casillero que sigue.", null, 0); return; }
+        if (vale(pid)) { puestos.add(pid); const el = $(`#bandeja [data-id="${pid}"]`); el.classList.add("puesta"); $(`[data-destino="${dest}"] .dentro`).appendChild(el); $(`[data-destino="${dest}"]`).classList.add("lleno"); sig += 1; msj(""); if (sig === pasos.length) finItem(); }
+        else error(it.pista1, [sig === 0 || sig === pasos.length - 1 ? "inicio_final" : "pasos_invertidos", "pasos_invertidos", "orden_oracion", "dependencia_rota", "orden"]);
+      });
+      it._pasos = pasos; S.R.local.sig = () => sig;
+    },
+    ayuda(n, it) { const p = it._siguiente ? it._siguiente() : it._pasos[S.R.local.sig()]; if (!p) return "resaltar"; if (n === 2) { $(`[data-destino="${S.R.local.sig()}"]`).classList.add("marcada"); msj("Pensá: ¿qué va " + (S.R.local.sig() ? "después" : "primero") + "?"); return "resaltar"; }
+      const b = $(`#bandeja [data-id="${p.id}"]`); if (b) b.classList.add("resaltada"); it._demo = `Ahora va: «${p.txt}».`; return "demostracion"; },
+  },
+  /* 5A · Encontrar con precisión: sin reloj visible; exposición breve solo en Difícil, desactivable (REQ-CLI-CHF-08) */
+  encontrar: {
+    render(it) {
+      const expo = it.exposicion && !S.sinExposicionBreve ? (S.expo.ms || MODULO.exposicion_5a.inicial_ms) : null;
+      marcoJuego(it, `<div class="modelo-chef" id="modelo">${D.ing(BANCO, it.modelo, !it.audio_objetivo)}<span>Modelo</span>${it.audio_objetivo ? escuchar(nombreIng(it.modelo), 'id="oir-modelo"') : ""}</div>
+        <div class="opciones" id="ops" style="--min:110px" ${expo ? "hidden" : ""}>${it.opciones.map((o) => opcionHTML(o, { sin_nombre: true })).join("")}</div>`);
+      S.R.extra.exposicion_ms = expo || undefined; S.R.extra.sin_exposicion_breve = S.sinExposicionBreve || undefined; S.R.local.t1 = Date.now();
+      const R0 = S.R; if (expo) setTimeout(() => { if (S.R !== R0 || R0.terminado || !$("#modelo")) return; $("#modelo").innerHTML = "<span>Modelo</span>"; $("#ops").hidden = false; S.R.local.t1 = Date.now(); }, expo);
+      $$("#ops [data-op]").forEach((b) => b.onclick = () => {
+        if (S.R.terminado) return;
+        if (b.dataset.op === it.correcta) { cerrarExpo(true); finItem(); } else { b.disabled = true; cerrarExpo(false); error(it.pista1, ING[b.dataset.op].parecido === it.modelo || ING[it.modelo].parecido === b.dataset.op ? ["distractor_parecido"] : ["otro"]); }
+      });
+    },
+    ayuda(n, it) { if (n === 2) { const malas = $$("#ops [data-op]").filter((b) => b.dataset.op !== it.correcta); malas.slice(0, Math.ceil(malas.length / 2)).forEach((b) => (b.disabled = true)); return "sacar-opciones"; }
+      const b = $(`#ops [data-op="${it.correcta}"]`); if (b) b.classList.add("resaltada"); $("#ops").hidden = false; it._demo = "Es el que tiene la misma forma."; return "demostracion"; },
+  },
+  /* 5B · Cambiar de regla: la señal es el gorro (forma y color, con texto); el tiempo no cuenta */
+  regla: {
+    render(it) {
+      let k = 0, aciertos = 0;
+      const pintar = () => {
+        const e = it.ensayos[k], R = it.reglas[e.regla], cambio = k > 0 && it.ensayos[k - 1].regla !== e.regla;
+        marcoJuego(it, `${cambio && it.aviso ? `<p class="guia">¡Cambió el gorro!</p>` : ""}<div class="gorro">${D.gorro(e.regla)}<span>${esc(R.txt)}</span></div>
+          <div class="objeto-grande" style="width:130px;height:130px">${D.ing(BANCO, e.ing)}</div><p style="text-align:center;font-weight:800">${esc(nombreIng(e.ing))}</p>
+          <div class="dos-botones" id="botones">${R.canastas.map((c) => `<button class="btn sec" data-c="${c.id}">${esc(c.txt)}</button>`).join("")}</div><p class="small" style="text-align:center">${k + 1} / ${it.ensayos.length}</p>`);
+        $("#ayuda").onclick = () => usarAyuda(Math.min(3, S.R.nivelAyuda + 1));
+        $$("#botones [data-c]").forEach((b) => b.onclick = () => {
+          if (S.R.terminado) return;
+          const ing = ING[e.ing], bien = e.regla === "tipo" ? ing.tipo === b.dataset.c : ing.forma === b.dataset.c;
+          if (bien) { aciertos += 1; k += 1; if (k === it.ensayos.length) finItem({ extra: { precision: Math.round((aciertos / (aciertos + S.R.errores)) * 100) / 100 } }); else pintar(); }
+          else { const anterior = k > 0 && it.ensayos[k - 1].regla !== e.regla; error(it.pista1, anterior ? ["perseveracion"] : ["regla_confundida"]); }
+        });
+      };
+      pintar();
+    },
+    ayuda(n) { if (n === 2) { msj("Mirá el gorro: dice cómo ubicar."); return "resaltar"; } it_demo(); return "demostracion"; },
+  },
+  /* 6B Intermedio · Seguir instrucciones de 2 o 3 pasos tocando en orden */
+  secuencia_toques: {
+    render(it) {
+      const dib = (id) => ING[id] ? D.ing(BANCO, id) : D.ut(BANCO, id);
+      const nom = (id) => ING[id] ? nombreIng(id) : UT[id].nombre;
+      marcoJuego(it, `<div class="estante" id="estante">${it.objetos.map((i) => `<button class="ficha con-nombre" data-id="${i}">${dib(i)}<span class="nom">${esc(nom(i))}</span></button>`).join("")}</div><h3>Hecho</h3><div class="mesada" id="mesada"></div>`);
+      let k = 0;
+      $$("#estante [data-id]").forEach((b) => b.onclick = () => { if (S.R.terminado || b.classList.contains("puesta")) return;
+        if (b.dataset.id === it.orden[k]) { k += 1; b.classList.add("puesta"); $("#mesada").appendChild(b); if (k === it.orden.length) finItem(); }
+        else error(it.pista1, it.orden.includes(b.dataset.id) ? ["orden_oracion"] : ["palabra_equivocada"]); });
+      S.R.local.k = () => k;
+    },
+    ayuda(n, it) { const id = it.orden[S.R.local.k()]; if (n === 2) { msj("Primero lo primero que escuchaste."); return "resaltar"; } const b = $(`#estante [data-id="${id}"]`); if (b) b.classList.add("resaltada"); it._demo = "Ahora va este."; return "demostracion"; },
+  },
+  /* F9 · La cocina de juego (Rincón 7 y etapa de 8): acciones por botón; fuego, filo y electrodomésticos los usa el chef en 3–12 (REQ-CLI-CHF-12) */
+  cocina: {
+    render(it) {
+      const ninos = ["3-5", "6-8", "9-12"].includes(S.ruta);
+      const pasos = it.pasos, r = Motor.azar(Motor.semillaDe(it.id));
+      const utsReceta = [...new Set(pasos.map((p) => p.utensilio))];
+      const seguros = Motor.mezclar([...new Set(utsReceta.filter((u) => !UT[u].riesgo || !ninos).concat(Motor.mezclar(["bol", "cuchara", "plato", "taza", "espatula", "colador"].filter((u) => !utsReceta.includes(u)), r).slice(0, 2)))], r);
+      const riesgosos = [...new Set(pasos.filter((p) => p.riesgo).map((p) => p.utensilio))];   // incluye el riesgo heredado (B1): colar, sumar a la olla
+      const acciones = Motor.mezclar([...new Set(pasos.filter((p) => !p.riesgo || !ninos).map((p) => p.accion).concat(Motor.mezclar(["mezclar", "colocar", "servir", "distribuir", "lavar"], r).slice(0, 2)))], r);
+      const modeloTxt = (p) => p.riesgo && ninos ? `El chef: ${p.texto.replace(/^El adulto /, "").toLowerCase()}.` : `El chef: ${BANCO.acciones[p.accion].toLowerCase()} con ${UT[p.utensilio].nombre}. Ahora vos.`;
+      const lado = it.modelo === "a_pedido" ? `<button class="btn sec chico" id="ver-chef">Ver al chef</button>` : "";
+      marcoJuego(it, `<div class="cocina-juego">
+        <div class="modelo-chef" id="modelo" ${["permanente", "guia", "primer_paso"].includes(it.modelo) ? "" : "hidden"}>${D.personaje("chef")}<span class="modelo-ut" id="modelo-ut" aria-hidden="true"></span><span id="modelo-txt"></span></div>
+        ${it.instrucciones_parciales ? `<p class="small">Pasos: ${esc(pasos.map((p, k) => (k % 2 ? "…" : p.texto)).join(" · "))}</p>` : ""}
+        <div><h3>Utensilios</h3><div class="botonera" id="uts">${seguros.map((u) => `<button class="opcion sel-ut" data-ut="${u}" aria-pressed="false">${D.ut(BANCO, u)}<span class="t">${esc(UT[u].nombre)}</span></button>`).join("")}</div></div>
+        <div><h3>Acciones</h3><div class="botonera" id="accs">${acciones.map((a) => `<button class="opcion sel-acc" data-acc="${a}" aria-pressed="false"><span class="t">${esc(BANCO.acciones[a])}</span></button>`).join("")}
+          ${ninos ? riesgosos.map((u) => `<button class="opcion chef" data-chef="${u}">${D.ut(BANCO, u)}<span class="t">${esc(N.pedirChef)} use ${esc(["cuchara", "sarten", "hornalla", "olla", "fuente", "tabla", "taza", "licuadora", "batidora", "espatula"].includes(u) ? "la" : "el")} ${esc(UT[u].nombre)}</span></button>`).join("") : ""}</div></div>
+        ${ninos ? "" : '<p class="guia" id="seguridad" hidden></p>'}<h3>Mesada</h3><ol class="pasos-hechos" id="hechos"></ol></div>`, lado);
+      let k = 0, ut = null;
+      /* O8 (RT-CHF-001-R v1.1): en 7A el chef hace primero el paso (dibujo del chef con el utensilio y la acción) y recién después se resaltan los botones. Sin parpadeos. */
+      const mostrarModelo = () => { const p = pasos[k]; if (!p) return; const m = $("#modelo"), sg = $("#seguridad");
+        if (sg) { sg.hidden = !p.riesgo; sg.textContent = p.riesgo ? (T.seguridad_13_18 || {})[p.riesgo] || "" : ""; }   // 13–18: pasos de seguridad a la vista
+        const ve = it.modelo === "permanente" || it.modelo === "guia" || (it.modelo === "primer_paso" && k === 0);
+        m.hidden = !ve;
+        if (ve) { $("#modelo-ut").innerHTML = D.ut(BANCO, p.utensilio, true); $("#modelo-txt").textContent = it.modelo === "guia" ? `Paso ${k + 1}: ${p.texto}` : modeloTxt(p);
+          m.classList.toggle("haciendo", false); void m.offsetWidth; m.classList.toggle("haciendo", true); }
+        $$("[data-ut],[data-acc],[data-chef]").forEach((b) => b.classList.toggle("ofrecida", false));
+        if (it.modelo === "permanente") { const R0 = S.R, k0 = k, sel = p.riesgo && ninos ? `[data-chef="${p.utensilio}"]` : `[data-ut="${p.utensilio}"],[data-acc="${p.accion}"]`;
+          setTimeout(() => { if (S.R !== R0 || R0.terminado || k !== k0 || !m.isConnected) return; $$(sel).forEach((b) => b.classList.add("ofrecida")); }, 1200); } };
+      const hecho = (p) => { $("#hechos").insertAdjacentHTML("beforeend", `<li class="${p.riesgo && ninos ? "adulto" : ""}">${esc(p.texto)}</li>`); k += 1; ut = null; $$("[data-ut],[data-acc]").forEach((b) => b.setAttribute("aria-pressed", "false")); msj(""); if (k === pasos.length) finItem(); else mostrarModelo(); };
+      $$("[data-ut]").forEach((b) => b.onclick = () => { if (S.R.terminado) return; ut = b.dataset.ut; $$("[data-ut]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
+      $$("[data-acc]").forEach((b) => b.onclick = () => {
+        if (S.R.terminado) return; const p = pasos[k];
+        if (p.riesgo && ninos) return error("Este paso lo hace el chef. Pedíselo.", ["accion"]);
+        if (!ut) return msj("Primero elegí un utensilio.");
+        if (ut === p.utensilio && b.dataset.acc === p.accion) hecho(p);
+        else error(it.pista1, ut !== p.utensilio ? ["utensilio"] : ["accion"]);
+      });
+      $$("[data-chef]").forEach((b) => b.onclick = () => { if (S.R.terminado) return; const p = pasos[k];
+        if (p.riesgo && p.utensilio === b.dataset.chef) hecho(p);   // pedirle al chef cuenta como paso correcto (caso 8)
+        else error(p.riesgo ? it.pista1 : "Este paso lo podés hacer vos.", ["accion"]); });
+      const vc = $("#ver-chef"); if (vc) vc.onclick = () => { registrarAcceso("modelo-de-secuencia"); const p = pasos[k]; $("#modelo").hidden = false; $("#modelo-txt").textContent = modeloTxt(p); };
+      mostrarModelo(); S.R.local.k = () => k;
+    },
+    ayuda(n, it) { const p = it.pasos[S.R.local.k()]; if (!p) return "resaltar"; $("#modelo").hidden = false; $("#modelo-txt").textContent = p.texto;
+      if (n === 3) { const sel = p.riesgo ? `[data-chef="${p.utensilio}"]` : `[data-ut="${p.utensilio}"],[data-acc="${p.accion}"]`; $$(sel).forEach((b) => b.classList.add("resaltada")); it._demo = `Ahora: ${p.texto.toLowerCase()}.`; return "demostracion"; }
+      return "resaltar"; },
+  },
+};
+function it_demo() { if (S.item) S.item._demo = "Mirá el gorro antes de ubicar."; }
+/* Lista de la receta: visible (2A) o para recordar, que se tapa solo con «Ya miré», nunca por tiempo (REQ-CLI-CHF-07). */
+function listaHTML(lista, recordar) {
+  return `<div class="lista-receta" id="lista"><strong>Lista</strong><ul>${lista.map((i) => `<li>${D.ing(BANCO, i)} ${esc(nombreIng(i))}</li>`).join("")}</ul>${recordar ? `<button class="btn" id="ya-mire">${esc(N.yaMire)}</button>` : ""}</div>`;
+}
+function mostrarLista(ver) { const l = $("#lista"); if (l) l.classList.toggle("tapada", !ver); }
+function prepararYaMire(it) {
+  $("#ya-mire").onclick = () => { mostrarLista(false); $("#ya-mire").remove(); $("#zona-juego").hidden = false;
+    if (it.agregado) msj(`Agregamos ${nombreIng(it.agregado)}.`);
+    $("#lista").insertAdjacentHTML("beforeend", `<button class="btn sec chico" id="ver-otra">${esc(N.verLista)}</button>`);
+    // T8: cada vez que se vuelve a ver la lista después de «Ya miré» es apoyo de aprendizaje nivel 2. No es error ni tiene devolución negativa.
+    let viendo = false;
+    $("#ver-otra").onclick = () => {
+      if (!S.R || S.R.terminado) return;
+      viendo = !viendo; mostrarLista(viendo);
+      if (viendo) { S.R.apoyo_max = Math.max(S.R.apoyo_max, 2); if (S.R.apoyos.length < 20) S.R.apoyos.push("2:volver-a-ver-lista"); }
+      $("#ver-otra").textContent = viendo ? N.yaMire : N.verLista;
+    }; };
+}
+/* Calculadora simple, sin memoria (T13): 9–12 suma, resta y multiplicación; 13–18 las cuatro y %. Se calcula en código. */
+function calculadoraHTML(ops) {
+  const sim = { "+": "+", "-": "−", "*": "×", "/": "÷", "%": "%" };
+  return `<div class="calculadora" id="calculadora" hidden role="group" aria-label="${esc(N.calculadora)}"><div class="pantalla-num" id="calc-pant">0</div>
+    <div class="teclado calc">${[7, 8, 9, 4, 5, 6, 1, 2, 3, 0].map((d) => `<button class="btn sec" data-c="${d}">${d}</button>`).join("")}${ops.map((o) => `<button class="btn sec" data-c="${o}" aria-label="${o === "%" ? "por ciento" : sim[o]}">${sim[o]}</button>`).join("")}<button class="btn sec" data-c="=">=</button><button class="btn sec" data-c="C" aria-label="Borrar todo">C</button></div></div>`;
+}
+function prepararCalculadora(alAbrir) {
+  let a = null, op = null, cur = "", abierta = false;
+  const pant = () => { $("#calc-pant").textContent = cur || (a != null ? String(a) : "0"); };
+  const hacer = (x, o, y) => o === "+" ? x + y : o === "-" ? x - y : o === "*" ? x * y : o === "/" ? (y ? x / y : x) : y;
+  $("#calc").onclick = () => { abierta = !abierta; $("#calculadora").hidden = !abierta; if (abierta) alAbrir(); };
+  $$("#calculadora [data-c]").forEach((b) => b.onclick = () => {
+    const c = b.dataset.c;
+    if (/^\d$/.test(c)) { if (cur.length < 9) cur += c; }
+    else if (c === "C") { a = null; op = null; cur = ""; }
+    else if (c === "%") { if (cur) { const y = +cur; cur = String(a != null && (op === "*" || op === "/") ? y / 100 : a != null ? a * y / 100 : y / 100); } }
+    else if (c === "=") { if (op && cur) { a = Math.round(hacer(a, op, +cur) * 100) / 100; op = null; cur = ""; } }
+    else { if (cur) { a = a == null || !op ? +cur : Math.round(hacer(a, op, +cur) * 100) / 100; cur = ""; } op = c; }
+    pant();
+  });
+}
+function cerrarExpo(ok) {
+  if (!S.item.exposicion || S.sinExposicionBreve) return;
+  const prev = S.registros.filter((r) => r.variante === "5-zona" && r.grado === "dificil").slice(-4).map((r) => r.resultado === "acierto" && r.errores === 0);
+  const prec = (prev.filter(Boolean).length + (ok ? 1 : 0)) / (prev.length + 1);
+  const r = Motor.exposicionSiguiente(S.expo, prec, MODULO.exposicion_5a, { ruta: S.ruta, desactivada: S.sinExposicionBreve });
+  if (r.acorto) S.expo.acortoEnSesion = true; if (r.ms) S.expo.ms = r.ms;
+  S.R.extra.precision = Math.round(prec * 100) / 100;
+}
+</script>
+<script id="arranque">
+"use strict";
+encabezado();
+if (CON_ADULTO && !EN_MARCO) pantallaAdulto(); else (S.historiaVista ? cocina() : historia(cocina));
+window.__chef = { S, Motor, BANCO, MODULO, DICHOS, FORMATOS };   // solo para las pruebas automáticas
+</script>
+</body></html>
