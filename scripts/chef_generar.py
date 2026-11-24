@@ -14,7 +14,7 @@ import json, pathlib, random
 
 raiz = pathlib.Path(__file__).resolve().parent.parent
 dest = raiz / "app" / "herramientas" / "chef"
-VERSION, FECHA = "0.2.0-prueba", "2026-11-23"
+VERSION, FECHA = "0.2.1-prueba", "2026-11-24"
 VALIDADO = "validado por PSP-SR (RT-CHF-001-R v1.0, pendiente de aprobación de la supervisora)"
 PEND = "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)"
 R = random.Random(16)
@@ -762,6 +762,12 @@ for v in variantes:   # la ficha publica las recetas que usan los ítems nuevos,
     v["recetas_usadas"] = sorted({it.get("receta") for g in GR for it in banco[v["variante"]][g] if it.get("receta")})
     v["recetas_alergenos"] = {r: REC[r]["alergenos"] for r in v["recetas_usadas"]}
 modulo["minimos_por_combinacion"]["_nota"] = "T12; rige desde 0.2.0: 8 ítems por variante y grado en 3–5 y 12 en 6–8 y 9–12, donde la ficha los ofrece."
+# RT-CHF-001-R v1.4, O1 (decisión D5): orden parcial de los pasos; cambia solo cómo se corrigen los ítems de ordenar (también los nuevos de v0.2.x)
+import chef_o1
+O1_ITEMS = chef_o1.aplicar(_R, _B, CAMBIOS)
+# RT-CHF-001-R v1.4, sección 3: los 22 ítems para corregir y el estado clínico (350 nuevos y 7 cambiados, validados)
+import chef_psp_v14
+V14 = chef_psp_v14.aplicar(_R, _B, V020, CAMBIOS)
 import os
 if os.environ.get("CHEF_LOG"): print("\n".join(CAMBIOS[_n0:]))
 

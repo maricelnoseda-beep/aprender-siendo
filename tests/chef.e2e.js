@@ -6,7 +6,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 const archivo = 'file://' + path.resolve(__dirname, '..', 'app', 'dist-chef', 'Chef_en_Accion.html');
 const CAP = process.env.CAPTURAS || null;
-let fallas = 0, casos = 0;
+let fallas = 0, casos = 0, ordenAlternativo = 0;
 const must = (c, m) => { casos++; if (!c) { fallas++; console.error('FALLA:', m); } };
 
 async function resolver(page) {
@@ -30,7 +30,13 @@ async function resolver(page) {
   else if (f === 'ordenar') {
     if (it.faltante) await click(`[data-f="${it.faltante}"]`);
     const pasos = it.faltante ? it.pasos.filter((p) => p.id !== it.faltante) : it.pasos;
-    for (let k = 0; k < pasos.length; k++) { await click(`#bandeja [data-id="${pasos[k].id}"]`); await click(`[data-destino="${k}"]`); }
+    // O1: con orden parcial, se resuelve con otro orden válido (el último paso disponible cada vez), distinto del de la receta
+    let orden = pasos;
+    if (it.orden_parcial) { const ids = new Set(pasos.map((p) => p.id)), puestos = new Set(); orden = [];
+      while (orden.length < pasos.length) { const ok = pasos.filter((p) => !puestos.has(p.id) && it.orden_parcial.every(([a, b]) => b !== p.id || !ids.has(a) || puestos.has(a))); const x = ok[ok.length - 1]; orden.push(x); puestos.add(x.id); }
+      if (orden.some((p, k) => p !== pasos[k])) ordenAlternativo++; }
+    for (let k = 0; k < orden.length; k++) { await click(`#bandeja [data-id="${orden[k].id}"]`); await click(`[data-destino="${k}"]`); }
+    if (it.orden_parcial) must(!(await page.evaluate(() => S.R.errores)), `O1: ${it.id || 'etapa'} acepta otro orden válido sin marcar error`);
   } else if (f === 'encontrar') { await page.waitForSelector('#ops:not([hidden])', { timeout: 5000 }); await click(`#ops [data-op="${it.correcta}"]`); }
   else if (f === 'regla') {
     for (const e of it.ensayos) { const ing = await page.evaluate((i) => BANCO.ingredientes[i], e.ing); await click(`#botones [data-c="${e.regla === 'tipo' ? ing.tipo : ing.forma}"]`); }
@@ -137,13 +143,28 @@ async function jugarVariante(page, id, grado) {
   const DIECINUEVE = ['1-espacio-f4', '1-zona-i1', '1-zona-i4', '8-espacio-d1', '8-espacio-d3', '8-espacio-d4', '8-espacio-d5', '8-espacio-d6', '8-espacio-d7', '8-espacio-f5', '8-espacio-f7', '8-espacio-i1', '8-espacio-i3', '8-espacio-i4', '8-espacio-i8', '8-espacio-i9', '8-zona-f2', '8-zona-i3', '8-zona-i4'];
   const v20 = await page.evaluate(() => { const todos = Object.values(BANCO.variantes).flatMap((g) => Object.values(g).flat()); const c = (f) => todos.filter(f).length;
     const imps = todos.flatMap((it) => (it.etapas || []).filter((e) => e.imprevisto));
-    return { total: todos.length, nuevosPend: todos.every((it) => !it.nuevo_v020 || it.estado_clinico === 'pendiente de PSP-SR'), nuevos: c((it) => it.nuevo_v020), viejosSinPend: c((it) => !it.nuevo_v020 && it.estado_clinico === 'pendiente de PSP-SR'),
-      validados: c((it) => it.estado_clinico === 'validado por PSP-SR'), corregidos: c((it) => /RT-CHF-001-R v1\.3/.test(it.estado_clinico)),
+    return { total: todos.length, nuevos: c((it) => it.nuevo_v020), pendientes: c((it) => /pendiente de PSP-SR/.test(it.estado_clinico)),
+      validados: c((it) => it.estado_clinico === 'validado por PSP-SR'), corregidos: todos.filter((it) => /RT-CHF-001-R v1\.4, a revisar/.test(it.estado_clinico)).map((it) => it.id).sort(),
       harina: imps.filter((e) => /harina de siempre/.test(e.consigna)).every((e) => e.opciones.find((o) => o.id === 'nada').txt === 'Volver sin comprar'),
       o9: !todos.some((it) => /abuela|primos/.test(it.situacion || '')) && !!BANCO.situaciones['Hoy hay un cumpleaños.'] && !!BANCO.situaciones['Vienen visitas a cenar.'],
       merienda: todos.flatMap((it) => [it, ...(it.etapas || [])]).filter((e) => e.formato === 'elegir' && /para la merienda/.test(e.consigna || '')).every((e) => e.opciones.filter((o) => o.id !== e.correcta).every((o) => ['fideos_salsa', 'arroz_verduras', 'tarta_verdura'].includes(o.receta))) }; });
-  must(v20.total === 585 && v20.nuevos === 372 && v20.nuevosPend && v20.viejosSinPend === 0, `v0.2.0: 213 ítems de la v0.1.3 y 372 nuevos, pendientes de PSP-SR (${JSON.stringify(v20)})`);
-  must(v20.validados + v20.corregidos === 213 && v20.corregidos === 7, `v0.2.0: los 213 de la v0.1.3 validados, salvo los 7 que cambian por O9 o por la harina (${v20.validados}, ${v20.corregidos})`);
+  const VEINTITRES = ['1-espacio-d12', '1-espacio-i5', '1-zona-d8', '3-zona-d7', '3-zona-d8', '4-espacio-i13', ...[5, 6, 7, 8, 9, 10, 11, 12].map((k) => '4-zona-d' + k), ...[5, 6, 7, 8, 9, 10, 11, 12].map((k) => '6-espacio-f' + k), '8-espacio-d11'].sort();
+  must(v20.total === 585 && v20.nuevos === 372 && v20.pendientes === 0, `v0.2.1: 213 ítems de la v0.1.3 y 372 nuevos, ninguno pendiente de PSP-SR (${JSON.stringify(v20)})`);
+  must(v20.validados === 562 && JSON.stringify(v20.corregidos) === JSON.stringify(VEINTITRES), `v0.2.1: 562 validados por PSP-SR; a revisar, solo los 22 de RT-CHF-001-R v1.4 y 1-espacio-i5 (${v20.validados}, ${v20.corregidos})`);
+  const v14 = await page.evaluate(() => { const todos = Object.values(BANCO.variantes).flatMap((g) => Object.values(g).flat()); const it = (i) => todos.find((x) => x.id === i);
+    const B = JSON.parse(JSON.stringify(BANCO)), b = (i) => Object.values(B.variantes).flatMap((g) => Object.values(g).flat()).find((x) => x.id === i);
+    b('6-espacio-f5').pista1 = '¿Qué usás para eso en tu casa?'; b('1-zona-d8').consigna = '¿Cuáles llevan sal?'; b('4-espacio-i13').opciones.find((o) => o.id === 'ok').txt = 'Lavar los utensilios';
+    b('3-zona-d7').consigna = 'La receta pide 14 huevos.'; b('1-espacio-d12').opciones[1] = { id: 'fideos_salsa', receta: 'fideos_salsa' };
+    const e = b('8-espacio-d11').etapas.find((x) => x.consigna === 'Se terminó el presupuesto.'); Object.assign(e, { consigna: 'No hay queso untable.', falta: 'queso_untable', opciones: [{ id: 'reemplazar', txt: 'Hacerlas solo con mermelada' }, { id: 'cambiar', txt: 'Cambiar de receta' }, { id: 'nada', txt: 'Seguir como si estuviera' }] });
+    const d5 = b('4-zona-d5'); d5.correctas_una_de = ['p0', 'p1'];   // bizcochuelo: «Prender el horno» y «Batir» se pueden intercambiar
+    for (const k of [6, 8, 9, 11]) { const x = b('4-zona-d' + k); x.opciones = x.opciones.map((o, i) => ({ id: 'p' + [0, 1, 3, 2][i], txt: o.txt })); x.correctas_una_de = ['p3', 'p2']; }
+    const v = Motor.validarBanco(B, MODULO).join('\n');
+    return { reglas: [/6-espacio-f5: texto con «en tu casa»/, /1-zona-d8: pregunta por un ingrediente que casi todo lleva/, /4-espacio-i13: lavado/, /3-zona-d7: pide 14/, /1-espacio-d12: las dos recetas tienen el mismo/, /8-espacio-d11: el reemplazo/, /4-zona-d5: los pasos cambiados de lugar se pueden hacer/, /4-zona dificil: el paso cambiado de lugar está en el último par/].map((r) => r.test(v)),
+      textos: it('6-espacio-f9').pista1 === '¿Qué se usa para eso en la cocina?' && it('1-zona-d8').consigna === '¿Cuáles llevan huevo?' && it('4-espacio-i13').opciones.some((o) => o.txt === 'Lavar el bol y las cucharas')
+        && it('3-zona-d7').consigna === 'Para dos tortas necesitamos 14 huevos.' && it('3-zona-d8').consigna === 'Para tres tortas necesitamos 18 huevos.' && it('8-espacio-d11').etapas.some((x) => x.consigna === 'Se terminó el presupuesto.')
+        && JSON.stringify(it('1-espacio-d12').opciones.map((o) => o.id)) === '["ensalada_verde","empanadas"]' && !/en tu casa|tu familia/.test(JSON.stringify(BANCO)) }; });
+  must(v14.textos, 'RT-CHF-001-R v1.4: los 22 ítems quedan con las correcciones pedidas');
+  must(v14.reglas.every(Boolean), `RT-CHF-001-R v1.4: el validador rechaza cada uno de los problemas de la sección 3 (${v14.reglas})`);
   must(v20.harina, 'RT-CHF-001-R v1.3: la opción incorrecta del imprevisto de la harina es siempre «Volver sin comprar»');
   must(v20.o9, 'O9: «Hoy hay un cumpleaños.» y «Vienen visitas a cenar.», en los ítems y en la tabla de situaciones');
   must(v20.merienda, 'T21: con la consigna de la merienda, la otra opción es siempre un plato de cena');
@@ -254,6 +275,15 @@ async function jugarVariante(page, id, grado) {
   must(/En el gran reto/.test(reg) && await page.evaluate(() => Motor.vistaPorHabilidad(S.registros).some((f) => f.gran_reto.items > 0)), 'T5: columna aparte «En el gran reto»');
   must(!/impulsiv|perseverante|r[ií]gid/i.test(await page.$eval('.dialogo', (x) => x.textContent)), 'T4: los tipos de error no se muestran como rasgo de la persona');
   if (CAP) await page.screenshot({ path: path.join(CAP, '04-registro.png'), fullPage: true });
+  must(ordenAlternativo > 0, `O1: se jugaron ítems de ordenar con un orden distinto del de la receta (${ordenAlternativo})`);
+  const o1 = await page.evaluate(() => { const b = JSON.parse(JSON.stringify(BANCO)); const it = b.variantes['6-espacio'].dificil.find((x) => x.receta === 'yogur_cereales'); const ok = !!it.orden_parcial; delete it.orden_parcial;
+    const v = Motor.validarBanco(b, MODULO); const b2 = JSON.parse(JSON.stringify(BANCO)); b2.variantes['6-espacio'].dificil.find((x) => x.receta === 'yogur_cereales').orden_parcial.pop();
+    const ids = Object.values(BANCO.variantes).flatMap((g) => Object.values(g).flat()).filter((x) => x.orden_parcial || (x.etapas || []).some((e) => e.orden_parcial)).map((x) => x.id).sort();
+    return { ok, quitado: v.some((e) => /O1/.test(e) && /se pueden intercambiar/.test(e)), incompleto: Motor.validarBanco(b2, MODULO).some((e) => /orden parcial no coincide/.test(e)), ids }; });
+  must(o1.ok && o1.quitado && o1.incompleto, 'O1: el validador rechaza un ítem de ordenar sin orden parcial cuando hay pasos intercambiables, y un orden parcial incompleto');
+  const O1_V013 = ['4-zona-i1', '4-zona-i4', '6-espacio-d3', '8-espacio-f1', '8-espacio-f5', '8-espacio-i1', '8-espacio-i2', '8-espacio-i4', '8-zona-d3', '8-zona-i3', '8-zona-i4'];
+  const O1_NUEVOS = ['4-zona-i5', '4-zona-i7', '6-espacio-d11', '6-espacio-d6', '6-espacio-d7', '8-espacio-d10', '8-espacio-d11', '8-espacio-i10', '8-espacio-i11', '8-zona-d6', '8-zona-f10', '8-zona-f12', '8-zona-f7'];
+  must(JSON.stringify(o1.ids) === JSON.stringify([...O1_V013, ...O1_NUEVOS].sort()), `O1: cambian de corrección los 11 ítems de la v0.1.3 y 13 nuevos (${o1.ids})`);
   must(errores.length === 0, 'sin errores de JavaScript: ' + errores.slice(0, 3).join(' | '));
   await browser.close();
   console.log(`chef e2e: ${casos - fallas} de ${casos} verificaciones`);

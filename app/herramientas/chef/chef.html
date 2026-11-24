@@ -552,6 +552,19 @@ const Motor = (() => {
         if (it.formato === "presupuesto" && it.productos.reduce((s, p) => s + Math.min(...p.precios), 0) > it.presupuesto) E.push(`${pos}: presupuesto imposible`);
         if (it.formato === "aventura") for (const e of it.etapas) if (e.rincon !== 8 && (it.rutas || []).some((r) => rutaActiva(modulo, r) && !rinconesDe(modulo, r).includes(e.rincon) && !(r === "3-5" && e.rincon === 3 && e.formato === "carrito"))) E.push(`${pos}: etapa del rincón ${e.rincon} en una ruta donde no está (CHF-29)`);
         if (it.formato === "aventura" && id === "8-espacio" && !it.etapas.some((e) => e.imprevisto)) E.push(`${pos}: 8B sin imprevisto`);
+        // O1 (RT-CHF-001-R v1.4): si la receta permite más de un orden entre los pasos del ítem, el ítem los acepta todos
+        for (const e of [it, ...(it.etapas || [])]) {
+          if (e.formato !== "ordenar" || !e.pasos) continue;
+          const rec = REC[e.receta || it.receta]; if (!rec) continue;
+          const tx = rec.pasos.map((p) => p.texto), k = e.pasos.map((p) => tx.indexOf(p.txt)); if (k.some((x) => x < 0)) continue;
+          const antes = (a, b) => { const vis = new Set(), pila = [a]; while (pila.length) { const x = pila.pop(); for (const y of rec.pasos[x].antes_de || []) { if (y === b) return true; if (!vis.has(y)) { vis.add(y); pila.push(y); } } } return false; };
+          const libres = [];
+          for (let i = 0; i < k.length; i++) for (let j = i + 1; j < k.length; j++) if (!antes(k[i], k[j]) && !antes(k[j], k[i])) libres.push(`«${e.pasos[i].txt}» y «${e.pasos[j].txt}»`);
+          const decl = new Set((e.orden_parcial || []).map(([a, b]) => a + ">" + b));
+          const esperado = []; for (let i = 0; i < k.length; i++) for (let j = 0; j < k.length; j++) if (i !== j && antes(k[i], k[j])) esperado.push(e.pasos[i].id + ">" + e.pasos[j].id);
+          if (libres.length && !e.orden_parcial) E.push(`${pos}: ordenar con un solo orden aceptado, pero ${libres[0]} se pueden intercambiar (O1)`);
+          if (e.orden_parcial && (decl.size !== esperado.length || esperado.some((x) => !decl.has(x)))) E.push(`${pos}: el orden parcial no coincide con el de la receta (O1)`);
+        }
         // C1: en un ítem de dulce o salado no entra una receta de «los dos», y la correcta tiene el sabor pedido
         const sab = (rid) => (REC[rid] || {}).sabor;
         if (it.formato === "clasificar" && (it.canastas || []).some((c) => c.id === "dulce")) for (const f of it.fichas || []) {
@@ -581,8 +594,38 @@ const Motor = (() => {
           const SIT = banco.situaciones || {};
           if (SIT[it.situacion] && !SIT[it.situacion].includes(it.receta)) E.push(`${pos}: la receta no va con la situación «${it.situacion}» (B2)`);
           for (const e of imps) for (const o of e.opciones || []) if (/^(Volver sin nada|Pagar con lo que no hay|Seguir sin decir nada|Seguir como si nada|Hacer lo mismo)$/.test(o.txt)) E.push(`${pos}: opción poco clara «${o.txt}» (B2)`);
+          // RT-CHF-001-R v1.4: con dos faltantes, el reemplazo del segundo no usa un ingrediente que ya faltó
+          const faltaron = [];
+          for (const e of imps) { if (!e.falta) continue;
+            const re = (e.opciones || []).find((o) => o.id === "reemplazar");
+            for (const f of faltaron) if (re && re.txt.toLowerCase().includes(((ING[f] || {}).nombre || f).toLowerCase())) E.push(`${pos}: el reemplazo «${re.txt}» usa ${f}, que ya faltó (v1.4)`);
+            faltaron.push(e.falta); }
+        }
+        // RT-CHF-001-R v1.4: ningún texto da por sentada la casa o la familia de quien juega
+        if (/en tu casa|tu familia/i.test(JSON.stringify(it))) E.push(`${pos}: texto con «en tu casa» o «tu familia» (v1.4)`);
+        // v1.4: no se pregunta por ingredientes que casi todo lleva
+        if (/llevan? (sal|agua)\?/i.test(it.consigna || "")) E.push(`${pos}: pregunta por un ingrediente que casi todo lleva (v1.4)`);
+        // v1.4: el lavado se nombra con utensilios sin filo
+        if (/lavar (los|todos los) utensilios|lavar (el|los) cuchillos?(?! de untar)/i.test(t)) E.push(`${pos}: lavado que puede incluir utensilios con filo (v1.4)`);
+        // v1.4: si se piden más de 12, la cantidad se justifica en la situación
+        { const m = /^La receta pide (\d+)/.exec(it.consigna || ""); if (m && Number(m[1]) > 12) E.push(`${pos}: pide ${m[1]} sin una situación que lo justifique (v1.4)`); }
+        // v1.4: en «¿Cuál elegís?» con razón, las dos recetas difieren en tiempo y en porciones
+        if (it.con_razon && (it.opciones || []).length === 2) { const [a, b] = it.opciones.map((o) => REC[o.receta] || {});
+          if (a.tiempo === b.tiempo || a.porciones === b.porciones) E.push(`${pos}: las dos recetas tienen el mismo tiempo o las mismas porciones (v1.4)`); }
+        // v1.4: «¿Qué paso cambiarías de lugar?»: los dos pasos cambiados son vecinos y no se pueden invertir
+        if (it.secuencia && it.correctas_una_de && REC[it.receta]) {
+          const rec = REC[it.receta], k = it.correctas_una_de.map((id) => /^p(\d+)$/.test(id) && rec.pasos[Number(id.slice(1))] ? Number(id.slice(1)) : -1);   // el id pN es el paso N de la receta
+          const antes = (a, b) => { const vis = new Set(), pila = [a]; while (pila.length) { const x = pila.pop(); for (const y of rec.pasos[x].antes_de || []) { if (y === b) return true; if (!vis.has(y)) { vis.add(y); pila.push(y); } } } return false; };
+          if (k.length !== 2 || k.some((x) => x < 0) || !(antes(k[0], k[1]) || antes(k[1], k[0]))) E.push(`${pos}: los pasos cambiados de lugar se pueden hacer en cualquier orden (v1.4)`);
         }
       }
+    }
+    // v1.4 (T23): en «¿Qué paso cambiarías de lugar?» el error no va casi siempre en el mismo lugar (primer par, del medio o último)
+    for (const [id, gs] of Object.entries(banco.variantes)) for (const g of GR) {
+      const lugar = (gs[g] || []).filter((it) => it.secuencia && it.correctas_una_de).map((it) => { const ix = it.correctas_una_de.map((c) => (it.opciones || []).findIndex((o) => o.id === c)); const a = Math.min(...ix);
+        return a === 0 ? "primer par" : a + 2 === it.secuencia.length ? "último par" : "par del medio"; });
+      const cuenta = {}; for (const l of lugar) cuenta[l] = (cuenta[l] || 0) + 1;
+      for (const [l, n] of Object.entries(cuenta)) if (lugar.length >= 4 && n > lugar.length / 2) E.push(`${id} ${g}: el paso cambiado de lugar está en el ${l} en ${n} de ${lugar.length} ítems (v1.4)`);
     }
     // T12: mínimos por combinación, desde la versión 0.2.0 (13–18 queda aparte: banco propio de PSP-SR, T16)
     const MINI = modulo.minimos_por_combinacion || {}, ver = String(banco.version || modulo.version || "0").split(/[.-]/).map(Number);
@@ -1322,15 +1365,19 @@ const FORMATOS = {
       const vm = $("#ver-modelo"); if (vm) vm.onclick = () => { $("#modelo").hidden = !$("#modelo").hidden; S.R.apoyo_max = Math.max(S.R.apoyo_max, 2); S.R.apoyos.push("2:modelo-de-secuencia"); };   // en 4A el modelo es apoyo de aprendizaje (5.3)
       $$("#faltan [data-f]").forEach((b) => b.onclick = () => { if (b.dataset.f === it.faltante) { $("#faltan").closest(".grupo").remove(); $("#orden").hidden = false; msj("Ahora ordená los pasos."); } else { b.disabled = true; error(it.pista1, ["paso_omitido"]); } });
       let sig = 0;
+      /* O1 (RT-CHF-001-R v1.4): con orden parcial, vale cualquier paso cuyos anteriores ya estén puestos; sin él, el orden es único. */
+      const puestos = new Set(), ids = new Set(pasos.map((p) => p.id));
+      const vale = (pid) => it.orden_parcial ? ids.has(pid) && !puestos.has(pid) && it.orden_parcial.every(([a, b]) => b !== pid || !ids.has(a) || puestos.has(a)) : pasos[sig].id === pid;
+      it._siguiente = () => pasos.find((p) => vale(p.id) && (it.orden_parcial || p === pasos[sig]));
       ubicable($("#cuerpo"), (pid, dest) => {
         if (S.R.terminado) return;
         if (+dest !== sig) { error("Empezá por el casillero que sigue.", null, 0); return; }
-        if (pasos[sig].id === pid) { const el = $(`#bandeja [data-id="${pid}"]`); el.classList.add("puesta"); $(`[data-destino="${dest}"] .dentro`).appendChild(el); $(`[data-destino="${dest}"]`).classList.add("lleno"); sig += 1; msj(""); if (sig === pasos.length) finItem(); }
+        if (vale(pid)) { puestos.add(pid); const el = $(`#bandeja [data-id="${pid}"]`); el.classList.add("puesta"); $(`[data-destino="${dest}"] .dentro`).appendChild(el); $(`[data-destino="${dest}"]`).classList.add("lleno"); sig += 1; msj(""); if (sig === pasos.length) finItem(); }
         else error(it.pista1, [sig === 0 || sig === pasos.length - 1 ? "inicio_final" : "pasos_invertidos", "pasos_invertidos", "orden_oracion", "dependencia_rota", "orden"]);
       });
       it._pasos = pasos; S.R.local.sig = () => sig;
     },
-    ayuda(n, it) { const p = it._pasos[S.R.local.sig()]; if (!p) return "resaltar"; if (n === 2) { $(`[data-destino="${S.R.local.sig()}"]`).classList.add("marcada"); msj("Pensá: ¿qué va " + (S.R.local.sig() ? "después" : "primero") + "?"); return "resaltar"; }
+    ayuda(n, it) { const p = it._siguiente ? it._siguiente() : it._pasos[S.R.local.sig()]; if (!p) return "resaltar"; if (n === 2) { $(`[data-destino="${S.R.local.sig()}"]`).classList.add("marcada"); msj("Pensá: ¿qué va " + (S.R.local.sig() ? "después" : "primero") + "?"); return "resaltar"; }
       const b = $(`#bandeja [data-id="${p.id}"]`); if (b) b.classList.add("resaltada"); it._demo = `Ahora va: «${p.txt}».`; return "demostracion"; },
   },
   /* 5A · Encontrar con precisión: sin reloj visible; exposición breve solo en Difícil, desactivable (REQ-CLI-CHF-08) */
