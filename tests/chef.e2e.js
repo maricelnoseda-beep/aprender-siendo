@@ -6,7 +6,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 const archivo = 'file://' + path.resolve(__dirname, '..', 'app', 'dist-chef', 'Chef_en_Accion.html');
 const CAP = process.env.CAPTURAS || null;
-let fallas = 0, casos = 0;
+let fallas = 0, casos = 0, ordenAlternativo = 0;
 const must = (c, m) => { casos++; if (!c) { fallas++; console.error('FALLA:', m); } };
 
 async function resolver(page) {
@@ -30,7 +30,13 @@ async function resolver(page) {
   else if (f === 'ordenar') {
     if (it.faltante) await click(`[data-f="${it.faltante}"]`);
     const pasos = it.faltante ? it.pasos.filter((p) => p.id !== it.faltante) : it.pasos;
-    for (let k = 0; k < pasos.length; k++) { await click(`#bandeja [data-id="${pasos[k].id}"]`); await click(`[data-destino="${k}"]`); }
+    // O1: con orden parcial, se resuelve con otro orden válido (el último paso disponible cada vez), distinto del de la receta
+    let orden = pasos;
+    if (it.orden_parcial) { const ids = new Set(pasos.map((p) => p.id)), puestos = new Set(); orden = [];
+      while (orden.length < pasos.length) { const ok = pasos.filter((p) => !puestos.has(p.id) && it.orden_parcial.every(([a, b]) => b !== p.id || !ids.has(a) || puestos.has(a))); const x = ok[ok.length - 1]; orden.push(x); puestos.add(x.id); }
+      if (orden.some((p, k) => p !== pasos[k])) ordenAlternativo++; }
+    for (let k = 0; k < orden.length; k++) { await click(`#bandeja [data-id="${orden[k].id}"]`); await click(`[data-destino="${k}"]`); }
+    if (it.orden_parcial) must(!(await page.evaluate(() => S.R.errores)), `O1: ${it.id || 'etapa'} acepta otro orden válido sin marcar error`);
   } else if (f === 'encontrar') { await page.waitForSelector('#ops:not([hidden])', { timeout: 5000 }); await click(`#ops [data-op="${it.correcta}"]`); }
   else if (f === 'regla') {
     for (const e of it.ensayos) { const ing = await page.evaluate((i) => BANCO.ingredientes[i], e.ing); await click(`#botones [data-c="${e.regla === 'tipo' ? ing.tipo : ing.forma}"]`); }
@@ -241,6 +247,13 @@ async function jugarVariante(page, id, grado) {
   must(/En el gran reto/.test(reg) && await page.evaluate(() => Motor.vistaPorHabilidad(S.registros).some((f) => f.gran_reto.items > 0)), 'T5: columna aparte «En el gran reto»');
   must(!/impulsiv|perseverante|r[ií]gid/i.test(await page.$eval('.dialogo', (x) => x.textContent)), 'T4: los tipos de error no se muestran como rasgo de la persona');
   if (CAP) await page.screenshot({ path: path.join(CAP, '04-registro.png'), fullPage: true });
+  must(ordenAlternativo > 0, `O1: se jugaron ítems de ordenar con un orden distinto del de la receta (${ordenAlternativo})`);
+  const o1 = await page.evaluate(() => { const b = JSON.parse(JSON.stringify(BANCO)); const it = b.variantes['6-espacio'].dificil.find((x) => x.receta === 'yogur_cereales'); const ok = !!it.orden_parcial; delete it.orden_parcial;
+    const v = Motor.validarBanco(b, MODULO); const b2 = JSON.parse(JSON.stringify(BANCO)); b2.variantes['6-espacio'].dificil.find((x) => x.receta === 'yogur_cereales').orden_parcial.pop();
+    const ids = Object.values(BANCO.variantes).flatMap((g) => Object.values(g).flat()).filter((x) => x.orden_parcial || (x.etapas || []).some((e) => e.orden_parcial)).map((x) => x.id).sort();
+    return { ok, quitado: v.some((e) => /O1/.test(e) && /se pueden intercambiar/.test(e)), incompleto: Motor.validarBanco(b2, MODULO).some((e) => /orden parcial no coincide/.test(e)), ids }; });
+  must(o1.ok && o1.quitado && o1.incompleto, 'O1: el validador rechaza un ítem de ordenar sin orden parcial cuando hay pasos intercambiables, y un orden parcial incompleto');
+  must(JSON.stringify(o1.ids) === JSON.stringify(['4-zona-i1', '4-zona-i4', '6-espacio-d3', '8-espacio-f1', '8-espacio-f5', '8-espacio-i1', '8-espacio-i2', '8-espacio-i4', '8-zona-d3', '8-zona-i3', '8-zona-i4']), `O1: cambian de corrección exactamente los 11 ítems de la lista de PSP-SR (${o1.ids})`);
   must(errores.length === 0, 'sin errores de JavaScript: ' + errores.slice(0, 3).join(' | '));
   await browser.close();
   console.log(`chef e2e: ${casos - fallas} de ${casos} verificaciones`);

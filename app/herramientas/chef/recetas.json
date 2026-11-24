@@ -1,6 +1,6 @@
 {
- "version": "0.1.4-prueba",
- "fecha": "2026-11-23",
+ "version": "0.1.5-prueba",
+ "fecha": "2026-11-24",
  "estado": "corregido según RT-CHF-001-R v1.2 (C1 a C4); pendiente de PSP-SR (19 ítems) y de la supervisora",
  "recetas": [
   {
@@ -30,7 +30,10 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "antes",
-     "texto": "El adulto corta la fruta"
+     "texto": "El adulto corta la fruta",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "colocar",
@@ -39,7 +42,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner la fruta en el bol"
+     "texto": "Poner la fruta en el bol",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "mezclar",
@@ -48,7 +54,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Mezclar con la cuchara"
+     "texto": "Mezclar con la cuchara",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "servir",
@@ -57,7 +66,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Servir en los platos"
+     "texto": "Servir en los platos",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -105,7 +115,10 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "antes",
-     "texto": "El adulto corta el tomate"
+     "texto": "El adulto corta el tomate",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "colocar",
@@ -114,7 +127,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner el pan en el plato"
+     "texto": "Poner el pan en el plato",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "colocar",
@@ -123,7 +139,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner el queso sobre el pan"
+     "texto": "Poner el queso sobre el pan",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "completar",
@@ -132,7 +151,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Tapar con otro pan"
+     "texto": "Tapar con otro pan",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -184,7 +204,10 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "antes",
-     "texto": "El adulto corta la banana"
+     "texto": "El adulto corta la banana",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "colocar",
@@ -193,7 +216,11 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner el yogur en el bol"
+     "texto": "Poner el yogur en el bol",
+     "antes_de": [
+      2,
+      3
+     ]
     },
     {
      "accion": "distribuir",
@@ -202,7 +229,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Repartir los cereales arriba"
+     "texto": "Repartir los cereales arriba",
+     "antes_de": []
     },
     {
      "accion": "colocar",
@@ -211,7 +239,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Sumar la banana"
+     "texto": "Sumar la banana",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -262,7 +291,11 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "antes",
-     "texto": "El adulto tuesta el pan"
+     "texto": "El adulto tuesta el pan",
+     "antes_de": [
+      1,
+      2
+     ]
     },
     {
      "accion": "untar",
@@ -271,7 +304,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Untar el queso"
+     "texto": "Untar el queso",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "untar",
@@ -280,7 +316,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Untar la mermelada"
+     "texto": "Untar la mermelada",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "servir",
@@ -289,7 +328,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Servir"
+     "texto": "Servir",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -350,7 +390,10 @@
      "riesgo": "filo",
      "momento": "antes",
      "texto": "El adulto ralla la zanahoria",
-     "resultado": "zanahoria_rallada"
+     "resultado": "zanahoria_rallada",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "cortar",
@@ -359,7 +402,10 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "antes",
-     "texto": "El adulto corta el tomate"
+     "texto": "El adulto corta el tomate",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "lavar",
@@ -368,7 +414,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Lavar la lechuga"
+     "texto": "Lavar la lechuga",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "colocar",
@@ -377,7 +426,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner todo en el bol"
+     "texto": "Poner todo en el bol",
+     "antes_de": [
+      4
+     ]
     },
     {
      "accion": "mezclar",
@@ -386,7 +438,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Condimentar y mezclar"
+     "texto": "Condimentar y mezclar",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -439,7 +492,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner el dulce de leche en el bol"
+     "texto": "Poner el dulce de leche en el bol",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "mezclar",
@@ -448,7 +504,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Mezclar con el coco"
+     "texto": "Mezclar con el coco",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "amasar",
@@ -457,7 +516,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Formar bolitas"
+     "texto": "Formar bolitas",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "distribuir",
@@ -466,7 +528,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Pasarlas por coco"
+     "texto": "Pasarlas por coco",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -520,7 +583,10 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "antes",
-     "texto": "Prender el horno"
+     "texto": "Prender el horno",
+     "antes_de": [
+      4
+     ]
     },
     {
      "accion": "batir",
@@ -529,7 +595,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Batir los huevos con el azúcar"
+     "texto": "Batir los huevos con el azúcar",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "mezclar",
@@ -538,7 +607,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Sumar la harina y mezclar"
+     "texto": "Sumar la harina y mezclar",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "colocar",
@@ -547,7 +619,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Pasar a la fuente"
+     "texto": "Pasar a la fuente",
+     "antes_de": [
+      4
+     ]
     },
     {
      "accion": "hornear",
@@ -556,7 +631,8 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Hornear"
+     "texto": "Hornear",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -616,7 +692,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Mezclar manteca y azúcar"
+     "texto": "Mezclar manteca y azúcar",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "mezclar",
@@ -625,7 +704,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Sumar huevo y harina"
+     "texto": "Sumar huevo y harina",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "amasar",
@@ -634,7 +716,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Estirar la masa"
+     "texto": "Estirar la masa",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "colocar",
@@ -643,7 +728,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner en la fuente"
+     "texto": "Poner en la fuente",
+     "antes_de": [
+      4
+     ]
     },
     {
      "accion": "hornear",
@@ -652,7 +740,8 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Hornear"
+     "texto": "Hornear",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -716,7 +805,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Mezclar harina, levadura, agua y sal"
+     "texto": "Mezclar harina, levadura, agua y sal",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "amasar",
@@ -725,7 +817,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Estirar la masa"
+     "texto": "Estirar la masa",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "distribuir",
@@ -734,7 +829,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner la salsa"
+     "texto": "Poner la salsa",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "distribuir",
@@ -743,7 +841,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Repartir el queso"
+     "texto": "Repartir el queso",
+     "antes_de": [
+      4
+     ]
     },
     {
      "accion": "hornear",
@@ -752,7 +853,8 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Hornear"
+     "texto": "Hornear",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -811,7 +913,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Batir huevo y leche"
+     "texto": "Batir huevo y leche",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "mezclar",
@@ -820,7 +925,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Sumar la harina"
+     "texto": "Sumar la harina",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "cocinar",
@@ -831,7 +939,10 @@
      "momento": "durante",
      "texto": "El adulto cocina el panqueque y lo deja entibiar",
      "recipiente": "sarten",
-     "enfria": true
+     "enfria": true,
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "untar",
@@ -840,7 +951,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Untar con dulce de leche"
+     "texto": "Untar con dulce de leche",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -901,7 +1013,10 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "durante",
-     "texto": "Cortar la cebolla"
+     "texto": "Cortar la cebolla",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "mezclar",
@@ -910,7 +1025,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Mezclar espinaca, huevo y queso"
+     "texto": "Mezclar espinaca, huevo y queso",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "colocar",
@@ -919,7 +1037,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Poner la tapa en la fuente"
+     "texto": "Poner la tapa en la fuente",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "distribuir",
@@ -928,7 +1049,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Rellenar la tarta"
+     "texto": "Rellenar la tarta",
+     "antes_de": [
+      4
+     ]
     },
     {
      "accion": "hornear",
@@ -937,7 +1061,8 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Hornear"
+     "texto": "Hornear",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -993,7 +1118,10 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "durante",
-     "texto": "Cortar la cebolla"
+     "texto": "Cortar la cebolla",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "cocinar",
@@ -1005,7 +1133,10 @@
      "texto": "El adulto cocina el relleno y lo deja enfriar",
      "recipiente": "sarten",
      "enfria": true,
-     "produce": "relleno"
+     "produce": "relleno",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "distribuir",
@@ -1015,7 +1146,10 @@
      "riesgo": null,
      "momento": "durante",
      "texto": "Rellenar las tapas",
-     "usa": "relleno"
+     "usa": "relleno",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "completar",
@@ -1024,7 +1158,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Cerrar las empanadas"
+     "texto": "Cerrar las empanadas",
+     "antes_de": [
+      4
+     ]
     },
     {
      "accion": "hornear",
@@ -1033,7 +1170,8 @@
      "actor": "adulto",
      "riesgo": "calor",
      "momento": "durante",
-     "texto": "Hornear"
+     "texto": "Hornear",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -1089,7 +1227,10 @@
      "riesgo": "calor",
      "momento": "durante",
      "texto": "Hervir los fideos",
-     "recipiente": "olla"
+     "recipiente": "olla",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "cocinar",
@@ -1099,7 +1240,10 @@
      "riesgo": "calor",
      "momento": "durante",
      "texto": "Calentar la salsa",
-     "recipiente": "sarten"
+     "recipiente": "sarten",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "trasladar",
@@ -1109,7 +1253,10 @@
      "riesgo": "calor",
      "momento": "durante",
      "texto": "El adulto cuela los fideos",
-     "recipiente": "olla"
+     "recipiente": "olla",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "servir",
@@ -1118,7 +1265,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Servir con queso"
+     "texto": "Servir con queso",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -1172,7 +1320,10 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "durante",
-     "texto": "Cortar las verduras"
+     "texto": "Cortar las verduras",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "hervir",
@@ -1182,7 +1333,10 @@
      "riesgo": "calor",
      "momento": "durante",
      "texto": "Hervir el arroz",
-     "recipiente": "olla"
+     "recipiente": "olla",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "mezclar",
@@ -1192,7 +1346,10 @@
      "riesgo": "calor",
      "momento": "durante",
      "texto": "El adulto suma las verduras al arroz",
-     "recipiente": "olla"
+     "recipiente": "olla",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "servir",
@@ -1201,7 +1358,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Servir"
+     "texto": "Servir",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -1252,7 +1410,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Mezclar harina, sal y manteca"
+     "texto": "Mezclar harina, sal y manteca",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "amasar",
@@ -1261,7 +1422,10 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Estirar la masa"
+     "texto": "Estirar la masa",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "cocinar",
@@ -1273,7 +1437,10 @@
      "texto": "El adulto fríe las tortas y las deja entibiar",
      "recipiente": "sarten",
      "enfria": true,
-     "produce": "tortas"
+     "produce": "tortas",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "servir",
@@ -1283,7 +1450,8 @@
      "riesgo": null,
      "momento": "durante",
      "texto": "Servir",
-     "usa": "tortas"
+     "usa": "tortas",
+     "antes_de": []
     }
    ],
    "rutas": [
@@ -1345,7 +1513,10 @@
      "actor": "adulto",
      "riesgo": "filo",
      "momento": "durante",
-     "texto": "Cortar las verduras"
+     "texto": "Cortar las verduras",
+     "antes_de": [
+      1
+     ]
     },
     {
      "accion": "hervir",
@@ -1355,7 +1526,10 @@
      "riesgo": "calor",
      "momento": "durante",
      "texto": "Hervir con agua",
-     "recipiente": "olla"
+     "recipiente": "olla",
+     "antes_de": [
+      2
+     ]
     },
     {
      "accion": "mezclar",
@@ -1365,7 +1539,10 @@
      "riesgo": "calor",
      "momento": "durante",
      "texto": "Revolver de a ratos",
-     "recipiente": "olla"
+     "recipiente": "olla",
+     "antes_de": [
+      3
+     ]
     },
     {
      "accion": "servir",
@@ -1374,7 +1551,8 @@
      "actor": "persona",
      "riesgo": null,
      "momento": "durante",
-     "texto": "Servir"
+     "texto": "Servir",
+     "antes_de": []
     }
    ],
    "sin_carne": true,

@@ -14,7 +14,7 @@ import json, pathlib, random
 
 raiz = pathlib.Path(__file__).resolve().parent.parent
 dest = raiz / "app" / "herramientas" / "chef"
-VERSION, FECHA = "0.1.4-prueba", "2026-11-23"
+VERSION, FECHA = "0.1.5-prueba", "2026-11-24"
 VALIDADO = "validado por PSP-SR (RT-CHF-001-R v1.0, pendiente de aprobación de la supervisora)"
 PEND = "pendiente de PSP-SR (prototipo v0.1.0, RT-CHF-001 v1.0)"
 R = random.Random(16)
@@ -755,6 +755,9 @@ _rehacer_8b("8-espacio-d6", None, "Hay que llevar algo a la escuela.")
 # RT-CHF-001-R v1.2: C1 (sabor), C2 (faltante de la lista), C3 (enfriado), C4 (situación de 13–18) y estado clínico (194 validados, 19 a corregir)
 import chef_psp_v12
 _n0 = len(CAMBIOS); ESTADO_V12 = chef_psp_v12.aplicar(_R, _B, CAMBIOS)
+# RT-CHF-001-R v1.4, O1 (decisión D5): orden parcial de los pasos; cambia solo cómo se corrigen los ítems de ordenar
+import chef_o1
+O1_ITEMS = chef_o1.aplicar(_R, _B, CAMBIOS)
 import os
 if os.environ.get("CHEF_LOG"): print("\n".join(CAMBIOS[_n0:]))
 
