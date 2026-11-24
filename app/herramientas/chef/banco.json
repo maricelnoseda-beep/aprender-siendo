@@ -737,7 +737,7 @@
    "con_adulto_3_5": "En 3 a 5 años, «Contar» se hace con la persona adulta."
   },
   "adulto": {
-   "intro": "Banco v0.2.0 de prueba: los 213 ítems de la v0.1.3 están validados por PSP-SR; los ítems nuevos están pendientes de PSP-SR.",
+   "intro": "Banco v0.2.1 de prueba: PSP-SR validó 562 ítems (RT-CHF-001-R v1.4) y 23 ítems corregidos esperan su revisión. Falta la aprobación de la supervisora.",
    "parlante": "Ningún texto suena solo: tocá el parlante para escuchar cualquier texto.",
    "letra": "La letra es un apoyo de acceso. Si hay un ejercicio en curso, el cambio rige desde el siguiente.",
    "libre": "En modo libre, quien juega no ve Estación, grado ni variante. Pasar de Zona a Espacio nunca es automático.",
